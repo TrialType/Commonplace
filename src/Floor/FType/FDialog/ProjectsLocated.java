@@ -757,7 +757,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 write.f(a.bulletAngle);
                 write.f(a.bulletSpread);
                 write.bool(a.alternate);
-                TypeIO.writeEffect(write, a.shootEffect);
+                writeEffect(write, a.shootEffect);
                 write.bool(a.parentizeEffects);
                 TypeIO.writeSound(write, a.shootSound);
             } else if (ability instanceof RepairFieldAbility a) {
@@ -765,8 +765,8 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 write.f(a.amount);
                 write.f(a.reload);
                 write.f(a.range);
-                TypeIO.writeEffect(write, a.activeEffect);
-                TypeIO.writeEffect(write, a.healEffect);
+                writeEffect(write, a.activeEffect);
+                writeEffect(write, a.healEffect);
                 write.bool(a.parentizeEffects);
             }
         }
@@ -784,7 +784,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
             if (weapon.bullet != null) {
                 writeBullet(write, weapon.bullet);
             }
-            TypeIO.writeEffect(write, weapon.ejectEffect);
+            writeEffect(write, weapon.ejectEffect);
             write.f(weapon.x);
             write.f(weapon.y);
             write.f(weapon.shootY);
@@ -836,10 +836,10 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 TypeIO.writeColor(write, r.laserColor);
                 TypeIO.writeColor(write, r.laserTopColor);
                 TypeIO.writeColor(write, r.healColor);
-                TypeIO.writeEffect(write, r.healEffect);
+                writeEffect(write, r.healEffect);
             } else if (weapon instanceof PointDefenseWeapon p) {
                 TypeIO.writeColor(write, p.color);
-                TypeIO.writeEffect(write, p.beamEffect);
+                writeEffect(write, p.beamEffect);
             }
         }
         write.f(healthBoost);
@@ -1222,7 +1222,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                     write.str("explosion");
                 } else {
                     write.str("effect");
-                    TypeIO.writeEffect(write, effect);
+                    writeEffect(write, effect);
                     return;
                 }
                 write.f(effect.lifetime);
