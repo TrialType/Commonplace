@@ -13,7 +13,7 @@ public class FStatusEffects {
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
-            grow, seethe, friability;
+            grow, seethe, friability, back;
 
     public static StatusEffect pureA, pureT,
             catalyzeI, catalyzeII, catalyzeIII, catalyzeIV, catalyzeV,
@@ -111,6 +111,10 @@ public class FStatusEffects {
             healthMultiplier = 0.001f;
             damageMultiplier = 25;
             speedMultiplier = 4.2f;
+        }};
+        back = new StatusEffect("back") {{
+            healthMultiplier = 2.4f;
+            damage = -200;
         }};
 
 

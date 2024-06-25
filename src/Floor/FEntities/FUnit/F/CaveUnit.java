@@ -12,15 +12,12 @@ import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.content.*;
-import mindustry.core.World;
 import mindustry.ctype.ContentType;
 import mindustry.entities.Units;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.gen.Unit;
 import mindustry.gen.UnitWaterMove;
 import mindustry.graphics.Trail;
-import mindustry.maps.Map;
-import mindustry.type.Planet;
 import mindustry.type.UnitType;
 
 import java.util.Random;
@@ -190,7 +187,7 @@ public class CaveUnit extends UnitWaterMove {
                 u.damage(u.maxHealth * 0.001f);
             }
             u.apply(StatusEffects.slow, 2);
-            u.apply(FStatusEffects.High_tension, 2);
+            u.apply(FStatusEffects.abyss, 2);
         });
         Units.nearbyBuildings(x, y, length * boost, b -> {
             b.applySlowdown(0.8f, 3);
@@ -256,7 +253,7 @@ public class CaveUnit extends UnitWaterMove {
         unit.set(x, y);
         unit.rotation(rotate);
         unit.add();
-        unit.apply(FStatusEffects.High_tension);
+        unit.apply(FStatusEffects.tension);
         Events.fire(new FEvents.GetPowerEvent(unit, time * 2, false));
         Fx.unitSpawn.at(x, y, rotate);
     }

@@ -28,7 +28,7 @@ public class WindBulletType extends BulletType {
     public float bossPowerExpand = 0;
     public float windLength = 200;
     public float windWidth = 400;
-    public StatusEffect applyEffect = FStatusEffects.burningV;
+    public StatusEffect applyEffect = FStatusEffects.sublimation;
     public float effectTime = 240;
     public Effect windEffect = Fx.none;
     public Effect everyHit = Fx.none;

@@ -37,7 +37,8 @@ import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
 
 public class FUnits {
-    public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a;
+    //tool
+    public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a, rejuvenate_b;
 
     ////ENGSWEISBoss
     public static UnitType velocity, velocity_d, velocity_s, hidden, cave;
@@ -231,6 +232,39 @@ public class FUnits {
                 }};
             }});
         }};
+        rejuvenate_b = new UnitType("rejuvenate_b") {{
+            constructor = MechUnit::create;
+
+            stepShake = 0;
+            health = 200;
+            armor = 1000;
+            speed = 0;
+            hitSize = 14;
+            abilities.add(new StatusFieldAbility(FStatusEffects.back, 15, 15, 120) {{
+                activeEffect = Fx.healWave;
+            }});
+
+            weapons.add(new RepairBeamWeapon() {{
+                targetUnits = true;
+                targetBuildings = false;
+                rotateSpeed = 12;
+                reload = 150;
+
+                repairSpeed = 3;
+                fractionRepairSpeed = 1f;
+            }});
+            weapons.add(new Weapon() {{
+                reload = 1000000;
+                shoot = new ShootPattern() {{
+                    firstShotDelay = 300;
+                }};
+
+                bullet = new ExplosionBulletType(0, 120) {{
+                    healAmount = 240;
+                    healPercent = 2f;
+                }};
+            }});
+        }};
         rejuvenate = new UnitType("rejuvenate") {{
             constructor = LegsUnit::create;
             aiController = HealthOnlyAI::new;
@@ -253,7 +287,7 @@ public class FUnits {
                 reload = 480;
 
                 repairSpeed = 10;
-                fractionRepairSpeed = 0.4f;
+                fractionRepairSpeed = 4f;
             }});
 
             weapons.add(new Weapon() {{
@@ -281,30 +315,19 @@ public class FUnits {
 
             weapons.add(new Weapon() {{
                 shootCone = 360;
-                reload = 240;
+                reload = 300;
                 mirror = false;
                 shootX = 0;
-                shootY = -28;
-                shoot = new ShootBarrel() {{
-                    shots = 3;
-                    shotDelay = 16;
-                    barrels = new float[]{
-                            0, 0, 170,
-                            0, 0, 180,
-                            0, 0, 190
-                    };
-                }};
+                shootY = 28;
 
-                bullet = new AroundBulletType() {{
+                bullet = new BulletType(0, 0) {{
                     absorbable = false;
                     reflectable = false;
-                    lifetime = 600;
-                    speed = 5.5f;
-                    damage = 20;
-                    targetRange = 1000;
-                    circleRange = 60;
-                    statusEffect = FStatusEffects.suppress;
-                    statusTime = 300;
+                    hittable = false;
+                    keepVelocity = false;
+                    lifetime = 0;
+                    rangeOverride = 1000;
+                    spawnUnit = rejuvenate_b;
                 }};
             }});
         }};
@@ -350,6 +373,7 @@ public class FUnits {
         bulletInterception = new UpGradeUnitType("bulletInterception") {{
             constructor = SpawnerUnit::create;
 
+            hitSize = 45;
             range = 1000;
             health = 10000;
             armor = 24;

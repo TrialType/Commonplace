@@ -27,7 +27,7 @@ public class FollowAI extends AIController {
 
     @Override
     public void updateMovement() {
-        if (shooter != null && shooter.health <= shooter.health * 0.3f) {
+        if (shooter != null && !shooter.dead && shooter.health > 0 && shooter.health <= shooter.maxHealth * 0.3f) {
             moveTo(shooter, unit.range() * 0.3f);
         } else {
             updateTarget();

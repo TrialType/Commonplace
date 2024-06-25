@@ -63,7 +63,6 @@ public class FBlocks {
     public static Block buildCore, slowProject, unitUpper;
 
     public static void load() {
-        //crafting
         primarySolidification = new StackCrafter("primary-solidification") {{
             itemCapacity = 60;
             liquidCapacity = 120;
