@@ -235,6 +235,7 @@ public class FUnits {
         rejuvenate_b = new UnitType("rejuvenate_b") {{
             constructor = MechUnit::create;
 
+            hidden = true;
             stepShake = 0;
             health = 200;
             armor = 1000;
@@ -255,6 +256,9 @@ public class FUnits {
             }});
             weapons.add(new Weapon() {{
                 reload = 1000000;
+                alwaysShooting = true;
+                mirror = false;
+                x = y = 0;
                 shoot = new ShootPattern() {{
                     firstShotDelay = 300;
                 }};
