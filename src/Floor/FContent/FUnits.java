@@ -9,7 +9,6 @@ import Floor.FEntities.FUnitType.*;
 import Floor.FTools.classes.BossList;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Interp;
 import arc.math.Mathf;
@@ -33,7 +32,6 @@ import mindustry.type.Weapon;
 import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
-import mindustry.world.blocks.production.BurstDrill;
 
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
@@ -196,7 +194,7 @@ public class FUnits {
             lifetime = 300;
             trailLength = 15;
             trailColor = Color.valueOf("00DDAAFF");
-            immunities.addAll(StatusEffects.slow, FStatusEffects.slowII, FStatusEffects.StrongStop);
+            immunities.addAll(StatusEffects.slow, FStatusEffects.tardy, FStatusEffects.StrongStop);
 
             abilities.add(new ShieldArcAbility() {{
                 radius = 20;
@@ -210,7 +208,7 @@ public class FUnits {
             weapons.add(new Weapon() {{
                 bullet = new ExplosionBulletType(15, 120) {{
                     rangeOverride = 120;
-                    status = FStatusEffects.breakHelIV;
+                    status = FStatusEffects.suppress;
                     statusDuration = 300;
                 }};
             }});
@@ -247,7 +245,7 @@ public class FUnits {
             stepShake = 0;
             isEnemy = false;
 
-            abilities.add(new StatusFieldAbility(FStatusEffects.healthIV, 3600, 300, 160));
+            abilities.add(new StatusFieldAbility(FStatusEffects.grow, 3600, 300, 160));
             abilities.add(new ShieldRegenFieldAbility(5000, 100000, 600, 160));
 
             weapons.add(new RepairBeamWeapon() {{
@@ -305,7 +303,7 @@ public class FUnits {
                     damage = 20;
                     targetRange = 1000;
                     circleRange = 60;
-                    statusEffect = FStatusEffects.suppressIV;
+                    statusEffect = FStatusEffects.suppress;
                     statusTime = 300;
                 }};
             }});
@@ -398,7 +396,7 @@ public class FUnits {
                 bullet = new BasicBulletType() {{
                     intervalSpread = 30;
                     shootEffect = Fx.artilleryTrailSmoke;
-                    status = FStatusEffects.slowII;
+                    status = FStatusEffects.tardy;
                     statusDuration = 90;
                     splashDamageRadius = 158;
                     speed = 7;
@@ -428,7 +426,7 @@ public class FUnits {
                         fragOnHit = true;
                         fragOnAbsorb = true;
                         collides = false;
-                        status = FStatusEffects.suppressII;
+                        status = FStatusEffects.torn;
                         statusDuration = 150;
                         splashDamage = 20;
                         splashDamageRadius = 158;
@@ -881,7 +879,7 @@ public class FUnits {
                     splashDamagePierce = true;
                     statusDuration = 300;
                     keepVelocity = false;
-                    status = FStatusEffects.burningV;
+                    status = FStatusEffects.sublimation;
                     incendSpread = 360;
                     incendChance = 1;
                     incendAmount = 15;
@@ -908,7 +906,7 @@ public class FUnits {
                             incendChance = 1;
                             incendAmount = 6;
 
-                            status = FStatusEffects.breakHelIII;
+                            status = FStatusEffects.torn;
                             statusDuration = 240;
                         }};
                     }};
@@ -965,7 +963,7 @@ public class FUnits {
                         splashDamage = 80;
                         splashDamageRadius = 156;
 
-                        status = FStatusEffects.breakHelIII;
+                        status = FStatusEffects.torn;
                         statusDuration = 180;
                         keepVelocity = false;
                         despawnEffect = new WaveEffect() {{
@@ -1347,13 +1345,13 @@ public class FUnits {
             faceTarget = false;
 
             immunities.addAll(
-                    FStatusEffects.fastII,
+                    FStatusEffects.swift,
                     StatusEffects.slow, StatusEffects.wet,
                     StatusEffects.unmoving, FStatusEffects.StrongStop,
                     StatusEffects.fast, StatusEffects.freezing
             );
 
-            abilities.add(new StatusFieldAbility(FStatusEffects.fastII, 600, 610, 100));
+            abilities.add(new StatusFieldAbility(FStatusEffects.swift, 600, 610, 100));
             abilities.add(new ShieldRegenFieldAbility(10000, 100000, 610, 100));
             abilities.add(new UnitSpawnAbility(hammer, 600, 1, 1));
             abilities.add(new UnitSpawnAbility(hammer, 600, -1, 1));
@@ -1438,94 +1436,6 @@ public class FUnits {
             drag = 1;
             range = maxRange = 1000;
             targetAir = targetGround = true;
-
-            for (int i = 0; i < 2; i++) {
-                int finalI = i;
-                weapons.add(new Weapon() {{
-                    rotate = true;
-                    rotateSpeed = 12;
-                    reload = 20;
-                    x = 25;
-                    y = finalI % 2 == 0 ? 15 : -15;
-                    shootSound = Sounds.none;
-
-                    shoot = new ShootBarrel() {{
-                        shots = 24;
-                        firstShotDelay = 30;
-                        shotDelay = 10;
-                    }};
-
-                    bullet = new LiquidBulletType() {{
-                        liquid = Liquids.water;
-
-                        range = maxRange = 1000;
-                        lifetime = 600;
-                        speed = 3;
-                        damage = 80;
-                        buildingDamageMultiplier = 0.75f;
-                        splashDamage = 10;
-                        splashDamageRadius = 40;
-                        splashDamagePierce = true;
-
-                        lightColor = trailColor = Color.valueOf("01066FAA");
-                        hitEffect = despawnEffect = Fx.none;
-                        shootEffect = Fx.none;
-
-                        status = FStatusEffects.High_tensionII;
-                        statusDuration = 240;
-                    }};
-                }});
-            }
-            weapons.add(new Weapon() {{
-                reload = 3;
-                x = y = shootY = shootX = 0;
-                mirror = false;
-                inaccuracy = 360;
-                rotate = false;
-                alwaysShooting = true;
-
-                bullet = new BasicBulletType() {{
-                    width = height = 12;
-                    shrinkX = shrinkY = 0;
-                    damage = 14;
-                    speed = 5;
-                    lifetime = 1200;
-                    status = FStatusEffects.High_tension;
-                    statusDuration = 90;
-                    spin = 12;
-                    frontColor = backColor = Pal.techBlue;
-                    trailChance = 0.05f;
-                    trailEffect = new Effect(90, e -> {
-                        Draw.color(Pal.techBlue);
-                        Fill.circle(e.x, e.y, 3);
-                    });
-                    weaveMag = 0.1f;
-                    weaveScale = 25;
-                    shootEffect = Fx.none;
-                    hitEffect = despawnEffect = Fx.smoke;
-                }};
-            }});
-
-            weapons.add(new Weapon() {{
-                rotate = true;
-                shootCone = 360;
-                rotateSpeed = 120;
-                reload = 20;
-                shootSound = Sounds.laser;
-
-                bullet = new LaserBulletType(135) {{
-                    rangeOverride = range = 2000;
-                    length = 2000;
-                    width = 45;
-                    sideLength = 20;
-
-                    status = FStatusEffects.slowII;
-                    statusDuration = 240;
-
-                    laserAbsorb = true;
-                    colors = new Color[]{Pal.techBlue, Pal.techBlue, Pal.techBlue};
-                }};
-            }});
         }};
 
         BossList.list.add(velocity);

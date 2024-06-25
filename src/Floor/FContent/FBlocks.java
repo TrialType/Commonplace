@@ -430,7 +430,7 @@ public class FBlocks {
                             lifetime = 135;
                             speed = 4;
                             trailLength = 36;
-                            trailColor = Color.valueOf("8da1e3");
+                            trailColor = Color.valueOf("272727");
                             range = maxRange = 12;
 
                             weapons.add(new Weapon() {{
@@ -480,7 +480,7 @@ public class FBlocks {
                                     speed = 2.3f;
                                     ammoMultiplier = 8;
                                     shootEffect = new Effect(33f, 80f, e -> {
-                                        color(Color.valueOf("8da1e3"), Color.valueOf("8da1e3"), Color.gray, e.fin());
+                                        color(Color.valueOf("272727"), Color.valueOf("272727"), Color.gray, e.fin());
 
                                         randLenVectors(e.id, 10, e.finpow() * 70f, e.rotation, 10f, (x, y) -> {
                                             Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f);
@@ -520,7 +520,7 @@ public class FBlocks {
                             lifetime = 90;
                             speed = 4;
                             trailLength = 36;
-                            trailColor = Color.valueOf("f9a3c7");
+                            trailColor = Color.valueOf("ffaa5f");
                             range = maxRange = 12;
 
                             weapons.add(new Weapon() {{
@@ -570,13 +570,13 @@ public class FBlocks {
                                     speed = 2.5f;
                                     ammoMultiplier = 16;
                                     shootEffect = new Effect(33f, 80f, e -> {
-                                        color(Color.valueOf("f9a3c7"), Color.valueOf("f9a3c7"), Color.gray, e.fin());
+                                        color(Color.valueOf("ffaa5f"), Color.valueOf("ffaa5f"), Color.gray, e.fin());
 
                                         randLenVectors(e.id, 10, e.finpow() * 70f, e.rotation, 10f, (x, y) -> {
                                             Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f);
                                         });
                                     });
-                                    status = FStatusEffects.burningII;
+                                    status = StatusEffects.burning;
                                     statusDuration = 300;
                                     hitEffect = despawnEffect = Fx.none;
                                 }};
@@ -624,7 +624,7 @@ public class FBlocks {
 
                 pierce = true;
                 pierceBuilding = true;
-                status = FStatusEffects.burningII;
+                status = StatusEffects.burning;
                 statusDuration = 240;
             }};
 
@@ -668,7 +668,7 @@ public class FBlocks {
                 fragBullets = 5;
                 fragBullet = new BulletType(3, 1) {{
                     lifetime = 30;
-                    status = FStatusEffects.breakHel;
+                    status = FStatusEffects.torn;
                     statusDuration = 120;
 
                     splashDamageRadius = 12;
@@ -754,7 +754,7 @@ public class FBlocks {
                     damage = 3;
                     speed = 2.5f;
                     splashDamageRadius = 36;
-                    status = FStatusEffects.breakHelII;
+                    status = FStatusEffects.torn;
                     statusDuration = 240;
 
                     hitEffect = new ExplosionEffect() {{
@@ -847,7 +847,7 @@ public class FBlocks {
                 fragBullet = new BulletType() {{
                     damage = 12;
                     splashDamageRadius = 24;
-                    status = FStatusEffects.suppressIII;
+                    status = FStatusEffects.torn;
                     statusDuration = 240;
 
                     hitEffect = new ExplosionEffect() {{
@@ -880,7 +880,7 @@ public class FBlocks {
                     frontColor = backColor = trailColor = Pal.redLight;
                     trailLength = 7;
 
-                    status = FStatusEffects.breakHelIII;
+                    status = FStatusEffects.torn;
                     statusDuration = 240;
 
                     splashDamageRadius = 24;
@@ -1005,7 +1005,7 @@ public class FBlocks {
                     lifetime = 850;
                     damage = 1f;
                     windPower = 0.45f;
-                    applyEffect = FStatusEffects.burningIV;
+                    applyEffect = FStatusEffects.gasify;
 
                     fillRange = false;
                     windEffect = new Effect(120, 80f, e -> {
@@ -1137,7 +1137,7 @@ public class FBlocks {
                         lifetime = 0;
                         splashDamageRadius = 60;
                         splashDamage = 45;
-                        status = FStatusEffects.breakHelIII;
+                        status = FStatusEffects.torn;
                         statusDuration = 300;
 
                         collides = hittable = absorbable = reflectable = false;
@@ -1250,7 +1250,7 @@ public class FBlocks {
                     windPower = 0.65f;
                     windWidth = 600;
                     windLength = 300;
-                    applyEffect = FStatusEffects.burningV;
+                    applyEffect = StatusEffects.burning;
 
                     fillRange = false;
                     windEffect = new Effect(120, 80f, e -> {
@@ -1384,7 +1384,7 @@ public class FBlocks {
                         lifetime = 0;
                         splashDamageRadius = 80;
                         splashDamage = 75;
-                        status = FStatusEffects.breakHelIV;
+                        status = FStatusEffects.suppress;
                         statusDuration = 360;
 
                         collides = hittable = absorbable = reflectable = false;
@@ -1467,7 +1467,7 @@ public class FBlocks {
                         circleRange = 160;
 
                         statusTime = 35;
-                        statusEffect = FStatusEffects.High_tensionV;
+                        statusEffect = FStatusEffects.abyss;
                         frontColor = backColor = lightColor = trailColor = Color.valueOf("01066FAA");
                         applyEffect = new WaveEffect() {{
                             colorFrom = colorTo = Color.valueOf("01066FAA");
@@ -1496,7 +1496,7 @@ public class FBlocks {
                             splashDamage = 700;
                             splashDamageRadius = 300;
 
-                            status = FStatusEffects.burningIV;
+                            status = FStatusEffects.gasify;
                             statusDuration = 300;
                             lightColor = Pal.darkFlame;
                         }};
@@ -1517,7 +1517,7 @@ public class FBlocks {
             maxFenceSize = 150;
             eleDamage = 1.2f;
             air = true;
-            statusEffect = FStatusEffects.burningIV;
+            statusEffect = FStatusEffects.gasify;
             statusTime = 300;
 
             consume(new ConsumePower(25, 5000, false));
@@ -1539,7 +1539,7 @@ public class FBlocks {
             maxFenceSize = 300;
             eleDamage = 2.5f;
             air = true;
-            statusEffect = FStatusEffects.burningV;
+            statusEffect = FStatusEffects.sublimation;
             statusTime = 420;
 
             consume(new ConsumePower(75, 15000, false));

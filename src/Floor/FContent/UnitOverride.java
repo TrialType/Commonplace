@@ -416,7 +416,7 @@ public class UnitOverride {
                 collides = absorbable = reflectable = hittable = false;
                 rangeOverride = 135;
                 keepVelocity = false;
-                status = FStatusEffects.slowII;
+                status = FStatusEffects.tardy;
                 statusDuration = 180;
                 splashDamageRadius = 135;
                 shootEffect = new Effect(45, e -> {

@@ -1,10 +1,8 @@
 package Floor.FContent;
 
-import Floor.FType.FDialog.ProjectUtils;
 import Floor.FType.FDialog.ProjectsLocated;
 import Floor.FType.FStatusEffect.WithMoreStatus;
 import arc.Core;
-import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.content.Fx;
@@ -14,14 +12,14 @@ import mindustry.type.StatusEffect;
 public class FStatusEffects {
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
-            suppressI, suppressII, suppressIII, suppressIV,
-            slowII, fastII,
-            High_tension, High_tensionII, High_tensionIII, High_tensionIV, High_tensionV,
-            burningII, burningIII, burningIV, burningV,
-            breakHel, breakHelII, breakHelIII, breakHelIV, breakHelV, pureA, pureT,
+            torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
+            grow, seethe, friability;
+
+    public static StatusEffect pureA, pureT,
             catalyzeI, catalyzeII, catalyzeIII, catalyzeIV, catalyzeV,
-            healthI, healthII, healthIII, healthIV, healthV,
-            corrosionI, corrosionII, corrosionIII, corrosionIV, corrosionV, corrosionVI, corrosionVII, corrosionVIII, corrosionIX, corrosionX;
+            corrosionI, corrosionII, corrosionIII, corrosionIV, corrosionV,
+            corrosionVI, corrosionVII, corrosionVIII, corrosionIX, corrosionX;
+
     public static WithMoreStatus pWet, pTarred, pFreezing, pMelting, pMuddy;
 
     public static void load() {
@@ -32,6 +30,90 @@ public class FStatusEffects {
             reloadMultiplier = 0.01f;
             dragMultiplier = 0.01f;
         }};
+        StrongStop = new StatusEffect("strong_stop") {{
+            speedMultiplier = 0;
+            buildSpeedMultiplier = 0;
+            disarm = true;
+        }};
+        boostSpeed = new StatusEffect("boost_speed") {{
+            speedMultiplier = 15;
+            show = false;
+        }};
+        HardHit = new StatusEffect("hard_hit") {{
+            damageMultiplier = 0.8F;
+            speedMultiplier = 0.75F;
+            healthMultiplier = 0.4F;
+            reloadMultiplier = 0.5F;
+        }};
+        torn = new StatusEffect("torn") {{
+            speedMultiplier = 0.8F;
+            healthMultiplier = 0.8F;
+        }};
+        suppress = new StatusEffect("suppress") {{
+            speedMultiplier = 0.6F;
+            healthMultiplier = 0.6F;
+        }};
+        tardy = new StatusEffect("tardy") {{
+            speedMultiplier = 0.55F;
+        }};
+        swift = new StatusEffect("swift") {{
+            speedMultiplier = 2.4f;
+            init(() -> {
+                opposite(StatusEffects.slow);
+                opposite(tardy);
+            });
+        }};
+        tension = new StatusEffect("tension") {{
+            speedMultiplier = 0.85f;
+            reloadMultiplier = 0.85f;
+            healthMultiplier = 0.95f;
+            damage = 6;
+        }};
+        abyss = new StatusEffect("abyss") {{
+            speedMultiplier = 0.1f;
+            reloadMultiplier = 0.1f;
+            healthMultiplier = 0.7f;
+            damage = 54;
+        }};
+        StatusEffects.burning.transitionDamage = 54;
+        StatusEffects.burning.damage = 1.2f;
+        gasify = new StatusEffect("gasify") {{
+            damage = 5.6f;
+            transitionDamage = 480;
+            effect = Fx.burning;
+
+            init(() -> {
+                opposite(StatusEffects.wet, StatusEffects.freezing);
+                affinity(StatusEffects.tarred, (unit, result, time) -> {
+                    unit.damagePierce(transitionDamage);
+                    Fx.burning.at(unit.x + Mathf.range(unit.bounds() / 2f), unit.y + Mathf.range(unit.bounds() / 2f));
+                    result.set(gasify, Math.min(time + result.time, 300f));
+                });
+            });
+        }};
+        sublimation = new StatusEffect("sublimation") {{
+            damage = 8f;
+            transitionDamage = 650;
+            effect = Fx.burning;
+        }};
+        grow = new StatusEffect("grow") {{
+            healthMultiplier = 20;
+            damage = -4;
+        }};
+        seethe = new StatusEffect("seethe") {{
+            damageMultiplier = 2.7f;
+            speedMultiplier = 1.9f;
+            reloadMultiplier = 0.62f;
+            healthMultiplier = 0.56f;
+            damage = 5.2f;
+        }};
+        friability = new StatusEffect("friability") {{
+            healthMultiplier = 0.001f;
+            damageMultiplier = 25;
+            speedMultiplier = 4.2f;
+        }};
+
+
         pureA = new StatusEffect("pure-a") {{
             show = false;
             permanent = true;
@@ -374,164 +456,7 @@ public class FStatusEffects {
             sign = true;
             with.addAll(StatusEffects.muddy, corrosionI);
         }};
-        StrongStop = new StatusEffect("strong_stop") {{
-            speedMultiplier = 0;
-            buildSpeedMultiplier = 0;
-            disarm = true;
-        }};
-        boostSpeed = new StatusEffect("boost_speed") {{
-            speedMultiplier = 15;
-            show = false;
-            permanent = false;
-        }};
-        HardHit = new StatusEffect("hard_hit") {{
-            damageMultiplier = 0.8F;
-            speedMultiplier = 0.75F;
-            healthMultiplier = 0.4F;
-            reloadMultiplier = 0.5F;
-            color = new Color(145, 75, 0, 255);
-            effectChance = 0.3f;
-        }};
-        suppressI = new StatusEffect("suppress_I") {{
-            speedMultiplier = 0.9F;
-            reloadMultiplier = 0.9F;
-            color = new Color(170, 170, 153, 255);
-            effectChance = 1;
-        }};
-        suppressII = new StatusEffect("suppress_II") {{
-            speedMultiplier = 0.8F;
-            reloadMultiplier = 0.8F;
-            color = new Color(170, 170, 153, 255);
-            effectChance = 1;
-        }};
-        suppressIII = new StatusEffect("suppress_III") {{
-            speedMultiplier = 0.7F;
-            reloadMultiplier = 0.7F;
-            color = new Color(170, 170, 153, 255);
-            effectChance = 1;
-        }};
-        suppressIV = new StatusEffect("suppress_IV") {{
-            speedMultiplier = 0.6F;
-            reloadMultiplier = 0.6F;
-            color = new Color(170, 170, 153, 255);
-            effectChance = 1;
-        }};
-        slowII = new StatusEffect("slow_II") {{
-            speedMultiplier = 0.55F;
-            color = new Color(0, 0, 0, 0);
-            effectChance = 1;
-            effect = Fx.none;
-        }};
-        fastII = new StatusEffect("fast_II") {{
-            speedMultiplier = 2.4f;
-            init(() -> {
-                opposite(StatusEffects.slow);
-                opposite(slowII);
-            });
-        }};
-        High_tension = new StatusEffect("high_tension") {{
-            speedMultiplier = 0.85f;
-            reloadMultiplier = 0.85f;
-            healthMultiplier = 0.95f;
-            damage = 6;
-        }};
-        High_tensionII = new StatusEffect("high_tensionII") {{
-            speedMultiplier = 0.67f;
-            reloadMultiplier = 0.67f;
-            healthMultiplier = 0.85f;
-            damage = 13;
-        }};
-        High_tensionIII = new StatusEffect("high_tensionIII") {{
-            speedMultiplier = 0.45f;
-            reloadMultiplier = 0.45f;
-            healthMultiplier = 0.8f;
-            damage = 20;
-        }};
-        High_tensionIV = new StatusEffect("high_tensionIV") {{
-            speedMultiplier = 0.24f;
-            reloadMultiplier = 0.24f;
-            healthMultiplier = 0.75f;
-            damage = 34;
-        }};
-        High_tensionV = new StatusEffect("high_tensionV") {{
-            speedMultiplier = 0.1f;
-            reloadMultiplier = 0.1f;
-            healthMultiplier = 0.7f;
-            damage = 54;
-        }};
-        StatusEffects.burning.transitionDamage = 54;
-        StatusEffects.burning.damage = 0.7f;
-        burningII = new StatusEffect("burningII") {{
-            damage = 1.2f;
-            transitionDamage = 130;
-            effect = Fx.burning;
-        }};
-        burningIII = new StatusEffect("burningIII") {{
-            damage = 3.4f;
-            transitionDamage = 340;
-            effect = Fx.burning;
-        }};
-        burningIV = new StatusEffect("burningIV") {{
-            damage = 5.6f;
-            transitionDamage = 480;
-            effect = Fx.burning;
 
-            init(() -> {
-                opposite(StatusEffects.wet, StatusEffects.freezing);
-                affinity(StatusEffects.tarred, (unit, result, time) -> {
-                    unit.damagePierce(transitionDamage);
-                    Fx.burning.at(unit.x + Mathf.range(unit.bounds() / 2f), unit.y + Mathf.range(unit.bounds() / 2f));
-                    result.set(burningIV, Math.min(time + result.time, 300f));
-                });
-            });
-        }};
-        burningV = new StatusEffect("burningV") {{
-            damage = 8f;
-            transitionDamage = 650;
-            effect = Fx.burning;
-        }};
-        breakHel = new StatusEffect("break_hel") {{
-            healthMultiplier = 0.9f;
-            transitionDamage = 12;
-        }};
-        breakHelII = new StatusEffect("break_helII") {{
-            healthMultiplier = 0.8f;
-            transitionDamage = 24;
-        }};
-        breakHelIII = new StatusEffect("break_helIII") {{
-            healthMultiplier = 0.65f;
-            transitionDamage = 48;
-        }};
-        breakHelIV = new StatusEffect("break_helIV") {{
-            healthMultiplier = 0.5f;
-            transitionDamage = 96;
-        }};
-        breakHelV = new StatusEffect("break_helV") {{
-            healthMultiplier = 0.3f;
-            transitionDamage = 192;
-        }};
-        healthI = new StatusEffect("health-1") {{
-            healthMultiplier = 1.8f;
-            damage = -1;
-        }};
-        healthII = new StatusEffect("health-2") {{
-            healthMultiplier = 3;
-            damage = -2;
-        }};
-        healthIII = new StatusEffect("health-3") {{
-            healthMultiplier = 4.4f;
-            damage = -3;
-        }};
-        healthIV = new StatusEffect("health-4") {{
-            healthMultiplier = 6;
-            damage = -4;
-        }};
-        healthV = new StatusEffect("health-5") {{
-            healthMultiplier = 40;
-            damage = -60;
-        }};
-
-        burnings.addAll(StatusEffects.burning, burningII, burningIII, burningIV, burningV);
 
         ProjectsLocated.eff = new StatusEffect("eff") {{
             show = false;
@@ -539,5 +464,7 @@ public class FStatusEffects {
             healthMultiplier = Core.settings.getFloat("floor-project-heal", 1);
             speedMultiplier = Core.settings.getFloat("floor-project-speed", 1);
         }};
+
+        burnings.addAll(StatusEffects.burning, gasify);
     }
 }
