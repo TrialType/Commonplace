@@ -103,9 +103,9 @@ public class FStatusEffects {
         seethe = new StatusEffect("seethe") {{
             damageMultiplier = 2.7f;
             speedMultiplier = 1.9f;
-            reloadMultiplier = 0.62f;
+            reloadMultiplier = 0.33f;
             healthMultiplier = 0.56f;
-            damage = 5.2f;
+            damage = 4f;
         }};
         friability = new StatusEffect("friability") {{
             healthMultiplier = 0.001f;

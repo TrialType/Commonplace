@@ -215,7 +215,7 @@ public class FUnits {
             }});
 
             weapons.add(new Weapon() {{
-                reload = 45;
+                reload = 30;
                 x = 6;
                 y = 13;
                 xRand = 25;
@@ -226,13 +226,15 @@ public class FUnits {
                 }};
                 bullet = new LightningBulletType() {{
                     damage = 30;
+                    status = StatusEffects.sapped;
+                    statusDuration = 150;
                     healAmount = 250;
                     lightningLength = 35;
                     lightningColor = Color.valueOf("00DDAAFF");
                 }};
             }});
         }};
-        rejuvenate_b = new UnitType("rejuvenate_b") {{
+        rejuvenate_b = new UnitType("rejuvenate-b") {{
             constructor = MechUnit::create;
 
             hidden = true;
@@ -264,8 +266,8 @@ public class FUnits {
                 }};
 
                 bullet = new ExplosionBulletType(0, 120) {{
-                    healAmount = 240;
-                    healPercent = 2f;
+                    healAmount = 1000;
+                    healPercent = 7f;
                 }};
             }});
         }};
@@ -418,89 +420,24 @@ public class FUnits {
                 y = -10;
                 shoot = new ShootBarrel() {{
                     shots = 2;
-                    barrels = new float[]{0, 0, -90};
+                    barrels = new float[]{
+                            0, 0, -60,
+                            0, 0, 60
+                    };
                 }};
                 shootSound = Sounds.artillery;
-                bullet = new BasicBulletType() {{
+                bullet = new BulletType() {{
                     intervalSpread = 30;
                     shootEffect = Fx.artilleryTrailSmoke;
-                    status = FStatusEffects.tardy;
-                    statusDuration = 90;
+                    status = FStatusEffects.seethe;
+                    statusDuration = 600;
                     splashDamageRadius = 158;
                     speed = 7;
                     lifetime = 600;
-                    fragOnHit = true;
-                    fragOnAbsorb = true;
-                    width = 0;
-                    height = 0;
                     homingPower = 0.9F;
                     homingRange = 1000;
                     homingDelay = 120;
-                    despawnEffect = new WaveEffect() {{
-                        lifetime = 90;
-                        colorFrom = new Color(170, 113, 113, 85);
-                        colorTo = new Color(170, 113, 113, 102);
-                        sizeTo = 0;
-                        strokeFrom = 60;
-                        strokeTo = 30;
-                    }};
-                    hitEffect = despawnEffect;
-                    fragBullets = 1;
-                    fragVelocityMin = 0;
-                    fragVelocityMax = 0;
-                    fragLifeMin = 1.5F;
-                    fragLifeMax = 1.5F;
-                    fragBullet = new BasicBulletType() {{
-                        fragOnHit = true;
-                        fragOnAbsorb = true;
-                        collides = false;
-                        status = FStatusEffects.torn;
-                        statusDuration = 150;
-                        splashDamage = 20;
-                        splashDamageRadius = 158;
-                        despawnEffect = new MultiEffect(new WaveEffect() {{
-                            lifetime = 10;
-                            colorFrom = new Color(170, 113, 113, 102);
-                            colorTo = new Color(170, 113, 113, 51);
-                            sizeTo = 0;
-                            strokeFrom = 30;
-                            strokeTo = 180;
-                            sides = 120;
-
-                        }}, new WaveEffect() {{
-                            startDelay = 10;
-                            lifetime = 20;
-                            colorFrom = new Color(170, 113, 113, 102);
-                            colorTo = new Color(170, 113, 113, 51);
-                            sizeTo = 0;
-                            strokeFrom = 180;
-                            strokeTo = 180;
-                            sides = 120;
-
-                        }}, new WaveEffect() {{
-                            startDelay = 10;
-                            lifetime = 50;
-                            colorFrom = new Color(170, 113, 113, 102);
-                            colorTo = new Color(170, 113, 113, 51);
-                            sizeFrom = 10;
-                            sizeTo = 160;
-                            strokeFrom = 10;
-                            strokeTo = 0;
-                            sides = 120;
-                        }}, new ExplosionEffect() {{
-                            lifetime = 60;
-                            startDelay = 10;
-                            waveLife = 0;
-                            sparkRad = 158;
-                            smokeRad = 158;
-                            smokes = 200;
-                            sparkStroke = 2;
-                            sparkLen = 5;
-                            sparks = 300;
-
-                        }});
-                        hitEffect = Fx.none;
-                    }};
+                    hitEffect = despawnEffect = Fx.none;
                 }};
             }});
         }};
