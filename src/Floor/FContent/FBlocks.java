@@ -431,13 +431,13 @@ public class FBlocks {
                             speed = 4;
                             trailLength = 36;
                             trailColor = Color.valueOf("8da1e3");
+                            range = maxRange = 12;
 
                             weapons.add(new Weapon() {{
                                 x = y = 0;
                                 mirror = false;
-                                bullet = new ExplosionBulletType(35, 36) {{
-                                    absorbable = reflectable = hittable = false;
-                                    rangeOverride = 30;
+                                bullet = new ExplosionBulletType(35, 62) {{
+                                    rangeOverride = 12;
                                 }};
                             }});
 
@@ -446,7 +446,7 @@ public class FBlocks {
                                 mirror = false;
                                 shootCone = 360;
                                 inaccuracy = 15;
-                                reload = 60;
+                                reload = 15;
                                 alwaysShooting = true;
 
                                 shootSound = Sounds.flame;
@@ -521,13 +521,13 @@ public class FBlocks {
                             speed = 4;
                             trailLength = 36;
                             trailColor = Color.valueOf("f9a3c7");
+                            range = maxRange = 12;
 
                             weapons.add(new Weapon() {{
                                 x = y = 0;
                                 mirror = false;
-                                bullet = new ExplosionBulletType(45, 36) {{
-                                    absorbable = reflectable = hittable = false;
-                                    rangeOverride = 30;
+                                bullet = new ExplosionBulletType(45, 65) {{
+                                    rangeOverride = 5;
                                 }};
                             }});
 
@@ -536,7 +536,7 @@ public class FBlocks {
                                 mirror = false;
                                 shootCone = 360;
                                 inaccuracy = 15;
-                                reload = 80;
+                                reload = 15;
                                 alwaysShooting = true;
 
                                 shootSound = Sounds.flame;

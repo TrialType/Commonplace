@@ -36,11 +36,7 @@ public class TileSpawnerUnit extends ENGSWEISUnitEntity implements OwnerSpawner 
             }
             minerId.clear();
         }
-        for (Unit u : miners) {
-            if (u.dead || u.health() < 0) {
-                miners.remove(u);
-            }
-        }
+        miners.removeAll(u -> u == null || u.dead || u.health() < 0);
         super.update();
     }
 

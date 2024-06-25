@@ -189,20 +189,47 @@ public class FUnits {
         rejuvenate_a = new MissileUnitType("rejuvenate-a") {{
             hidden = true;
 
-            health = 10000;
-            armor = 260;
+            health = 3000;
+            armor = 100;
             speed = 6;
-            range = maxRange = 120;
-            lifetime = 1200;
+            range = maxRange = 16;
+            lifetime = 300;
             trailLength = 15;
             trailColor = Color.valueOf("00DDAAFF");
             immunities.addAll(StatusEffects.slow, FStatusEffects.slowII, FStatusEffects.StrongStop);
+
+            abilities.add(new ShieldArcAbility() {{
+                radius = 20;
+                regen = 1;
+                max = 7000;
+                cooldown = 1200;
+                angle = 115;
+                whenShooting = false;
+            }});
 
             weapons.add(new Weapon() {{
                 bullet = new ExplosionBulletType(15, 120) {{
                     rangeOverride = 120;
                     status = FStatusEffects.breakHelIV;
                     statusDuration = 300;
+                }};
+            }});
+
+            weapons.add(new Weapon() {{
+                reload = 45;
+                x = 6;
+                y = 13;
+                xRand = 25;
+                alwaysShooting = true;
+
+                shoot = new ShootPattern() {{
+                    shots = 5;
+                }};
+                bullet = new LightningBulletType() {{
+                    damage = 30;
+                    healAmount = 250;
+                    lightningLength = 35;
+                    lightningColor = Color.valueOf("00DDAAFF");
                 }};
             }});
         }};
@@ -217,6 +244,7 @@ public class FUnits {
             drag = 0.9f;
             hitSize = 35;
             range = maxRange = 3600;
+            stepShake = 0;
             isEnemy = false;
 
             abilities.add(new StatusFieldAbility(FStatusEffects.healthIV, 3600, 300, 160));
