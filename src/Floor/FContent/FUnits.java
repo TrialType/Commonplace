@@ -388,6 +388,7 @@ public class FUnits {
             legGroupSize = 2;
             legLength = 14;
             legContinuousMove = false;
+            stepShake = 0;
             abilities.add(new ShieldArcAbility() {{
                 regen = 2.5F;
                 max = 50000;
@@ -429,6 +430,8 @@ public class FUnits {
                 bullet = new BulletType() {{
                     intervalSpread = 30;
                     shootEffect = Fx.artilleryTrailSmoke;
+                    trailEffect = Fx.artilleryTrailSmoke;
+                    trailChance = 0.5f;
                     status = FStatusEffects.seethe;
                     statusDuration = 600;
                     splashDamageRadius = 158;
