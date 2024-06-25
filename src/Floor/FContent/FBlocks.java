@@ -12,7 +12,6 @@ import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
-import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.*;
@@ -50,15 +49,13 @@ public class FBlocks {
     //test
     public static Block kt, pu;
     //units
-    public static Block outPowerFactory, inputPowerFactory, outPowerFactoryII,
-            inputPowerFactoryII, outPowerFactoryIII, inputPowerFactoryIII,
-            specialUnitFactory;
+    public static Block outPowerFactory, inputPowerFactory;
     //defense
     public static Block eleFenceII, eleFenceIII;
     //turret
     public static Block fourNet, fireBoost,
-            middleWindTurret, largeWindTurret,
-            stay, bind, tranquil,
+            windTurret,
+            stay, tranquil,
             fireStream, residual;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
@@ -190,128 +187,7 @@ public class FBlocks {
                     Items.lead, 1400, Items.graphite, 1350, Items.titanium, 1400, Items.thorium, 1450, Items.surgeAlloy, 500));
         }};
 //======================================================================================================================
-        specialUnitFactory = new UnitFactory("special-unit-factory") {{
-            requirements(Category.units, with(Items.lead, 1500, Items.silicon, 700, Items.titanium, 1400, Items.thorium, 400, Items.plastanium, 200));
-
-            size = 6;
-            health = 2000;
-
-            plans.addAll(new UnitPlan(FUnits.bulletInterception, 3600, ItemStack.with(Items.silicon, 500, Items.copper, 650, Items.plastanium, 350)),
-                    new UnitPlan(FUnits.rejuvenate, 3600, ItemStack.with(Items.silicon, 500, Items.copper, 650, Items.plastanium, 350)));
-
-            consume(new ConsumePower(12, 0, false));
-        }};
         outPowerFactory = new GradeFactory("out_power_factory") {{
-            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800));
-
-            itemCapacity = 770;
-            size = 3;
-            consumePower(50f);
-
-            constructTime = 60f * 10f;
-            grades = new Seq<>(new UnitType[]{
-                    UnitTypes.flare, UnitTypes.nova,
-                    UnitTypes.pulsar, UnitTypes.dagger,
-                    UnitTypes.mace, UnitTypes.crawler,
-                    UnitTypes.atrax, UnitTypes.horizon,
-                    UnitTypes.poly, UnitTypes.risso,
-                    UnitTypes.minke, UnitTypes.retusa,
-                    UnitTypes.oxynoe, UnitTypes.stell,
-                    UnitTypes.locus, UnitTypes.merui,
-                    UnitTypes.cleroi, UnitTypes.elude,
-                    UnitTypes.avert, FUnits.barb, FUnits.hammer
-            });
-        }};
-        inputPowerFactory = new GradeFactory("input_power_factory") {{
-            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800));
-
-            itemCapacity = 770;
-            size = 3;
-            consumePower(50f);
-
-            constructTime = 60f * 10f;
-            grades = new Seq<>(new UnitType[]{
-                    UnitTypes.flare, UnitTypes.nova,
-                    UnitTypes.pulsar, UnitTypes.dagger,
-                    UnitTypes.mace, UnitTypes.crawler,
-                    UnitTypes.atrax, UnitTypes.horizon,
-                    UnitTypes.poly, UnitTypes.risso,
-                    UnitTypes.minke, UnitTypes.retusa,
-                    UnitTypes.oxynoe, UnitTypes.stell,
-                    UnitTypes.locus, UnitTypes.merui,
-                    UnitTypes.cleroi, UnitTypes.elude,
-                    UnitTypes.avert, FUnits.barb, FUnits.hammer
-            });
-            out = false;
-        }};
-        outPowerFactoryII = new GradeFactory("out_power_factory_II") {{
-            requirements(Category.units, with(Items.copper, 1000, Items.lead, 1200, Items.silicon, 2000));
-
-            itemCapacity = 770;
-            size = 7;
-            consumePower(200);
-
-            constructTime = 60f * 10f;
-            grades = new Seq<>(new UnitType[]{
-                    UnitTypes.flare, UnitTypes.nova,
-                    UnitTypes.pulsar, UnitTypes.dagger,
-                    UnitTypes.mace, UnitTypes.crawler,
-                    UnitTypes.atrax, UnitTypes.horizon,
-                    UnitTypes.poly, UnitTypes.risso,
-                    UnitTypes.minke, UnitTypes.retusa,
-                    UnitTypes.oxynoe, UnitTypes.stell,
-                    UnitTypes.locus, UnitTypes.merui,
-                    UnitTypes.cleroi, UnitTypes.elude,
-                    UnitTypes.avert, FUnits.barb, FUnits.hammer,
-                    UnitTypes.fortress, UnitTypes.scepter,
-                    UnitTypes.quasar, UnitTypes.vela,
-                    UnitTypes.spiroct, UnitTypes.arkyid,
-                    UnitTypes.zenith, UnitTypes.antumbra,
-                    UnitTypes.mega, UnitTypes.quad,
-                    UnitTypes.bryde, UnitTypes.sei,
-                    UnitTypes.cyerce, UnitTypes.aegires,
-                    UnitTypes.precept, UnitTypes.vanquish,
-                    UnitTypes.anthicus, UnitTypes.tecta,
-                    UnitTypes.obviate, UnitTypes.quell,
-                    FUnits.buying, FUnits.crazy,
-                    FUnits.dive, FUnits.befall
-            });
-        }};
-        inputPowerFactoryII = new GradeFactory("input_power_factory_II") {{
-            requirements(Category.units, with(Items.copper, 1000, Items.lead, 1200, Items.silicon, 2000));
-
-            itemCapacity = 770;
-            size = 7;
-            consumePower(200);
-
-            constructTime = 60f * 10f;
-            grades = new Seq<>(new UnitType[]{
-                    UnitTypes.flare, UnitTypes.nova,
-                    UnitTypes.pulsar, UnitTypes.dagger,
-                    UnitTypes.mace, UnitTypes.crawler,
-                    UnitTypes.atrax, UnitTypes.horizon,
-                    UnitTypes.poly, UnitTypes.risso,
-                    UnitTypes.minke, UnitTypes.retusa,
-                    UnitTypes.oxynoe, UnitTypes.stell,
-                    UnitTypes.locus, UnitTypes.merui,
-                    UnitTypes.cleroi, UnitTypes.elude,
-                    UnitTypes.avert, FUnits.barb, FUnits.hammer,
-                    UnitTypes.fortress, UnitTypes.scepter,
-                    UnitTypes.quasar, UnitTypes.vela,
-                    UnitTypes.spiroct, UnitTypes.arkyid,
-                    UnitTypes.zenith, UnitTypes.antumbra,
-                    UnitTypes.mega, UnitTypes.quad,
-                    UnitTypes.bryde, UnitTypes.sei,
-                    UnitTypes.cyerce, UnitTypes.aegires,
-                    UnitTypes.precept, UnitTypes.vanquish,
-                    UnitTypes.anthicus, UnitTypes.tecta,
-                    UnitTypes.obviate, UnitTypes.quell,
-                    FUnits.buying, FUnits.crazy,
-                    FUnits.dive, FUnits.befall
-            });
-            out = false;
-        }};
-        outPowerFactoryIII = new GradeFactory("out_power_factory_III") {{
             requirements(Category.units, with(Items.copper, 2000, Items.lead, 2400, Items.silicon, 2800));
 
             itemCapacity = 770;
@@ -320,7 +196,7 @@ public class FBlocks {
 
             constructTime = 60f * 10f;
         }};
-        inputPowerFactoryIII = new GradeFactory("input_power_factory_III") {{
+        inputPowerFactory = new GradeFactory("input_power_factory") {{
             requirements(Category.units, with(Items.copper, 2000, Items.lead, 2400, Items.silicon, 2800));
 
             itemCapacity = 770;
@@ -700,87 +576,6 @@ public class FBlocks {
                     Items.graphite, 60
             ));
         }};
-        bind = new PowerTurret("bind") {{
-            consume(new ConsumePower(6, 0, false));
-
-            health = 1000;
-            size = 3;
-
-            recoil = 1.3f;
-            range = 280;
-            reload = 60;
-            consumesPower = true;
-            hasPower = true;
-            consumeAmmoOnce = false;
-            canOverdrive = false;
-
-            shootType = new BulletType() {{
-                speed = 4.8f;
-                damage = 12;
-
-                trailLength = 14;
-                trailColor = Pal.redLight;
-                trailChance = 1;
-                rangeOverride = 200;
-                lightColor = Pal.redLight;
-                status = StatusEffects.unmoving;
-                statusDuration = 45;
-                splashDamageRadius = 60;
-
-                shootEffect = smokeEffect = Fx.none;
-                hitEffect = new ExplosionEffect() {{
-                    lifetime = 45;
-                    waveColor = Pal.redLight;
-                    waveRadBase = 60;
-                    waveRad = 61;
-                    waveStroke = 4;
-                    waveLife = 45;
-                    smokes = 28;
-                    smokeRad = 60;
-                    smokeColor = Pal.redLight;
-                    smokeSizeBase = 4;
-                }};
-                despawnEffect = hitEffect;
-
-                fragAngle = 360;
-                fragBullets = 6;
-                fragLifeMax = 3.5f;
-                fragLifeMin = 3f;
-                fragVelocityMin = 0.2f;
-                fragVelocityMax = 0.5f;
-                fragOnAbsorb = false;
-                fragOnHit = true;
-                fragBullet = new BulletType() {{
-                    damage = 3;
-                    speed = 2.5f;
-                    splashDamageRadius = 36;
-                    status = FStatusEffects.torn;
-                    statusDuration = 240;
-
-                    hitEffect = new ExplosionEffect() {{
-                        lifetime = 240;
-
-                        waveColor = Pal.redLight;
-                        waveRadBase = 6;
-                        waveRad = 6;
-                        waveStroke = 1;
-                        waveLife = 240;
-
-                        smokes = 4;
-                        smokeRad = 6;
-                        smokeColor = Pal.redLight;
-                        smokeSizeBase = 1;
-                    }};
-                    despawnEffect = hitEffect;
-                }};
-            }};
-
-            requirements(Category.turret, ItemStack.with(
-                    Items.copper, 500,
-                    Items.titanium, 350,
-                    Items.graphite, 400
-            ));
-        }};
         tranquil = new PowerTurret("tranquil") {{
             consume(new ConsumePower(20, 0, false));
 
@@ -911,249 +706,7 @@ public class FBlocks {
                     Items.graphite, 800
             ));
         }};
-        middleWindTurret = new ItemTurret("middle_wind_turret") {{
-            requirements(Category.turret, ItemStack.with(
-                    Items.titanium, 700,
-                    Items.copper, 800,
-                    Items.graphite, 780,
-                    Items.silicon, 750
-            ));
-
-            consume(new ConsumePower(100, 1500, false));
-            coolant = consume(new ConsumeCoolant(0.8f));
-            coolantMultiplier = 1.05f;
-
-            hasItems = true;
-            itemCapacity = 32;
-            maxAmmo = 32;
-            ammoPerShot = 10;
-            consumeAmmoOnce = false;
-            shootX = shootY = 0;
-
-            range = 500;
-            reload = 900;
-            size = 4;
-            clipSize = 4;
-            health = 2000;
-
-            ammoTypes.put(Items.blastCompound, new BasicBulletType() {{
-                ammoMultiplier = 1f;
-
-                trailEffect = Fx.none;
-
-                damage = 0;
-                lifetime = 1800;
-                speed = 1.5f;
-                width = height = 0;
-                shrinkX = shrinkY = 0;
-                backColor = frontColor = Pal.darkPyraFlame;
-
-                trailLength = 130;
-                trailWidth = 2;
-                trailChance = 1f;
-                trailRotation = true;
-                trailEffect = new Effect(90, e -> {
-                    float len = (float) Math.abs(Math.cos(Math.toRadians((e.time + Time.time) * 5.5 - 2.75))) * 4,
-                            x = e.x, y = e.y, rotation = e.rotation;
-                    Draw.color(Pal.darkPyraFlame);
-                    Fill.circle((float) (x + len * Math.cos(Math.toRadians(rotation + 90))),
-                            (float) (y + len * Math.sin(Math.toRadians(rotation + 90))), (1 - e.fin()) * 2);
-                    Fill.circle((float) (x + len * Math.cos(Math.toRadians(rotation - 90))),
-                            (float) (y + len * Math.sin(Math.toRadians(rotation - 90))), (1 - e.fin()) * 2);
-                });
-
-                parts.addAll(new ShapePart() {{
-                    rotateSpeed = 3;
-                    sides = 3;
-                    lifetime = 400;
-                    radius = 10;
-                    radiusTo = 10;
-                    colorTo = color = Pal.darkPyraFlame;
-                }}, new ShapePart() {{
-                    rotateSpeed = 3;
-                    sides = 3;
-                    lifetime = 400;
-                    rotation = 180;
-                    radius = 10;
-                    radiusTo = 10;
-                    colorTo = color = Pal.darkPyraFlame;
-                }}, new ShapePart() {{
-                    rotateSpeed = -3;
-                    sides = 3;
-                    lifetime = 400;
-                    rotation = 30;
-                    radius = 10;
-                    radiusTo = 10;
-                    colorTo = color = Pal.darkPyraFlame;
-                }}, new ShapePart() {{
-                    rotateSpeed = -3;
-                    sides = 3;
-                    lifetime = 400;
-                    rotation = 210;
-                    radius = 10;
-                    radiusTo = 10;
-                    colorTo = color = Pal.darkPyraFlame;
-                }});
-
-                fragAngle = 0;
-                fragRandomSpread = 0;
-                fragSpread = 0;
-                fragOnAbsorb = fragOnHit = true;
-                fragBullets = 1;
-
-                fragBullet = new WindBulletType() {{
-                    lifetime = 850;
-                    damage = 1f;
-                    windPower = 0.45f;
-                    applyEffect = FStatusEffects.gasify;
-
-                    fillRange = false;
-                    windEffect = new Effect(120, 80f, e -> {
-                        Draw.color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());
-                        randLenVectors(e.id, 5, e.finpow() * Math.max(windLength, windWidth / 2) * 1.4f, e.rotation, 50,
-                                (x, y) -> Fill.circle(e.x + x, e.y + y, 1 * (1 - e.fin()))
-                        );
-                    });
-                    everyHit = new Effect(120, e -> {
-                        Draw.color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());
-                        if (e.data instanceof Unit u) {
-                            float size = u.hitSize;
-                            float angle = Angles.angle(e.x, e.y, u.x, u.y);
-                            float x = u.x - Angles.trnsx(angle, size / 1.2f);
-                            float y = u.y - Angles.trnsy(angle, size / 1.2f);
-                            for (float i = -size / 1.5f; i <= size / 1.5f; i += 1) {
-                                if (i + size / 1.5f <= 1.1 || i - size / 1.5f >= -1.9) {
-                                    Draw.color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());
-                                } else {
-                                    Draw.color(Pal.darkPyraFlame, Color.valueOf("00000099"), Color.valueOf("00000044"), e.fin());
-                                }
-                                float len = (float) (size / 1.2f - Math.sqrt(size * size / 1.2f / 1.2f - i * i));
-                                float lx = x + Angles.trnsx(angle + 90, i) + Angles.trnsx(angle, len);
-                                float ly = y + Angles.trnsy(angle + 90, i) + Angles.trnsy(angle, len);
-                                randLenVectors((long) (e.id + i), 1, e.finpow() * 200, angle, 24,
-                                        (cx, cy) -> Fill.circle(lx + cx, ly + cy, 2 * (1 - e.fin()))
-                                );
-                                randLenVectors((long) (e.id - i), 1, e.finpow() * 200, angle, 24,
-                                        (cx, cy) -> Fill.circle(lx + cx, ly + cy, 2 * (1 - e.fin()))
-                                );
-                            }
-                        }
-                        if (e.data instanceof Building b) {
-                            float size = b.hitSize();
-                            float angle = Angles.angle(e.x, e.y, b.x, b.y);
-                            float x = b.x - Angles.trnsx(angle, size / 1.2f);
-                            float y = b.y - Angles.trnsy(angle, size / 1.2f);
-                            for (float i = -size / 1.5f; i <= size / 1.5f; i += 1) {
-                                float len = (float) (size / 1.2f - Math.sqrt(size * size / 1.2f / 1.2f - i * i));
-                                float lx = x + Angles.trnsx(angle + 90, i) + Angles.trnsx(angle, len);
-                                float ly = y + Angles.trnsy(angle + 90, i) + Angles.trnsy(angle, len);
-                                if (i + size / 1.5f <= 1.1 || i - size / 1.5f >= -1.9) {
-                                    Draw.color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());
-                                } else {
-                                    Draw.color(Pal.darkPyraFlame, Color.valueOf("00000099"), Color.valueOf("00000044"), e.fin());
-                                }
-                                randLenVectors((long) (e.id + i), 1, e.finpow() * 200, angle, 24,
-                                        (cx, cy) -> Fill.circle(lx + cx, ly + cy, 2 * (1 - e.fin()))
-                                );
-                                randLenVectors((long) (e.id - i), 1, e.finpow() * 200, angle, 24,
-                                        (cx, cy) -> Fill.circle(lx + cx, ly + cy, 2 * (1 - e.fin()))
-                                );
-                            }
-                        }
-                    });
-
-                    parts.addAll(new ShapePart() {{
-                        rotateSpeed = 3;
-                        sides = 3;
-                        lifetime = 400;
-                        radius = 10;
-                        radiusTo = 0;
-                        colorTo = color = Pal.darkPyraFlame;
-                    }}, new ShapePart() {{
-                        rotateSpeed = 3;
-                        sides = 3;
-                        lifetime = 400;
-                        rotation = 180;
-                        radius = 10;
-                        radiusTo = 0;
-                        colorTo = color = Pal.darkPyraFlame;
-                    }}, new ShapePart() {{
-                        rotateSpeed = 3;
-                        sides = 3;
-                        lifetime = 400;
-                        rotation = 30;
-                        radius = 10;
-                        radiusTo = 0;
-                        colorTo = color = Pal.darkPyraFlame;
-                    }}, new ShapePart() {{
-                        rotateSpeed = 3;
-                        sides = 3;
-                        lifetime = 400;
-                        rotation = 210;
-                        radius = 10;
-                        radiusTo = 0;
-                        colorTo = color = Pal.darkPyraFlame;
-                    }});
-                }};
-            }});
-            ammoTypes.put(Items.metaglass, new PointBulletType() {{
-                trailEffect = Fx.none;
-
-                damage = 0;
-                lifetime = 600;
-                speed = 500;
-                trailSpacing = 20f;
-
-                fragAngle = 0;
-                fragRandomSpread = 0;
-                fragSpread = 0;
-                fragOnAbsorb = fragOnHit = true;
-                fragBullets = 1;
-
-                fragBullet = new FreeBulletType() {{
-                    lifetime = 700;
-                    damage = 36;
-                    speed = 0;
-                    hittable = absorbable = reflectable = collides = false;
-                    despawnEffect = hitEffect = Fx.none;
-
-                    parts.add(new FlarePart() {{
-                        sides = 3;
-                        radius = 45;
-                        radiusTo = 0;
-                        rotMove = 1000;
-                        stroke = 30;
-                        innerScl = 0.3f;
-                        color1 = Color.valueOf("EBEEF5");
-                        color2 = Color.valueOf("EBEEF5");
-                    }});
-
-                    intervalBullets = 3;
-                    intervalRandomSpread = 360;
-                    bulletInterval = 1;
-                    intervalDelay = 0;
-                    intervalBullet = new BulletType(0, 0) {{
-                        rangeOverride = 120;
-                        lifetime = 0;
-                        splashDamageRadius = 60;
-                        splashDamage = 45;
-                        status = FStatusEffects.torn;
-                        statusDuration = 300;
-
-                        collides = hittable = absorbable = reflectable = false;
-                    }};
-
-                    intervalHitEffect = new Effect(45, e -> {
-                        if (e.data instanceof Vec2 v) {
-                            color(Color.valueOf("EBEEF522"));
-                            Lines.stroke(7.5f * (1 - e.fin()));
-                            Lines.line(e.x, e.y, v.x, v.y);
-                        }
-                    });
-                }};
-            }});
-        }};
-        largeWindTurret = new ItemTurret("large_wind_turret") {{
+        windTurret = new ItemTurret("wind_turret") {{
             requirements(Category.turret, ItemStack.with(
                     Items.titanium, 2000,
                     Items.copper, 2600,
@@ -1162,20 +715,20 @@ public class FBlocks {
                     Items.surgeAlloy, 300
             ));
 
-            consume(new ConsumePower(1000, 20000, false));
+            consume(new ConsumePower(200, 20000, false));
             coolant = consume(new ConsumeCoolant(1.3f));
             coolantMultiplier = 1.01f;
 
             hasItems = true;
             itemCapacity = 90;
             maxAmmo = 90;
-            ammoPerShot = 15;
+            ammoPerShot = 10;
             consumeAmmoOnce = false;
             shootX = shootY = 0;
 
-            range = 1000;
+            range = 500;
             reload = 1200;
-            size = 5;
+            size = 4;
             clipSize = 5;
             health = 8000;
 
@@ -1185,18 +738,18 @@ public class FBlocks {
                 trailEffect = Fx.none;
 
                 damage = 0;
-                lifetime = 1800;
+                lifetime = 240;
                 speed = 2.4f;
                 width = height = 0;
                 shrinkX = shrinkY = 0;
                 backColor = frontColor = Pal.darkPyraFlame;
 
-                trailLength = 168;
-                trailWidth = 2;
+                trailLength = 127;
+                trailWidth = 1.5f;
                 trailChance = 1f;
                 trailRotation = true;
                 trailEffect = new Effect(90, e -> {
-                    float len = (float) Math.abs(Math.cos(Math.toRadians((e.time + Time.time) * 5 - 2.5))) * 6,
+                    float len = (float) Math.abs(Math.cos(Math.toRadians((e.time + Time.time) * 5))) * 4,
                             x = e.x, y = e.y, rotation = e.rotation;
                     Draw.color(Pal.darkPyraFlame);
                     Fill.circle((float) (x + len * Math.cos(Math.toRadians(rotation + 90))),
@@ -1209,32 +762,32 @@ public class FBlocks {
                     rotateSpeed = 3;
                     sides = 3;
                     lifetime = 400;
-                    radius = 14;
-                    radiusTo = 14;
+                    radius = 11;
+                    radiusTo = 11;
                     colorTo = color = Pal.darkPyraFlame;
                 }}, new ShapePart() {{
                     rotateSpeed = 3;
                     sides = 3;
                     lifetime = 400;
                     rotation = 180;
-                    radius = 14;
-                    radiusTo = 14;
+                    radius = 11;
+                    radiusTo = 11;
                     colorTo = color = Pal.darkPyraFlame;
                 }}, new ShapePart() {{
                     rotateSpeed = -3;
                     sides = 3;
                     lifetime = 400;
                     rotation = 30;
-                    radius = 14;
-                    radiusTo = 14;
+                    radius = 11;
+                    radiusTo = 11;
                     colorTo = color = Pal.darkPyraFlame;
                 }}, new ShapePart() {{
                     rotateSpeed = -3;
                     sides = 3;
                     lifetime = 400;
                     rotation = 210;
-                    radius = 14;
-                    radiusTo = 14;
+                    radius = 11;
+                    radiusTo = 11;
                     colorTo = color = Pal.darkPyraFlame;
                 }});
 
@@ -1245,12 +798,12 @@ public class FBlocks {
                 fragBullets = 1;
 
                 fragBullet = new WindBulletType() {{
-                    lifetime = 1000;
-                    damage = 2f;
-                    windPower = 0.65f;
-                    windWidth = 600;
-                    windLength = 300;
-                    applyEffect = StatusEffects.burning;
+                    lifetime = 600;
+                    damage = 1.4f;
+                    windPower = 0.45f;
+                    windWidth = 500;
+                    windLength = 250;
+                    applyEffect = FStatusEffects.gasify;
 
                     fillRange = false;
                     windEffect = new Effect(120, 80f, e -> {
@@ -1311,7 +864,7 @@ public class FBlocks {
                         rotateSpeed = 3;
                         sides = 3;
                         lifetime = 400;
-                        radius = 14;
+                        radius = 11;
                         radiusTo = 0;
                         colorTo = color = Pal.darkPyraFlame;
                     }}, new ShapePart() {{
@@ -1319,7 +872,7 @@ public class FBlocks {
                         sides = 3;
                         lifetime = 400;
                         rotation = 180;
-                        radius = 14;
+                        radius = 11;
                         radiusTo = 0;
                         colorTo = color = Pal.darkPyraFlame;
                     }}, new ShapePart() {{
@@ -1327,7 +880,7 @@ public class FBlocks {
                         sides = 3;
                         lifetime = 400;
                         rotation = 30;
-                        radius = 14;
+                        radius = 11;
                         radiusTo = 0;
                         colorTo = color = Pal.darkPyraFlame;
                     }}, new ShapePart() {{
@@ -1335,7 +888,7 @@ public class FBlocks {
                         sides = 3;
                         lifetime = 400;
                         rotation = 210;
-                        radius = 14;
+                        radius = 11;
                         radiusTo = 0;
                         colorTo = color = Pal.darkPyraFlame;
                     }});
@@ -1375,15 +928,15 @@ public class FBlocks {
                         color2 = Color.valueOf("EBEEF5");
                     }});
 
-                    intervalBullets = 5;
+                    intervalBullets = 3;
                     intervalRandomSpread = 360;
-                    bulletInterval = 1;
+                    bulletInterval = 3;
                     intervalDelay = 0;
                     intervalBullet = new BulletType(0, 0) {{
                         rangeOverride = 160;
                         lifetime = 0;
-                        splashDamageRadius = 80;
-                        splashDamage = 75;
+                        splashDamageRadius = 58;
+                        splashDamage = 62;
                         status = FStatusEffects.suppress;
                         statusDuration = 360;
 
@@ -1391,13 +944,13 @@ public class FBlocks {
                     }};
 
                     intervalHitEffect = new ExplosionEffect() {{
-                        lifetime = 24;
+                        lifetime = 13;
                         sparks = 0;
                         waveLife = 0;
-                        smokes = 20;
-                        smokeRad = 60;
+                        smokes = 6;
+                        smokeRad = 47;
                         smokeColor = Color.valueOf("EBEEF522");
-                        smokeSizeBase = 3.5f;
+                        smokeSizeBase = 1.5f;
 
                         renderer = f -> {
                             Draw.color(this.waveColor);
@@ -1419,7 +972,7 @@ public class FBlocks {
 
                             if (f.data instanceof Vec2 v) {
                                 color(Color.valueOf("EBEEF522"));
-                                Lines.stroke(7.5f * (1 - f.fin()));
+                                Lines.stroke(4.5f * (1 - f.fin()));
                                 Lines.line(f.x, f.y, v.x, v.y);
                             }
                         };

@@ -23,6 +23,7 @@ import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.gen.*;
 import mindustry.world.Tile;
+import mindustry.world.blocks.defense.OverdriveProjector;
 import mindustry.world.blocks.environment.StaticWall;
 
 import static mindustry.Vars.world;
@@ -210,6 +211,8 @@ public class EMPBullet extends Bullet {
             Units.nearbyBuildings(x, y, downRange, b -> {
                 if (b.team != this.team && b.block.canOverdrive) {
                     b.applySlowdown(slowDown, downDuration);
+                } else if (b.team != this.team && b.block instanceof OverdriveProjector) {
+                    b.damage(b.maxHealth * 0.3f);
                 }
             });
             remove();

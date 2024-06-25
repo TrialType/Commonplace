@@ -64,25 +64,13 @@ public class Techs {
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == groundFactory) {
-                tf = node(specialUnitFactory, ItemStack.with(Items.lead, 15000, Items.silicon, 7000, Items.titanium, 14000, Items.thorium, 4000, Items.plastanium, 2000), () -> {
-                    node(bulletInterception);
-                    node(rejuvenate);
-                });
                 tf.parent = t;
                 t.children.add(tf);
                 tf = node(outPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000), () -> {
-                    node(outPowerFactoryII, ItemStack.with(Items.copper, 10000, Items.lead, 12000, Items.silicon, 20000), () -> {
-                        node(outPowerFactoryIII, ItemStack.with(Items.copper, 20000, Items.lead, 24000, Items.silicon, 28000), () -> {
-                        });
-                    });
                 });
                 tf.parent = t;
                 t.children.add(tf);
                 tf = node(inputPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000), () -> {
-                    node(inputPowerFactoryII, ItemStack.with(Items.copper, 10000, Items.lead, 12000, Items.silicon, 20000), () -> {
-                        node(inputPowerFactoryIII, ItemStack.with(Items.copper, 20000, Items.lead, 24000, Items.silicon, 28000), () -> {
-                        });
-                    });
                 });
                 tf.parent = t;
                 t.children.add(tf);
