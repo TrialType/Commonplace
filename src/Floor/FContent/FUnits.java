@@ -640,7 +640,7 @@ public class FUnits {
                 }};
             }});
         }};
-        dive = new ChainUnitType("dive") {{
+        dive = new UnitType("dive") {{
             constructor = ENGSWEISLegsUnit::create;
 
             flying = false;
@@ -648,7 +648,6 @@ public class FUnits {
             health = 900;
             armor = 18;
             hitSize = 13;
-            percent = 13;
 
             weapons.add(new Weapon("a-weapon") {{
                 top = false;
@@ -675,30 +674,8 @@ public class FUnits {
                     status = StatusEffects.burning;
                 }};
             }});
-
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(90)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(90)) / 2.0F),
-                            4, 0
-                    )
-            );
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(180)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(180)) / 2.0F),
-                            4, -90
-                    )
-            );
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(270)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(270)) / 2.0F),
-                            4, 180
-                    )
-            );
         }};
-        befall = new ChainUnitType("befall") {{
+        befall = new UnitType("befall") {{
             constructor = ENGSWEISLegsUnit::create;
 
             health = 6000;
@@ -708,28 +685,6 @@ public class FUnits {
 
             abilities.add(new ShieldRegenFieldAbility(200, 1000, 120, 0.01F));
             abilities.add(new TimeLargeDamageAbility());
-
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(90)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(90)) / 2.0F),
-                            5, 0
-                    )
-            );
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(180)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(180)) / 2.0F),
-                            5, -90
-                    )
-            );
-            engines.add(
-                    new UnitEngine(
-                            (float) (hitSize * Math.sin(Math.toRadians(270)) / 2.0F),
-                            (float) (hitSize * Math.cos(Math.toRadians(270)) / 2.0F),
-                            5, 180
-                    )
-            );
         }};
         velocity = new ENGSWEISUnitType("velocity") {{
             constructor = ENGSWEISUnitEntity::create;
