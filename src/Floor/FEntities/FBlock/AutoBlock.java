@@ -3,63 +3,77 @@ package Floor.FEntities.FBlock;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
 import arc.math.Mathf;
+import arc.math.Rand;
 import arc.math.geom.Point2;
 import arc.scene.ui.Image;
 import arc.scene.ui.layout.Table;
 import arc.struct.IntSet;
 import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.Eachable;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.content.Blocks;
-import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Groups;
 import mindustry.gen.Tex;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
+import mindustry.ui.Bar;
 import mindustry.ui.ItemDisplay;
 import mindustry.world.Block;
 import mindustry.world.Build;
 import mindustry.world.Tile;
 import mindustry.world.meta.Env;
 
+import java.util.Comparator;
+
 public class AutoBlock extends Block {
     private int index = 0;
     private float timer = 0;
 
     public ObjectMap<ItemStack[], Block> creates = new ObjectMap<>();
-    public int behind = 4;
-    public int maxLength = 20;
-    public float maxRange = 250;
-    public float createReload = 15;
+    public int behind = 7;
+    public int maxLength = 30;
+    public float maxRange = 350;
+    public float createReload = 5;
     public float createDelay = 120;
 
-    public Effect startEffect = new Effect(180, e -> {
-        Draw.color(Pal.coalBlack);
-        Lines.stroke(3 * (1 - e.fin()));
-        Lines.poly(e.x, e.y, 36, 250 * e.fin(), 360);
+    public Effect startEffect = new Effect(75, e -> {
+        Draw.color(Pal.lighterOrange);
+        Lines.stroke(8 * (1 - e.fin()));
+        Lines.poly(e.x, e.y, 36, maxRange / 2 * e.fin(), 360);
     });
     public Effect createEffect = new Effect(90, e -> {
         if (e.data instanceof Object[] o) {
-            Building n = (Building) o[0];
             Block b = (Block) o[1];
-            Draw.color(Color.white);
-            Drawf.square(e.x, e.y, b.size * 2 * (1 - e.fin()), Color.white);
-            Lines.stroke(2 * (1 - e.fin()));
-            Lines.line(e.x, e.y, n.x, n.y);
+            Draw.color(Pal.bulletYellow);
+            Fill.square(e.x, e.y, b.size * 5 * (1 - e.fin()), e.rotation);
         }
     });
-    public Effect beginEffect = Fx.healWave;
+    public Effect beginEffect = new Effect(createDelay, e -> {
+        Rand rand = new Rand(e.id);
+        Draw.color(Color.valueOf("AAFFAAFF"));
+        float fin = e.fin() % 0.25f;
+        Lines.stroke(3 * (0.25f - fin));
+        Lines.poly(e.x, e.y, 36, maxRange * 2 * (0.25f - fin));
+        for (int i = 0; i < 54; i++) {
+            float angle = rand.range(360);
+            float len = rand.range(maxRange / 2);
+            Fill.circle(e.x + Angles.trnsx(angle, len * (1 - e.fin())),
+                    e.y + Angles.trnsy(angle, len * (1 - e.fin())), 6 * (1 - e.fin()));
+        }
+    });
 
     public AutoBlock(String name) {
         super(name);
@@ -101,43 +115,63 @@ public class AutoBlock extends Block {
 
         Block finalDrawer = drawer;
         set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8, Point2.y(p) * 8));
+
+        Draw.color(Pal.range);
+        Lines.stroke(3);
+        Lines.poly(plan.x * 8, plan.y * 8, 36, maxRange / 2);
     }
 
     public IntSet buildResult(int x, int y, int rotation, int lon, Block type) {
         IntSet set = new IntSet();
         Tile t;
+        float max = maxRange / 16;
         if (rotation % 2 == 0) {
-            for (int i = 0; set.size < maxLength && i * 8 <= maxRange / 2; i += lon) {
-                if ((t = Vars.world.tileWorld(x * 8, (y + i) * 8)) != null &&
-                        Build.validPlace(type,
-                                Vars.player == null ? Team.derelict : Vars.player.team(),
-                                x, y + i, rotation, false)) {
+            for (int step1 = 0, step2 = 0; set.size < maxLength && (step1 <= max || step2 <= max); ) {
+                if (step1 <= max && (t = Vars.world.tileWorld(x * 8, (y + step1) * 8)) != null &&
+                        Build.validPlace(type, Vars.player == null ? Team.derelict : Vars.player.team(),
+                                x, y + step1, rotation, false)) {
                     set.add(t.pos());
+                    step1 += lon;
+                } else if (step1 <= max) {
+                    step1 += 1;
                 }
-                if ((t = Vars.world.tileWorld(x * 8, (y - i) * 8)) != null &&
-                        Build.validPlace(type,
-                                Vars.player == null ? Team.derelict : Vars.player.team(),
-                                x, y - i, rotation, false)) {
+                if (step2 <= max && (t = Vars.world.tileWorld(x * 8, (y - step2) * 8)) != null &&
+                        Build.validPlace(type, Vars.player == null ? Team.derelict : Vars.player.team(),
+                                x, y - step2, rotation, false)) {
                     set.add(t.pos());
+                    step2 += lon;
+                } else if (step2 <= max) {
+                    step2 += 1;
                 }
             }
         } else {
-            for (int i = 0; set.size < maxLength && i * 8 <= maxRange / 2; i += lon) {
-                if ((t = Vars.world.tileWorld((x + i) * 8, y * 8)) != null &&
-                        Build.validPlace(type,
-                                Vars.player == null ? Team.derelict : Vars.player.team(),
-                                x + i, y, rotation, false)) {
+            for (int step1 = 0, step2 = 0; set.size < maxLength && (step1 <= max || step2 <= max); ) {
+                if (step1 <= max && (t = Vars.world.tileWorld((x + step1) * 8, y * 8)) != null &&
+                        Build.validPlace(type, Vars.player == null ? Team.derelict : Vars.player.team(),
+                                x + step1, y, rotation, false)) {
                     set.add(t.pos());
+                    step1 += lon;
+                } else if (step1 <= max) {
+                    step1 += 1;
                 }
-                if ((t = Vars.world.tileWorld((x - i) * 8, y * 8)) != null &&
-                        Build.validPlace(type,
-                                Vars.player == null ? Team.derelict : Vars.player.team(),
-                                x - i, y, rotation, false)) {
+                if (step2 <= max && (t = Vars.world.tileWorld((x - step2) * 8, y * 8)) != null &&
+                        Build.validPlace(type, Vars.player == null ? Team.derelict : Vars.player.team(),
+                                x - step2, y, rotation, false)) {
                     set.add(t.pos());
+                    step2 += lon;
+                } else if (step2 <= max) {
+                    step2 += 1;
                 }
             }
         }
         return set;
+    }
+
+    @Override
+    public void setBars() {
+        super.setBars();
+
+        addBar("step", (AutoBuild b) -> new Bar(Core.bundle.get("@step"), Pal.range, () -> (float) b.walls.size / maxLength));
     }
 
     public class AutoBuild extends Building {
@@ -165,7 +199,8 @@ public class AutoBlock extends Block {
                         }
                     });
                     if (createReload <= 0 || createTimer >= createReload) {
-                        Block b = creates.values().toSeq().get(config);
+                        Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+                        Block b = blocks.get(config);
                         float cx = tileX() + (b.size + behind) * Mathf.cosDeg(rotation * 90);
                         float cy = tileY() + (b.size + behind) * Mathf.sinDeg(rotation * 90);
                         if (rotation % 2 == 0) {
@@ -194,7 +229,7 @@ public class AutoBlock extends Block {
             if (t != null && Build.validPlace(b, team, t.x, t.y, rotation, false)) {
                 t.setBlock(b, team, rotation * 90);
                 walls.add(t.pos());
-                createEffect.at(sx, sy, b.size, new Object[]{this, b});
+                createEffect.at(sx, sy, rotation * 90, new Object[]{this, b});
             } else {
                 if (tx) {
                     createBuild(b, sx + step, sy, step, true, all + Math.abs(step));
@@ -228,27 +263,31 @@ public class AutoBlock extends Block {
                 return;
             }
             final int[] id = {0};
-            t.table(s -> creates.each((i, b) -> {
-                int index = creates.keys().toSeq().indexOf(i);
-                s.table(e -> {
-                    e.clicked(() -> {
-                        config = index;
-                        buildConfiguration(t);
-                    });
-                    e.background(config == index ? Tex.buttonEdge1 : Tex.windowEmpty);
-                    Image image = new Image(b.region);
-                    e.add(image).size(15);
-                    for (ItemStack stack : i) {
-                        ItemDisplay display = new ItemDisplay(stack.item, stack.amount);
-                        display.sizeBy(1);
-                        e.add(display).pad(12);
+            t.table(s -> {
+                Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+                for (int i = 0; i < blocks.size; i++) {
+                    int index = i;
+                    Block b = blocks.get(i);
+                    s.table(e -> {
+                        e.clicked(() -> {
+                            config = index;
+                            buildConfiguration(t);
+                        });
+                        e.background(config == index ? Tex.buttonEdge1 : Tex.windowEmpty);
+                        Image image = new Image(b.region);
+                        e.add(image).size(15);
+                        for (ItemStack stack : creates.findKey(b, true)) {
+                            ItemDisplay display = new ItemDisplay(stack.item, stack.amount);
+                            display.sizeBy(1);
+                            e.add(display).pad(12);
+                        }
+                    }).growX();
+                    id[0]++;
+                    if (id[0] % 2 == 0) {
+                        s.row();
                     }
-                }).growX();
-                id[0]++;
-                if (id[0] % 2 == 0) {
-                    s.row();
                 }
-            })).grow();
+            }).grow();
             t.row();
             t.table(b -> b.button(Core.bundle.get("@start"), () -> {
                 if (couldStart()) {
@@ -259,7 +298,8 @@ public class AutoBlock extends Block {
         }
 
         public boolean couldStart() {
-            for (ItemStack stack : creates.keys().toSeq().get(config)) {
+            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            for (ItemStack stack : creates.findKey(blocks.get(config), true)) {
                 if (items.get(stack.item) < stack.amount) {
                     return false;
                 }
@@ -268,6 +308,7 @@ public class AutoBlock extends Block {
         }
 
         public void start() {
+            items.remove(creates.keys().toSeq().get(config));
             beginning = true;
             if (createDelay > 0) {
                 beginEffect.at(this);
@@ -287,7 +328,8 @@ public class AutoBlock extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            ItemStack[] items = creates.keys().toSeq().get(config);
+            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            ItemStack[] items = creates.findKey(blocks.get(config), true);
             ItemStack stack;
             for (ItemStack itemStack : items) {
                 stack = itemStack;
@@ -306,6 +348,8 @@ public class AutoBlock extends Block {
             write.f(createTimer);
             write.bool(starting);
             write.bool(beginning);
+            write.i(walls.size);
+            walls.each(write::i);
         }
 
         @Override
@@ -316,6 +360,10 @@ public class AutoBlock extends Block {
             this.createTimer = read.f();
             this.starting = read.bool();
             this.beginning = read.bool();
+            int num = read.i();
+            for (int i = 0; i < num; i++) {
+                walls.add(read.i());
+            }
         }
     }
 }

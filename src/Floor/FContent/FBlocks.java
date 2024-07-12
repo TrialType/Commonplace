@@ -47,11 +47,11 @@ import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
     //test
-    public static Block kt, pu, wa;
+    public static Block kt, pu;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII;
+    public static Block eleFenceII, eleFenceIII, autoWall;
     //turret
     public static Block fourNet, fireBoost,
             windTurret,
@@ -217,16 +217,6 @@ public class FBlocks {
             consumePower(50f);
 
             requirements(Category.effect, ItemStack.with(Items.copper, 1));
-        }};
-
-        wa = new AutoBlock("wa") {{
-            size = 2;
-            health = 1145;
-
-            requirements(Category.defense, ItemStack.with(Items.copper, 1));
-
-            creates.putAll(ItemStack.with(Items.copper, 1), Blocks.copperWall,
-                    ItemStack.with(Items.titanium, 1), Blocks.titaniumWall);
         }};
 //======================================================================================================================
         residual = new ItemTurret("residual") {{
@@ -1111,6 +1101,18 @@ public class FBlocks {
                     Items.copper, 1000,
                     Items.silicon, 500
             ));
+        }};
+        autoWall = new AutoBlock("auto-wall") {{
+            size = 2;
+            health = 350;
+
+            requirements(Category.defense, ItemStack.with(Items.copper, 145, Items.graphite, 35));
+
+            creates.putAll(ItemStack.with(Items.copper, 120, Items.silicon, 10), Blocks.copperWall,
+                    ItemStack.with(Items.titanium, 120, Items.silicon, 10), Blocks.titaniumWall,
+                    ItemStack.with(Items.thorium, 120, Items.silicon, 10), Blocks.thoriumWall,
+                    ItemStack.with(Items.phaseFabric, 120, Items.silicon, 10), Blocks.phaseWall,
+                    ItemStack.with(Items.surgeAlloy, 120, Items.silicon, 10), Blocks.surgeWall);
         }};
 //======================================================================================================================
         slowProject = new DownProject("slow_project") {{
