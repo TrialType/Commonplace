@@ -47,7 +47,7 @@ import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
     //test
-    public static Block kt, pu;
+    public static Block kt, pu, wa;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
@@ -218,6 +218,16 @@ public class FBlocks {
 
             requirements(Category.effect, ItemStack.with(Items.copper, 1));
         }};
+
+        wa = new AutoBlock("wa") {{
+            size = 2;
+            health = 1145;
+
+            requirements(Category.defense, ItemStack.with(Items.copper, 1));
+
+            creates.putAll(ItemStack.with(Items.copper, 1), Blocks.copperWall,
+                    ItemStack.with(Items.titanium, 1), Blocks.titaniumWall);
+        }};
 //======================================================================================================================
         residual = new ItemTurret("residual") {{
             requirements(Category.turret, with(Items.copper, 100, Items.graphite, 80, Items.titanium, 25, Items.silicon, 25));
@@ -347,7 +357,7 @@ public class FBlocks {
                                     };
                                 }};
 
-                                bullet = new BulletType(){{
+                                bullet = new BulletType() {{
                                     absorbable = reflectable = hittable = false;
 
                                     damage = 38;
@@ -437,7 +447,7 @@ public class FBlocks {
                                     };
                                 }};
 
-                                bullet = new BulletType(){{
+                                bullet = new BulletType() {{
                                     absorbable = reflectable = hittable = false;
 
                                     damage = 64;
