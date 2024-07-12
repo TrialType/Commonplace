@@ -649,7 +649,7 @@ public class FUnits {
             armor = 18;
             hitSize = 13;
 
-            weapons.add(new Weapon("a-weapon") {{
+            weapons.add(new Weapon("dive1") {{
                 top = false;
                 mirror = false;
                 shootY = 0f;

@@ -65,7 +65,6 @@ public class FUnitEntity extends UnitEntity implements FUnitUpGrade {
         healthLevel = read.i();
         againLevel = read.i();
         shieldLevel = read.i();
-        this.afterRead();
     }
 
     @Override
