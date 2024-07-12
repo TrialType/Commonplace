@@ -12,7 +12,7 @@ public class FEntities {
         EntityMapping.idMap[97] = AroundBullet::create;
         EntityMapping.idMap[98] = WaterEffectState::create;
         EntityMapping.idMap[99] = removeSpwanBullet::new;
-        EntityMapping.idMap[100] = ChainLegUnit::create;
+        EntityMapping.idMap[100] = ENGSWEISLegsUnit::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;
         EntityMapping.idMap[105] = FTankUnit::create;

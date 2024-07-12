@@ -641,7 +641,7 @@ public class FUnits {
             }});
         }};
         dive = new ChainUnitType("dive") {{
-            constructor = ChainLegUnit::create;
+            constructor = ENGSWEISLegsUnit::create;
 
             flying = false;
             speed = 0.8F;
@@ -699,7 +699,7 @@ public class FUnits {
             );
         }};
         befall = new ChainUnitType("befall") {{
-            constructor = ChainLegUnit::create;
+            constructor = ENGSWEISLegsUnit::create;
 
             health = 6000;
             armor = 30;

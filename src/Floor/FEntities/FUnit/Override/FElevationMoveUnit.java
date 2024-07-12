@@ -1,8 +1,6 @@
 package Floor.FEntities.FUnit.Override;
 
 import Floor.FTools.interfaces.FUnitUpGrade;
-import Floor.FTools.interfaces.LayAble;
-import Floor.FTools.interfaces.ChainAble;
 import Floor.FTools.classes.UnitUpGrade;
 import arc.math.Angles;
 import arc.math.Mathf;
@@ -29,10 +27,7 @@ import mindustry.world.blocks.environment.Floor;
 
 import java.util.Random;
 
-public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrade, LayAble {
-    private final Seq<Integer> idList = new Seq<>();
-    public Seq<Unit> units = new Seq<>();
-
+public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrade {
     protected int damageLevel = 0;
     protected int speedLevel = 0;
     protected int healthLevel = 0;
@@ -95,11 +90,6 @@ public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrad
             this.y = read.f();
             this.afterRead();
 
-
-            int number = read.i();
-            for (int i = 0; i < number; i++) {
-                idList.add(read.i());
-            }
             level = read.i();
             exp = read.f();
 
@@ -150,10 +140,6 @@ public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrad
         write.f(this.x);
         write.f(this.y);
 
-        write.i(units.size);
-        for (Unit u : units) {
-            write.i(u.id);
-        }
         write.i(level);
         write.f(exp);
         write.i(damageLevel);
@@ -487,27 +473,6 @@ public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrad
             WeaponMount mount = var16[accepted];
             mount.weapon.update(this, mount);
         }
-
-        if (units.size == 0 && idList.size > 0) {
-            for (int i : idList) units.add(Groups.unit.getByID(i));
-            idList.clear();
-        }
-
-        for (Unit u : units) {
-            if (!u.within(x, y, u.speed() * 40)) {
-                if (u instanceof ChainAble uca) {
-                    uca.UnderUnit(null);
-                    uca.upon(false);
-                }
-                units.remove(u);
-                continue;
-            }
-            if ((u.dead || u.health() <= 0) || (u instanceof ChainAble uca && uca.UnderUnit() != this)) {
-                units.remove(u);
-                continue;
-            }
-            if (u instanceof ChainAble uca && uca.UnderUnit() == null) uca.UnderUnit(this);
-        }
     }
 
     @Override
@@ -537,12 +502,6 @@ public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrad
         }
         super.kill();
     }
-
-    @Override
-    public Seq<Unit> getUit() {
-        return units;
-    }
-
     @Override
     public int getLevel() {
         return level;

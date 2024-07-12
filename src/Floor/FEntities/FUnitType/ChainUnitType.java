@@ -1,7 +1,5 @@
 package Floor.FEntities.FUnitType;
 
-import Floor.FAI.ChainAI;
-import Floor.FTools.interfaces.ChainAble;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;

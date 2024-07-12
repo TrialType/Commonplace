@@ -1,6 +1,5 @@
 package Floor.FContent;
 
-import Floor.FAI.ChainAI;
 import Floor.FAI.StrongBoostAI;
 import mindustry.ai.UnitCommand;
 
