@@ -328,6 +328,9 @@ public class AutoBlock extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
+            if(beginning || starting){
+                return false;
+            }
             Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
             ItemStack[] items = creates.findKey(blocks.get(config), true);
             ItemStack stack;

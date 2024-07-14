@@ -16,13 +16,13 @@ import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.ForceFieldAbility;
-import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.bullet.BulletType;
-import mindustry.entities.bullet.ExplosionBulletType;
-import mindustry.entities.bullet.LaserBulletType;
+import mindustry.entities.abilities.RepairFieldAbility;
+import mindustry.entities.abilities.StatusFieldAbility;
+import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.ShootPattern;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
+import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
@@ -33,6 +33,8 @@ import static arc.graphics.g2d.Lines.stroke;
 
 public class UnitOverride {
     static Weapon weapon;
+    static BulletType bullet;
+    static Color color;
 
     public static void load() {
         UnitTypes.alpha.buildSpeed = 1f;
@@ -167,7 +169,7 @@ public class UnitOverride {
                 rangeOverride = 360;
 
                 weapons.add(new Weapon() {{
-                    bullet = new ExplosionBulletType(12, 36){{
+                    bullet = new ExplosionBulletType(12, 36) {{
                         rangeOverride = 30;
                     }};
                 }});
@@ -227,6 +229,15 @@ public class UnitOverride {
         UnitTypes.reign.weapons.get(0).bullet.fragBullet.splashDamage = 45;
         UnitTypes.reign.weapons.get(0).bullet.fragBullets = 6;
         /*-----------------------------------------------------------------------------*/
+        UnitTypes.crawler.health = 350;
+        UnitTypes.crawler.speed = 2.5f;
+        UnitTypes.crawler.abilities.add(new StatusFieldAbility(FStatusEffects.swift, 900, 900, 4));
+        weapon = UnitTypes.crawler.weapons.get(0);
+        weapon.reload = 30;
+        weapon.bullet.killShooter = false;
+        weapon.bullet.splashDamageRadius = 70;
+        weapon.bullet.buildingDamageMultiplier = 3;
+
         UnitTypes.arkyid.health = 28000;
 
         UnitTypes.toxopid.health = 77000;
@@ -377,16 +388,16 @@ public class UnitOverride {
         UnitTypes.tecta.health = 26550;
 
         UnitTypes.collaris.health = 63000;
-        BulletType b = UnitTypes.collaris.weapons.get(0).bullet;
+        bullet = UnitTypes.collaris.weapons.get(0).bullet;
         UnitTypes.collaris.targetAir = true;
-        b.damage = 520;
-        b.splashDamage = 85f;
-        b.splashDamageRadius = 20f;
-        b.bulletInterval = 20;
-        b.intervalBullets = 3;
-        b.intervalRandomSpread = 30;
-        b.intervalAngle = 0;
-        b.intervalBullet = new BasicBulletType() {{
+        bullet.damage = 520;
+        bullet.splashDamage = 85f;
+        bullet.splashDamageRadius = 20f;
+        bullet.bulletInterval = 20;
+        bullet.intervalBullets = 3;
+        bullet.intervalRandomSpread = 30;
+        bullet.intervalAngle = 0;
+        bullet.intervalBullet = new BasicBulletType() {{
             lifetime = 180;
             damage = 120;
             speed = 6;
@@ -398,15 +409,44 @@ public class UnitOverride {
             trailWidth = 2.2f;
             trailLength = 30;
         }};
-        b.fragBullet.damage = 100;
-        b.fragBullet.splashDamage = 92f;
-        b.fragBullet.splashDamageRadius = 30f;
+        bullet.fragBullet.damage = 100;
+        bullet.fragBullet.splashDamage = 92f;
+        bullet.fragBullet.splashDamageRadius = 30f;
 
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.quasar.health = 2000;
+        UnitTypes.nova.speed = 2f;
+        UnitTypes.nova.armor = 21f;
+        UnitTypes.nova.buildSpeed = 0;
+        UnitTypes.nova.abilities.add(new RepairFieldAbility(60, 60 * 8, 4));
+        color = Color.valueOf("ffa998");
+        weapon = UnitTypes.nova.weapons.get(0);
+        weapon.reload = 4;
+        bullet = weapon.bullet;
+        bullet.lifetime = 90;
+        bullet.speed = 8;
+        bullet.damage = 18;
+        bullet.healAmount = 0;
+        bullet.collidesTeam = false;
+        bullet.smokeEffect = new Effect(8, e -> {
+            color(Color.white, color, e.fin());
+            stroke(0.5f + e.fout());
+            Lines.circle(e.x, e.y, e.fin() * 5f);
+
+            Drawf.light(e.x, e.y, 23f, color, e.fout() * 0.7f);
+        });
+        bullet.hitEffect = bullet.smokeEffect;
+        bullet.despawnEffect = bullet.smokeEffect;
+        bullet.lightColor = color;
+        ((LaserBoltBulletType) bullet).frontColor = color;
+        ((LaserBoltBulletType) bullet).backColor = color;
+
+        UnitTypes.quasar.health = 2200;
         ForceFieldAbility fAbility = (ForceFieldAbility) UnitTypes.quasar.abilities.get(0);
         fAbility.regen = 0.8f;
         fAbility.max = 1000;
+        weapon = UnitTypes.quasar.weapons.get(0);
+        weapon.reload = 35;
+        weapon.bullet.damage = 65;
         UnitTypes.quasar.weapons.add(new Weapon() {{
             x = y = 0;
             mirror = false;

@@ -1,15 +1,10 @@
 package Floor;
 
 import Floor.FContent.*;
-import Floor.FEntities.FBulletType.EMPLarge;
-import Floor.FEntities.FBulletType.LimitBulletType;
-import mindustry.mod.ClassMap;
 import mindustry.mod.Mod;
 
 public class Floor extends Mod {
     public Floor() {
-        ClassMap.classes.put("EMPLarge", EMPLarge.class);
-        ClassMap.classes.put("LimitBulletType", LimitBulletType.class);
     }
 
     @Override
