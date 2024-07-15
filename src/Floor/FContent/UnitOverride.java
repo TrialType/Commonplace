@@ -19,6 +19,7 @@ import mindustry.entities.abilities.ForceFieldAbility;
 import mindustry.entities.abilities.RepairFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
+import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.pattern.ShootPattern;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
@@ -237,6 +238,27 @@ public class UnitOverride {
         weapon.bullet.killShooter = false;
         weapon.bullet.splashDamageRadius = 70;
         weapon.bullet.buildingDamageMultiplier = 3;
+        weapon.bullet.shootEffect = new ExplosionEffect() {{
+            lifetime = 25;
+            clip = 70;
+
+            smokes = 24;
+            smokeRad = 70;
+            smokeSize = 4;
+            smokeSizeBase = 0;
+            smokeColor = Color.valueOf("CCAA88ff");
+
+            sparks = 36;
+            sparkRad = 70;
+            sparkLen = 7;
+            sparkColor = Color.valueOf("CCAA88ff");
+
+            waveLife = 25;
+            waveStroke = 2;
+            waveRad = 80;
+            waveRadBase = 0;
+            waveColor = Color.valueOf("CCAA88ff");
+        }};
 
         UnitTypes.arkyid.health = 28000;
 
@@ -247,6 +269,32 @@ public class UnitOverride {
         UnitTypes.flare.health = 160;
         UnitTypes.flare.circleTarget = true;
         UnitTypes.flare.abilities.add(new ForceFieldAbility(12, 0.2f, 240, 12 * 60));
+
+        UnitTypes.zenith.health = 1500;
+        UnitTypes.zenith.armor = 8;
+        UnitTypes.zenith.speed = 2;
+        UnitTypes.zenith.range = 540;
+        weapon = UnitTypes.zenith.weapons.get(0);
+        weapon.reload = 300;
+        weapon.inaccuracy = 30;
+        weapon.shoot = new ShootPattern() {{
+            shots = 10;
+            shotDelay = 15;
+        }};
+        MissileBulletType m = (MissileBulletType) weapon.bullet;
+        m.speed = 6;
+        m.damage = 28;
+        m.lifetime = 90;
+        m.height = 14;
+        m.width = 7;
+        m.splashDamageRadius = 45f;
+        m.splashDamage = 36f;
+        m.inaccuracy = 0;
+        m.homingDelay = 30;
+        m.homingRange = 540;
+        m.homingPower = 0.1f;
+        m.trailEffect = Fx.missileTrailSmoke;
+        m.trailChance = 0.1f;
 
         UnitTypes.antumbra.health = 25200;
 

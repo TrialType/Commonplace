@@ -55,248 +55,20 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
 
     @Override
     public void read(Reads read) {
-        short REV = read.s();
-        int statuses_LENGTH;
-        int INDEX;
-        StatusEntry statuses_ITEM;
-        if (REV == 0) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            read.bool();
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 1) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 2) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 3) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 4) {
-            this.ammo = read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        } else {
-            if (REV != 5) {
-                throw new IllegalArgumentException("Unknown revision '" + REV + "' for entity type 'nova'");
-            }
-
-            TypeIO.readAbilities(read, this.abilities);
-            this.ammo = read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        }
-
+        super.read(read);
         level = read.i();
         exp = read.f();
-
         damageLevel = read.i();
         speedLevel = read.i();
         reloadLevel = read.i();
         healthLevel = read.i();
         againLevel = read.i();
         shieldLevel = read.i();
-        this.afterRead();
     }
 
     @Override
     public void write(Writes write) {
-        write.s(5);
-        TypeIO.writeAbilities(write, this.abilities);
-        write.f(this.ammo);
-        write.f(this.baseRotation);
-        TypeIO.writeController(write, this.controller);
-        write.f(this.elevation);
-        write.d(this.flag);
-        write.f(this.health);
-        write.bool(this.isShooting);
-        TypeIO.writeTile(write, this.mineTile);
-        TypeIO.writeMounts(write, this.mounts);
-        write.i(this.plans.size);
-
-        int INDEX;
-        for (INDEX = 0; INDEX < this.plans.size; ++INDEX) {
-            TypeIO.writePlan(write, this.plans.get(INDEX));
-        }
-
-        write.f(this.rotation);
-        write.f(this.shield);
-        write.bool(this.spawnedByCore);
-        TypeIO.writeItems(write, this.stack);
-        write.i(this.statuses.size);
-
-        for (INDEX = 0; INDEX < this.statuses.size; ++INDEX) {
-            TypeIO.writeStatus(write, this.statuses.get(INDEX));
-        }
-
-        TypeIO.writeTeam(write, this.team);
-        write.s(this.type.id);
-        write.bool(this.updateBuilding);
-        TypeIO.writeVec2(write, this.vel);
-        write.f(this.x);
-        write.f(this.y);
-
+        super.write(write);
         write.i(level);
         write.f(exp);
         write.i(damageLevel);
@@ -308,7 +80,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
     }
 
     @Override
-    public void update(){
+    public void update() {
         if (shieldLevel > 0 && sfa == null) {
             sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
                     maxHealth * shieldLevel / 10, 120, 60);
@@ -337,13 +109,13 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
         if (this.type.bounded) {
             offset = 0.0F;
             range = 0.0F;
-            cx = (float)Vars.world.unitHeight();
-            cy = (float)Vars.world.unitWidth();
+            cx = (float) Vars.world.unitHeight();
+            cy = (float) Vars.world.unitWidth();
             if (Vars.state.rules.limitMapArea && !this.team.isAI()) {
-                offset = (float)(Vars.state.rules.limitY * 8);
-                range = (float)(Vars.state.rules.limitX * 8);
-                cx = (float)(Vars.state.rules.limitHeight * 8) + offset;
-                cy = (float)(Vars.state.rules.limitWidth * 8) + range;
+                offset = (float) (Vars.state.rules.limitY * 8);
+                range = (float) (Vars.state.rules.limitX * 8);
+                cx = (float) (Vars.state.rules.limitHeight * 8) + offset;
+                cy = (float) (Vars.state.rules.limitWidth * 8) + range;
             }
 
             if (!Vars.net.client() || this.isLocal()) {
@@ -399,7 +171,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
         this.updateDrowning();
         this.hitTime -= Time.delta / 9.0F;
         this.stack.amount = Mathf.clamp(this.stack.amount, 0, this.itemCapacity());
-        this.itemTime = Mathf.lerpDelta(this.itemTime, (float)Mathf.num(this.hasItem()), 0.05F);
+        this.itemTime = Mathf.lerpDelta(this.itemTime, (float) Mathf.num(this.hasItem()), 0.05F);
         if (this.walked || Vars.net.client()) {
             offset = this.deltaLen();
             this.baseRotation = Angles.moveToward(this.baseRotation, this.deltaAngle(), this.type().baseRotateSpeed * Mathf.clamp(offset / this.type().speed / Time.delta) * Time.delta);
@@ -413,7 +185,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
         cy = this.walkExtension;
         if (!Vars.headless && cx < cy && range % 2.0F > 1.0F && !this.isFlying() && !this.inFogTo(Vars.player.team())) {
             int side = -Mathf.sign(offset);
-            dy = this.hitSize / 2.0F * (float)side;
+            dy = this.hitSize / 2.0F * (float) side;
             float length = this.type.mechStride * 1.35F;
             cx = this.x + Angles.trnsx(this.baseRotation, length, dy);
             cy = this.y + Angles.trnsy(this.baseRotation, length, dy);
@@ -444,11 +216,11 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
                 this.mineTimer = 0.0F;
             } else if (this.mining() && item != null) {
                 this.mineTimer += Time.delta * this.type.mineSpeed;
-                if (Mathf.chance(0.06 * (double)Time.delta)) {
+                if (Mathf.chance(0.06 * (double) Time.delta)) {
                     Fx.pulverizeSmall.at(this.mineTile.worldx() + Mathf.range(4.0F), this.mineTile.worldy() + Mathf.range(4.0F), 0.0F, item.color);
                 }
 
-                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float)item.hardness * 15.0F : 15.0F)) {
+                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float) item.hardness * 15.0F : 15.0F)) {
                     this.mineTimer = 0.0F;
                     if (Vars.state.rules.sector != null && this.team() == Vars.state.rules.defaultTeam) {
                         Vars.state.rules.sector.info.handleProduction(item, 1);
@@ -492,8 +264,8 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
             index = 0;
 
             label338:
-            while(true) {
-                while(true) {
+            while (true) {
+                while (true) {
                     if (index >= this.statuses.size) {
                         break label338;
                     }
@@ -531,9 +303,10 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 6) {
-                speedMultiplier *= 6;
-                healthMultiplier *= (lBoost - 5);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }
@@ -565,7 +338,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
             this.team.data().updateCount(this.type, -1);
         }
 
-        if (Vars.state.rules.unitAmmo && this.ammo < (float)this.type.ammoCapacity - 1.0E-4F) {
+        if (Vars.state.rules.unitAmmo && this.ammo < (float) this.type.ammoCapacity - 1.0E-4F) {
             this.resupplyTime += Time.delta;
             if (this.resupplyTime > 10.0F) {
                 this.type.ammoType.resupply(this);
@@ -576,7 +349,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
         Ability[] var14 = this.abilities;
         index = var14.length;
 
-        for(accepted = 0; accepted < index; ++accepted) {
+        for (accepted = 0; accepted < index; ++accepted) {
             Ability a = var14[accepted];
             a.update(this);
         }
@@ -655,7 +428,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
         WeaponMount[] var20 = this.mounts;
         index = var20.length;
 
-        for(accepted = 0; accepted < index; ++accepted) {
+        for (accepted = 0; accepted < index; ++accepted) {
             WeaponMount mount = var20[accepted];
             mount.weapon.update(this, mount);
         }
@@ -679,7 +452,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
                 fu.setReloadLevel(reloadLevel / 2);
                 fu.setLevel(damageLevel / 2 + healthLevel / 2 + speedLevel / 2 + shieldLevel / 2 + reloadLevel / 2);
             }
-            if(shieldLevel >= 2){
+            if (shieldLevel >= 2) {
                 fu.sfa = new ShieldRegenFieldAbility(maxHealth / 200 * shieldLevel,
                         maxHealth * shieldLevel / 20, 120, 60);
             }
@@ -693,18 +466,22 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
     public int getLevel() {
         return level;
     }
+
     @Override
-    public void setLevel(int l){
+    public void setLevel(int l) {
         level = l;
     }
+
     @Override
     public float getExp() {
         return exp;
     }
+
     @Override
     public void addExp(float exp) {
         this.exp = exp + this.exp;
     }
+
     @Override
     public int number() {
         int number = 0;
@@ -763,11 +540,13 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements FUnitUpGr
     public void setShieldLevel(int shieldLevel) {
         this.shieldLevel = shieldLevel;
     }
+
     @Override
     public void sfa(int level) {
         sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
                 maxHealth * shieldLevel / 10, 120, 60);
     }
+
     public int baseLevel() {
         return damageLevel + shieldLevel + speedLevel + healthLevel + reloadLevel + againLevel;
     }

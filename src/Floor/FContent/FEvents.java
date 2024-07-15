@@ -5,8 +5,6 @@ import Floor.FTools.interfaces.FUnitUpGrade;
 import Floor.FTools.classes.UnitUpGrade;
 import Floor.FTools.interfaces.UpGradeTime;
 import Floor.FType.FDialog.MoreResearchDialog;
-import Floor.FType.FDialog.ProjectUtils;
-import Floor.FType.FDialog.ProjectsLocated;
 import Floor.FType.UponFloor.CorrosionMist;
 import arc.Events;
 import arc.util.Time;
@@ -57,39 +55,50 @@ public class FEvents {
         });
         Events.on(EventType.UnitSpawnEvent.class, e -> {
             if (e.unit instanceof FUnitUpGrade uug) {
-                if (Vars.state.wave >= 8 && Vars.state.wave < 24) {
+                if (Vars.state.wave >= 8 && Vars.state.wave < 18) {
                     int n = r.nextInt(6);
                     uug.setLevel(n);
                     UnitUpGrade.getPower(uug, n, true, false);
-                } else if (Vars.state.wave >= 24 && Vars.state.wave < 45) {
+                } else if (Vars.state.wave >= 18 && Vars.state.wave < 30) {
                     uug.setLevel(7);
                     UnitUpGrade.getPower(uug, 7, true, false);
-                } else if (Vars.state.wave >= 45 && Vars.state.wave < 68) {
+                } else if (Vars.state.wave >= 30 && Vars.state.wave < 42) {
                     uug.setLevel(13);
                     UnitUpGrade.getPower(uug, 13, true, false);
-                } else if (Vars.state.wave >= 68 && Vars.state.wave < 90) {
+                } else if (Vars.state.wave >= 42 && Vars.state.wave < 55) {
                     uug.setLevel(19);
                     UnitUpGrade.getPower(uug, 19, true, false);
-                } else if (Vars.state.wave >= 90 && Vars.state.wave < 115) {
+                } else if (Vars.state.wave >= 55 && Vars.state.wave < 70) {
                     uug.setLevel(25);
                     UnitUpGrade.getPower(uug, 25, true, false);
-                } else if (Vars.state.wave >= 115 && Vars.state.wave <= 150) {
+                } else if (Vars.state.wave >= 70 && Vars.state.wave <= 85) {
+                    uug.setLevel(32);
+                    UnitUpGrade.getPower(uug, 32, true, false);
+                } else if (Vars.state.wave >= 85 && Vars.state.wave <= 100) {
+                    uug.setLevel(40);
+                    UnitUpGrade.getPower(uug, 40, true, false);
+                } else if (Vars.state.wave >= 100 && Vars.state.wave <= 115) {
+                    uug.setLevel(50);
+                    UnitUpGrade.getPower(uug, 50, true, false);
+                } else if (Vars.state.wave >= 115 && Vars.state.wave <= 135) {
                     UnitUpGrade.getPower(uug, 0, false, true);
-                } else if (Vars.state.wave > 150) {
+                } else if (Vars.state.wave > 135) {
                     UnitUpGrade.getPower(uug, 0, false, true);
-                    uug.setLevel(60 + (Vars.state.wave - 150));
+                    uug.setLevel(60 + Math.min(Vars.state.wave - 135, 200));
                 }
             }
         });
 
         Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof FUnitUpGrade uug && (e.unit instanceof FUnitUpGrade || e.unit.maxHealth() >= 1000)) {
-                uug.addExp(e.unit.maxHealth * Math.max(1, uug.getLevel() / 25) * max(Vars.state.wave / 25, 1));
+                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 25, 1) *
+                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
                 int n = uug.number();
                 int min = min(60 - uug.baseLevel(), n);
                 UnitUpGrade.getPower(uug, min, true, false);
             } else if (e.bullet.owner instanceof Unit u && u.controller() instanceof MissileAI ai && ai.shooter instanceof FUnitUpGrade uug) {
-                uug.addExp(e.unit.maxHealth() * Math.max(1, uug.getLevel() / 25) * max(Vars.state.wave / 25, 1));
+                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 25, 1) *
+                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
                 int n = uug.number();
                 int min = min(60 - uug.baseLevel(), n);
                 UnitUpGrade.getPower(uug, min, true, false);
@@ -103,12 +112,14 @@ public class FEvents {
         Events.on(FEvents.UnitDestroyOtherEvent.class, e -> {
             if (e.other instanceof FUnitUpGrade || e.other.maxHealth() >= 1000) {
                 if (e.killer instanceof FUnitUpGrade uug) {
-                    uug.addExp(e.other.maxHealth() * Math.max(1, uug.getLevel() / 25) * max(Vars.state.wave / 25, 1));
+                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 25, 1) *
+                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
                     int n = uug.number();
                     int min = min(60 - uug.baseLevel(), n);
                     UnitUpGrade.getPower(uug, min, true, false);
                 } else if (e.killer.controller() instanceof MissileAI ai && ai.shooter instanceof FUnitUpGrade uug) {
-                    uug.addExp(e.other.maxHealth() * Math.max(1, uug.getLevel() / 25) * max(Vars.state.wave / 25, 1));
+                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 25, 1) *
+                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
                     int n = uug.number();
                     int min = min(60 - uug.baseLevel(), n);
                     UnitUpGrade.getPower(uug, min, true, false);

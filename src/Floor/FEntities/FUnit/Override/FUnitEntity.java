@@ -275,9 +275,10 @@ public class FUnitEntity extends UnitEntity implements FUnitUpGrade {
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 6) {
-                speedMultiplier *= 6;
-                healthMultiplier *= (lBoost - 5);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }

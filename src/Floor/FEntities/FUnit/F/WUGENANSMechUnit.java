@@ -331,9 +331,10 @@ public class WUGENANSMechUnit extends FMechUnit {
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 9) {
-                speedMultiplier *= 9;
-                healthMultiplier *= (lBoost - 8);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }
@@ -341,8 +342,10 @@ public class WUGENANSMechUnit extends FMechUnit {
             reloadMultiplier *= lBoost;
         }
 
-        if (speedMultiplier >= 18) {
-            healthMultiplier *= boost;
+        if (speedMultiplier * boost >= 10) {
+            float hb = 1 + (boost * speedMultiplier / 10);
+            speedMultiplier = 10;
+            healthMultiplier *= hb;
         } else {
             speedMultiplier *= boost;
         }

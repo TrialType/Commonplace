@@ -238,9 +238,10 @@ public class TimeUpGradeUnit extends FUnitEntity implements UpGradeTime {
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 6) {
-                speedMultiplier *= 6;
-                healthMultiplier *= (lBoost - 5);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }
@@ -250,8 +251,10 @@ public class TimeUpGradeUnit extends FUnitEntity implements UpGradeTime {
 
         if (boostTime > 0) {
             float lBoost = (float) Math.max(1, Math.pow(1.01f, boostTime));
-            if (speedMultiplier >= 18) {
-                healthMultiplier *= lBoost;
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }

@@ -61,89 +61,20 @@ public class FCrawlUnit extends CrawlUnit implements FUnitUpGrade {
 
     @Override
     public void read(Reads read) {
-        short REV = read.s();
-        if (REV == 0) {
-            TypeIO.readAbilities(read, this.abilities);
-            this.ammo = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            int statuses_LENGTH = read.i();
-            this.statuses.clear();
+        super.read(read);
+        level = read.i();
+        exp = read.f();
+        damageLevel = read.i();
+        speedLevel = read.i();
+        reloadLevel = read.i();
+        healthLevel = read.i();
+        againLevel = read.i();
+        shieldLevel = read.i();
 
-            for (int INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                StatusEntry statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-            this.afterRead();
-
-            level = read.i();
-            exp = read.f();
-
-            damageLevel = read.i();
-            speedLevel = read.i();
-            reloadLevel = read.i();
-            healthLevel = read.i();
-            againLevel = read.i();
-            shieldLevel = read.i();
-        } else {
-            throw new IllegalArgumentException("Unknown revision '" + REV + "' for entity type 'latum'");
-        }
     }
 
     public void write(Writes write) {
-        write.s(0);
-        TypeIO.writeAbilities(write, this.abilities);
-        write.f(this.ammo);
-        TypeIO.writeController(write, this.controller);
-        write.f(this.elevation);
-        write.d(this.flag);
-        write.f(this.health);
-        write.bool(this.isShooting);
-        TypeIO.writeTile(write, this.mineTile);
-        TypeIO.writeMounts(write, this.mounts);
-        write.i(this.plans.size);
-
-        int INDEX;
-        for (INDEX = 0; INDEX < this.plans.size; ++INDEX) {
-            TypeIO.writePlan(write, this.plans.get(INDEX));
-        }
-
-        write.f(this.rotation);
-        write.f(this.shield);
-        write.bool(this.spawnedByCore);
-        TypeIO.writeItems(write, this.stack);
-        write.i(this.statuses.size);
-
-        for (INDEX = 0; INDEX < this.statuses.size; ++INDEX) {
-            TypeIO.writeStatus(write, this.statuses.get(INDEX));
-        }
-
-        TypeIO.writeTeam(write, this.team);
-        write.s(this.type.id);
-        write.bool(this.updateBuilding);
-        TypeIO.writeVec2(write, this.vel);
-        write.f(this.x);
-        write.f(this.y);
-
+        super.write(write);
         write.i(level);
         write.f(exp);
         write.i(damageLevel);
@@ -396,9 +327,10 @@ public class FCrawlUnit extends CrawlUnit implements FUnitUpGrade {
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 9) {
-                speedMultiplier *= 9;
-                healthMultiplier *= (lBoost - 8);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }

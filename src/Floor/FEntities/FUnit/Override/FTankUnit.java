@@ -43,105 +43,39 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
 
     public int level = 0;
     public float exp = 0;
+
     protected FTankUnit() {
         this.applied = new Bits(Vars.content.getBy(ContentType.status).size);
         this.lastSlowdown = 1.0F;
         this.resupplyTime = Mathf.random(10.0F);
         this.statuses = new Seq<>();
     }
-    public static FTankUnit create(){
+
+    public static FTankUnit create() {
         return new FTankUnit();
     }
+
     @Override
-    public int classId(){
+    public int classId() {
         return 105;
     }
+
     @Override
     public void read(Reads read) {
-        short REV = read.s();
-        if (REV == 0) {
-            TypeIO.readAbilities(read, this.abilities);
-            this.ammo = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            int statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for(int INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                StatusEntry statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-            this.afterRead();
-
-            level = read.i();
-            exp = read.f();
-
-            damageLevel = read.i();
-            speedLevel = read.i();
-            reloadLevel = read.i();
-            healthLevel = read.i();
-            againLevel = read.i();
-            shieldLevel = read.i();
-        } else {
-            throw new IllegalArgumentException("Unknown revision '" + REV + "' for entity type 'stell'");
-        }
+        super.read(read);
+        level = read.i();
+        exp = read.f();
+        damageLevel = read.i();
+        speedLevel = read.i();
+        reloadLevel = read.i();
+        healthLevel = read.i();
+        againLevel = read.i();
+        shieldLevel = read.i();
     }
 
     @Override
     public void write(Writes write) {
-        write.s(0);
-        TypeIO.writeAbilities(write, this.abilities);
-        write.f(this.ammo);
-        TypeIO.writeController(write, this.controller);
-        write.f(this.elevation);
-        write.d(this.flag);
-        write.f(this.health);
-        write.bool(this.isShooting);
-        TypeIO.writeTile(write, this.mineTile);
-        TypeIO.writeMounts(write, this.mounts);
-        write.i(this.plans.size);
-
-        int INDEX;
-        for(INDEX = 0; INDEX < this.plans.size; ++INDEX) {
-            TypeIO.writePlan(write, this.plans.get(INDEX));
-        }
-
-        write.f(this.rotation);
-        write.f(this.shield);
-        write.bool(this.spawnedByCore);
-        TypeIO.writeItems(write, this.stack);
-        write.i(this.statuses.size);
-
-        for(INDEX = 0; INDEX < this.statuses.size; ++INDEX) {
-            TypeIO.writeStatus(write, this.statuses.get(INDEX));
-        }
-
-        TypeIO.writeTeam(write, this.team);
-        write.s(this.type.id);
-        write.bool(this.updateBuilding);
-        TypeIO.writeVec2(write, this.vel);
-        write.f(this.x);
-        write.f(this.y);
-
+        super.write(write);
         write.i(level);
         write.f(exp);
         write.i(damageLevel);
@@ -153,7 +87,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
     }
 
     @Override
-    public void update(){
+    public void update() {
         if (shieldLevel > 0 && sfa == null) {
             sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
                     maxHealth * shieldLevel / 10, 120, 60);
@@ -181,13 +115,13 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         if (this.type.bounded) {
             offset = 0.0F;
             range = 0.0F;
-            cx = (float)Vars.world.unitHeight();
-            cy = (float)Vars.world.unitWidth();
+            cx = (float) Vars.world.unitHeight();
+            cy = (float) Vars.world.unitWidth();
             if (Vars.state.rules.limitMapArea && !this.team.isAI()) {
-                offset = (float)(Vars.state.rules.limitY * 8);
-                range = (float)(Vars.state.rules.limitX * 8);
-                cx = (float)(Vars.state.rules.limitHeight * 8) + offset;
-                cy = (float)(Vars.state.rules.limitWidth * 8) + range;
+                offset = (float) (Vars.state.rules.limitY * 8);
+                range = (float) (Vars.state.rules.limitX * 8);
+                cx = (float) (Vars.state.rules.limitHeight * 8) + offset;
+                cy = (float) (Vars.state.rules.limitWidth * 8) + range;
             }
 
             if (!Vars.net.client() || this.isLocal()) {
@@ -243,7 +177,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         this.updateDrowning();
         this.hitTime -= Time.delta / 9.0F;
         this.stack.amount = Mathf.clamp(this.stack.amount, 0, this.itemCapacity());
-        this.itemTime = Mathf.lerpDelta(this.itemTime, (float)Mathf.num(this.hasItem()), 0.05F);
+        this.itemTime = Mathf.lerpDelta(this.itemTime, (float) Mathf.num(this.hasItem()), 0.05F);
         int total;
         if (this.mineTile != null) {
             Building core = this.closestCore();
@@ -261,11 +195,11 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
                 this.mineTimer = 0.0F;
             } else if (this.mining() && item != null) {
                 this.mineTimer += Time.delta * this.type.mineSpeed;
-                if (Mathf.chance(0.06 * (double)Time.delta)) {
+                if (Mathf.chance(0.06 * (double) Time.delta)) {
                     Fx.pulverizeSmall.at(this.mineTile.worldx() + Mathf.range(4.0F), this.mineTile.worldy() + Mathf.range(4.0F), 0.0F, item.color);
                 }
 
-                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float)item.hardness * 15.0F : 15.0F)) {
+                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float) item.hardness * 15.0F : 15.0F)) {
                     this.mineTimer = 0.0F;
                     if (Vars.state.rules.sector != null && this.team() == Vars.state.rules.defaultTeam) {
                         Vars.state.rules.sector.info.handleProduction(item, 1);
@@ -309,13 +243,13 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
             solids = 0;
 
             label397:
-            while(true) {
-                while(true) {
+            while (true) {
+                while (true) {
                     if (solids >= this.statuses.size) {
                         break label397;
                     }
 
-                    StatusEntry entry = (StatusEntry)this.statuses.get(solids++);
+                    StatusEntry entry = (StatusEntry) this.statuses.get(solids++);
                     entry.time = Math.max(entry.time - Time.delta, 0.0F);
                     if (entry.effect != null && (!(entry.time <= 0.0F) || entry.effect.permanent)) {
                         this.applied.set(entry.effect.id);
@@ -347,9 +281,10 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
             int boost2 = level - 60;
             float lBoost = (float) Math.pow(1.01f, boost2);
             healthMultiplier *= lBoost;
-            if (lBoost >= 6) {
-                speedMultiplier *= 6;
-                healthMultiplier *= (lBoost - 5);
+            if (speedMultiplier * lBoost >= 10) {
+                float hb = 1 + (lBoost * speedMultiplier / 10);
+                speedMultiplier = 10;
+                healthMultiplier *= hb;
             } else {
                 speedMultiplier *= lBoost;
             }
@@ -371,9 +306,9 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
                 int[] var17 = Mathf.signs;
                 dy = var17.length;
 
-                for(int var25 = 0; var25 < dy; ++var25) {
+                for (int var25 = 0; var25 < dy; ++var25) {
                     int i = var17[var25];
-                    Tmp.v1.set(range * (float)i, cx - treadRect.height / 2.0F / 4.0F).rotate(this.rotation - 90.0F);
+                    Tmp.v1.set(range * (float) i, cx - treadRect.height / 2.0F / 4.0F).rotate(this.rotation - 90.0F);
                     Effect.floorDustAngle(this.type.treadEffect, Tmp.v1.x + this.x, Tmp.v1.y + this.y, this.rotation + 180.0F);
                 }
 
@@ -385,9 +320,9 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         solids = 0;
         total = (r * 2 + 1) * (r * 2 + 1);
 
-        for(int dx = -r; dx <= r; ++dx) {
-            for(dy = -r; dy <= r; ++dy) {
-                Tile t = Vars.world.tileWorld(this.x + (float)(dx * 8), this.y + (float)(dy * 8));
+        for (int dx = -r; dx <= r; ++dx) {
+            for (dy = -r; dy <= r; ++dy) {
+                Tile t = Vars.world.tileWorld(this.x + (float) (dx * 8), this.y + (float) (dy * 8));
                 if (t == null || t.solid()) {
                     ++solids;
                 }
@@ -398,7 +333,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
             }
         }
 
-        this.lastSlowdown = Mathf.lerp(1.0F, this.type.crawlSlowdown, Mathf.clamp((float)solids / (float)total / this.type.crawlSlowdownFrac));
+        this.lastSlowdown = Mathf.lerp(1.0F, this.type.crawlSlowdown, Mathf.clamp((float) solids / (float) total / this.type.crawlSlowdownFrac));
         if (this.walked || Vars.net.client()) {
             cy = this.deltaLen();
             this.treadTime += cy;
@@ -425,7 +360,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
             this.team.data().updateCount(this.type, -1);
         }
 
-        if (Vars.state.rules.unitAmmo && this.ammo < (float)this.type.ammoCapacity - 1.0E-4F) {
+        if (Vars.state.rules.unitAmmo && this.ammo < (float) this.type.ammoCapacity - 1.0E-4F) {
             this.resupplyTime += Time.delta;
             if (this.resupplyTime > 10.0F) {
                 this.type.ammoType.resupply(this);
@@ -436,7 +371,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         Ability[] var15 = this.abilities;
         solids = var15.length;
 
-        for(total = 0; total < solids; ++total) {
+        for (total = 0; total < solids; ++total) {
             Ability a = var15[total];
             a.update(this);
         }
@@ -515,7 +450,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         WeaponMount[] var20 = this.mounts;
         solids = var20.length;
 
-        for(total = 0; total < solids; ++total) {
+        for (total = 0; total < solids; ++total) {
             WeaponMount mount = var20[total];
             mount.weapon.update(this, mount);
         }
@@ -539,7 +474,7 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
                 fu.setReloadLevel(reloadLevel / 2);
                 fu.setLevel(damageLevel / 2 + healthLevel / 2 + speedLevel / 2 + shieldLevel / 2 + reloadLevel / 2);
             }
-            if(shieldLevel >= 2){
+            if (shieldLevel >= 2) {
                 fu.sfa = new ShieldRegenFieldAbility(maxHealth / 200 * shieldLevel,
                         maxHealth * shieldLevel / 20, 120, 60);
             }
@@ -548,22 +483,27 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
         }
         super.kill();
     }
+
     @Override
     public int getLevel() {
         return level;
     }
+
     @Override
-    public void setLevel(int l){
+    public void setLevel(int l) {
         level = l;
     }
+
     @Override
     public float getExp() {
         return exp;
     }
+
     @Override
     public void addExp(float exp) {
         this.exp = exp + this.exp;
     }
+
     @Override
     public int number() {
         int number = 0;
@@ -622,11 +562,13 @@ public class FTankUnit extends TankUnit implements FUnitUpGrade {
     public void setShieldLevel(int shieldLevel) {
         this.shieldLevel = shieldLevel;
     }
+
     @Override
     public void sfa(int level) {
         sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
                 maxHealth * shieldLevel / 10, 120, 60);
     }
+
     public int baseLevel() {
         return damageLevel + shieldLevel + speedLevel + healthLevel + reloadLevel + againLevel;
     }
