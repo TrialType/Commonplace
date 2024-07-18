@@ -15,7 +15,7 @@ import mindustry.world.Tile;
 
 import static mindustry.Vars.tilesize;
 
-public class CorrosionSteamVent extends CorrosionFloor{
+public class CorrosionSteamVent extends CorrosionFloor {
     public static final Point2[] offsets = {
             new Point2(0, 0),
             new Point2(1, 0),
@@ -33,44 +33,44 @@ public class CorrosionSteamVent extends CorrosionFloor{
     public Color effectColor = Pal.vent;
     public float effectSpacing = 15f;
 
-    static{
-        for(var p : offsets){
+    static {
+        for (var p : offsets) {
             p.sub(1, 1);
         }
     }
 
-    public CorrosionSteamVent(String name){
+    public CorrosionSteamVent(String name) {
         super(name);
         variants = 2;
     }
 
     @Override
-    public void drawBase(Tile tile){
+    public void drawBase(Tile tile) {
         parent.drawBase(tile);
 
-        if(checkAdjacent(tile)){
+        if (checkAdjacent(tile)) {
             Mathf.rand.setSeed(tile.pos());
             Draw.rect(variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1))], tile.worldx() - tilesize, tile.worldy() - tilesize);
         }
     }
 
     @Override
-    public boolean updateRender(Tile tile){
+    public boolean updateRender(Tile tile) {
         return checkAdjacent(tile);
     }
 
     @Override
-    public void renderUpdate(UpdateRenderState state){
-        if(state.tile.block() == Blocks.air && (state.data += Time.delta) >= effectSpacing){
+    public void renderUpdate(UpdateRenderState state) {
+        if (state.tile.block() == Blocks.air && (state.data += Time.delta) >= effectSpacing) {
             effect.at(state.tile.x * tilesize - tilesize, state.tile.y * tilesize - tilesize, effectColor);
             state.data = 0f;
         }
     }
 
-    public boolean checkAdjacent(Tile tile){
-        for(var point : offsets){
+    public boolean checkAdjacent(Tile tile) {
+        for (var point : offsets) {
             Tile other = Vars.world.tile(tile.x + point.x, tile.y + point.y);
-            if(other == null || other.floor() != this){
+            if (other == null || other.floor() != this) {
                 return false;
             }
         }

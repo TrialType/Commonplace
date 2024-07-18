@@ -2,7 +2,6 @@ package Floor.FContent;
 
 import Floor.FEntities.FBlock.*;
 import Floor.FEntities.FBulletType.*;
-import Floor.FType.DrawParts.EffectPart;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -10,12 +9,11 @@ import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
-import arc.math.Rand;
 import arc.math.geom.Vec2;
 import arc.util.Time;
-import arc.util.Tmp;
 import mindustry.content.*;
 import mindustry.entities.Effect;
+import mindustry.entities.abilities.EnergyFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.effect.MultiEffect;
@@ -40,23 +38,19 @@ import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 
-import static arc.graphics.g2d.Draw.alpha;
 import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
     //test
-    public static Block kt, pu;
+    public static Block reflective, pu;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
     public static Block eleFenceII, eleFenceIII, autoWall;
     //turret
-    public static Block fourNet, fireBoost,
-            windTurret,
-            stay, tranquil,
-            fireStream, residual;
+    public static Block fourNet, fireBoost, windTurret, tranquil, billow, residual;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
@@ -206,9 +200,11 @@ public class FBlocks {
             out = false;
         }};
 //======================================================================================================================
-        kt = new KnockingTurret("kt") {{
+        reflective = new ReflectiveShield("reflective") {{
             health = 650;
+            size = 2;
 
+            consumePower(5);
             requirements(Category.effect, ItemStack.with(Items.copper, 1));
         }};
         pu = new PureProject("pu") {{
@@ -269,213 +265,58 @@ public class FBlocks {
 
             limitRange();
         }};
-        fireStream = new ItemTurret("fire_stream") {{
-            requirements(Category.turret, ItemStack.with(
-                    Items.titanium, 340,
-                    Items.copper, 300,
-                    Items.graphite, 350
+        billow = new PowerTurret("billow") {{
+            requirements(Category.turret, ItemStack.with(Items.titanium, 340,
+                    Items.copper, 300, Items.graphite, 350
             ));
-            coolantMultiplier = 2f;
-            hasItems = true;
-            itemCapacity = 32;
-            maxAmmo = 32;
-            consumeAmmoOnce = false;
+            consume(new ConsumePower(8, 480, false));
+
             size = 2;
             recoil = 3;
-            shootY = 3f;
-            reload = 150;
             range = 540;
-            shootCone = 15f;
-            ammoUseEffect = Fx.casing1;
-            ammoPerShot = 10;
             health = 1000;
-            inaccuracy = 0;
             rotateSpeed = 10f;
-            coolant = consumeCoolant(0.05f);
             researchCostMultiplier = 8f;
+            canOverdrive = false;
 
-            ammo(
-                    Items.coal, new BulletType(0, 0) {{
-                        rangeOverride = 540;
-                        ammoMultiplier = 2f;
-                        absorbable = reflectable = hittable = collides = false;
-                        spawnUnit = new MissileUnitType("explode1") {{
-                            health = 600;
-                            armor = 3;
-                            lifetime = 135;
-                            speed = 4;
-                            trailLength = 36;
-                            trailColor = Color.valueOf("272727");
-                            range = maxRange = 12;
+            shootY = 3f;
+            reload = 400;
+            inaccuracy = 0;
+            shootCone = 15f;
 
-                            weapons.add(new Weapon() {{
-                                x = y = 0;
-                                mirror = false;
-                                bullet = new ExplosionBulletType(35, 62) {{
-                                    rangeOverride = 12;
-                                }};
-                            }});
+            shootType = new BulletType(0, 0) {{
+                rangeOverride = 540;
+                ammoMultiplier = 2f;
+                absorbable = reflectable = hittable = collides = false;
+                spawnUnit = new MissileUnitType("billow1") {{
+                    health = 600;
+                    armor = 24;
+                    lifetime = 360;
+                    speed = 1.5f;
+                    trailLength = 0;
+                    playerControllable = false;
+                    logicControllable = false;
 
-                            weapons.add(new Weapon() {{
-                                x = y = shootX = shootY = 0;
-                                mirror = false;
-                                shootCone = 360;
-                                inaccuracy = 15;
-                                reload = 15;
-                                alwaysShooting = true;
+                    abilities.add(new EnergyFieldAbility(1, 60, 300) {{
+                        status = FStatusEffects.suppress;
+                        statusDuration = 420;
+                        effectRadius = 0;
+                        healPercent = 1;
+                    }});
 
-                                shootSound = Sounds.flame;
-                                shoot = new ShootBarrel() {{
-                                    shots = 16;
-                                    barrels = new float[]{
-                                            0, 0, 0,
-                                            0, 0, 22.5f,
-                                            0, 0, 45,
-                                            0, 0, 67.5f,
-                                            0, 0, 90,
-                                            0, 0, 112.5f,
-                                            0, 0, 135,
-                                            0, 0, 157.5f,
-                                            0, 0, 180,
-                                            0, 0, 202.5f,
-                                            0, 0, 225,
-                                            0, 0, 247.5f,
-                                            0, 0, 270,
-                                            0, 0, 292.5f,
-                                            0, 0, 315,
-                                            0, 0, 337.5f,
-                                    };
-                                }};
+                    abilities.add(new EnergyFieldAbility(0, 12, 120) {{
+                        status = StatusEffects.unmoving;
+                        statusDuration = 380;
+                        effectRadius = 0;
+                        healPercent = 0;
+                        sectors = 3;
+                        color = Pal.redderDust;
+                        healEffect = hitEffect = damageEffect = Fx.none;
+                        shootSound = Sounds.none;
+                    }});
 
-                                bullet = new BulletType() {{
-                                    absorbable = reflectable = hittable = false;
-
-                                    damage = 38;
-                                    lifetime = 30;
-                                    speed = 2.3f;
-                                    ammoMultiplier = 8;
-                                    shootEffect = new Effect(33f, 80f, e -> {
-                                        color(Color.valueOf("272727"), Color.valueOf("272727"), Color.gray, e.fin());
-
-                                        randLenVectors(e.id, 10, e.finpow() * 70f, e.rotation, 10f, (x, y) -> {
-                                            Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f);
-                                        });
-                                    });
-                                    status = StatusEffects.burning;
-                                    statusDuration = 180;
-                                    hitEffect = despawnEffect = Fx.none;
-                                }};
-                            }});
-
-                            parts.add(new EffectPart() {{
-                                effect = new Effect(50, e -> {
-                                    color(Color.valueOf("8da1e3"));
-                                    Rand rand = new Rand(e.id);
-                                    for (int i = 0; i < 3; i++) {
-                                        float fin = e.fin() / rand.random(0.5f, 1f), fout = 1f - fin, angle = rand.random(360f), len = rand.random(0.5f, 1f);
-
-                                        if (fin <= 1f) {
-                                            Tmp.v1.trns(angle, fin * 24f * len);
-
-                                            alpha((0.5f - Math.abs(fin - 0.5f)) * 2f);
-                                            Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, 0.5f + fout * 4f);
-                                        }
-                                    }
-                                });
-                            }});
-                        }};
-                    }},
-                    Items.pyratite, new BulletType(0, 0) {{
-                        rangeOverride = 360;
-                        ammoMultiplier = 1f;
-                        absorbable = reflectable = hittable = collides = false;
-                        spawnUnit = new MissileUnitType("explode2") {{
-                            health = 400;
-                            armor = 1;
-                            lifetime = 90;
-                            speed = 4;
-                            trailLength = 36;
-                            trailColor = Color.valueOf("ffaa5f");
-                            range = maxRange = 12;
-
-                            weapons.add(new Weapon() {{
-                                x = y = 0;
-                                mirror = false;
-                                bullet = new ExplosionBulletType(45, 65) {{
-                                    rangeOverride = 5;
-                                }};
-                            }});
-
-                            weapons.add(new Weapon() {{
-                                x = y = shootX = shootY = 0;
-                                mirror = false;
-                                shootCone = 360;
-                                inaccuracy = 15;
-                                reload = 15;
-                                alwaysShooting = true;
-
-                                shootSound = Sounds.flame;
-                                shoot = new ShootBarrel() {{
-                                    shots = 16;
-                                    barrels = new float[]{
-                                            0, 0, 0,
-                                            0, 0, 22.5f,
-                                            0, 0, 45,
-                                            0, 0, 67.5f,
-                                            0, 0, 90,
-                                            0, 0, 112.5f,
-                                            0, 0, 135,
-                                            0, 0, 157.5f,
-                                            0, 0, 180,
-                                            0, 0, 202.5f,
-                                            0, 0, 225,
-                                            0, 0, 247.5f,
-                                            0, 0, 270,
-                                            0, 0, 292.5f,
-                                            0, 0, 315,
-                                            0, 0, 337.5f,
-                                    };
-                                }};
-
-                                bullet = new BulletType() {{
-                                    absorbable = reflectable = hittable = false;
-
-                                    damage = 64;
-                                    lifetime = 45;
-                                    speed = 2.5f;
-                                    ammoMultiplier = 16;
-                                    shootEffect = new Effect(33f, 80f, e -> {
-                                        color(Color.valueOf("ffaa5f"), Color.valueOf("ffaa5f"), Color.gray, e.fin());
-
-                                        randLenVectors(e.id, 10, e.finpow() * 70f, e.rotation, 10f, (x, y) -> {
-                                            Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f);
-                                        });
-                                    });
-                                    status = StatusEffects.burning;
-                                    statusDuration = 300;
-                                    hitEffect = despawnEffect = Fx.none;
-                                }};
-                            }});
-
-                            parts.add(new EffectPart() {{
-                                effect = new Effect(50, e -> {
-                                    color(Color.valueOf("f9a3c7"));
-                                    Rand rand = new Rand(e.id);
-                                    for (int i = 0; i < 3; i++) {
-                                        float fin = e.fin() / rand.random(0.5f, 1f), fout = 1f - fin, angle = rand.random(360f), len = rand.random(0.5f, 1f);
-
-                                        if (fin <= 1f) {
-                                            Tmp.v1.trns(angle, fin * 24f * len);
-
-                                            alpha((0.5f - Math.abs(fin - 0.5f)) * 2f);
-                                            Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, 0.5f + fout * 4f);
-                                        }
-                                    }
-                                });
-                            }});
-                        }};
-                    }}
-            );
+                }};
+            }};
         }};
         fireBoost = new OwnerTurret("fire_boost") {{
             targetAir = targetGround = true;
@@ -510,69 +351,6 @@ public class FBlocks {
                     Items.silicon, 1500,
                     Items.phaseFabric, 1500,
                     Items.plastanium, 900
-            ));
-        }};
-        stay = new PowerTurret("stay") {{
-            consume(new ConsumePower(2, 0, false));
-
-            health = 200;
-            size = 2;
-
-            recoil = 0.8f;
-            range = 200;
-            reload = 30;
-            consumesPower = true;
-            hasPower = true;
-            consumeAmmoOnce = false;
-            canOverdrive = false;
-
-            shootType = new BasicBulletType() {{
-                width = height = 12;
-                speed = 2.1f;
-                damage = 8;
-                lifetime = 90;
-
-                lightColor = Pal.redLight;
-                status = StatusEffects.unmoving;
-                statusDuration = 24;
-                splashDamageRadius = 36;
-
-                fragLifeMax = fragLifeMin = 0.5f;
-                fragVelocityMax = 3.5f;
-                fragVelocityMin = 2;
-                fragBullets = 5;
-                fragBullet = new BulletType(3, 1) {{
-                    lifetime = 30;
-                    status = FStatusEffects.torn;
-                    statusDuration = 120;
-
-                    splashDamageRadius = 12;
-                    hitEffect = new WaveEffect() {{
-                        lifetime = 12;
-                        strokeFrom = 1;
-                        strokeTo = 0;
-                        sizeFrom = 35;
-                        sizeTo = 0;
-                        colorTo = colorFrom = Color.valueOf("221122");
-                    }};
-                    despawnEffect = Fx.none;
-                }};
-
-                shootEffect = smokeEffect = Fx.none;
-                hitEffect = new WaveEffect() {{
-                    lifetime = 12;
-                    strokeFrom = 36;
-                    strokeTo = 0;
-                    sizeFrom = 35;
-                    sizeTo = 0;
-                    colorTo = colorFrom = Color.valueOf("221122");
-                }};
-                despawnEffect = Fx.none;
-            }};
-
-            requirements(Category.turret, ItemStack.with(
-                    Items.copper, 60,
-                    Items.graphite, 60
             ));
         }};
         tranquil = new PowerTurret("tranquil") {{

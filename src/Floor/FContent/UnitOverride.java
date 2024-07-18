@@ -9,8 +9,10 @@ import Floor.FEntities.FUnit.F.TimeUpGradeUnit;
 import Floor.FEntities.FUnit.Override.*;
 import Floor.FEntities.FWeapon.SuctionWeapon;
 import arc.graphics.Color;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
-import mindustry.ai.types.MissileAI;
+import arc.math.Interp;
+import arc.math.Rand;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
@@ -21,16 +23,18 @@ import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.pattern.ShootPattern;
+import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
 import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
-import mindustry.type.unit.MissileUnitType;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 
 public class UnitOverride {
     static Weapon weapon;
@@ -157,43 +161,60 @@ public class UnitOverride {
         /*=================================================================*/
         /*=================================================================*/
         UnitTypes.dagger.speed = 0.2f;
-        UnitTypes.dagger.weapons.get(0).reload = 45;
-        UnitTypes.dagger.weapons.get(0).bullet = new BulletType(0, 0) {{
-            spawnUnit = new MissileUnitType("dagger1") {{
-                constructor = TimedKillUnit::create;
-                controller = u -> new MissileAI();
-
-                health = 350;
-                armor = 3;
-                speed = 4;
-                lifetime = 90;
-                rangeOverride = 360;
-
-                weapons.add(new Weapon() {{
-                    bullet = new ExplosionBulletType(12, 36) {{
-                        rangeOverride = 30;
-                    }};
-                }});
-                weapons.add(new Weapon() {{
-                    x = y = 0;
-                    mirror = false;
-                    reload = 15;
-                    alwaysShooting = true;
-
-                    bullet = new BasicBulletType() {{
-                        width = height = 8;
-                        damage = 2;
-                        lifetime = 15;
-                        speed = 6;
-                    }};
-                }});
-            }};
+        weapon = UnitTypes.dagger.weapons.get(0);
+        weapon.reload = 45;
+        weapon.shoot = new ShootPattern() {{
+            shots = 3;
+            shotDelay = 10;
+        }};
+        weapon.bullet = new BasicBulletType() {{
+            damage = 8;
+            speed = 4;
+            lifetime = 90;
+            width = height = 8;
+            splashDamage = 8;
+            splashDamageRadius = 13;
+            keepVelocity = false;
         }};
 
         UnitTypes.mace.health = 1000;
         UnitTypes.mace.armor = 8;
         UnitTypes.mace.weapons.get(0).bullet.incendChance = 1;
         UnitTypes.mace.weapons.get(0).bullet.incendAmount = 2;
+        weapon = new Weapon() {{
+            reload = 600;
+            inaccuracy = 15;
+            shootY = 2f;
+            mirror = false;
+            shootSound = Sounds.flame;
+            shoot = new ShootPattern() {{
+                shots = 110;
+                shotDelay = 3;
+            }};
+
+            bullet = new BulletType() {{
+                absorbable = reflectable = hittable = false;
+                pierce = true;
+                pierceCap = 2;
+                lifetime = 25;
+                speed = 8;
+                damage = 7;
+                status = StatusEffects.burning;
+                statusDuration = 3;
+                despawnEffect = hitEffect = Fx.none;
+                shootSound = Sounds.none;
+                shootEffect = new Effect(32f, 266f, e -> {
+                    color(Pal.lightFlame, Pal.darkFlame, Color.gray, e.fin());
+
+                    randLenVectors(e.id, 20, e.finpow() * 200, e.rotation, 15,
+                            (x, y) -> Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.5f));
+                });
+            }};
+        }};
+        UnitTypes.mace.weapons.add(weapon);
+        weapon = weapon.copy();
+        weapon.x = -5;
+        UnitTypes.mace.weapons.add(weapon);
 
         UnitTypes.fortress.health = 1800;
         weapon = UnitTypes.fortress.weapons.get(0);
@@ -205,13 +226,13 @@ public class UnitOverride {
         weapon.bullet.incendChance = 0.1f;
         weapon.bullet.incendAmount = 1;
         UnitTypes.fortress.weapons.add(new Weapon() {{
-            reload = 36;
+            reload = 18;
             rotate = true;
             rotateSpeed = 10;
 
             bullet = new BasicBulletType() {{
                 width = height = 7;
-                damage = 15;
+                damage = 8;
                 speed = 2;
                 lifetime = 120;
                 collidesTiles = false;
@@ -232,11 +253,11 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
         UnitTypes.crawler.health = 350;
         UnitTypes.crawler.speed = 2.5f;
-        UnitTypes.crawler.abilities.add(new StatusFieldAbility(FStatusEffects.swift, 900, 900, 4));
+        UnitTypes.crawler.abilities.add(new StatusFieldAbility(FStatusEffects.swift, 900, 900, 1));
         weapon = UnitTypes.crawler.weapons.get(0);
         weapon.reload = 30;
         weapon.bullet.killShooter = false;
-        weapon.bullet.splashDamageRadius = 70;
+        weapon.bullet.splashDamageRadius = 60;
         weapon.bullet.buildingDamageMultiplier = 3;
         weapon.bullet.shootEffect = new ExplosionEffect() {{
             lifetime = 25;
@@ -246,19 +267,31 @@ public class UnitOverride {
             smokeRad = 70;
             smokeSize = 4;
             smokeSizeBase = 0;
-            smokeColor = Color.valueOf("CCAA88ff");
+            smokeColor = Color.valueOf("EEAA88ff");
 
             sparks = 36;
             sparkRad = 70;
-            sparkLen = 7;
-            sparkColor = Color.valueOf("CCAA88ff");
+            sparkLen = 4;
+            sparkColor = Color.valueOf("EEAA88ff");
 
             waveLife = 25;
             waveStroke = 2;
             waveRad = 80;
             waveRadBase = 0;
-            waveColor = Color.valueOf("CCAA88ff");
+            waveColor = Color.valueOf("EEAA88ff");
         }};
+
+        UnitTypes.atrax.speed = 0.3f;
+        UnitTypes.atrax.health = 1200;
+        UnitTypes.atrax.armor = 8f;
+        UnitTypes.atrax.targetAir = true;
+        weapon = UnitTypes.atrax.weapons.get(0);
+        weapon.shoot = new ShootSpread(6, 30) {{
+            shotDelay = 1;
+        }};
+        weapon.bullet.damage = 23;
+        weapon.bullet.lifetime = 100;
+        weapon.bullet.collidesAir = true;
 
         UnitTypes.arkyid.health = 28000;
 
@@ -287,13 +320,29 @@ public class UnitOverride {
         m.lifetime = 90;
         m.height = 14;
         m.width = 7;
-        m.splashDamageRadius = 45f;
+        m.splashDamageRadius = 25;
         m.splashDamage = 36f;
         m.inaccuracy = 0;
         m.homingDelay = 30;
         m.homingRange = 540;
         m.homingPower = 0.1f;
-        m.trailEffect = Fx.missileTrailSmoke;
+        m.trailEffect = new Effect(180f, 220f, b -> {
+            float intensity = 2f;
+
+            color(b.color, 0.7f);
+            for (int i = 0; i < 4; i++) {
+                Rand rand = new Rand(b.id * 2L + i);
+                float lenScl = rand.random(0.5f, 1f);
+                int fi = i;
+                b.scaled(b.lifetime * lenScl, e -> randLenVectors(e.id + fi - 1, e.fin(Interp.pow10Out), (int) (2.9f * intensity), 7f * intensity, (x, y, in, out) -> {
+                    float fout = e.fout(Interp.pow5Out) * rand.random(0.5f, 1f);
+                    float rad = fout * ((2f + intensity) * 2.35f);
+
+                    Fill.circle(e.x + x, e.y + y, rad);
+                    Drawf.light(e.x + x, e.y + y, rad * 2.5f, b.color, 0.5f);
+                }));
+            }
+        }).layer(Layer.bullet - 1f);
         m.trailChance = 0.1f;
 
         UnitTypes.antumbra.health = 25200;
@@ -459,11 +508,12 @@ public class UnitOverride {
         }};
         bullet.fragBullet.damage = 100;
         bullet.fragBullet.splashDamage = 92f;
-        bullet.fragBullet.splashDamageRadius = 30f;
+        bullet.fragBullet.splashDamageRadius = 20;
 
         /*-----------------------------------------------------------------------------*/
         UnitTypes.nova.speed = 2f;
         UnitTypes.nova.armor = 21f;
+        UnitTypes.nova.health = 220;
         UnitTypes.nova.buildSpeed = 0;
         UnitTypes.nova.abilities.add(new RepairFieldAbility(60, 60 * 8, 4));
         color = Color.valueOf("ffa998");
@@ -474,6 +524,7 @@ public class UnitOverride {
         bullet.speed = 8;
         bullet.damage = 18;
         bullet.healAmount = 0;
+        bullet.healPercent = 0;
         bullet.collidesTeam = false;
         bullet.smokeEffect = new Effect(8, e -> {
             color(Color.white, color, e.fin());

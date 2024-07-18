@@ -16,6 +16,7 @@ public class Floor extends Mod {
         FEntities.load();
         FStatusEffects.load();
         UnitOverride.load();
+        BlockOverride.load();
         FUnits.load();
         FEvents.load();
         FBlocks.load();

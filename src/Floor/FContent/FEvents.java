@@ -84,7 +84,7 @@ public class FEvents {
                     UnitUpGrade.getPower(uug, 0, false, true);
                 } else if (Vars.state.wave > 135) {
                     UnitUpGrade.getPower(uug, 0, false, true);
-                    uug.setLevel(60 + Math.min(Vars.state.wave - 135, 200));
+                    uug.setLevel(60 + Math.min(Vars.state.wave - 135, 120));
                 }
             }
         });

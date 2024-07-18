@@ -27,6 +27,7 @@ import mindustry.gen.Building;
 import mindustry.gen.Groups;
 import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
+import mindustry.logic.LAccess;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.ui.Bar;
@@ -87,7 +88,12 @@ public class AutoBlock extends Block {
         configurable = true;
         breakable = true;
         canOverdrive = false;
+        logicConfigurable = true;
         envEnabled = Env.any;
+    }
+
+    public boolean configSenseable() {
+        return true;
     }
 
     @Override
@@ -179,6 +185,7 @@ public class AutoBlock extends Block {
         public int config = 0;
         public boolean starting = false;
         public boolean beginning = false;
+//        public boolean auto = true;
         public float createTimer = 0;
         public int step = 0;
 
@@ -328,7 +335,7 @@ public class AutoBlock extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            if(beginning || starting){
+            if (beginning || starting) {
                 return false;
             }
             Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
@@ -340,7 +347,48 @@ public class AutoBlock extends Block {
                     return this.items.get(item) < itemStack.amount;
                 }
             }
+//            if (auto) {
+//                final ItemStack[][] items2 = {null};
+//                creates.each((i, b) -> {
+//                    if (items2[0] == null) {
+//                        for (ItemStack s : items) {
+//                            if (s.item == item) {
+//                                items2[0] = i;
+//                                return;
+//                            }
+//                        }
+//                    }
+//                });
+//                Seq<Item> different = new Seq<>(items.length);
+//                if (items2[0] != null) {
+//                    for (ItemStack stack : items) {
+//                        for (ItemStack itemStack : items2[0]) {
+//                            if (stack.item == itemStack.item) {
+//                                break;
+//                            }
+//                            different.add(stack.item);
+//                        }
+//                    }
+//                }
+//            }
             return false;
+        }
+
+        @Override
+        public Object config() {
+            return (int) config;
+        }
+
+        @Override
+        public void control(LAccess type, double p1, double p2, double p3, double p4) {
+            if (type == LAccess.enabled) {
+                this.enabled = !Mathf.zero((float) p1);
+                if (p1 == 2 && couldStart()) {
+                    start();
+                }
+            } else if (type == LAccess.config) {
+                this.config = Math.min(creates.size - 1, (int) p1);
+            }
         }
 
         @Override

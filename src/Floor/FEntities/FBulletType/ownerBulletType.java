@@ -10,6 +10,7 @@ import mindustry.gen.Teamc;
 public class ownerBulletType extends BulletType {
     public ownerBulletType(float speed, float damage) {
         super(speed, damage);
+        collidesTeam = true;
     }
 
     public void updateHoming(Bullet b) {

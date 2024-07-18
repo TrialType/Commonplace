@@ -45,10 +45,9 @@ public class Techs {
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == scorch) {
-                tf = node(fireStream, ItemStack.with(Items.titanium, 3400, Items.copper, 3000, Items.graphite, 3500), Seq.with(new Objectives.SectorComplete(stainedMountains)), () -> {
-                    node(fireBoost, ItemStack.with(Items.titanium, 15000, Items.graphite, 15000, Items.graphite, 20000, Items.silicon, 15000, Items.phaseFabric, 15000, Items.plastanium, 9000), () -> {
-                    });
+                tf = node(fireBoost, ItemStack.with(Items.titanium, 15000, Items.graphite, 15000, Items.graphite, 20000, Items.silicon, 15000, Items.phaseFabric, 15000, Items.plastanium, 9000), () -> {
                 });
+
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == copperWall) {

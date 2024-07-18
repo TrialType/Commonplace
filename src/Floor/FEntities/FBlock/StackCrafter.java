@@ -9,6 +9,7 @@ import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.gen.Building;
 import mindustry.gen.Tex;
+import mindustry.logic.LAccess;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.Liquid;
@@ -26,7 +27,12 @@ public class StackCrafter extends GenericCrafter {
         super(name);
 
         configurable = true;
+        logicConfigurable = true;
         hasLiquids = hasItems = hasPower = true;
+    }
+
+    public boolean configSenseable() {
+        return true;
     }
 
     @Override
@@ -302,6 +308,20 @@ public class StackCrafter extends GenericCrafter {
 
         public boolean acceptLiquid(Building source, Liquid liquid) {
             return this.block.hasLiquids && use(liquid);
+        }
+
+        @Override
+        public Object config() {
+            return (int) chance;
+        }
+
+        @Override
+        public void control(LAccess type, double p1, double p2, double p3, double p4) {
+            if (type == LAccess.enabled) {
+                this.enabled = !Mathf.zero((float) p1);
+            } else if (type == LAccess.config) {
+                this.chance = Math.min(switchStack.size - 1, (int) p1);
+            }
         }
 
         @Override
