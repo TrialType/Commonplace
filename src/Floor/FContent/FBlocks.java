@@ -13,6 +13,7 @@ import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.*;
 import mindustry.entities.Effect;
+import mindustry.entities.TargetPriority;
 import mindustry.entities.abilities.EnergyFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
@@ -29,6 +30,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.type.unit.MissileUnitType;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
@@ -36,6 +38,7 @@ import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
+import mindustry.world.meta.BlockFlag;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
@@ -47,9 +50,9 @@ public class FBlocks {
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall;
+    public static Block eleFenceII, eleFenceIII, autoWall, decoy;
     //turret
-    public static Block fourNet, fireBoost, windTurret, tranquil, billow, residual;
+    public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
@@ -257,7 +260,7 @@ public class FBlocks {
 
             limitRange();
         }};
-        billow = new PowerTurret("billow") {{
+        mountain = new PowerTurret("mountain") {{
             requirements(Category.turret, ItemStack.with(Items.titanium, 340,
                     Items.copper, 300, Items.graphite, 350
             ));
@@ -286,6 +289,7 @@ public class FBlocks {
                     lifetime = 360;
                     speed = 1.5f;
                     trailLength = 0;
+                    hidden = true;
                     playerControllable = false;
                     logicControllable = false;
 
@@ -843,6 +847,37 @@ public class FBlocks {
                     ItemStack.with(Items.thorium, 120, Items.silicon, 10), Blocks.thoriumWall,
                     ItemStack.with(Items.phaseFabric, 120, Items.silicon, 10), Blocks.phaseWall,
                     ItemStack.with(Items.surgeAlloy, 120, Items.silicon, 10), Blocks.surgeWall);
+        }};
+        decoy = new Block("decoy") {{
+            requirements(Category.defense, ItemStack.with(
+                    Items.copper, 350, Items.silicon, 250, Items.graphite, 250,
+                    Items.titanium, 300, Items.thorium, 300));
+
+            size = 3;
+            health = 1000;
+            solid = true;
+            breakable = true;
+            destructible = true;
+            canOverdrive = false;
+            drawDisabled = false;
+            crushDamageMultiplier = 3;
+            researchCostMultiplier = 8;
+            destroyBullet = new BulletType() {{
+                reflectable = hittable = absorbable = false;
+                lifetime = 0;
+                speed = 0;
+                damage = 0;
+                splashDamageRadius = 300;
+                splashDamage = 410;
+                hitEffect = Fx.blockExplosionSmoke;
+                despawnEffect = Fx.blockExplosionSmoke;
+            }};
+
+            flags.with(BlockFlag.battery);
+            flags.with(BlockFlag.factory);
+            flags.with(BlockFlag.generator);
+            flags.with(BlockFlag.reactor);
+            priority = TargetPriority.core;
         }};
 //======================================================================================================================
         slowProject = new DownProject("slow_project") {{
