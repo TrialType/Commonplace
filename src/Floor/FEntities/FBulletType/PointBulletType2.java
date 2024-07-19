@@ -1,13 +1,13 @@
 package Floor.FEntities.FBulletType;
 
+import arc.math.Angles;
 import arc.math.Mathf;
-import arc.math.Rand;
 import arc.math.geom.Geometry;
 import arc.math.geom.Vec2;
-import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.content.Fx;
+import mindustry.entities.Damage;
 import mindustry.entities.Effect;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
@@ -15,42 +15,88 @@ import mindustry.gen.Building;
 import mindustry.gen.Bullet;
 import mindustry.gen.Unit;
 
-import java.util.HashMap;
-import java.util.Map;
+public class PointBulletType2 extends BulletType {
+    private float cdist = 0.0F;
+    private Unit result;
 
-public class FreeBulletType extends BulletType {
-    public boolean intervalPoint = true;
-    public Effect intervalHitEffect = Fx.none;
     public boolean pointWithFrag = true;
     public boolean pointWithUnit = true;
     public boolean point = false;
-    private float cdist = 0.0F;
-    private Unit result;
     public float trailSpacing = 10.0F;
+
+    public BulletType laserBulletType = null;
+    public Effect laserEffect = Fx.none;
+    public float laserDelay = 0;
+    public float laserInterval = 0;
+    public float laserSpreadRandom = 360;
+    public float laserSpread = 0;
+    public float laserAngle = 0;
+    public float laserRange = 350f;
+    public int laserBullets = 35;
+
+    public Effect intervalHitEffect = Fx.none;
+    public Effect intervalLinkEffect = Fx.none;
+    public boolean intervalPoint = true;
+    public float intervalRange = 350f;
 
     @Override
     public void update(Bullet b) {
         super.update(b);
+        updateLaser(b);
+    }
+
+    public void updateLaser(Bullet b) {
+        if (laserBulletType != null && b.time >= laserDelay && b.timer.get(3, laserInterval)) {
+            float angle;
+            float length;
+            for (int i = 0; i < laserBullets; i++) {
+                angle = laserAngle + b.rotation() + Mathf.range(laserSpreadRandom) +
+                        ((i - (laserBullets - 1f) / 2f) * laserSpread);
+                length = Mathf.range(laserRange);
+                Bullet b1 = laserBulletType.create(b.owner, b.team, b.x + Angles.trnsx(angle, length),
+                        b.y + Angles.trnsy(angle, length), angle,
+                        laserBulletType.damage * laserBulletType.damageMultiplier(b),
+                        1, 1, null);
+                angle = laserAngle + b.rotation() + Mathf.range(laserSpreadRandom) +
+                        ((i - (laserBullets - 1f) / 2f) * laserSpread);
+                length = Mathf.range(laserRange);
+                Bullet b2 = laserBulletType.create(b.owner, b.team, b.x + Angles.trnsx(angle, length),
+                        b.y + Angles.trnsy(angle, length), angle,
+                        laserBulletType.damage * laserBulletType.damageMultiplier(b),
+                        1, 1, null);
+                float x1 = b1.x, y1 = b1.y, x2 = b2.x, y2 = b2.y;
+                Damage.collideLine(b1, b.team, laserBulletType.hitEffect, x1, y1,
+                        Angles.angle(x1, y1, x2, y2), b1.dst(b2), false, false, -1);
+                laserEffect.at(x1, y1, 0, new Vec2(x2, y2));
+            }
+        }
     }
 
     public void updateBulletInterval(Bullet b) {
         if (intervalBullet != null && b.time >= intervalDelay && b.timer.get(2, bulletInterval)) {
             float ang = b.rotation();
             if (intervalPoint) {
+                Vec2[] ves = new Vec2[intervalBullets];
+                ves[0] = new Vec2(b.x, b.y);
+                float x = b.x, y = b.y;
                 for (int i = 0; i < intervalBullets; i++) {
-                    float bx = b.x + Mathf.range(intervalBullet.range);
-                    float by = b.y + Mathf.range(intervalBullet.range);
-                    intervalBullet.create(b, bx, by, ang + Mathf.range(intervalRandomSpread) +
+                    float angle = Mathf.range(ang + Mathf.range(intervalRandomSpread) +
                             intervalAngle + ((i - (intervalBullets - 1f) / 2f) * intervalSpread));
+                    float len = Mathf.range(intervalRange);
+                    float bx = b.x + Angles.trnsx(angle, len);
+                    float by = b.y + Angles.trnsy(angle, len);
+                    intervalBullet.create(b, bx, by, angle);
                     intervalHitEffect.at(bx, by, 0, new Vec2(b.x, b.y));
+                    Vec2 v = new Vec2(bx, by).sub(x, y);
+                    ves[i] = v;
+                    x = bx;
+                    y = by;
                 }
+                intervalLinkEffect.at(b.x, b.y, b.rotation(), ves);
             } else {
                 for (int i = 0; i < intervalBullets; i++) {
                     float rot = ang + Mathf.range(intervalRandomSpread) + intervalAngle + ((i - (intervalBullets - 1f) / 2f) * intervalSpread);
-                    Bullet bu = intervalBullet.create(b, b.x, b.y, rot);
-                    if (intervalHitEffect != null) {
-                        intervalHitEffect.at(b.x, b.y, rot, bu);
-                    }
+                    intervalBullet.create(b, b.x, b.y, rot);
                 }
             }
         }

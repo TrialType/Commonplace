@@ -8,9 +8,9 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Interp;
-import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.EnergyFieldAbility;
@@ -18,7 +18,6 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.WaveEffect;
-import mindustry.entities.part.FlarePart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.pattern.ShootSpread;
@@ -44,7 +43,7 @@ import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
     //test
-    public static Block reflective, pu;
+    public static Block pu;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
@@ -54,7 +53,7 @@ public class FBlocks {
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
-    public static Block buildCore, slowProject, unitUpper;
+    public static Block buildCore, slowProject, unitUpper, reflective;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -200,13 +199,6 @@ public class FBlocks {
             out = false;
         }};
 //======================================================================================================================
-        reflective = new ReflectiveShield("reflective") {{
-            health = 650;
-            size = 2;
-
-            consumePower(5);
-            requirements(Category.effect, ItemStack.with(Items.copper, 1));
-        }};
         pu = new PureProject("pu") {{
             health = 650;
 
@@ -687,73 +679,33 @@ public class FBlocks {
                 fragOnAbsorb = fragOnHit = true;
                 fragBullets = 1;
 
-                fragBullet = new FreeBulletType() {{
+                fragBullet = new PointBulletType2() {{
                     lifetime = 1000;
                     damage = 0;
                     speed = 0;
                     hittable = absorbable = reflectable = collides = false;
                     despawnEffect = hitEffect = Fx.none;
 
-                    parts.add(new FlarePart() {{
-                        sides = 3;
-                        radius = 55;
-                        radiusTo = 0;
-                        rotMove = 1000;
-                        stroke = 40;
-                        innerScl = 0.2f;
-                        color1 = Color.valueOf("EBEEF5");
-                        color2 = Color.valueOf("EBEEF5");
-                    }});
-
-                    intervalBullets = 3;
-                    intervalRandomSpread = 360;
-                    bulletInterval = 3;
-                    intervalDelay = 0;
-                    intervalBullet = new BulletType(0, 0) {{
-                        rangeOverride = 160;
-                        lifetime = 0;
-                        splashDamageRadius = 58;
-                        splashDamage = 62;
+                    laserBullets = 10;
+                    laserInterval = 10;
+                    laserDelay = 0;
+                    laserBulletType = new BulletType(0, 62) {{
+                        lifetime = 1;
                         status = FStatusEffects.suppress;
                         statusDuration = 360;
+                        hitEffect = despawnEffect = Fx.none;
 
                         collides = hittable = absorbable = reflectable = false;
                     }};
-
-                    intervalHitEffect = new ExplosionEffect() {{
-                        lifetime = 13;
-                        sparks = 0;
-                        waveLife = 0;
-                        smokes = 6;
-                        smokeRad = 47;
-                        smokeColor = Color.valueOf("EBEEF522");
-                        smokeSizeBase = 1.5f;
-
-                        renderer = f -> {
-                            Draw.color(this.waveColor);
-                            f.scaled(this.waveLife, (i) -> {
-                                Lines.stroke(this.waveStroke * i.fout());
-                                Lines.circle(f.x, f.y, this.waveRadBase + i.fin() * this.waveRad);
-                            });
-                            Draw.color(this.smokeColor);
-                            if (this.smokeSize > 0.0F) {
-                                Angles.randLenVectors(f.id, this.smokes, 2.0F + this.smokeRad * f.finpow(), (x, y) -> Fill.circle(f.x + x, f.y + y, f.fout() * this.smokeSize + this.smokeSizeBase));
-                            }
-
-                            Draw.color(this.sparkColor);
-                            Lines.stroke(f.fout() * this.sparkStroke);
-                            Angles.randLenVectors(f.id + 1, this.sparks, 1.0F + this.sparkRad * f.finpow(), (x, y) -> {
-                                Lines.lineAngle(f.x + x, f.y + y, Mathf.angle(x, y), 1.0F + f.fout() * this.sparkLen);
-                                Drawf.light(f.x + x, f.y + y, f.fout() * this.sparkLen * 4.0F, this.sparkColor, 0.7F);
-                            });
-
-                            if (f.data instanceof Vec2 v) {
-                                color(Color.valueOf("EBEEF522"));
-                                Lines.stroke(4.5f * (1 - f.fin()));
-                                Lines.line(f.x, f.y, v.x, v.y);
-                            }
-                        };
-                    }};
+                    laserEffect = new Effect(15, f -> {
+                        if (f.data instanceof Vec2 v) {
+                            Draw.color(Color.valueOf("EBEEF5"));
+                            float stroke = 12 * (0.5f - Math.abs(f.fin() - 0.5f));
+                            Lines.stroke(stroke);
+                            Lines.line(f.x, f.y, v.x, v.y);
+                            Drawf.light(f.x, f.y, v.x, v.y, stroke + 1, Color.valueOf("EBEEF5"), 0.6f);
+                        }
+                    });
                 }};
             }});
         }};
@@ -918,6 +870,13 @@ public class FBlocks {
 
             requirements(Category.effect, ItemStack.with(Items.copper, 2000, Items.lead, 2000,
                     Items.graphite, 2000, Items.silicon, 2000, Items.titanium, 2000));
+        }};
+        reflective = new ReflectiveShield("reflective") {{
+            health = 650;
+            size = 2;
+
+            consumePower(5);
+            requirements(Category.effect, ItemStack.with(Items.copper, 1));
         }};
 //======================================================================================================================
         blockOverride();

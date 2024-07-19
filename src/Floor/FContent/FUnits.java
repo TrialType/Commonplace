@@ -812,7 +812,7 @@ public class FUnits {
                     fragLifeMax = 6;
                     fragVelocityMin = 0;
                     fragVelocityMax = 0;
-                    fragBullet = new FreeBulletType() {{
+                    fragBullet = new PointBulletType2() {{
                         collides = absorbable = hittable = reflectable = false;
 
                         point = false;

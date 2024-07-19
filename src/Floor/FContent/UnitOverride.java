@@ -525,6 +525,7 @@ public class UnitOverride {
         bullet.damage = 18;
         bullet.healAmount = 0;
         bullet.healPercent = 0;
+        bullet.reflectable = true;
         bullet.collidesTeam = false;
         bullet.smokeEffect = new Effect(8, e -> {
             color(Color.white, color, e.fin());

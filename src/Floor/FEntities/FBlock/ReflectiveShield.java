@@ -3,6 +3,7 @@ package Floor.FEntities.FBlock;
 import arc.graphics.Blending;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.struct.ObjectMap;
@@ -24,9 +25,11 @@ public class ReflectiveShield extends Block {
     protected static final ObjectMap<Bullet, Float> angles = new ObjectMap<>();
     protected static final Vec2 vec = new Vec2();
 
-    public float width = 200;
-    public float height = 150;
+    public float width = 300;
+    public float height = 220;
     public float force = 0.2f;
+    public float speedForce = 0.01f;
+    public float peaceRange = 50;
 
     public ReflectiveShield(String name) {
         super(name);
@@ -97,29 +100,31 @@ public class ReflectiveShield extends Block {
                             }
                     );
                 }
-            }
 
-            angles.each((b, f) -> {
-                if (inRange(b)) {
-                    vec.trns(-f, force * efficiency);
-                    b.vel.add(vec);
-                } else {
-                    b.time = 0;
-                    b.team = team;
-                    b.owner = this;
-                    removes.add(b);
+                angles.each((b, f) -> {
+                    if (inRange(b)) {
+                        if (!within(b, peaceRange)) b.keepAlive = true;
+                        vec.trns(f + 180, b.type.speed * speedForce + force * efficiency);
+                        b.vel.add(vec);
+                    } else {
+                        if (Angles.angleDist(b.vel.angle(), angles.get(b)) > 120) {
+                            b.time = 0;
+                            b.team = team;
+                            b.owner = this;
+                        }
+                        removes.add(b);
+                    }
+                });
+                for (Bullet b : removes) {
+                    angles.remove(b);
                 }
-            });
-            for (Bullet b : removes) {
-                angles.remove(b);
             }
         }
 
         public boolean inRange(Bullet b) {
-
-
-
-            return true;
+            float w = rotation % 2 == 0 ? height : width;
+            float h = rotation % 2 == 0 ? width : height;
+            return Math.abs(b.x - x) <= w + b.hitSize * 2 && Math.abs(b.y - y) <= h + b.hitSize * 2;
         }
 
         @Override
