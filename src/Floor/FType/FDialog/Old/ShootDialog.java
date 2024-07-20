@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import arc.Core;
 import arc.func.*;
@@ -9,7 +9,6 @@ import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.ui.dialogs.BaseDialog;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
 import static mindustry.Vars.ui;
 
 public class ShootDialog extends BaseDialog {
@@ -68,7 +67,7 @@ public class ShootDialog extends BaseDialog {
                 ta.button(b -> {
                     b.image(Icon.rotate);
 
-                    b.clicked(() -> createSelectDialog(b, (tb, hide) -> {
+                    b.clicked(() -> ProjectUtils.createSelectDialog(b, (tb, hide) -> {
                         tb.button(Core.bundle.get("dialog.shoot.pattern"), () -> {
                             if (!shot.equals("pattern")) {
                                 setShoot(new ShootPattern() {{
@@ -172,11 +171,11 @@ public class ShootDialog extends BaseDialog {
     public void rebuildBase() {
         base.clear();
         base.setBackground(Tex.buttonEdge1);
-        createLevDialog(base, dia, "number", shot.equals("multi") ? "shots2" : "shots", shoot.shots, f -> shoot.shots = (int) (f + 0),
+        ProjectUtils.createLevDialog(base, dia, "number", shot.equals("multi") ? "shots2" : "shots", shoot.shots, f -> shoot.shots = (int) (f + 0),
                 this::rebuildBase, heavyUp, use, heavy);
-        createNumberDialog(base, dia, shot.equals("multi") ? "shotDelay2" : "shotDelay", shoot.shotDelay,
+        ProjectUtils.createNumberDialog(base, dia, shot.equals("multi") ? "shotDelay2" : "shotDelay", shoot.shotDelay,
                 f -> shoot.shotDelay = f, this::rebuildBase);
-        createNumberDialog(base, dia, shot.equals("multi") ? "firstShotDelay2" : "firstShotDelay", shoot.firstShotDelay,
+        ProjectUtils.createNumberDialog(base, dia, shot.equals("multi") ? "firstShotDelay2" : "firstShotDelay", shoot.firstShotDelay,
                 f -> shoot.firstShotDelay = f, this::rebuildBase);
     }
 
@@ -186,50 +185,50 @@ public class ShootDialog extends BaseDialog {
         switch (shot) {
             case "summon": {
                 ShootSummon ss = (ShootSummon) shoot;
-                createNumberDialog(type, dia, "x", ss.x,
+                ProjectUtils.createNumberDialog(type, dia, "x", ss.x,
                         f -> ss.x = f, this::rebuildType);
-                createNumberDialog(type, dia, "y", ss.y,
+                ProjectUtils.createNumberDialog(type, dia, "y", ss.y,
                         f -> ss.y = f, this::rebuildType);
-                createNumberDialog(type, dia, "radius", ss.radius,
+                ProjectUtils.createNumberDialog(type, dia, "radius", ss.radius,
                         f -> ss.radius = f, this::rebuildType);
-                createNumberDialog(type, dia, "spread", ss.spread,
+                ProjectUtils.createNumberDialog(type, dia, "spread", ss.spread,
                         f -> ss.spread = f, this::rebuildType);
                 break;
             }
             case "spread": {
                 ShootSpread ss = (ShootSpread) shoot;
-                createNumberDialog(type, dia, "spread1", ss.spread,
+                ProjectUtils.createNumberDialog(type, dia, "spread1", ss.spread,
                         f -> ss.spread = f, this::rebuildType);
                 break;
             }
             case "sine": {
                 ShootSine ss = (ShootSine) shoot;
-                createNumberDialog(type, dia, "scl", ss.scl,
+                ProjectUtils.createNumberDialog(type, dia, "scl", ss.scl,
                         f -> ss.scl = f, this::rebuildType);
-                createNumberDialog(type, dia, "mag", ss.mag,
+                ProjectUtils.createNumberDialog(type, dia, "mag", ss.mag,
                         f -> ss.mag = f, this::rebuildType);
                 break;
             }
             case "multi": {
                 ShootMulti sm = (ShootMulti) shoot;
-                createShootList(type, dia, "dest", () -> sm.dest, s -> sm.dest = s, () -> use.get(), heavy);
-                createShootDialog(type, dia, "source", getHeavy("number", getShootVal(sm.source)), () -> sm.source,
+                ProjectUtils.createShootList(type, dia, "dest", () -> sm.dest, s -> sm.dest = s, () -> use.get(), heavy);
+                ProjectUtils.createShootDialog(type, dia, "source", ProjectUtils.getHeavy("number", ProjectUtils.getShootVal(sm.source)), () -> sm.source,
                         s -> sm.source = s, use, heavy, heavyUp);
                 break;
             }
             case "helix": {
                 ShootHelix sh = (ShootHelix) shoot;
-                createNumberDialog(type, dia, "scl", sh.scl,
+                ProjectUtils.createNumberDialog(type, dia, "scl", sh.scl,
                         f -> sh.scl = f, this::rebuildType);
-                createNumberDialog(type, dia, "mag", sh.mag,
+                ProjectUtils.createNumberDialog(type, dia, "mag", sh.mag,
                         f -> sh.mag = f, this::rebuildType);
-                createNumberDialog(type, dia, "offset", sh.offset,
+                ProjectUtils.createNumberDialog(type, dia, "offset", sh.offset,
                         f -> sh.offset = f, this::rebuildType);
                 break;
             }
             case "barrel": {
                 ShootBarrel sb = new ShootBarrel();
-                createNumberDialog(type, dia, "offset", sb.barrelOffset,
+                ProjectUtils.createNumberDialog(type, dia, "offset", sb.barrelOffset,
                         f -> sb.barrelOffset = (int) (f + 0), this::rebuildType);
                 type.table(t -> {
                     t.label(() -> Core.bundle.get("dialog.shoot.barrels")).width(100);
@@ -258,11 +257,11 @@ public class ShootDialog extends BaseDialog {
             }
             case "alternate": {
                 ShootAlternate sa = (ShootAlternate) shoot;
-                createNumberDialog(type, dia, "barrels2", sa.barrels,
+                ProjectUtils.createNumberDialog(type, dia, "barrels2", sa.barrels,
                         f -> sa.barrels = (int) (f + 0), this::rebuildType);
-                createNumberDialog(type, dia, "spread2", sa.spread,
+                ProjectUtils.createNumberDialog(type, dia, "spread2", sa.spread,
                         f -> sa.spread = f, this::rebuildType);
-                createNumberDialog(type, dia, "barrelOffset2", sa.barrelOffset,
+                ProjectUtils.createNumberDialog(type, dia, "barrelOffset2", sa.barrelOffset,
                         f -> sa.barrelOffset = (int) (f + 0), this::rebuildType);
             }
         }

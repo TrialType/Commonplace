@@ -4,8 +4,8 @@ import Floor.FTools.interfaces.FBuildUpGrade;
 import Floor.FTools.interfaces.FUnitUpGrade;
 import Floor.FTools.classes.UnitUpGrade;
 import Floor.FTools.interfaces.UpGradeTime;
-import Floor.FType.FDialog.MoreResearchDialog;
-import Floor.FType.UponFloor.CorrosionMist;
+import Floor.FType.FDialog.Old.MoreResearchDialog;
+import Floor.FType.Extent.CorrosionMist;
 import arc.Events;
 import arc.util.Time;
 import mindustry.Vars;
@@ -16,7 +16,7 @@ import mindustry.gen.Unit;
 
 import java.util.Random;
 
-import static Floor.FType.FDialog.ProjectsLocated.projects;
+import static Floor.FType.FDialog.Old.ProjectsLocated.projects;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 

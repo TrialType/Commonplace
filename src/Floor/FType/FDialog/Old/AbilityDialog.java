@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import Floor.FEntities.FBulletType.LimitBulletType;
 import arc.Core;
@@ -12,20 +12,19 @@ import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.ui.dialogs.BaseDialog;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
 import static mindustry.Vars.ui;
 
-public class AbilityDialog extends BaseDialog implements EffectTableGetter {
+public class AbilityDialog extends BaseDialog implements ProjectUtils.EffectTableGetter {
     public Table type, effect;
     public Ability ability;
     public BulletDialog dialog;
     public float heavy, bulletHeavy;
     public String aType;
     public Boolp
-            heavyUse = () -> heavy + bulletHeavy <= freeSize,
-            powerUse = () -> couldUse("abilityPower", findVal("abilityPower")),
-            boostUse = () -> couldUse("abilityBoost", findVal("abilityBoost")),
-            statusUse = () -> couldUse("abilityStatus", findVal("abilityStatus"));
+            heavyUse = () -> heavy + bulletHeavy <= ProjectUtils.freeSize,
+            powerUse = () -> ProjectUtils.couldUse("abilityPower", findVal("abilityPower")),
+            boostUse = () -> ProjectUtils.couldUse("abilityBoost", findVal("abilityBoost")),
+            statusUse = () -> ProjectUtils.couldUse("abilityStatus", findVal("abilityStatus"));
     protected static String dia = "ability";
 
     public AbilityDialog(String title, Prov<Ability> def, Cons<Ability> apply, Cons<Float> heavyApply) {
@@ -40,7 +39,7 @@ public class AbilityDialog extends BaseDialog implements EffectTableGetter {
         }).width(100);
         buttons.button(Core.bundle.get("@apply"), Icon.right, () -> {
             updateHeavy();
-            if (heavy + bulletHeavy <= freeSize) {
+            if (heavy + bulletHeavy <= ProjectUtils.freeSize) {
                 apply.get(ability);
                 heavyApply.get(heavy);
             } else {
@@ -59,7 +58,7 @@ public class AbilityDialog extends BaseDialog implements EffectTableGetter {
             t.button(b -> {
                 b.image(Icon.pencil);
 
-                b.clicked(() -> createSelectDialog(b, (tb, hide) -> {
+                b.clicked(() -> ProjectUtils.createSelectDialog(b, (tb, hide) -> {
                     tb.clear();
                     tb.button(Core.bundle.get("dialog.ability.repairField"), () -> {
                         if (!aType.equals("repairField")) {
@@ -135,145 +134,145 @@ public class AbilityDialog extends BaseDialog implements EffectTableGetter {
         switch (aType) {
             case "repairField" -> {
                 RepairFieldAbility a = (RepairFieldAbility) ability;
-                createLevDialog(type, dia, "abilityStatus", "amount", a.amount,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "amount", a.amount,
                         f -> a.amount = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityPower", "reload", a.reload,
+                ProjectUtils.createLevDialog(type, dia, "abilityPower", "reload", a.reload,
                         f -> a.reload = f, this::rebuildType, this::updateHeavy, powerUse, heavyUse);
-                createLevDialog(type, dia, "abilityBoost", "range", a.range,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "range", a.range,
                         f -> a.range = f, this::rebuildType, this::updateHeavy, boostUse, heavyUse);
                 type.row();
-                createEffectList(type, this, dia, "healEffect", () -> a.healEffect, e -> a.healEffect = e);
-                createEffectList(type, this, dia, "activeEffect", () -> a.activeEffect, e -> a.activeEffect = e);
-                createBooleanDialog(type, dia, "parentizeEffects", a.parentizeEffects,
+                ProjectUtils.createEffectList(type, this, dia, "healEffect", () -> a.healEffect, e -> a.healEffect = e);
+                ProjectUtils.createEffectList(type, this, dia, "activeEffect", () -> a.activeEffect, e -> a.activeEffect = e);
+                ProjectUtils.createBooleanDialog(type, dia, "parentizeEffects", a.parentizeEffects,
                         b -> a.parentizeEffects = b, this::rebuildType);
             }
             case "suppressionField" -> {
                 SuppressionFieldAbility a = (SuppressionFieldAbility) ability;
-                createLevDialog(type, dia, "abilityStatus", "applyParticleChance", a.applyParticleChance,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "applyParticleChance", a.applyParticleChance,
                         f -> a.applyParticleChance = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityPower", "reload", a.reload,
+                ProjectUtils.createLevDialog(type, dia, "abilityPower", "reload", a.reload,
                         f -> a.reload = f, this::rebuildType, this::updateHeavy, powerUse, heavyUse);
-                createLevDialog(type, dia, "abilityBoost", "range", a.range,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "range", a.range,
                         f -> a.range = f, this::rebuildType, this::updateHeavy, boostUse, heavyUse);
                 type.row();
-                createNumberDialog(type, dia, "orbRadius", a.orbRadius,
+                ProjectUtils.createNumberDialog(type, dia, "orbRadius", a.orbRadius,
                         f -> a.orbRadius = f, this::rebuildType);
-                createNumberDialog(type, dia, "orbMidScl", a.orbMidScl,
+                ProjectUtils.createNumberDialog(type, dia, "orbMidScl", a.orbMidScl,
                         f -> a.orbMidScl = f, this::rebuildType);
-                createNumberDialog(type, dia, "orbSinScl", a.orbSinScl,
+                ProjectUtils.createNumberDialog(type, dia, "orbSinScl", a.orbSinScl,
                         f -> a.orbSinScl = f, this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "orbSinMag", a.orbSinMag,
+                ProjectUtils.createNumberDialog(type, dia, "orbSinMag", a.orbSinMag,
                         f -> a.orbSinMag = f, this::rebuildType);
-                createNumberDialog(type, dia, "layer", a.layer,
+                ProjectUtils.createNumberDialog(type, dia, "layer", a.layer,
                         f -> a.layer = f, this::rebuildType);
-                createColorDialog(type, dia, "color", a.color,
+                ProjectUtils.createColorDialog(type, dia, "color", a.color,
                         c -> a.color = c, this::rebuildType);
                 type.row();
-                createNumberDialogWithLimit(type, dia, "x", a.x, 15, 0,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "x", a.x, 15, 0,
                         f -> a.x = f, this::rebuildType);
-                createNumberDialogWithLimit(type, dia, "y", a.y, 15, -15,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "y", a.y, 15, -15,
                         f -> a.y = f, this::rebuildType);
-                createNumberDialog(type, dia, "particleSize", a.particleSize,
+                ProjectUtils.createNumberDialog(type, dia, "particleSize", a.particleSize,
                         f -> a.particleSize = f, this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "particleLen", a.particleLen,
+                ProjectUtils.createNumberDialog(type, dia, "particleLen", a.particleLen,
                         f -> a.particleLen = f, this::rebuildType);
-                createNumberDialog(type, dia, "rotateScl", a.rotateScl,
+                ProjectUtils.createNumberDialog(type, dia, "rotateScl", a.rotateScl,
                         f -> a.rotateScl = f, this::rebuildType);
-                createNumberDialog(type, dia, "particleLife", a.particleLife,
+                ProjectUtils.createNumberDialog(type, dia, "particleLife", a.particleLife,
                         f -> a.particleLife = f, this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "particles", a.particles,
+                ProjectUtils.createNumberDialog(type, dia, "particles", a.particles,
                         f -> a.particles = (int) (f + 0), this::rebuildType);
-                createInterpolSelect(type, dia, "particleInterp", i -> a.particleInterp = i);
-                createColorDialog(type, dia, "particleColor", a.particleColor,
+                ProjectUtils.createInterpolSelect(type, dia, "particleInterp", i -> a.particleInterp = i);
+                ProjectUtils.createColorDialog(type, dia, "particleColor", a.particleColor,
                         c -> a.particleColor = c, this::rebuildType);
             }
             case "regen" -> {
                 RegenAbility a = (RegenAbility) ability;
-                createLevDialog(type, dia, "abilityStatus", "percentAmount", a.percentAmount,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "percentAmount", a.percentAmount,
                         f -> a.percentAmount = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityStatus", "amount", a.amount,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "amount", a.amount,
                         f -> a.amount = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
             }
             case "forceField" -> {
                 ForceFieldAbility a = (ForceFieldAbility) ability;
-                createLevDialog(type, dia, "abilityBoost", "radius", a.radius,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "radius", a.radius,
                         f -> a.radius = f, this::rebuildType, this::updateHeavy, boostUse, heavyUse);
-                createLevDialog(type, dia, "abilityStatus", "regen", a.regen,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "regen", a.regen,
                         f -> a.regen = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityStatus", "max", a.max,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "max", a.max,
                         f -> a.max = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
                 type.row();
-                createLevDialog(type, dia, "abilityPower", "cooldown", a.cooldown,
+                ProjectUtils.createLevDialog(type, dia, "abilityPower", "cooldown", a.cooldown,
                         f -> a.cooldown = f, this::rebuildType, this::updateHeavy, powerUse, heavyUse);
-                createNumberDialog(type, dia, "sides", a.sides,
+                ProjectUtils.createNumberDialog(type, dia, "sides", a.sides,
                         f -> a.sides = (int) (f + 0), this::rebuildType);
-                createNumberDialog(type, dia, "rotation", a.rotation,
+                ProjectUtils.createNumberDialog(type, dia, "rotation", a.rotation,
                         f -> a.rotation = f, this::rebuildType);
             }
             case "shieldArc" -> {
                 ShieldArcAbility a = (ShieldArcAbility) ability;
-                createLevDialog(type, dia, "abilityBoost", "radius", a.radius,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "radius", a.radius,
                         f -> a.radius = f, this::rebuildType, this::updateHeavy, boostUse, heavyUse);
-                createLevDialog(type, dia, "abilityStatus", "regen", a.regen,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "regen", a.regen,
                         f -> a.regen = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityStatus", "max", a.max,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "max", a.max,
                         f -> a.max = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
                 type.row();
-                createLevDialog(type, dia, "abilityPower", "cooldown", a.cooldown,
+                ProjectUtils.createLevDialog(type, dia, "abilityPower", "cooldown", a.cooldown,
                         f -> a.cooldown = f, this::rebuildType, this::updateHeavy, powerUse, heavyUse);
-                createLevDialog(type, dia, "abilityBoost", "width", a.width,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "width", a.width,
                         f -> a.width = f, this::rebuildType, this::updateHeavy, boostUse, heavyUse);
-                createNumberDialog(type, dia, "angle", a.angle,
+                ProjectUtils.createNumberDialog(type, dia, "angle", a.angle,
                         f -> a.angle = (int) (f + 0), this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "angleOffset", a.angleOffset,
+                ProjectUtils.createNumberDialog(type, dia, "angleOffset", a.angleOffset,
                         f -> a.angleOffset = f, this::rebuildType);
-                createBooleanDialog(type, dia, "whenShooting", a.whenShooting,
+                ProjectUtils.createBooleanDialog(type, dia, "whenShooting", a.whenShooting,
                         b -> a.whenShooting = b, this::rebuildType);
-                createBooleanDialog(type, dia, "drawArc", a.drawArc,
+                ProjectUtils.createBooleanDialog(type, dia, "drawArc", a.drawArc,
                         b -> a.drawArc = b, this::rebuildType);
                 type.row();
-                createNumberDialogWithLimit(type, dia, "x", a.x, 12, 0,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "x", a.x, 12, 0,
                         f -> a.x = f, this::rebuildType);
-                createNumberDialogWithLimit(type, dia, "x", a.x, 12, -12,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "x", a.x, 12, -12,
                         f -> a.x = f, this::rebuildType);
             }
             case "armorPlate" -> {
                 ArmorPlateAbility a = (ArmorPlateAbility) ability;
-                createLevDialog(type, dia, "abilityStatus", "healthMultiplier", a.healthMultiplier,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "healthMultiplier", a.healthMultiplier,
                         f -> a.healthMultiplier = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createNumberDialogWithLimit(type, dia, "z", a.z, 220, -11,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "z", a.z, 220, -11,
                         f -> a.z = f, this::rebuildType);
-                createColorDialog(type, dia, "color", a.color, c -> a.color = c, this::rebuildType);
+                ProjectUtils.createColorDialog(type, dia, "color", a.color, c -> a.color = c, this::rebuildType);
             }
             case "moveLightning" -> {
                 MoveLightningAbility a = (MoveLightningAbility) ability;
-                createLevDialog(type, dia, "abilityStatus", "damage", a.damage,
+                ProjectUtils.createLevDialog(type, dia, "abilityStatus", "damage", a.damage,
                         f -> a.damage = f, this::rebuildType, this::updateHeavy, statusUse, heavyUse);
-                createLevDialog(type, dia, "abilityBoost", "length", a.length,
+                ProjectUtils.createLevDialog(type, dia, "abilityBoost", "length", a.length,
                         f -> a.length = (int) (f + 0), this::rebuildType, this::updateHeavy, boostUse, heavyUse);
-                createNumberDialogWithLimit(type, dia, "chance", a.chance, 1, 0,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "chance", a.chance, 1, 0,
                         f -> a.chance = f, this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "minSpeed", a.minSpeed,
+                ProjectUtils.createNumberDialog(type, dia, "minSpeed", a.minSpeed,
                         f -> a.minSpeed = f, this::rebuildType);
-                createNumberDialog(type, dia, "maxSpeed", a.maxSpeed,
+                ProjectUtils.createNumberDialog(type, dia, "maxSpeed", a.maxSpeed,
                         f -> a.maxSpeed = f, this::rebuildType);
-                createColorDialog(type, dia, "color", a.color, c -> a.color = c, this::rebuildType);
+                ProjectUtils.createColorDialog(type, dia, "color", a.color, c -> a.color = c, this::rebuildType);
                 type.row();
-                createNumberDialogWithLimit(type, dia, "x", a.x, 12, 0,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "x", a.x, 12, 0,
                         f -> a.x = f, this::rebuildType);
-                createNumberDialogWithLimit(type, dia, "y", a.y, 12, -12,
+                ProjectUtils.createNumberDialogWithLimit(type, dia, "y", a.y, 12, -12,
                         f -> a.y = f, this::rebuildType);
-                createBooleanDialog(type, dia, "alternate", a.alternate,
+                ProjectUtils.createBooleanDialog(type, dia, "alternate", a.alternate,
                         b -> a.alternate = b, this::rebuildType);
                 type.row();
-                createNumberDialog(type, dia, "bulletAngle", a.bulletAngle,
+                ProjectUtils.createNumberDialog(type, dia, "bulletAngle", a.bulletAngle,
                         f -> a.bulletAngle = f, this::rebuildType);
-                createNumberDialog(type, dia, "bulletSpread", a.bulletSpread,
+                ProjectUtils.createNumberDialog(type, dia, "bulletSpread", a.bulletSpread,
                         f -> a.bulletSpread = f, this::rebuildType);
                 type.table(t -> {
                     t.label(() -> Core.bundle.get("dialog.ability.bullet")).width(100);
@@ -294,10 +293,10 @@ public class AbilityDialog extends BaseDialog implements EffectTableGetter {
                     }
                 }).width(250);
                 type.row();
-                createEffectList(type, this, dia, "shootEffect",
+                ProjectUtils.createEffectList(type, this, dia, "shootEffect",
                         () -> a.shootEffect, e -> a.shootEffect = e);
-                createSoundSelect(type, dia, "shootSound", s -> a.shootSound = s);
-                createBooleanDialog(type, dia, "parentizeEffects", a.parentizeEffects,
+                ProjectUtils.createSoundSelect(type, dia, "shootSound", s -> a.shootSound = s);
+                ProjectUtils.createBooleanDialog(type, dia, "parentizeEffects", a.parentizeEffects,
                         b -> a.parentizeEffects = b, this::rebuildType);
             }
         }
@@ -394,8 +393,8 @@ public class AbilityDialog extends BaseDialog implements EffectTableGetter {
                 a.bullet = new LimitBulletType();
             }
             dialog = new BulletDialog(() -> a.bullet, f -> bulletHeavy = f, b -> a.bullet = b, "", () -> 30);
-            dialog.shown(() -> freeSize -= this.heavy);
-            dialog.hidden(() -> freeSize += this.heavy);
+            dialog.shown(() -> ProjectUtils.freeSize -= this.heavy);
+            dialog.hidden(() -> ProjectUtils.freeSize += this.heavy);
         } else {
             dialog = null;
         }

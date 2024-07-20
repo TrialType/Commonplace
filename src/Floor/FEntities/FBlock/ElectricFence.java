@@ -1,6 +1,6 @@
 package Floor.FEntities.FBlock;
 
-import Floor.FTools.classes.BossList;
+import Floor.FContent.FUnits;
 import Floor.FTools.interfaces.FUnitUpGrade;
 import arc.Core;
 import arc.graphics.Color;
@@ -213,7 +213,7 @@ public class ElectricFence extends Block {
         }
 
         public boolean inRange(float len, Unit u) {
-            if (BossList.list.indexOf(u.type) < 0) {
+            if (!FUnits.boss.contains(u.type)) {
                 float ux = u.x;
                 float uy = u.y;
                 float angle1 = Angles.angleDist(rotate, Angles.angle(x, y, ux, uy));

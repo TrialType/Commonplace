@@ -1,6 +1,7 @@
 package Floor.FTools.classes;
 
 import Floor.FContent.FStatusEffects;
+import Floor.FContent.FUnits;
 import arc.Events;
 import arc.func.Cons;
 import arc.math.Angles;
@@ -152,7 +153,7 @@ public class FDamage extends Damage {
                 }
 
                 vec.set(u.x - x, u.y - y);
-                if (BossList.list.indexOf(u.type) >= 0) {
+                if (FUnits.boss.contains(u.type)) {
                     vec.setLength(power * boss);
                 } else {
                     vec.setLength(power);

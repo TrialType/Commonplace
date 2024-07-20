@@ -2,7 +2,7 @@ package Floor.FAI;
 
 import Floor.FEntities.FUnit.F.TileMiner;
 import Floor.FTools.classes.FLocated;
-import Floor.FTools.interfaces.NeedPoseBridge;
+import Floor.FTools.interfaces.PoseBridge;
 import arc.math.geom.Vec2;
 import mindustry.content.Blocks;
 import mindustry.entities.Units;
@@ -15,7 +15,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 
 import static mindustry.Vars.world;
 
-public class TileMinerAI extends AIController implements NeedPoseBridge {
+public class TileMinerAI extends AIController implements PoseBridge {
     protected TileMiner sm = null;
     protected Unit spawner;
     protected Item targetItem;

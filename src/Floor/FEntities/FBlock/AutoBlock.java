@@ -120,11 +120,15 @@ public class AutoBlock extends Block {
         IntSet set = buildResult(x, y, plan.rotation, lon, drawer);
 
         Block finalDrawer = drawer;
-        set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8, Point2.y(p) * 8));
+        if ( plan.block.size % 2 == 0){
+            set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8, Point2.y(p) * 8));
+        } else {
+            set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8 + 4, Point2.y(p) * 8 + 4));
+        }
 
         Draw.color(Pal.range);
         Lines.stroke(3);
-        Lines.poly(plan.x * 8, plan.y * 8, 36, maxRange / 2);
+        Lines.poly(plan.x * 8, plan.y * 8, 36, (float) Math.sqrt(maxRange * maxRange / 4 + behind * behind));
     }
 
     public IntSet buildResult(int x, int y, int rotation, int lon, Block type) {
@@ -185,7 +189,7 @@ public class AutoBlock extends Block {
         public int config = 0;
         public boolean starting = false;
         public boolean beginning = false;
-//        public boolean auto = true;
+        //        public boolean auto = true;
         public float createTimer = 0;
         public int step = 0;
 

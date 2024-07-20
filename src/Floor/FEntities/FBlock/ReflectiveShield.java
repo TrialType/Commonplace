@@ -85,7 +85,7 @@ public class ReflectiveShield extends Block {
                     bullet.intersect(x + offset - height, y + offset - width,
                             boost * 2 * height, boost * 2 * width,
                             b -> {
-                                if (b.team != this.team && b.type.reflectable && !angles.containsKey(b)) {
+                                if (b.team != this.team && !b.vel.isZero() && b.type.reflectable && !angles.containsKey(b)) {
                                     angles.put(b, b.vel.angle());
                                 }
                             }
@@ -94,7 +94,7 @@ public class ReflectiveShield extends Block {
                     bullet.intersect(x + offset - width, y + offset - height,
                             boost * 2 * width, boost * 2 * height,
                             b -> {
-                                if (b.team != this.team && b.type.reflectable && !angles.containsKey(b)) {
+                                if (b.team != this.team && !b.vel.isZero() && b.type.reflectable && !angles.containsKey(b)) {
                                     angles.put(b, b.vel.angle());
                                 }
                             }

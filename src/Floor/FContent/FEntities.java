@@ -4,14 +4,12 @@ import Floor.FEntities.FBullet.AroundBullet;
 import Floor.FEntities.FEffectState.WaterEffectState;
 import Floor.FEntities.FUnit.F.*;
 import Floor.FEntities.FUnit.Override.*;
-import Floor.FEntities.FBullet.removeSpwanBullet;
 import mindustry.gen.EntityMapping;
 
 public class FEntities {
     public static void load() {
         EntityMapping.idMap[97] = AroundBullet::create;
         EntityMapping.idMap[98] = WaterEffectState::create;
-        EntityMapping.idMap[99] = removeSpwanBullet::new;
         EntityMapping.idMap[100] = ENGSWEISLegsUnit::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;

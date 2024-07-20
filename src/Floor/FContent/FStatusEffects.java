@@ -1,6 +1,6 @@
 package Floor.FContent;
 
-import Floor.FType.FDialog.ProjectsLocated;
+import Floor.FType.FDialog.Old.ProjectsLocated;
 import Floor.FType.FStatusEffect.WithMoreStatus;
 import arc.Core;
 import arc.math.Mathf;

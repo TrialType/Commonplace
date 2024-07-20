@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import Floor.FEntities.FEffect.IOEffect;
 import arc.Core;
@@ -16,7 +16,6 @@ import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.ui.dialogs.BaseDialog;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
 import static mindustry.Vars.ui;
 
 
@@ -75,19 +74,19 @@ abstract class DiscardEffectDialog extends BaseDialog {
     public void rebuildBase() {
         base.clear();
         base.background(Tex.buttonEdge3);
-        createNumberDialog(base, dia, "lifetime", effect.lifetime,
+        ProjectUtils.createNumberDialog(base, dia, "lifetime", effect.lifetime,
                 f -> effect.lifetime = f, this::rebuildBase);
-        createNumberDialog(base, dia, "startDelay", effect.startDelay,
+        ProjectUtils.createNumberDialog(base, dia, "startDelay", effect.startDelay,
                 f -> effect.startDelay = f, this::rebuildBase);
         base.row();
-        createNumberDialog(base, dia, "clip", effect.clip,
+        ProjectUtils.createNumberDialog(base, dia, "clip", effect.clip,
                 f -> effect.clip = f, this::rebuildBase);
-        createNumberDialog(base, dia, "baseRotation", effect.baseRotation,
+        ProjectUtils.createNumberDialog(base, dia, "baseRotation", effect.baseRotation,
                 f -> effect.baseRotation = f, this::rebuildBase);
         base.row();
-        createBooleanDialog(base, dia, "followParent", effect.followParent,
+        ProjectUtils.createBooleanDialog(base, dia, "followParent", effect.followParent,
                 b -> effect.followParent = b, this::rebuildBase);
-        createBooleanDialog(base, dia, "rotWithParent", effect.rotWithParent,
+        ProjectUtils.createBooleanDialog(base, dia, "rotWithParent", effect.rotWithParent,
                 b -> effect.rotWithParent = b, this::rebuildBase);
     }
 
@@ -104,41 +103,41 @@ abstract class DiscardEffectDialog extends BaseDialog {
         now.clear();
         switch (typeNow) {
             case "circle": {
-                createNumberDialog(now, dia, "circleNumber", acs[0], f -> acs[0] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "circleLengthFrom", acs[1], f -> acs[1] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "circleLengthTo", acs[2], f -> acs[2] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleNumber", acs[0], f -> acs[0] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleLengthFrom", acs[1], f -> acs[1] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleLengthTo", acs[2], f -> acs[2] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "circleRangeFrom", acs[3], f -> acs[3] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "circleRangeTo", acs[4], f -> acs[4] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "circleAngle", acs[5], f -> acs[5] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleRangeFrom", acs[3], f -> acs[3] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleRangeTo", acs[4], f -> acs[4] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleAngle", acs[5], f -> acs[5] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "circleAngleRand", acs[6], f -> acs[6] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "circleMinRange", acs[7], f -> acs[7] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleAngleRand", acs[6], f -> acs[6] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "circleMinRange", acs[7], f -> acs[7] = f, this::rebuildNow);
                 break;
             }
             case "line": {
-                createNumberDialog(now, dia, "lineNumber", acs[0], f -> acs[0] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "lineLengthFrom", acs[1], f -> acs[1] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineNumber", acs[0], f -> acs[0] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineLengthFrom", acs[1], f -> acs[1] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "lineLengthTo", acs[2], f -> acs[2] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "lineStrokeFrom", acs[3], f -> acs[3] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineLengthTo", acs[2], f -> acs[2] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineStrokeFrom", acs[3], f -> acs[3] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "lineStrokeTo", acs[4], f -> acs[4] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "lineRangeFrom", acs[5], f -> acs[5] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineStrokeTo", acs[4], f -> acs[4] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineRangeFrom", acs[5], f -> acs[5] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "lineRangeTo", acs[6], f -> acs[6] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "lineAngle", acs[7], f -> acs[7] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineRangeTo", acs[6], f -> acs[6] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineAngle", acs[7], f -> acs[7] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "lineAngleRand", acs[8], f -> acs[8] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "lineMinRange", acs[9], f -> acs[9] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineAngleRand", acs[8], f -> acs[8] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "lineMinRange", acs[9], f -> acs[9] = f, this::rebuildNow);
                 break;
             }
             case "wave": {
-                createNumberDialog(now, dia, "waveStrokeFrom", acs[0], f -> acs[0] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "waveStrokeTo", acs[1], f -> acs[1] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "waveStrokeFrom", acs[0], f -> acs[0] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "waveStrokeTo", acs[1], f -> acs[1] = f, this::rebuildNow);
                 now.row();
-                createNumberDialog(now, dia, "waveRangeFrom", acs[2], f -> acs[2] = f, this::rebuildNow);
-                createNumberDialog(now, dia, "waveRangeTo", acs[3], f -> acs[3] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "waveRangeFrom", acs[2], f -> acs[2] = f, this::rebuildNow);
+                ProjectUtils.createNumberDialog(now, dia, "waveRangeTo", acs[3], f -> acs[3] = f, this::rebuildNow);
                 break;
             }
         }
@@ -267,7 +266,7 @@ abstract class DiscardEffectDialog extends BaseDialog {
                 select.button(b -> {
                     b.image(Icon.pencilSmall);
 
-                    b.clicked(() -> createSelectDialog(b, (ta, h) -> {
+                    b.clicked(() -> ProjectUtils.createSelectDialog(b, (ta, h) -> {
                         ta.top();
                         ta.button(Core.bundle.get("dialog.effect.circle"), () -> {
                             h.run();

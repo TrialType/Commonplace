@@ -6,12 +6,12 @@ import Floor.FEntities.FBulletType.*;
 import Floor.FEntities.FUnit.F.*;
 import Floor.FEntities.FUnit.Override.FLegsUnit;
 import Floor.FEntities.FUnitType.*;
-import Floor.FTools.classes.BossList;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Interp;
 import arc.math.Mathf;
+import arc.struct.Seq;
 import mindustry.ai.UnitCommand;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -37,6 +37,7 @@ import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
 
 public class FUnits {
+    public static Seq<UnitType> boss = new Seq<>();
     //tool
     public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a, rejuvenate_b;
 
@@ -1361,10 +1362,10 @@ public class FUnits {
             targetAir = targetGround = true;
         }};
 
-        BossList.list.add(velocity);
-        BossList.list.add(velocity_d);
-        BossList.list.add(velocity_s);
-        BossList.list.add(hidden);
-        BossList.list.add(cave);
+        boss.add(velocity);
+        boss.add(velocity_d);
+        boss.add(velocity_s);
+        boss.add(hidden);
+        boss.add(cave);
     }
 }

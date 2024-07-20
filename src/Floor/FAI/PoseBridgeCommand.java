@@ -1,6 +1,6 @@
 package Floor.FAI;
 
-import Floor.FTools.interfaces.NeedPoseBridge;
+import Floor.FTools.interfaces.PoseBridge;
 import mindustry.ai.types.CommandAI;
 
 public class PoseBridgeCommand extends CommandAI {
@@ -22,7 +22,7 @@ public class PoseBridgeCommand extends CommandAI {
         if(commandController != null){
             if(commandController.unit() != unit) commandController.unit(unit);
 
-            if(commandController instanceof NeedPoseBridge npb) {
+            if(commandController instanceof PoseBridge npb) {
                 if(!unit.isPlayer() && targetPos != null){
                     npb.setPose(targetPos);
                 }

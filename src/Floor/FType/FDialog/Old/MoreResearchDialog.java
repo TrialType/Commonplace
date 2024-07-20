@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import arc.struct.ObjectMap;
 import arc.struct.Seq;

@@ -1,9 +1,9 @@
 package Floor.FAI;
 
 import Floor.FContent.FStatusEffects;
+import Floor.FContent.FUnits;
 import Floor.FEntities.FUnit.F.ENGSWEISUnitEntity;
 import Floor.FEntities.FUnitType.ENGSWEISUnitType;
-import Floor.FTools.classes.BossList;
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.math.Angles;
@@ -128,7 +128,8 @@ public class StrongBoostAI extends FlyingAI {
                 }
                 moveTo(target, unit.range() * 0.8f);
                 unit.lookAt(target);
-                if (unit.within(x, y, unit.range()) && counter >= reload && !start && target instanceof Building && BossList.list.indexOf(unit.type) < 0) {
+                if (unit.within(x, y, unit.range()) && counter >= reload && !start &&
+                        target instanceof Building && !FUnits.boss.contains(unit.type)) {
                     start = true;
                     delayCounter = 0;
                     orx = x - ux;
@@ -199,7 +200,7 @@ public class StrongBoostAI extends FlyingAI {
                     unit.maxHealth(BoostUnitType.Health2);
                     if (number > 0 && unit.team.isAI()) {
                         Units.nearby(ux, uy, 100, 100, u -> {
-                            if (number > 0 && u.team == unit.team && !(BossList.list.indexOf(u.type) >= 0)) {
+                            if (number > 0 && u.team == unit.team && !FUnits.boss.contains(u.type)) {
                                 if (u instanceof ENGSWEISUnitEntity) {
                                     u.hitTime = 1.0F;
                                     number--;

@@ -1,4 +1,4 @@
-package Floor.FType.UponFloor;
+package Floor.FType.Extent;
 
 import Floor.FContent.FStatusEffects;
 import Floor.FTools.interfaces.Corrosion;

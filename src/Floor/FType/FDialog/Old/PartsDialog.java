@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import arc.Core;
 import arc.func.Cons;
@@ -8,9 +8,6 @@ import mindustry.entities.part.*;
 import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.ui.dialogs.BaseDialog;
-
-import static Floor.FType.FDialog.ProjectUtils.*;
-import static mindustry.Vars.ui;
 
 public class PartsDialog extends BaseDialog {
     protected Table listOn;
@@ -64,7 +61,7 @@ public class PartsDialog extends BaseDialog {
             tt.button(b -> {
                 b.image(Icon.rotate);
 
-                b.clicked(() -> createSelectDialog(b, (tb, hide) -> {
+                b.clicked(() -> ProjectUtils.createSelectDialog(b, (tb, hide) -> {
                     tb.top();
                     tb.button(Core.bundle.get("dialog.part.shape"), () -> {
                         if (type.equals("shape")) {
@@ -141,207 +138,207 @@ public class PartsDialog extends BaseDialog {
 
     public void rebuildPartBase(Table t, DrawPart part) {
         t.clear();
-        createMessageLine(t, dia, "default");
+        ProjectUtils.createMessageLine(t, dia, "default");
         t.row();
-        createBooleanDialog(t, dia, "turretShading", part.turretShading,
+        ProjectUtils.createBooleanDialog(t, dia, "turretShading", part.turretShading,
                 b -> part.turretShading = b, () -> rebuildPartBase(t, part));
-        createBooleanDialog(t, dia, "under", part.under,
+        ProjectUtils.createBooleanDialog(t, dia, "under", part.under,
                 b -> part.under = b, () -> rebuildPartBase(t, part));
         t.row();
-        createNumberDialog(t, dia, "weaponIndex", part.weaponIndex,
+        ProjectUtils.createNumberDialog(t, dia, "weaponIndex", part.weaponIndex,
                 f -> part.weaponIndex = (int) (f + 0), () -> rebuildPartBase(t, part));
-        createNumberDialog(t, dia, "recoilIndex", part.recoilIndex,
+        ProjectUtils.createNumberDialog(t, dia, "recoilIndex", part.recoilIndex,
                 f -> part.recoilIndex = (int) (f + 0), () -> rebuildPartBase(t, part));
     }
 
     public void rebuildPartType(Table t, String type, DrawPart part) {
         Runnable reb = () -> rebuildPartType(t, type, part);
         t.clear();
-        createMessageLine(t, dia, "type");
+        ProjectUtils.createMessageLine(t, dia, "type");
         t.row();
         switch (type) {
             case "shape" -> {
                 ShapePart shapePart = (ShapePart) part;
-                createBooleanDialog(t, dia, "circle", shapePart.circle,
+                ProjectUtils.createBooleanDialog(t, dia, "circle", shapePart.circle,
                         b -> shapePart.circle = b, reb);
-                createBooleanDialog(t, dia, "hollow", shapePart.hollow,
+                ProjectUtils.createBooleanDialog(t, dia, "hollow", shapePart.hollow,
                         b -> shapePart.hollow = b, reb);
-                createBooleanDialog(t, dia, "mirror", shapePart.mirror,
+                ProjectUtils.createBooleanDialog(t, dia, "mirror", shapePart.mirror,
                         b -> shapePart.mirror = b, reb);
                 t.row();
-                createNumberDialog(t, dia, "x", shapePart.x,
+                ProjectUtils.createNumberDialog(t, dia, "x", shapePart.x,
                         f -> shapePart.x = f, reb);
-                createNumberDialog(t, dia, "y", shapePart.y,
+                ProjectUtils.createNumberDialog(t, dia, "y", shapePart.y,
                         f -> shapePart.y = f, reb);
-                createNumberDialog(t, dia, "rotation", shapePart.rotation,
+                ProjectUtils.createNumberDialog(t, dia, "rotation", shapePart.rotation,
                         f -> shapePart.rotation = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "moveX", shapePart.moveX,
+                ProjectUtils.createNumberDialog(t, dia, "moveX", shapePart.moveX,
                         f -> shapePart.moveX = f, reb);
-                createNumberDialog(t, dia, "moveY", shapePart.moveY,
+                ProjectUtils.createNumberDialog(t, dia, "moveY", shapePart.moveY,
                         f -> shapePart.moveY = f, reb);
-                createNumberDialog(t, dia, "moveRot", shapePart.moveRot,
+                ProjectUtils.createNumberDialog(t, dia, "moveRot", shapePart.moveRot,
                         f -> shapePart.moveRot = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "sides", shapePart.sides,
+                ProjectUtils.createNumberDialog(t, dia, "sides", shapePart.sides,
                         f -> shapePart.sides = (int) (f + 0), reb);
-                createNumberDialog(t, dia, "radius", shapePart.radius,
+                ProjectUtils.createNumberDialog(t, dia, "radius", shapePart.radius,
                         f -> shapePart.radius = f, reb);
-                createNumberDialog(t, dia, "radiusTo", shapePart.radiusTo,
+                ProjectUtils.createNumberDialog(t, dia, "radiusTo", shapePart.radiusTo,
                         f -> shapePart.radiusTo = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "stroke", shapePart.stroke,
+                ProjectUtils.createNumberDialog(t, dia, "stroke", shapePart.stroke,
                         f -> shapePart.stroke = f, reb);
-                createNumberDialog(t, dia, "strokeTo", shapePart.strokeTo,
+                ProjectUtils.createNumberDialog(t, dia, "strokeTo", shapePart.strokeTo,
                         f -> shapePart.strokeTo = f, reb);
-                createNumberDialog(t, dia, "rotateSpeed", shapePart.rotateSpeed,
+                ProjectUtils.createNumberDialog(t, dia, "rotateSpeed", shapePart.rotateSpeed,
                         f -> shapePart.rotateSpeed = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "layer", shapePart.layer,
+                ProjectUtils.createNumberDialog(t, dia, "layer", shapePart.layer,
                         f -> shapePart.layer = f, reb);
-                createNumberDialog(t, dia, "layerOffset", shapePart.layerOffset,
+                ProjectUtils.createNumberDialog(t, dia, "layerOffset", shapePart.layerOffset,
                         f -> shapePart.layerOffset = f, reb);
-                createPartProgressSelect(t, dia, "progress", p -> shapePart.progress = p);
+                ProjectUtils.createPartProgressSelect(t, dia, "progress", p -> shapePart.progress = p);
                 t.row();
-                createColorDialog(t, dia, "color", shapePart.color,
+                ProjectUtils.createColorDialog(t, dia, "color", shapePart.color,
                         c -> shapePart.color = c, reb);
-                createColorDialog(t, dia, "colorTo", shapePart.colorTo,
+                ProjectUtils.createColorDialog(t, dia, "colorTo", shapePart.colorTo,
                         c -> shapePart.colorTo = c, reb);
             }
             case "hover" -> {
                 HoverPart hoverPart = (HoverPart) part;
-                createNumberDialog(t, dia, "x", hoverPart.x,
+                ProjectUtils.createNumberDialog(t, dia, "x", hoverPart.x,
                         f -> hoverPart.x = f, reb);
-                createNumberDialog(t, dia, "y", hoverPart.y,
+                ProjectUtils.createNumberDialog(t, dia, "y", hoverPart.y,
                         f -> hoverPart.y = f, reb);
-                createNumberDialog(t, dia, "rotation", hoverPart.rotation,
+                ProjectUtils.createNumberDialog(t, dia, "rotation", hoverPart.rotation,
                         f -> hoverPart.rotation = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "phase", hoverPart.phase,
+                ProjectUtils.createNumberDialog(t, dia, "phase", hoverPart.phase,
                         f -> hoverPart.phase = f, reb);
-                createNumberDialog(t, dia, "stroke", hoverPart.stroke,
+                ProjectUtils.createNumberDialog(t, dia, "stroke", hoverPart.stroke,
                         f -> hoverPart.stroke = f, reb);
-                createNumberDialog(t, dia, "minStroke", hoverPart.minStroke,
+                ProjectUtils.createNumberDialog(t, dia, "minStroke", hoverPart.minStroke,
                         f -> hoverPart.minStroke = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "radius", hoverPart.radius,
+                ProjectUtils.createNumberDialog(t, dia, "radius", hoverPart.radius,
                         f -> hoverPart.radius = f, reb);
-                createNumberDialog(t, dia, "circles", hoverPart.circles,
+                ProjectUtils.createNumberDialog(t, dia, "circles", hoverPart.circles,
                         f -> hoverPart.circles = (int) (f + 0), reb);
-                createNumberDialog(t, dia, "sides", hoverPart.sides,
+                ProjectUtils.createNumberDialog(t, dia, "sides", hoverPart.sides,
                         f -> hoverPart.sides = (int) (f + 0), reb);
                 t.row();
-                createBooleanDialog(t, dia, "mirror", hoverPart.mirror,
+                ProjectUtils.createBooleanDialog(t, dia, "mirror", hoverPart.mirror,
                         b -> hoverPart.mirror = b, reb);
-                createNumberDialog(t, dia, "layer", hoverPart.layer,
+                ProjectUtils.createNumberDialog(t, dia, "layer", hoverPart.layer,
                         f -> hoverPart.layer = f, reb);
-                createNumberDialog(t, dia, "layerOffset", hoverPart.layerOffset,
+                ProjectUtils.createNumberDialog(t, dia, "layerOffset", hoverPart.layerOffset,
                         f -> hoverPart.layerOffset = f, reb);
                 t.row();
-                createColorDialog(t, dia, "color", hoverPart.color,
+                ProjectUtils.createColorDialog(t, dia, "color", hoverPart.color,
                         c -> hoverPart.color = c, reb);
             }
             case "halo" -> {
                 HaloPart haloPart = (HaloPart) part;
-                createBooleanDialog(t, dia, "tri", haloPart.tri,
+                ProjectUtils.createBooleanDialog(t, dia, "tri", haloPart.tri,
                         b -> haloPart.tri = b, reb);
-                createBooleanDialog(t, dia, "hollow", haloPart.hollow,
+                ProjectUtils.createBooleanDialog(t, dia, "hollow", haloPart.hollow,
                         b -> haloPart.hollow = b, reb);
-                createBooleanDialog(t, dia, "mirror", haloPart.mirror,
+                ProjectUtils.createBooleanDialog(t, dia, "mirror", haloPart.mirror,
                         b -> haloPart.mirror = b, reb);
                 t.row();
-                createNumberDialog(t, dia, "radius", haloPart.radius,
+                ProjectUtils.createNumberDialog(t, dia, "radius", haloPart.radius,
                         f -> haloPart.radius = f, reb);
-                createNumberDialog(t, dia, "sides", haloPart.sides,
+                ProjectUtils.createNumberDialog(t, dia, "sides", haloPart.sides,
                         f -> haloPart.sides = (int) (f + 0), reb);
-                createNumberDialog(t, dia, "radiusTo", haloPart.radiusTo,
+                ProjectUtils.createNumberDialog(t, dia, "radiusTo", haloPart.radiusTo,
                         f -> haloPart.radiusTo = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "shapes", haloPart.shapes,
+                ProjectUtils.createNumberDialog(t, dia, "shapes", haloPart.shapes,
                         f -> haloPart.shapes = (int) (f + 0), reb);
-                createNumberDialog(t, dia, "stroke", haloPart.stroke,
+                ProjectUtils.createNumberDialog(t, dia, "stroke", haloPart.stroke,
                         f -> haloPart.stroke = f, reb);
-                createNumberDialog(t, dia, "strokeTo", haloPart.strokeTo,
+                ProjectUtils.createNumberDialog(t, dia, "strokeTo", haloPart.strokeTo,
                         f -> haloPart.strokeTo = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "x", haloPart.x,
+                ProjectUtils.createNumberDialog(t, dia, "x", haloPart.x,
                         f -> haloPart.x = f, reb);
-                createNumberDialog(t, dia, "y", haloPart.y,
+                ProjectUtils.createNumberDialog(t, dia, "y", haloPart.y,
                         f -> haloPart.y = f, reb);
-                createNumberDialog(t, dia, "shapeRotation", haloPart.shapeRotation,
+                ProjectUtils.createNumberDialog(t, dia, "shapeRotation", haloPart.shapeRotation,
                         f -> haloPart.shapeRotation = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "moveX", haloPart.moveX,
+                ProjectUtils.createNumberDialog(t, dia, "moveX", haloPart.moveX,
                         f -> haloPart.moveX = f, reb);
-                createNumberDialog(t, dia, "moveY", haloPart.moveY,
+                ProjectUtils.createNumberDialog(t, dia, "moveY", haloPart.moveY,
                         f -> haloPart.moveY = f, reb);
-                createNumberDialog(t, dia, "shapeMoveRot", haloPart.shapeMoveRot,
+                ProjectUtils.createNumberDialog(t, dia, "shapeMoveRot", haloPart.shapeMoveRot,
                         f -> haloPart.shapeMoveRot = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "haloRotateSpeed", haloPart.haloRotateSpeed,
+                ProjectUtils.createNumberDialog(t, dia, "haloRotateSpeed", haloPart.haloRotateSpeed,
                         f -> haloPart.haloRotateSpeed = f, reb);
-                createNumberDialog(t, dia, "haloRotation", haloPart.haloRotation,
+                ProjectUtils.createNumberDialog(t, dia, "haloRotation", haloPart.haloRotation,
                         f -> haloPart.haloRotation = f, reb);
-                createNumberDialog(t, dia, "rotateSpeed", haloPart.rotateSpeed,
+                ProjectUtils.createNumberDialog(t, dia, "rotateSpeed", haloPart.rotateSpeed,
                         f -> haloPart.rotateSpeed = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "triLength", haloPart.triLength,
+                ProjectUtils.createNumberDialog(t, dia, "triLength", haloPart.triLength,
                         f -> haloPart.triLength = f, reb);
-                createNumberDialog(t, dia, "triLengthTo", haloPart.triLengthTo,
+                ProjectUtils.createNumberDialog(t, dia, "triLengthTo", haloPart.triLengthTo,
                         f -> haloPart.triLengthTo = f, reb);
-                createNumberDialog(t, dia, "haloRadius", haloPart.haloRadius,
+                ProjectUtils.createNumberDialog(t, dia, "haloRadius", haloPart.haloRadius,
                         f -> haloPart.haloRadius = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "haloRadiusTo", haloPart.haloRadiusTo,
+                ProjectUtils.createNumberDialog(t, dia, "haloRadiusTo", haloPart.haloRadiusTo,
                         f -> haloPart.haloRadiusTo = f, reb);
-                createNumberDialog(t, dia, "layer", haloPart.layer,
+                ProjectUtils.createNumberDialog(t, dia, "layer", haloPart.layer,
                         f -> haloPart.layer = f, reb);
-                createNumberDialog(t, dia, "layerOffset", haloPart.layerOffset,
+                ProjectUtils.createNumberDialog(t, dia, "layerOffset", haloPart.layerOffset,
                         f -> haloPart.layerOffset = f, reb);
                 t.row();
-                createPartProgressSelect(t, dia, "progress", p -> haloPart.progress = p);
-                createColorDialog(t, dia, "color", haloPart.color,
+                ProjectUtils.createPartProgressSelect(t, dia, "progress", p -> haloPart.progress = p);
+                ProjectUtils.createColorDialog(t, dia, "color", haloPart.color,
                         c -> haloPart.color = c, reb);
-                createColorDialog(t, dia, "colorTo", haloPart.colorTo,
+                ProjectUtils.createColorDialog(t, dia, "colorTo", haloPart.colorTo,
                         c -> haloPart.colorTo = c, reb);
             }
             case "flare" -> {
                 FlarePart flarePart = (FlarePart) part;
-                createNumberDialog(t, dia, "sides", flarePart.sides,
+                ProjectUtils.createNumberDialog(t, dia, "sides", flarePart.sides,
                         f -> flarePart.sides = (int) (f + 0), reb);
-                createNumberDialog(t, dia, "radius", flarePart.radius,
+                ProjectUtils.createNumberDialog(t, dia, "radius", flarePart.radius,
                         f -> flarePart.radius = f, reb);
-                createNumberDialog(t, dia, "radiusTo", flarePart.radiusTo,
+                ProjectUtils.createNumberDialog(t, dia, "radiusTo", flarePart.radiusTo,
                         f -> flarePart.radiusTo = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "stroke", flarePart.stroke,
+                ProjectUtils.createNumberDialog(t, dia, "stroke", flarePart.stroke,
                         f -> flarePart.stroke = f, reb);
-                createNumberDialog(t, dia, "innerScl", flarePart.innerScl,
+                ProjectUtils.createNumberDialog(t, dia, "innerScl", flarePart.innerScl,
                         f -> flarePart.innerScl = f, reb);
-                createNumberDialog(t, dia, "innerRadScl", flarePart.innerRadScl,
+                ProjectUtils.createNumberDialog(t, dia, "innerRadScl", flarePart.innerRadScl,
                         f -> flarePart.innerRadScl = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "x", flarePart.x,
+                ProjectUtils.createNumberDialog(t, dia, "x", flarePart.x,
                         f -> flarePart.x = f, reb);
-                createNumberDialog(t, dia, "y", flarePart.y,
+                ProjectUtils.createNumberDialog(t, dia, "y", flarePart.y,
                         f -> flarePart.y = f, reb);
-                createNumberDialog(t, dia, "rotation", flarePart.rotation,
+                ProjectUtils.createNumberDialog(t, dia, "rotation", flarePart.rotation,
                         f -> flarePart.rotation = f, reb);
                 t.row();
-                createNumberDialog(t, dia, "rotMove", flarePart.rotMove,
+                ProjectUtils.createNumberDialog(t, dia, "rotMove", flarePart.rotMove,
                         f -> flarePart.rotMove = f, reb);
-                createNumberDialog(t, dia, "spinSpeed", flarePart.spinSpeed,
+                ProjectUtils.createNumberDialog(t, dia, "spinSpeed", flarePart.spinSpeed,
                         f -> flarePart.spinSpeed = f, reb);
-                createNumberDialog(t, dia, "layer", flarePart.layer,
+                ProjectUtils.createNumberDialog(t, dia, "layer", flarePart.layer,
                         f -> flarePart.layer = f, reb);
                 t.row();
-                createBooleanDialog(t, dia, "followRotation", flarePart.followRotation,
+                ProjectUtils.createBooleanDialog(t, dia, "followRotation", flarePart.followRotation,
                         b -> flarePart.followRotation = b, reb);
-                createPartProgressSelect(t, dia, "progress", p -> flarePart.progress = p);
-                createColorDialog(t, dia, "color1", flarePart.color1,
+                ProjectUtils.createPartProgressSelect(t, dia, "progress", p -> flarePart.progress = p);
+                ProjectUtils.createColorDialog(t, dia, "color1", flarePart.color1,
                         c -> flarePart.color1 = c, reb);
                 t.row();
-                createColorDialog(t, dia, "color2", flarePart.color2,
+                ProjectUtils.createColorDialog(t, dia, "color2", flarePart.color2,
                         c -> flarePart.color2 = c, reb);
             }
         }

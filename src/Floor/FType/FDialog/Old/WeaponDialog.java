@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import Floor.FEntities.FBulletType.LimitBulletType;
 import arc.Core;
@@ -14,10 +14,9 @@ import mindustry.ui.dialogs.BaseDialog;
 
 import java.lang.reflect.Field;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
 import static mindustry.Vars.ui;
 
-public class WeaponDialog extends BaseDialog implements EffectTableGetter {
+public class WeaponDialog extends BaseDialog implements ProjectUtils.EffectTableGetter {
     public Weapon weapon;
     public float bulletHeavy = 0;
     public float heavy = 0;
@@ -39,17 +38,17 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
     };
     protected static String dia = "weapon";
     protected Boolp
-            hevUser = () -> weapon.shoot.shots * bulletHeavy + heavy <= freeSize,
-            targetUse = () -> couldUse("target", getVal("target")),
-            reloadUse = () -> couldUse("reload", getVal("reload"));
+            hevUser = () -> weapon.shoot.shots * bulletHeavy + heavy <= ProjectUtils.freeSize,
+            targetUse = () -> ProjectUtils.couldUse("target", getVal("target")),
+            reloadUse = () -> ProjectUtils.couldUse("reload", getVal("reload"));
 
     public WeaponDialog(String title, Weapon rollback, Cons<Weapon> apply, Cons<Float> heavyApply) {
         super(title);
         shown(this::rebuild);
-        shown(() -> freeSize += this.heavy + getShootVal(weapon.shoot) * bulletHeavy);
+        shown(() -> ProjectUtils.freeSize += this.heavy + ProjectUtils.getShootVal(weapon.shoot) * bulletHeavy);
         hidden(() -> {
-            freeSize -= this.heavy;
-            freeSize -= getShootVal(weapon.shoot) * bulletHeavy;
+            ProjectUtils.freeSize -= this.heavy;
+            ProjectUtils.freeSize -= ProjectUtils.getShootVal(weapon.shoot) * bulletHeavy;
             heavyApply.get(weapon.shoot.shots * bulletHeavy + this.heavy);
         });
 
@@ -70,7 +69,7 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
         }).width(200);
         buttons.button(Core.bundle.get("@apply"), Icon.right, () -> {
             updateHeavy();
-            if (heavy + weapon.shoot.shots * bulletHeavy <= freeSize) {
+            if (heavy + weapon.shoot.shots * bulletHeavy <= ProjectUtils.freeSize) {
                 apply.get(weapon);
                 hide();
             } else {
@@ -100,14 +99,14 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
                         h.clear();
                         updateHeavy();
                         h.label(() -> Core.bundle.get("@heavyUse") +
-                                (heavy + bulletHeavy * getShootVal(weapon.shoot)) + "/" + freeSize).pad(5);
+                                (heavy + bulletHeavy * ProjectUtils.getShootVal(weapon.shoot)) + "/" + ProjectUtils.freeSize).pad(5);
                     };
                     rebuildHeavy.run();
                 });
                 s.button(b -> {
                     b.image(Icon.pencil);
 
-                    b.clicked(() -> createSelectDialog(b, (tb, hide) -> {
+                    b.clicked(() -> ProjectUtils.createSelectDialog(b, (tb, hide) -> {
                         tb.button(Core.bundle.get("dialog.weapon.default"), () -> {
                             if (type.equals("default")) {
                                 hide.run();
@@ -172,7 +171,7 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
             b.label(() -> Core.bundle.get("dialog.weapon.bullet")).width(100);
             if (bulletDialog != null) {
                 b.button(Icon.pencil, () -> {
-                    if (heavy + weapon.shoot.shots * bulletHeavy <= freeSize) {
+                    if (heavy + weapon.shoot.shots * bulletHeavy <= ProjectUtils.freeSize) {
                         bulletDialog.show();
                     } else {
                         ui.showInfo(Core.bundle.get("@tooHeavy"));
@@ -191,101 +190,101 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
                 }).pad(5);
             }
         });
-        createEffectList(baseOn, this, dia, "ejectEffect", () -> weapon.ejectEffect, e -> weapon.ejectEffect = e);
-        createShootDialog(baseOn, dia, "shoot", getHeavy("number", getVal("number")), () -> weapon.shoot,
-                s -> weapon.shoot = s, () -> couldUse("number", getVal("number")), hevUser, this::updateHeavy);
+        ProjectUtils.createEffectList(baseOn, this, dia, "ejectEffect", () -> weapon.ejectEffect, e -> weapon.ejectEffect = e);
+        ProjectUtils.createShootDialog(baseOn, dia, "shoot", ProjectUtils.getHeavy("number", getVal("number")), () -> weapon.shoot,
+                s -> weapon.shoot = s, () -> ProjectUtils.couldUse("number", getVal("number")), hevUser, this::updateHeavy);
         baseOn.row();
-        createNumberDialog(baseOn, dia, "x", weapon.x, f -> weapon.x = f, reBase);
-        createNumberDialog(baseOn, dia, "y", weapon.y, f -> weapon.y = f, reBase);
-        createNumberDialog(baseOn, dia, "shootY", weapon.shootY, f -> weapon.shootY = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "x", weapon.x, f -> weapon.x = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "y", weapon.y, f -> weapon.y = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "shootY", weapon.shootY, f -> weapon.shootY = f, reBase);
         baseOn.row();
-        createNumberDialog(baseOn, dia, "shootX", weapon.shootX, f -> weapon.shootX = f, reBase);
-        createNumberDialog(baseOn, dia, "shootCone", weapon.shootCone, f -> weapon.shootCone = f, reBase);
-        createBooleanDialog(baseOn, dia, "rotate", weapon.rotate, b -> weapon.rotate = b, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "shootX", weapon.shootX, f -> weapon.shootX = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "shootCone", weapon.shootCone, f -> weapon.shootCone = f, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "rotate", weapon.rotate, b -> weapon.rotate = b, reBase);
         baseOn.row();
-        createNumberDialog(baseOn, dia, "rotateSpeed", weapon.rotateSpeed, f -> weapon.rotateSpeed = f, reBase);
-        createPartsDialog(baseOn, dia, "parts", weapon.parts);
-        createNumberDialog(baseOn, dia, "baseRotation", weapon.baseRotation, f -> weapon.baseRotation = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "rotateSpeed", weapon.rotateSpeed, f -> weapon.rotateSpeed = f, reBase);
+        ProjectUtils.createPartsDialog(baseOn, dia, "parts", weapon.parts);
+        ProjectUtils.createNumberDialog(baseOn, dia, "baseRotation", weapon.baseRotation, f -> weapon.baseRotation = f, reBase);
         baseOn.row();
-        createBooleanDialog(baseOn, dia, "mirror", weapon.mirror, b -> weapon.mirror = b, reBase);
-        createBooleanDialog(baseOn, dia, "alternate", weapon.alternate, b -> weapon.alternate = b, reBase);
-        createBooleanDialog(baseOn, dia, "continuous", weapon.continuous, b -> weapon.continuous = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "mirror", weapon.mirror, b -> weapon.mirror = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "alternate", weapon.alternate, b -> weapon.alternate = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "continuous", weapon.continuous, b -> weapon.continuous = b, reBase);
         baseOn.row();
-        createBooleanDialog(baseOn, dia, "alwaysContinuous", weapon.alwaysContinuous, b -> weapon.alwaysContinuous = b, reBase);
-        createBooleanDialog(baseOn, dia, "controllable", weapon.controllable, b -> weapon.controllable = b, reBase);
-        createBooleanDialog(baseOn, dia, "aiControllable", weapon.aiControllable, b -> weapon.aiControllable = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "alwaysContinuous", weapon.alwaysContinuous, b -> weapon.alwaysContinuous = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "controllable", weapon.controllable, b -> weapon.controllable = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "aiControllable", weapon.aiControllable, b -> weapon.aiControllable = b, reBase);
         baseOn.row();
-        createBooleanDialog(baseOn, dia, "alwaysShooting", weapon.alwaysShooting, b -> weapon.alwaysShooting = b, reBase);
-        createBooleanDialog(baseOn, dia, "autoTarget", weapon.autoTarget, b -> weapon.autoTarget = b, reBase);
-        createBooleanDialog(baseOn, dia, "predictTarget", weapon.predictTarget, b -> weapon.predictTarget = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "alwaysShooting", weapon.alwaysShooting, b -> weapon.alwaysShooting = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "autoTarget", weapon.autoTarget, b -> weapon.autoTarget = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "predictTarget", weapon.predictTarget, b -> weapon.predictTarget = b, reBase);
         baseOn.row();
-        createBooleanDialog(baseOn, dia, "useAttackRange", weapon.useAttackRange, b -> weapon.useAttackRange = b, reBase);
-        createLevDialog(baseOn, dia, "target", "targetInterval", weapon.targetInterval,
+        ProjectUtils.createBooleanDialog(baseOn, dia, "useAttackRange", weapon.useAttackRange, b -> weapon.useAttackRange = b, reBase);
+        ProjectUtils.createLevDialog(baseOn, dia, "target", "targetInterval", weapon.targetInterval,
                 f -> weapon.targetInterval = f, reBase, this::updateHeavy, targetUse, hevUser);
-        createLevDialog(baseOn, dia, "target", "targetSwitchInterval", weapon.targetSwitchInterval,
+        ProjectUtils.createLevDialog(baseOn, dia, "target", "targetSwitchInterval", weapon.targetSwitchInterval,
                 f -> weapon.targetSwitchInterval = f, reBase, this::updateHeavy, targetUse, hevUser);
         baseOn.row();
-        createLevDialog(baseOn, dia, "reload", "reload", weapon.reload,
+        ProjectUtils.createLevDialog(baseOn, dia, "reload", "reload", weapon.reload,
                 f -> weapon.reload = f, reBase, this::updateHeavy, reloadUse, hevUser);
-        createNumberDialog(baseOn, dia, "inaccuracy", weapon.inaccuracy, f -> weapon.inaccuracy = f, reBase);
-        createNumberDialog(baseOn, dia, "shake", weapon.shake, f -> weapon.shake = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "inaccuracy", weapon.inaccuracy, f -> weapon.inaccuracy = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "shake", weapon.shake, f -> weapon.shake = f, reBase);
         baseOn.row();
-        createNumberDialog(baseOn, dia, "recoil", weapon.recoil, f -> weapon.recoil = f, reBase);
-        createNumberDialog(baseOn, dia, "recoils", weapon.recoils, f -> weapon.recoils = (int) (f + 0), reBase);
-        createNumberDialog(baseOn, dia, "recoilTime", weapon.recoilTime, f -> weapon.recoilTime = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "recoil", weapon.recoil, f -> weapon.recoil = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "recoils", weapon.recoils, f -> weapon.recoils = (int) (f + 0), reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "recoilTime", weapon.recoilTime, f -> weapon.recoilTime = f, reBase);
         baseOn.row();
-        createNumberDialog(baseOn, dia, "recoilPow", weapon.recoilPow, f -> weapon.recoilPow = f, reBase);
-        createNumberDialogWithLimit(baseOn, dia, "xRand", weapon.xRand, 25, 0, f -> weapon.xRand = f, reBase);
-        createNumberDialogWithLimit(baseOn, dia, "rotationLimit", weapon.rotationLimit, 361, 0, f -> weapon.rotationLimit = f, reBase);
+        ProjectUtils.createNumberDialog(baseOn, dia, "recoilPow", weapon.recoilPow, f -> weapon.recoilPow = f, reBase);
+        ProjectUtils.createNumberDialogWithLimit(baseOn, dia, "xRand", weapon.xRand, 25, 0, f -> weapon.xRand = f, reBase);
+        ProjectUtils.createNumberDialogWithLimit(baseOn, dia, "rotationLimit", weapon.rotationLimit, 361, 0, f -> weapon.rotationLimit = f, reBase);
         baseOn.row();
-        createNumberDialogWithLimit(baseOn, dia, "minWarmup", weapon.minWarmup, 0.99f, 0, f -> weapon.minWarmup = f, reBase);
-        createNumberDialogWithLimit(baseOn, dia, "shootWarmupSpeed", weapon.shootWarmupSpeed, 0.99f, 0, f -> weapon.shootWarmupSpeed = f, reBase);
-        createNumberDialogWithLimit(baseOn, dia, "smoothReloadSpeed", weapon.smoothReloadSpeed, 0.99f, 0, f -> weapon.smoothReloadSpeed = f, reBase);
+        ProjectUtils.createNumberDialogWithLimit(baseOn, dia, "minWarmup", weapon.minWarmup, 0.99f, 0, f -> weapon.minWarmup = f, reBase);
+        ProjectUtils.createNumberDialogWithLimit(baseOn, dia, "shootWarmupSpeed", weapon.shootWarmupSpeed, 0.99f, 0, f -> weapon.shootWarmupSpeed = f, reBase);
+        ProjectUtils.createNumberDialogWithLimit(baseOn, dia, "smoothReloadSpeed", weapon.smoothReloadSpeed, 0.99f, 0, f -> weapon.smoothReloadSpeed = f, reBase);
         baseOn.row();
-        createBooleanDialog(baseOn, dia, "ignoreRotation", weapon.ignoreRotation, b -> weapon.ignoreRotation = b, reBase);
-        createBooleanDialog(baseOn, dia, "noAttack", weapon.noAttack, b -> weapon.noAttack = b, reBase);
-        createBooleanDialog(baseOn, dia, "linearWarmup", weapon.linearWarmup, b -> weapon.linearWarmup = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "ignoreRotation", weapon.ignoreRotation, b -> weapon.ignoreRotation = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "noAttack", weapon.noAttack, b -> weapon.noAttack = b, reBase);
+        ProjectUtils.createBooleanDialog(baseOn, dia, "linearWarmup", weapon.linearWarmup, b -> weapon.linearWarmup = b, reBase);
     }
 
     public void rebuildType() {
         typeOn.clear();
         if (type.equals("defense")) {
             PointDefenseWeapon p = (PointDefenseWeapon) weapon;
-            createColorDialog(typeOn, dia, "color", p.color,
+            ProjectUtils.createColorDialog(typeOn, dia, "color", p.color,
                     c -> p.color = c, reType);
-            createEffectList(typeOn, this, dia, "effect", () -> p.beamEffect, e -> p.beamEffect = e);
+            ProjectUtils.createEffectList(typeOn, this, dia, "effect", () -> p.beamEffect, e -> p.beamEffect = e);
         } else if (type.equals("repair")) {
             RepairBeamWeapon r = (RepairBeamWeapon) weapon;
-            createBooleanDialog(typeOn, dia, "targetBuildings", r.targetBuildings,
+            ProjectUtils.createBooleanDialog(typeOn, dia, "targetBuildings", r.targetBuildings,
                     b -> r.targetBuildings = b, reType);
-            createBooleanDialog(typeOn, dia, "targetUnits", r.targetUnits,
+            ProjectUtils.createBooleanDialog(typeOn, dia, "targetUnits", r.targetUnits,
                     b -> r.targetUnits = b, reType);
-            createNumberDialogWithLimit(typeOn, dia, "recentDamageMultiplier", r.recentDamageMultiplier, 1, 0,
+            ProjectUtils.createNumberDialogWithLimit(typeOn, dia, "recentDamageMultiplier", r.recentDamageMultiplier, 1, 0,
                     f -> r.recentDamageMultiplier = f, reType);
             typeOn.row();
-            createLevDialog(typeOn, dia, "target", "repairSpeed", r.repairSpeed,
+            ProjectUtils.createLevDialog(typeOn, dia, "target", "repairSpeed", r.repairSpeed,
                     f -> r.repairSpeed = f, reType, this::updateHeavy, targetUse, hevUser);
-            createLevDialog(typeOn, dia, "target", "fractionRepairSpeed", r.fractionRepairSpeed,
+            ProjectUtils.createLevDialog(typeOn, dia, "target", "fractionRepairSpeed", r.fractionRepairSpeed,
                     f -> r.fractionRepairSpeed = f, reType, this::updateHeavy, targetUse, hevUser);
-            createLevDialog(typeOn, dia, "target", "beamWidth", r.beamWidth,
+            ProjectUtils.createLevDialog(typeOn, dia, "target", "beamWidth", r.beamWidth,
                     f -> r.beamWidth = f, reType, this::updateHeavy, targetUse, hevUser);
             typeOn.row();
-            createNumberDialog(typeOn, dia, "pulseRadius", r.pulseRadius,
+            ProjectUtils.createNumberDialog(typeOn, dia, "pulseRadius", r.pulseRadius,
                     f -> r.pulseRadius = f, reType);
-            createNumberDialog(typeOn, dia, "pulseStroke", r.pulseStroke,
+            ProjectUtils.createNumberDialog(typeOn, dia, "pulseStroke", r.pulseStroke,
                     f -> r.pulseStroke = f, reType);
-            createNumberDialog(typeOn, dia, "widthSinMag", r.widthSinMag,
+            ProjectUtils.createNumberDialog(typeOn, dia, "widthSinMag", r.widthSinMag,
                     f -> r.widthSinMag = f, reType);
             typeOn.row();
-            createNumberDialog(typeOn, dia, "widthSinScl", r.widthSinScl,
+            ProjectUtils.createNumberDialog(typeOn, dia, "widthSinScl", r.widthSinScl,
                     f -> r.widthSinScl = f, reType);
-            createEffectList(typeOn, this, dia, "healEffect", () -> r.healEffect, e -> r.healEffect = e);
-            createColorDialog(typeOn, dia, "laserColor", r.laserColor,
+            ProjectUtils.createEffectList(typeOn, this, dia, "healEffect", () -> r.healEffect, e -> r.healEffect = e);
+            ProjectUtils.createColorDialog(typeOn, dia, "laserColor", r.laserColor,
                     c -> r.laserColor = c, reType);
             typeOn.row();
-            createColorDialog(typeOn, dia, "laserTopColor", r.laserTopColor,
+            ProjectUtils.createColorDialog(typeOn, dia, "laserTopColor", r.laserTopColor,
                     c -> r.laserTopColor = c, reType);
-            createColorDialog(typeOn, dia, "healColor", r.healColor,
+            ProjectUtils.createColorDialog(typeOn, dia, "healColor", r.healColor,
                     c -> r.healColor = c, reType);
         }
     }
@@ -295,7 +294,7 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
             repairSpeed = fractionRepairSpeed = beamWidth = 0;
         }};
         return switch (type) {
-            case "number" -> getShootVal(weapon.shoot);
+            case "number" -> ProjectUtils.getShootVal(weapon.shoot);
             case "reload" -> weapon.reload;
             case "target" ->
                     this.type.equals("repair") ? r.repairSpeed * 15 + r.fractionRepairSpeed * 60 + r.beamWidth / 4 :
@@ -306,9 +305,9 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
 
     public void updateHeavy() {
         heavy = 0.5f;
-        heavy += getHeavy("number", getShootVal(weapon.shoot));
-        heavy += getHeavy("reload", weapon.reload);
-        heavy += getHeavy("target", weapon.targetInterval * weapon.targetSwitchInterval);
+        heavy += ProjectUtils.getHeavy("number", ProjectUtils.getShootVal(weapon.shoot));
+        heavy += ProjectUtils.getHeavy("reload", weapon.reload);
+        heavy += ProjectUtils.getHeavy("target", weapon.targetInterval * weapon.targetSwitchInterval);
         bulletHeavy = bulletDialog == null ? 0 : bulletDialog.heavyOut();
     }
 
@@ -361,9 +360,9 @@ public class WeaponDialog extends BaseDialog implements EffectTableGetter {
                 weapon.bullet = new LimitBulletType();
             }
             bulletDialog = new BulletDialog(() -> weapon.bullet, f -> bulletHeavy = f,
-                    b -> weapon.bullet = b, "", () -> (int) getShootVal(weapon.shoot));
-            bulletDialog.hidden(() -> freeSize += this.heavy);
-            bulletDialog.shown(() -> freeSize -= this.heavy);
+                    b -> weapon.bullet = b, "", () -> (int) ProjectUtils.getShootVal(weapon.shoot));
+            bulletDialog.hidden(() -> ProjectUtils.freeSize += this.heavy);
+            bulletDialog.shown(() -> ProjectUtils.freeSize -= this.heavy);
         } else {
             bulletDialog = null;
             weapon.bullet = null;

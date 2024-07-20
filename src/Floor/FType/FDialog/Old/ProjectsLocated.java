@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import Floor.FEntities.FAbility.SprintingAbility;
 import Floor.FEntities.FBulletType.LimitBulletType;
@@ -30,10 +30,9 @@ import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.ui.dialogs.BaseDialog;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
 import static mindustry.Vars.*;
 
-public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
+public class ProjectsLocated extends BaseDialog implements ProjectUtils.EffectTableGetter {
     public static ProjectsLocated projects;
     public static StatusEffect eff;
     public static WeaponMount sign = new WeaponMount(new Weapon() {{
@@ -143,19 +142,19 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
             hide();
         }).width(100);
         buttons.button(Core.bundle.get("dialog.weapon.add"), Icon.add, () -> {
-            if (freeSize >= 0.5f) {
+            if (ProjectUtils.freeSize >= 0.5f) {
                 weaponPack w = new weaponPack();
                 weapons.add(w);
-                freeSize -= w.heavy;
+                ProjectUtils.freeSize -= w.heavy;
                 rebuildWeapon();
                 //updateTable();
             }
         }).width(200);
         buttons.button(Core.bundle.get("dialog.ability.add"), Icon.add, () -> {
-            if (freeSize >= 0.5f) {
+            if (ProjectUtils.freeSize >= 0.5f) {
                 abilityPack a = new abilityPack();
                 abilities.add(a);
-                freeSize -= a.heavy;
+                ProjectUtils.freeSize -= a.heavy;
                 rebuildAbility();
                 //updateTable();
             }
@@ -172,7 +171,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
 
             bd.buttons.button("@back", Icon.left, bd::hide).width(100);
             bd.buttons.button(Core.bundle.get("@apply"), Icon.right, () -> {
-                if ((getHeavy("speed", speedD) + getHeavy("health", healD)) <= freeSize) {
+                if ((ProjectUtils.getHeavy("speed", speedD) + ProjectUtils.getHeavy("health", healD)) <= ProjectUtils.freeSize) {
                     healthBoost = Math.max(0.01f, healD);
                     speedBoost = Math.max(0.01f, speedD);
                     bd.hide();
@@ -180,9 +179,9 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                     ui.showInfo(Core.bundle.get("@tooHeavy"));
                 }
             }).width(100);
-            bd.shown(() -> freeSize += getBaseHeavy(false));
+            bd.shown(() -> ProjectUtils.freeSize += getBaseHeavy(false));
             //bd.shown(this::hideTables);
-            bd.hidden(() -> freeSize -= getBaseHeavy(true));
+            bd.hidden(() -> ProjectUtils.freeSize -= getBaseHeavy(true));
             //bd.hidden(this::showTables);
             bd.show();
         }).width(200);
@@ -191,24 +190,24 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
     public void rebuildBase() {
         base.clear();
         base.table(t -> {
-            createLevDialog(t, "unit", "health", "healBoost", healD,
+            ProjectUtils.createLevDialog(t, "unit", "health", "healBoost", healD,
                     f -> healD = Math.max(0.01f, f), this::rebuildBase,
                     () -> {
-                    }, () -> couldUse("health", healD),
-                    () -> getBaseHeavy(true) <= freeSize);
-            createLevDialog(t, "unit", "speed", "speedBoost", speedD,
+                    }, () -> ProjectUtils.couldUse("health", healD),
+                    () -> getBaseHeavy(true) <= ProjectUtils.freeSize);
+            ProjectUtils.createLevDialog(t, "unit", "speed", "speedBoost", speedD,
                     f -> speedD = Math.max(0.01f, f), this::rebuildBase,
                     () -> {
-                    }, () -> couldUse("speed", speedD),
-                    () -> getBaseHeavy(true) <= freeSize);
+                    }, () -> ProjectUtils.couldUse("speed", speedD),
+                    () -> getBaseHeavy(true) <= ProjectUtils.freeSize);
         });
 
         base.row();
         base.table(t -> {
             t.label(() -> Core.bundle.get("dialog.unit.boost")).left().width(150);
             t.label(() -> Core.bundle.get("@heavyUse") + ": " + (boost == null ? 0 :
-                    getHeavy("boost", boost.damage + boost.maxLength) +
-                            getHeavy("boostReload", (60 / boost.reload)))).left().width(150);
+                    ProjectUtils.getHeavy("boost", boost.damage + boost.maxLength) +
+                            ProjectUtils.getHeavy("boostReload", (60 / boost.reload)))).left().width(150);
             if (boost == null) {
                 t.button(Icon.add, () -> {
                     boost = new SprintingAbility();
@@ -221,24 +220,24 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                     rebuildBase();
                 }).pad(5);
                 t.row();
-                createLevDialog(t, "unit", "boost", "damage", boost.damage,
+                ProjectUtils.createLevDialog(t, "unit", "boost", "damage", boost.damage,
                         f -> boost.damage = f, this::rebuildBase, () -> {
-                        }, () -> couldUse("boost", boost.damage + boost.maxLength),
-                        () -> getBaseHeavy(true) <= freeSize);
-                createLevDialog(t, "unit", "boost", "maxLength", boost.maxLength,
+                        }, () -> ProjectUtils.couldUse("boost", boost.damage + boost.maxLength),
+                        () -> getBaseHeavy(true) <= ProjectUtils.freeSize);
+                ProjectUtils.createLevDialog(t, "unit", "boost", "maxLength", boost.maxLength,
                         f -> boost.maxLength = f, this::rebuildBase, () -> {
-                        }, () -> couldUse("boost", boost.damage + boost.maxLength),
-                        () -> getBaseHeavy(true) <= freeSize);
-                createLevDialog(t, "unit", "boostReload", "reload", boost.reload,
+                        }, () -> ProjectUtils.couldUse("boost", boost.damage + boost.maxLength),
+                        () -> getBaseHeavy(true) <= ProjectUtils.freeSize);
+                ProjectUtils.createLevDialog(t, "unit", "boostReload", "reload", boost.reload,
                         f -> boost.reload = f, this::rebuildBase, () -> {
-                        }, () -> couldUse("boostReload", (60 / boost.reload)),
-                        () -> getBaseHeavy(true) <= freeSize);
+                        }, () -> ProjectUtils.couldUse("boostReload", (60 / boost.reload)),
+                        () -> getBaseHeavy(true) <= ProjectUtils.freeSize);
                 t.row();
-                createNumberDialog(t, "unit", "powerReload", boost.powerReload,
+                ProjectUtils.createNumberDialog(t, "unit", "powerReload", boost.powerReload,
                         f -> boost.powerReload = f, this::rebuildBase);
-                createEffectList(t, this, "unit", "powerEffect",
+                ProjectUtils.createEffectList(t, this, "unit", "powerEffect",
                         () -> boost.powerEffect, e -> boost.powerEffect = e);
-                createEffectList(t, this, "unit", "maxPowerEffect",
+                ProjectUtils.createEffectList(t, this, "unit", "maxPowerEffect",
                         () -> boost.maxPowerEffect, e -> boost.maxPowerEffect = e);
             }
         }).width(1350);
@@ -246,13 +245,13 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
 
     public float getBaseHeavy(boolean write) {
         if (write) {
-            return getHeavy("speed", speedD) + getHeavy("health", healD) + (boost == null ? 0 :
-                    (getHeavy("boost", boost.damage + boost.maxLength) +
-                            getHeavy("boostReload", (60 / boost.reload))));
+            return ProjectUtils.getHeavy("speed", speedD) + ProjectUtils.getHeavy("health", healD) + (boost == null ? 0 :
+                    (ProjectUtils.getHeavy("boost", boost.damage + boost.maxLength) +
+                            ProjectUtils.getHeavy("boostReload", (60 / boost.reload))));
         } else {
-            return getHeavy("speed", speedBoost) + getHeavy("health", healthBoost) + (boost == null ? 0 :
-                    (getHeavy("boost", boost.damage + boost.maxLength) +
-                            getHeavy("boostReload", (60 / boost.reload))));
+            return ProjectUtils.getHeavy("speed", speedBoost) + ProjectUtils.getHeavy("health", healthBoost) + (boost == null ? 0 :
+                    (ProjectUtils.getHeavy("boost", boost.damage + boost.maxLength) +
+                            ProjectUtils.getHeavy("boostReload", (60 / boost.reload))));
         }
     }
 
@@ -287,7 +286,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
         LWeapon.clear();
         LWeapon.table(t -> {
             t.setBackground(Tex.buttonEdge1);
-            t.label(() -> Core.bundle.get("@heavyUse") + getWeaponHeavy() + "/" + maxSize);
+            t.label(() -> Core.bundle.get("@heavyUse") + getWeaponHeavy() + "/" + ProjectUtils.maxSize);
         }).width(500).row();
         for (int i = 0; i < weapons.size; i++) {
             weaponPack wp = weapons.get(i);
@@ -302,14 +301,14 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 t.label(() -> Core.bundle.get("dialog.weapon.index") + ": " + finalI).left().width(100).pad(5);
                 t.label(() -> Core.bundle.get("@heavyUse") + wp.heavy).left().width(100).pad(5);
                 t.button(Icon.pencil, () -> {
-                    if (freeSize > 0) {
+                    if (ProjectUtils.freeSize > 0) {
                         wp.dialog.show();
                     } else {
                         ui.showInfo(Core.bundle.get("tooHeavyDrop"));
                     }
                 }).pad(5);
                 t.button(Icon.trash, () -> {
-                    freeSize += wp.heavy;
+                    ProjectUtils.freeSize += wp.heavy;
                     weapons.remove(finalI);
                     if (wp.on != null) {
                         Core.app.post(wp.on::remove);
@@ -327,7 +326,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
         LAbility.clear();
         LAbility.table(t -> {
             t.setBackground(Tex.buttonEdge1);
-            t.label(() -> Core.bundle.get("@heavyUse") + getAbilityHeavy() + "/" + maxSize);
+            t.label(() -> Core.bundle.get("@heavyUse") + getAbilityHeavy() + "/" + ProjectUtils.maxSize);
         }).width(500).row();
         for (int i = 0; i < abilities.size; i++) {
             int finalI = i;
@@ -342,14 +341,14 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 t.label(() -> Core.bundle.get("dialog.ability.index") + ": " + finalI).left().width(100).pad(5);
                 t.label(() -> Core.bundle.get("@heavyUse") + ap.heavy);
                 t.button(Icon.pencil, () -> {
-                    if (freeSize > 0) {
+                    if (ProjectUtils.freeSize > 0) {
                         ap.dialog.show();
                     } else {
                         ui.showInfo(Core.bundle.get("tooHeavyDrop"));
                     }
                 }).pad(5);
                 t.button(Icon.trash, () -> {
-                    freeSize += ap.heavy;
+                    ProjectUtils.freeSize += ap.heavy;
                     abilities.remove(finalI);
                     if (ap.on != null) {
                         Core.app.post(ap.on::remove);
@@ -468,7 +467,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 abilities.add(new abilityPack(ability));
             }
         }
-        updateHeavy();
+        ProjectUtils.updateHeavy();
     }
 
     public void set(WeaponMount[] w) {
@@ -477,7 +476,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
                 weapons.add(new weaponPack(mount.weapon));
             }
         }
-        updateHeavy();
+        ProjectUtils.updateHeavy();
     }
 
     public float getWeaponHeavy() {
@@ -512,7 +511,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
         boost = null;
         healthBoost = eff.healthMultiplier = 1;
         speedBoost = eff.speedMultiplier = 1;
-        updateHeavy();
+        ProjectUtils.updateHeavy();
     }
 
     public void read(Reads read) {
@@ -1835,7 +1834,7 @@ public class ProjectsLocated extends BaseDialog implements EffectTableGetter {
             dialog = new WeaponDialog("", this.weapon, w -> this.weapon = w, f -> heavy = f);
             //dialog.shown(ProjectsLocated.this::hideTables);
             dialog.hidden(ProjectsLocated.this::rebuild);
-            heavy = dialog.heavy + getShootVal(weapon.shoot) * dialog.bulletHeavy;
+            heavy = dialog.heavy + ProjectUtils.getShootVal(weapon.shoot) * dialog.bulletHeavy;
         }
     }
 

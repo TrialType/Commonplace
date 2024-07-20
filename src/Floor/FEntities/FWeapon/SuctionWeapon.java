@@ -1,6 +1,6 @@
 package Floor.FEntities.FWeapon;
 
-import Floor.FTools.classes.BossList;
+import Floor.FContent.FUnits;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -73,7 +73,7 @@ public class SuctionWeapon extends Weapon {
             number.removeAll(u -> u.dead || u.health <= 0 || !u.within(point, range / 2));
             final boolean[] has = {false};
             Units.nearbyEnemies(unit.team, tx, ty, range, u -> {
-                if (BossList.list.indexOf(u.type) < 0 && u.type.targetable) {
+                if (!FUnits.boss.contains(u.type) && u.type.targetable) {
                     has[0] = true;
                     if (number.size < 3) {
                         number.add(u);

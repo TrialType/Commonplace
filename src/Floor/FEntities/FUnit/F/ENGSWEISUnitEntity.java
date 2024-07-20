@@ -4,7 +4,6 @@ import Floor.FContent.FEvents;
 import Floor.FContent.FUnits;
 import Floor.FEntities.FUnit.Override.FUnitEntity;
 import Floor.FEntities.FUnitType.ENGSWEISUnitType;
-import Floor.FTools.classes.BossList;
 import Floor.FTools.classes.PhysicsWorldChanger;
 import arc.Events;
 import arc.math.Angles;
@@ -20,9 +19,7 @@ import mindustry.async.AsyncProcess;
 import mindustry.async.PhysicsProcess;
 import mindustry.ctype.ContentType;
 import mindustry.entities.Units;
-import mindustry.entities.units.StatusEntry;
 import mindustry.gen.*;
-import mindustry.io.TypeIO;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -83,7 +80,7 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
             change();
         }
 
-        if (!team.isAI() || BossList.list.indexOf(type) > -1) {
+        if (!team.isAI() || FUnits.boss.contains(type)) {
             first = false;
         }
 

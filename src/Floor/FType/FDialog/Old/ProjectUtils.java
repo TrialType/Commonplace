@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import Floor.FContent.FStatusEffects;
 import arc.Core;
@@ -17,7 +17,6 @@ import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
-import mindustry.core.GameState;
 import mindustry.entities.Effect;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.DrawPart;
@@ -35,8 +34,7 @@ import java.util.HashMap;
 
 import static Floor.FContent.FItems.*;
 import static Floor.FContent.FItems.allTargetInterval;
-import static Floor.FType.FDialog.ProjectsLocated.eff;
-import static Floor.FType.FDialog.ProjectsLocated.projects;
+import static Floor.FType.FDialog.Old.ProjectsLocated.projects;
 import static mindustry.Vars.*;
 
 public abstract class ProjectUtils {

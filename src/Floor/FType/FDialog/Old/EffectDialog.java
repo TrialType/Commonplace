@@ -1,4 +1,4 @@
-package Floor.FType.FDialog;
+package Floor.FType.FDialog.Old;
 
 import arc.Core;
 import arc.func.Cons;
@@ -9,9 +9,7 @@ import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.ui.dialogs.BaseDialog;
 
-import static Floor.FType.FDialog.ProjectUtils.*;
-
-public class EffectDialog extends BaseDialog implements EffectTableGetter {
+public class EffectDialog extends BaseDialog implements ProjectUtils.EffectTableGetter {
     protected static String dia = "effect";
     protected Effect effect;
     protected Cons<Effect> apply;
@@ -183,7 +181,7 @@ public class EffectDialog extends BaseDialog implements EffectTableGetter {
             t.button(b -> {
                 b.image(Icon.rotate);
 
-                b.clicked(() -> createSelectDialog(b, (tb, hide) -> {
+                b.clicked(() -> ProjectUtils.createSelectDialog(b, (tb, hide) -> {
                     tb.clear();
                     tb.button(Core.bundle.get("dialog.effect.wave"), () -> {
                         if (type.equals("wave")) {
@@ -304,23 +302,23 @@ public class EffectDialog extends BaseDialog implements EffectTableGetter {
 
     public void rebuildBase() {
         base.clear();
-        createNumberDialog(base, dia, "lifetime", effect.lifetime,
+        ProjectUtils.createNumberDialog(base, dia, "lifetime", effect.lifetime,
                 f -> effect.lifetime = f, reb);
-        createNumberDialog(base, dia, "clip", effect.clip,
+        ProjectUtils.createNumberDialog(base, dia, "clip", effect.clip,
                 f -> effect.clip = f, reb);
-        createNumberDialog(base, dia, "startDelay", effect.startDelay,
+        ProjectUtils.createNumberDialog(base, dia, "startDelay", effect.startDelay,
                 f -> effect.startDelay = f, reb);
         base.row();
-        createNumberDialog(base, dia, "baseRotation", effect.baseRotation,
+        ProjectUtils.createNumberDialog(base, dia, "baseRotation", effect.baseRotation,
                 f -> effect.baseRotation = f, reb);
-        createNumberDialog(base, dia, "layer", effect.layer,
+        ProjectUtils.createNumberDialog(base, dia, "layer", effect.layer,
                 f -> effect.layer = f, reb);
-        createNumberDialog(base, dia, "layerDuration", effect.layerDuration,
+        ProjectUtils.createNumberDialog(base, dia, "layerDuration", effect.layerDuration,
                 f -> effect.layerDuration = f, reb);
         base.row();
-        createBooleanDialog(base, dia, "followParent", effect.followParent,
+        ProjectUtils.createBooleanDialog(base, dia, "followParent", effect.followParent,
                 b -> effect.followParent = b, reb);
-        createBooleanDialog(base, dia, "rotWithParent", effect.rotWithParent,
+        ProjectUtils.createBooleanDialog(base, dia, "rotWithParent", effect.rotWithParent,
                 b -> effect.rotWithParent = b, reb);
     }
 
@@ -329,149 +327,149 @@ public class EffectDialog extends BaseDialog implements EffectTableGetter {
         switch (type) {
             case "wave": {
                 WaveEffect waveEffect = (WaveEffect) effect;
-                createNumberDialog(tty, dia, "sizeFrom", waveEffect.sizeFrom,
+                ProjectUtils.createNumberDialog(tty, dia, "sizeFrom", waveEffect.sizeFrom,
                         f -> waveEffect.strokeFrom = f, ret);
-                createNumberDialog(tty, dia, "sizeTo", waveEffect.sizeTo,
+                ProjectUtils.createNumberDialog(tty, dia, "sizeTo", waveEffect.sizeTo,
                         f -> waveEffect.sizeTo = f, ret);
-                createNumberDialog(tty, dia, "sides", waveEffect.sides,
+                ProjectUtils.createNumberDialog(tty, dia, "sides", waveEffect.sides,
                         f -> waveEffect.sides = (int) (f + 0), ret);
                 tty.row();
-                createNumberDialog(tty, dia, "lightScl", waveEffect.lightScl,
+                ProjectUtils.createNumberDialog(tty, dia, "lightScl", waveEffect.lightScl,
                         f -> waveEffect.lightScl = f, ret);
-                createNumberDialog(tty, dia, "lightOpacity", waveEffect.lightOpacity,
+                ProjectUtils.createNumberDialog(tty, dia, "lightOpacity", waveEffect.lightOpacity,
                         f -> waveEffect.lightOpacity = f, ret);
-                createNumberDialog(tty, dia, "rotation", waveEffect.rotation,
+                ProjectUtils.createNumberDialog(tty, dia, "rotation", waveEffect.rotation,
                         f -> waveEffect.rotation = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "strokeFrom", waveEffect.strokeFrom,
+                ProjectUtils.createNumberDialog(tty, dia, "strokeFrom", waveEffect.strokeFrom,
                         f -> waveEffect.strokeFrom = f, ret);
-                createNumberDialog(tty, dia, "strokeTo", waveEffect.strokeTo,
+                ProjectUtils.createNumberDialog(tty, dia, "strokeTo", waveEffect.strokeTo,
                         f -> waveEffect.strokeTo = f, ret);
-                createNumberDialog(tty, dia, "offsetX", waveEffect.offsetX,
+                ProjectUtils.createNumberDialog(tty, dia, "offsetX", waveEffect.offsetX,
                         f -> waveEffect.offsetX = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "offsetY", waveEffect.offsetY,
+                ProjectUtils.createNumberDialog(tty, dia, "offsetY", waveEffect.offsetY,
                         f -> waveEffect.offsetY = f, ret);
-                createInterpolSelect(tty, dia, "interp", i -> waveEffect.interp = i);
-                createInterpolSelect(tty, dia, "lightInterp", i -> waveEffect.lightInterp = i);
+                ProjectUtils.createInterpolSelect(tty, dia, "interp", i -> waveEffect.interp = i);
+                ProjectUtils.createInterpolSelect(tty, dia, "lightInterp", i -> waveEffect.lightInterp = i);
                 tty.row();
-                createColorDialog(tty, dia, "colorFrom", waveEffect.colorFrom,
+                ProjectUtils.createColorDialog(tty, dia, "colorFrom", waveEffect.colorFrom,
                         c -> waveEffect.colorFrom = c, ret);
-                createColorDialog(tty, dia, "colorTo", waveEffect.colorTo,
+                ProjectUtils.createColorDialog(tty, dia, "colorTo", waveEffect.colorTo,
                         c -> waveEffect.colorTo = c, ret);
-                createColorDialog(tty, dia, "lightColor", waveEffect.lightColor,
+                ProjectUtils.createColorDialog(tty, dia, "lightColor", waveEffect.lightColor,
                         c -> waveEffect.lightColor = c, ret);
                 break;
             }
             case "wrap": {
                 WrapEffect wrapEffect = (WrapEffect) effect;
-                createNumberDialog(tty, dia, "rotation", wrapEffect.rotation,
+                ProjectUtils.createNumberDialog(tty, dia, "rotation", wrapEffect.rotation,
                         f -> wrapEffect.rotation = f, ret);
-                createEffectList(tty, this, dia, "effect", () -> wrapEffect.effect, e -> wrapEffect.effect = e);
-                createColorDialog(tty, dia, "color", wrapEffect.color,
+                ProjectUtils.createEffectList(tty, this, dia, "effect", () -> wrapEffect.effect, e -> wrapEffect.effect = e);
+                ProjectUtils.createColorDialog(tty, dia, "color", wrapEffect.color,
                         c -> wrapEffect.color = c, ret);
                 break;
             }
             case "radial": {
                 RadialEffect radialEffect = (RadialEffect) effect;
-                createNumberDialog(tty, dia, "rotationSpacing", radialEffect.rotationSpacing,
+                ProjectUtils.createNumberDialog(tty, dia, "rotationSpacing", radialEffect.rotationSpacing,
                         f -> radialEffect.rotationSpacing = f, ret);
-                createNumberDialog(tty, dia, "rotationOffset", radialEffect.rotationOffset,
+                ProjectUtils.createNumberDialog(tty, dia, "rotationOffset", radialEffect.rotationOffset,
                         f -> radialEffect.rotationOffset = f, ret);
-                createNumberDialog(tty, dia, "lengthOffset", radialEffect.lengthOffset,
+                ProjectUtils.createNumberDialog(tty, dia, "lengthOffset", radialEffect.lengthOffset,
                         f -> radialEffect.lengthOffset = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "amount", radialEffect.amount,
+                ProjectUtils.createNumberDialog(tty, dia, "amount", radialEffect.amount,
                         f -> radialEffect.amount = (int) (f + 0), ret);
-                createEffectList(tty, this, dia, "effect",
+                ProjectUtils.createEffectList(tty, this, dia, "effect",
                         () -> radialEffect.effect, e -> radialEffect.effect = e);
                 break;
             }
             case "particle": {
                 ParticleEffect particleEffect = (ParticleEffect) effect;
-                createNumberDialog(tty, dia, "particles", particleEffect.particles,
+                ProjectUtils.createNumberDialog(tty, dia, "particles", particleEffect.particles,
                         f -> particleEffect.particles = (int) (f + 0), ret);
-                createBooleanDialog(tty, dia, "randLength", particleEffect.randLength,
+                ProjectUtils.createBooleanDialog(tty, dia, "randLength", particleEffect.randLength,
                         b -> particleEffect.randLength = b, ret);
-                createBooleanDialog(tty, dia, "casingFlip", particleEffect.casingFlip,
+                ProjectUtils.createBooleanDialog(tty, dia, "casingFlip", particleEffect.casingFlip,
                         b -> particleEffect.casingFlip = b, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "cone", particleEffect.cone,
+                ProjectUtils.createNumberDialog(tty, dia, "cone", particleEffect.cone,
                         f -> particleEffect.cone = f, ret);
-                createNumberDialog(tty, dia, "length", particleEffect.length,
+                ProjectUtils.createNumberDialog(tty, dia, "length", particleEffect.length,
                         f -> particleEffect.length = f, ret);
-                createNumberDialog(tty, dia, "baseLength", particleEffect.baseLength,
+                ProjectUtils.createNumberDialog(tty, dia, "baseLength", particleEffect.baseLength,
                         f -> particleEffect.baseLength = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "offsetX", particleEffect.offsetX,
+                ProjectUtils.createNumberDialog(tty, dia, "offsetX", particleEffect.offsetX,
                         f -> particleEffect.offsetX = f, ret);
-                createNumberDialog(tty, dia, "offsetY", particleEffect.offsetY,
+                ProjectUtils.createNumberDialog(tty, dia, "offsetY", particleEffect.offsetY,
                         f -> particleEffect.offsetY = f, ret);
-                createNumberDialog(tty, dia, "lightScl", particleEffect.lightScl,
+                ProjectUtils.createNumberDialog(tty, dia, "lightScl", particleEffect.lightScl,
                         f -> particleEffect.lightScl = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "strokeFrom", particleEffect.strokeFrom,
+                ProjectUtils.createNumberDialog(tty, dia, "strokeFrom", particleEffect.strokeFrom,
                         f -> particleEffect.strokeFrom = f, ret);
-                createNumberDialog(tty, dia, "strokeTo", particleEffect.strokeTo,
+                ProjectUtils.createNumberDialog(tty, dia, "strokeTo", particleEffect.strokeTo,
                         f -> particleEffect.strokeTo = f, ret);
-                createNumberDialog(tty, dia, "lenFrom", particleEffect.lenFrom,
+                ProjectUtils.createNumberDialog(tty, dia, "lenFrom", particleEffect.lenFrom,
                         f -> particleEffect.lenFrom = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "lenTo", particleEffect.lenTo,
+                ProjectUtils.createNumberDialog(tty, dia, "lenTo", particleEffect.lenTo,
                         f -> particleEffect.lenTo = f, ret);
-                createBooleanDialog(tty, dia, "line", particleEffect.line,
+                ProjectUtils.createBooleanDialog(tty, dia, "line", particleEffect.line,
                         b -> particleEffect.line = b, ret);
-                createBooleanDialog(tty, dia, "cap", particleEffect.cap,
+                ProjectUtils.createBooleanDialog(tty, dia, "cap", particleEffect.cap,
                         b -> particleEffect.cap = b, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "lightOpacity", particleEffect.lightOpacity,
+                ProjectUtils.createNumberDialog(tty, dia, "lightOpacity", particleEffect.lightOpacity,
                         f -> particleEffect.lightOpacity = f, ret);
-                createInterpolSelect(tty, dia, "interp", i -> particleEffect.interp = i);
-                createInterpolSelect(tty, dia, "sizeInterp", i -> particleEffect.sizeInterp = i);
+                ProjectUtils.createInterpolSelect(tty, dia, "interp", i -> particleEffect.interp = i);
+                ProjectUtils.createInterpolSelect(tty, dia, "sizeInterp", i -> particleEffect.sizeInterp = i);
                 tty.row();
-                createColorDialog(tty, dia, "colorFrom", particleEffect.colorFrom,
+                ProjectUtils.createColorDialog(tty, dia, "colorFrom", particleEffect.colorFrom,
                         c -> particleEffect.colorFrom = c, ret);
-                createColorDialog(tty, dia, "colorTo", particleEffect.colorTo,
+                ProjectUtils.createColorDialog(tty, dia, "colorTo", particleEffect.colorTo,
                         c -> particleEffect.colorTo = c, ret);
-                createColorDialog(tty, dia, "lightColor", particleEffect.lightColor,
+                ProjectUtils.createColorDialog(tty, dia, "lightColor", particleEffect.lightColor,
                         c -> particleEffect.lightColor = c, ret);
                 break;
             }
             case "explosion": {
                 ExplosionEffect explosionEffect = (ExplosionEffect) effect;
-                createNumberDialog(tty, dia, "waveLife", explosionEffect.waveLife,
+                ProjectUtils.createNumberDialog(tty, dia, "waveLife", explosionEffect.waveLife,
                         f -> explosionEffect.waveLife = f, ret);
-                createNumberDialog(tty, dia, "waveStroke", explosionEffect.waveStroke,
+                ProjectUtils.createNumberDialog(tty, dia, "waveStroke", explosionEffect.waveStroke,
                         f -> explosionEffect.waveStroke = f, ret);
-                createNumberDialog(tty, dia, "waveRad", explosionEffect.waveRad,
+                ProjectUtils.createNumberDialog(tty, dia, "waveRad", explosionEffect.waveRad,
                         f -> explosionEffect.waveRad = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "waveRadBase", explosionEffect.waveRadBase,
+                ProjectUtils.createNumberDialog(tty, dia, "waveRadBase", explosionEffect.waveRadBase,
                         f -> explosionEffect.waveRadBase = f, ret);
-                createNumberDialog(tty, dia, "sparkStroke", explosionEffect.sparkStroke,
+                ProjectUtils.createNumberDialog(tty, dia, "sparkStroke", explosionEffect.sparkStroke,
                         f -> explosionEffect.sparkStroke = f, ret);
-                createNumberDialog(tty, dia, "sparkRad", explosionEffect.sparkRad,
+                ProjectUtils.createNumberDialog(tty, dia, "sparkRad", explosionEffect.sparkRad,
                         f -> explosionEffect.sparkRad = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "sparkLen", explosionEffect.sparkLen,
+                ProjectUtils.createNumberDialog(tty, dia, "sparkLen", explosionEffect.sparkLen,
                         f -> explosionEffect.sparkLen = f, ret);
-                createNumberDialog(tty, dia, "smokeSize", explosionEffect.smokeSize,
+                ProjectUtils.createNumberDialog(tty, dia, "smokeSize", explosionEffect.smokeSize,
                         f -> explosionEffect.smokeSize = f, ret);
-                createNumberDialog(tty, dia, "smokeSizeBase", explosionEffect.smokeSizeBase,
+                ProjectUtils.createNumberDialog(tty, dia, "smokeSizeBase", explosionEffect.smokeSizeBase,
                         f -> explosionEffect.smokeSizeBase = f, ret);
                 tty.row();
-                createNumberDialog(tty, dia, "smokeRad", explosionEffect.smokeRad,
+                ProjectUtils.createNumberDialog(tty, dia, "smokeRad", explosionEffect.smokeRad,
                         f -> explosionEffect.smokeRad = f, ret);
-                createNumberDialog(tty, dia, "smokes", explosionEffect.smokes,
+                ProjectUtils.createNumberDialog(tty, dia, "smokes", explosionEffect.smokes,
                         f -> explosionEffect.smokes = (int) (f + 0), ret);
-                createNumberDialog(tty, dia, "sparks", explosionEffect.sparks,
+                ProjectUtils.createNumberDialog(tty, dia, "sparks", explosionEffect.sparks,
                         f -> explosionEffect.sparks = (int) (f + 0), ret);
                 tty.row();
-                createColorDialog(tty, dia, "waveColor", explosionEffect.waveColor,
+                ProjectUtils.createColorDialog(tty, dia, "waveColor", explosionEffect.waveColor,
                         c -> explosionEffect.waveColor = c, ret);
-                createColorDialog(tty, dia, "smokeColor", explosionEffect.smokeColor,
+                ProjectUtils.createColorDialog(tty, dia, "smokeColor", explosionEffect.smokeColor,
                         c -> explosionEffect.smokeColor = c, ret);
-                createColorDialog(tty, dia, "sparkColor", explosionEffect.sparkColor,
+                ProjectUtils.createColorDialog(tty, dia, "sparkColor", explosionEffect.sparkColor,
                         c -> explosionEffect.sparkColor = c, ret);
                 break;
             }

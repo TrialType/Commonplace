@@ -39,6 +39,7 @@ import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BlockFlag;
+import mindustry.world.meta.BlockGroup;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
@@ -50,7 +51,7 @@ public class FBlocks {
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall, decoy;
+    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy;
     //turret
     public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
     //crafting
@@ -701,7 +702,7 @@ public class FBlocks {
 
                         collides = hittable = absorbable = reflectable = false;
                     }};
-                    laserEffect = new Effect(15, f -> {
+                    laserEffect = new Effect(25, f -> {
                         if (f.data instanceof Vec2 v) {
                             Draw.color(Color.valueOf("EBEEF5"));
                             float stroke = 12 * (0.5f - Math.abs(f.fin() - 0.5f));
@@ -848,6 +849,21 @@ public class FBlocks {
                     ItemStack.with(Items.phaseFabric, 120, Items.silicon, 10), Blocks.phaseWall,
                     ItemStack.with(Items.surgeAlloy, 120, Items.silicon, 10), Blocks.surgeWall);
         }};
+
+        edge = new AutoBlock("edge") {{
+            size = 3;
+            behind = 14;
+            health = 1000;
+            maxRange = 900;
+
+            requirements(Category.defense, ItemStack.with(Items.copper, 300, Items.graphite, 120, Items.thorium, 35));
+
+            creates.putAll(ItemStack.with(Items.copper, 480, Items.silicon, 10), Blocks.copperWallLarge,
+                    ItemStack.with(Items.titanium, 480, Items.silicon, 10), Blocks.titaniumWallLarge,
+                    ItemStack.with(Items.thorium, 480, Items.silicon, 10), Blocks.thoriumWallLarge,
+                    ItemStack.with(Items.phaseFabric, 480, Items.silicon, 10), Blocks.phaseWallLarge,
+                    ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 10), Blocks.surgeWallLarge);
+        }};
         decoy = new Block("decoy") {{
             requirements(Category.defense, ItemStack.with(
                     Items.copper, 350, Items.silicon, 250, Items.graphite, 250,
@@ -859,9 +875,9 @@ public class FBlocks {
             breakable = true;
             destructible = true;
             canOverdrive = false;
-            drawDisabled = false;
             crushDamageMultiplier = 3;
             researchCostMultiplier = 8;
+            destroyBulletSameTeam = true;
             destroyBullet = new BulletType() {{
                 reflectable = hittable = absorbable = false;
                 lifetime = 0;
@@ -869,6 +885,14 @@ public class FBlocks {
                 damage = 0;
                 splashDamageRadius = 300;
                 splashDamage = 410;
+
+                lightning = 18;
+                lightningDamage = 200;
+                lightningLength = 60;
+                lightningLengthRand = 15;
+                lightningCone = 360;
+                lightningColor = Color.valueOf("DD88DD");
+
                 hitEffect = Fx.blockExplosionSmoke;
                 despawnEffect = Fx.blockExplosionSmoke;
             }};
@@ -877,7 +901,7 @@ public class FBlocks {
             flags.with(BlockFlag.factory);
             flags.with(BlockFlag.generator);
             flags.with(BlockFlag.reactor);
-            priority = TargetPriority.core;
+            priority = TargetPriority.turret;
         }};
 //======================================================================================================================
         slowProject = new DownProject("slow_project") {{

@@ -1,7 +1,7 @@
 package Floor.FEntities.FBlock;
 
 import Floor.FContent.FStatusEffects;
-import Floor.FType.FDialog.ProjectsLocated;
+import Floor.FType.FDialog.Old.ProjectsLocated;
 import arc.scene.ui.layout.Table;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -19,7 +19,7 @@ import mindustry.graphics.Pal;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 
-import static Floor.FType.FDialog.ProjectsLocated.*;
+import static Floor.FType.FDialog.Old.ProjectsLocated.*;
 import static mindustry.Vars.player;
 
 public class UnitProjectBlock extends Block {

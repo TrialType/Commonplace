@@ -1,133 +1,73 @@
 package Floor.FEntities.FBulletType;
 
-import Floor.FEntities.FBullet.removeSpwanBullet;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
-import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
-import mindustry.ai.types.MissileAI;
 import mindustry.entities.Damage;
 import mindustry.entities.Fires;
-import mindustry.entities.Mover;
 import mindustry.entities.bullet.ContinuousLaserBulletType;
-import mindustry.game.Team;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.world.blocks.ConstructBlock;
-import mindustry.world.blocks.ControlBlock;
+import mindustry.world.blocks.defense.turrets.ContinuousTurret;
 
-import static mindustry.Vars.net;
-import static mindustry.Vars.world;
+import static arc.util.Time.delta;
 
 public class FlyContinuousLaserBulletType extends ContinuousLaserBulletType {
+    public float flyTime = 600;
+    public float flySpeed = 1f;
+
     @Override
-    public removeSpwanBullet create(@Nullable Entityc owner, @Nullable Entityc shooter, Team team, float x, float y, float angle, float damage, float velocityScl, float lifetimeScl, Object data, @Nullable Mover mover, float aimX, float aimY) {
-        if (!Mathf.chance(createChance)) return null;
-        if (ignoreSpawnAngle) angle = 0;
-        if (spawnUnit != null) {
-            //don't spawn units clientside!
-            if (!net.client()) {
-                Unit spawned = spawnUnit.create(team);
-                spawned.set(x, y);
-                spawned.rotation = angle;
-                //immediately spawn at top speed, since it was launched
-                if (spawnUnit.missileAccelTime <= 0f) {
-                    spawned.vel.trns(angle, spawnUnit.speed);
-                }
-                //assign unit owner
-                if (spawned.controller() instanceof MissileAI ai) {
-                    if (shooter instanceof Unit unit) {
-                        ai.shooter = unit;
+    public void update(Bullet b) {
+        super.update(b);
+        if (flyTime > 0 && !b.timer.check(3, flyTime)) {
+            b.keepAlive = true;
+        } else if (flyTime > 0 && b.time + delta >= lifetime && b.timer.get(3, flyTime + lifetime + 1)) {
+            if (b.owner instanceof Unit u) {
+                for (WeaponMount mount : u.mounts) {
+                    if (mount.bullet == b) {
+                        mount.bullet = null;
                     }
-
-                    if (shooter instanceof ControlBlock control) {
-                        ai.shooter = control.unit();
-                    }
-
                 }
-                spawned.add();
+            } else if (b.owner instanceof ContinuousTurret.ContinuousTurretBuild c) {
+                c.bullets.removeAll(e -> e.bullet == b);
             }
-            //Since bullet init is never called, handle killing shooter here
-            if (killShooter && owner instanceof Healthc h && !h.dead()) h.kill();
-
-            //no bullet returned
-            return null;
+            b.keepAlive = true;
+            b.initVel(b.rotation(), flySpeed);
         }
-
-        //這一步是關鍵
-        removeSpwanBullet bullet = new removeSpwanBullet();
-        bullet.type = this;
-        bullet.owner = owner;
-        bullet.team = team;
-        bullet.time = 0f;
-        bullet.originX = x;
-        bullet.originY = y;
-        if (!(aimX == -1f && aimY == -1f)) {
-            bullet.aimTile = world.tileWorld(aimX, aimY);
-        }
-        bullet.aimX = aimX;
-        bullet.aimY = aimY;
-
-        bullet.initVel(angle, speed * velocityScl);
-        if (backMove) {
-            bullet.set(x - bullet.vel.x * Time.delta, y - bullet.vel.y * Time.delta);
-        } else {
-            bullet.set(x, y);
-        }
-        bullet.lifetime = lifetime * lifetimeScl;
-        bullet.data = data;
-        bullet.drag = drag;
-        bullet.hitSize = hitSize;
-        bullet.mover = mover;
-        bullet.damage = (damage < 0 ? this.damage : damage) * bullet.damageMultiplier();
-        //reset trail
-        if (bullet.trail != null) {
-            bullet.trail.clear();
-        }
-        bullet.add();
-
-        if (keepVelocity && owner instanceof Velc v) bullet.vel.add(v.vel());
-        return bullet;
-    }
-
-    public removeSpwanBullet create(@Nullable Entityc owner, Team team, float x, float y, float angle, float velocityScl, float lifetimeScl) {
-        return create(owner, null, team, x, y, angle, damage, velocityScl, lifetimeScl, null, null, -1, -1);
     }
 
     @Override
     public void draw(Bullet b) {
-        removeSpwanBullet rsb = (removeSpwanBullet) b;
-        if (rsb != null) {
-            float realLength;
-            realLength = Damage.findLength(b, length, laserAbsorb, pierceCap);
-            float rot = b.rotation();
+        float realLength = Damage.findLength(b, currentLength(b), laserAbsorb, pierceCap);
+        float rot = b.rotation();
 
-            for (int i = 0; i < colors.length; i++) {
-                Draw.color(Tmp.c1.set(colors[i]).mul(1f + Mathf.absin(Time.time, 1f, 0.1f)));
+        for (int i = 0; i < colors.length; i++) {
+            Draw.color(Tmp.c1.set(colors[i]).mul(1f + Mathf.absin(Time.time, 1f, 0.1f)));
 
-                float colorFin = i / (float) (colors.length - 1);
-                float baseStroke = Mathf.lerp(strokeFrom, strokeTo, colorFin);
-                float stroke = (width + Mathf.absin(Time.time, oscScl, oscMag)) * baseStroke;
-                float ellipseLenScl = Mathf.lerp(1 - i / (float) (colors.length), 1f, pointyScaling);
+            float colorFin = i / (float) (colors.length - 1);
+            float baseStroke = Mathf.lerp(strokeFrom, strokeTo, colorFin);
+            float stroke = (width + Mathf.absin(Time.time, oscScl, oscMag)) * baseStroke;
+            float ellipseLenScl = Mathf.lerp(1 - i / (float) (colors.length), 1f, pointyScaling);
 
-                Lines.stroke(stroke);
-                Lines.lineAngle(b.x, b.y, rot, realLength - frontLength, false);
+            Lines.stroke(stroke);
+            Lines.lineAngle(b.x, b.y, rot, realLength - frontLength, false);
 
-                //back ellipse
-                Drawf.flameFront(b.x, b.y, divisions, rot + 180f, backLength, stroke / 2f);
+            //back ellipse
+            Drawf.flameFront(b.x, b.y, divisions, rot + 180f, backLength, stroke / 2f);
 
-                //front ellipse
-                Tmp.v1.trnsExact(rot, realLength - frontLength);
-                Drawf.flameFront(b.x + Tmp.v1.x, b.y + Tmp.v1.y, divisions, rot, frontLength * ellipseLenScl, stroke / 2f);
-            }
-
-            Tmp.v1.trns(b.rotation(), realLength * 1.1f);
-
-            Drawf.light(b.x, b.y, b.x + Tmp.v1.x, b.y + Tmp.v1.y, lightStroke, lightColor, 0.7f);
-            Draw.reset();
+            //front ellipse
+            Tmp.v1.trnsExact(rot, realLength - frontLength);
+            Drawf.flameFront(b.x + Tmp.v1.x, b.y + Tmp.v1.y, divisions, rot, frontLength * ellipseLenScl, stroke / 2f);
         }
+
+        Tmp.v1.trns(b.rotation(), realLength * 1.1f);
+
+        Drawf.light(b.x, b.y, b.x + Tmp.v1.x, b.y + Tmp.v1.y, lightStroke, lightColor, 0.7f);
+        Draw.reset();
     }
 
     @Override
@@ -143,7 +83,7 @@ public class FlyContinuousLaserBulletType extends ContinuousLaserBulletType {
             hit(b);
         }
 
-        if (build.absorbLasers() && b instanceof removeSpwanBullet rsb && !rsb.couldAgain) {
+        if (build.absorbLasers()) {
             if (Math.abs(b.x - build.x) <= build.hitSize() / 2 + 0.5 && Math.abs(b.y - build.y) <= build.hitSize() / 2 + 0.5) {
                 b.hit = true;
                 b.remove();
@@ -151,5 +91,22 @@ public class FlyContinuousLaserBulletType extends ContinuousLaserBulletType {
         } else {
             handlePierce(b, initialHealth, x, y);
         }
+    }
+
+    @Override
+    public float currentLength(Bullet b) {
+        float m = 1;
+        if (flyTime > 0) {
+            float last = flyTime - b.timer.getTime(3);
+            if (last >= 0 && last < fadeTime) {
+                m *= last / fadeTime;
+            }
+        } else {
+            float last = flyTime - b.time;
+            if (last > 0 && last < fadeTime) {
+                m *= last / fadeTime;
+            }
+        }
+        return length * m;
     }
 }
