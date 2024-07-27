@@ -42,11 +42,6 @@ public class FEvents {
         });
 
         Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (e.unit.spawnedByCore() && !e.unit.team.isAI()) {
-                projects.upper.get(e.unit);
-            }
-        });
-        Events.on(EventType.UnitCreateEvent.class, e -> {
             if (e.unit instanceof FUnitUpGrade uug) {
                 int n = r.nextInt(6);
                 uug.setLevel(uug.getLevel() + n);
@@ -91,14 +86,14 @@ public class FEvents {
 
         Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof FUnitUpGrade uug && (e.unit instanceof FUnitUpGrade || e.unit.maxHealth() >= 1000)) {
-                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 25, 1) *
-                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
+                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 50, 1) *
+                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 30) : 1));
                 int n = uug.number();
                 int min = min(60 - uug.baseLevel(), n);
                 UnitUpGrade.getPower(uug, min, true, false);
             } else if (e.bullet.owner instanceof Unit u && u.controller() instanceof MissileAI ai && ai.shooter instanceof FUnitUpGrade uug) {
-                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 25, 1) *
-                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
+                uug.addExp(e.unit.maxHealth * max(Vars.state.wave / 50, 1) *
+                        (e.unit instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 30) : 1));
                 int n = uug.number();
                 int min = min(60 - uug.baseLevel(), n);
                 UnitUpGrade.getPower(uug, min, true, false);
@@ -112,14 +107,14 @@ public class FEvents {
         Events.on(FEvents.UnitDestroyOtherEvent.class, e -> {
             if (e.other instanceof FUnitUpGrade || e.other.maxHealth() >= 1000) {
                 if (e.killer instanceof FUnitUpGrade uug) {
-                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 25, 1) *
-                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
+                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 50, 1) *
+                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 30) : 1));
                     int n = uug.number();
                     int min = min(60 - uug.baseLevel(), n);
                     UnitUpGrade.getPower(uug, min, true, false);
                 } else if (e.killer.controller() instanceof MissileAI ai && ai.shooter instanceof FUnitUpGrade uug) {
-                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 25, 1) *
-                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 25) : 1));
+                    uug.addExp(e.other.maxHealth() * max(Vars.state.wave / 50, 1) *
+                            (e.other instanceof FUnitUpGrade ku ? Math.max(1, ku.getLevel() / 30) : 1));
                     int n = uug.number();
                     int min = min(60 - uug.baseLevel(), n);
                     UnitUpGrade.getPower(uug, min, true, false);

@@ -1,7 +1,9 @@
 package Floor.FEntities.FBlock;
 
+import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
@@ -14,6 +16,7 @@ import mindustry.gen.Building;
 import mindustry.gen.Bullet;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Env;
@@ -30,6 +33,8 @@ public class ReflectiveShield extends Block {
     public float force = 0.2f;
     public float speedForce = 0.01f;
     public float peaceRange = 50;
+    public float numUse = 0.25f;
+    public float damageUse = 0.1f;
 
     public ReflectiveShield(String name) {
         super(name);
@@ -59,8 +64,18 @@ public class ReflectiveShield extends Block {
         Draw.color();
     }
 
+    @Override
+    public void setBars() {
+        super.setBars();
+
+        addBar("extraPower",
+                (ReflectiveShieldBuild r) -> new Bar(Core.bundle.format("bar.extraPower", (r.powerUsing * 60)),
+                        Pal.power, () -> Math.min(1, r.powerUsing / (r.power.graph.getLastPowerProduced() + 1))));
+    }
+
     public class ReflectiveShieldBuild extends Building {
         protected float boost = 0;
+        public float powerUsing = 0;
 
         @Override
         public void updateTile() {
@@ -80,6 +95,7 @@ public class ReflectiveShield extends Block {
                 angles.remove(b);
             }
 
+            powerUsing = 0;
             if (efficiency > 0) {
                 if (rotation % 2 == 0) {
                     bullet.intersect(x + offset - height, y + offset - width,
@@ -101,11 +117,13 @@ public class ReflectiveShield extends Block {
                     );
                 }
 
+                removes.clear();
                 angles.each((b, f) -> {
                     if (inRange(b)) {
                         if (!within(b, peaceRange)) b.keepAlive = true;
                         vec.trns(f + 180, b.type.speed * speedForce + force * efficiency);
                         b.vel.add(vec);
+                        powerUsing += b.damage * damageUse;
                     } else {
                         if (Angles.angleDist(b.vel.angle(), angles.get(b)) > 120) {
                             b.time = 0;
@@ -118,7 +136,13 @@ public class ReflectiveShield extends Block {
                 for (Bullet b : removes) {
                     angles.remove(b);
                 }
+
+                if (angles.size > (1f / numUse)) {
+                    powerUsing *= angles.size * numUse;
+                }
             }
+
+            this.power.graph.useBatteries(powerUsing);
         }
 
         public boolean inRange(Bullet b) {
@@ -133,17 +157,17 @@ public class ReflectiveShield extends Block {
             Draw.z(Layer.blockAdditive);
             Draw.blend(Blending.additive);
             Draw.blend();
-            Draw.z(Layer.block);
             Draw.reset();
             drawShield();
         }
 
         public void drawShield() {
             float bx = x + offset, by = y + offset;
+            Draw.z(Layer.shields);
             if (rotation % 2 == 0) {
-                Lines.rect(bx - height * boost, by - width * boost, height * boost * 2, width * boost * 2);
+                Fill.rect(bx, by, height * boost * 2, width * boost * 2);
             } else {
-                Lines.rect(bx - width * boost, by - height * boost, width * boost * 2, height * boost * 2);
+                Fill.rect(bx, by, width * boost * 2, height * boost * 2);
             }
             Draw.reset();
         }

@@ -1,5 +1,6 @@
 package Floor.FEntities.FBlock;
 
+import Floor.FContent.FWeathers;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -120,7 +121,7 @@ public class AutoBlock extends Block {
         IntSet set = buildResult(x, y, plan.rotation, lon, drawer);
 
         Block finalDrawer = drawer;
-        if ( plan.block.size % 2 == 0){
+        if (plan.block.size % 2 == 0) {
             set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8, Point2.y(p) * 8));
         } else {
             set.each(p -> Draw.rect(finalDrawer.region, Point2.x(p) * 8 + 4, Point2.y(p) * 8 + 4));

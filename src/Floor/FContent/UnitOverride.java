@@ -3,6 +3,7 @@ package Floor.FContent;
 import Floor.FAI.MissileAI_II;
 import Floor.FEntities.FAbility.LevelSign;
 import Floor.FEntities.FAbility.TimeLargeDamageAbility;
+import Floor.FEntities.FBulletType.ContinuousLightningBulletType;
 import Floor.FEntities.FBulletType.FlyContinuousLaserBulletType;
 import Floor.FEntities.FBulletType.MissileExplosionBulletType;
 import Floor.FEntities.FUnit.F.TimeUpGradeUnit;
@@ -539,6 +540,44 @@ public class UnitOverride {
         bullet.lightColor = color;
         ((LaserBoltBulletType) bullet).frontColor = color;
         ((LaserBoltBulletType) bullet).backColor = color;
+
+        UnitTypes.pulsar.health = 560;
+        UnitTypes.pulsar.speed = 1.1f;
+        UnitTypes.pulsar.range = 150;
+        weapon = UnitTypes.pulsar.weapons.get(0);
+        weapon.shoot.shots = 5;
+        weapon.shoot.shotDelay = 6;
+        weapon.reload = 360;
+        weapon.inaccuracy = 12;
+        weapon.bullet = new BasicBulletType() {{
+            absorbable = false;
+            collidesTeam = true;
+            speed = 9;
+            damage = 1;
+            lifetime = 50;
+            healPercent = 2f;
+            width = height = 25;
+            homingDelay = 0;
+            homingPower = 0.03f;
+            homingRange = 600;
+            frontColor = backColor = Pal.heal;
+            hitEffect = despawnEffect = Fx.none;
+
+            fragOnHit = false;
+            fragOnAbsorb = false;
+            fragBullets = 1;
+            fragBullet = new ContinuousLightningBulletType() {{
+                damage = 13;
+                lifetime = 260;
+                length = 35;
+
+                damageInterval = 60;
+                rotateSpeed = 4;
+
+                bulletLightningType.healPercent = 1f;
+                bulletLightningType.collidesTeam = true;
+            }};
+        }};
 
         UnitTypes.quasar.health = 2200;
         ForceFieldAbility fAbility = (ForceFieldAbility) UnitTypes.quasar.abilities.get(0);

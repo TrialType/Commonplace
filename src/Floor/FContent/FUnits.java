@@ -30,6 +30,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 import mindustry.type.unit.MissileUnitType;
+import mindustry.type.weapons.BuildWeapon;
 import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 
@@ -39,7 +40,10 @@ import static arc.math.Angles.randLenVectors;
 public class FUnits {
     public static Seq<UnitType> boss = new Seq<>();
     //tool
-    public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a, rejuvenate_b;
+    public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a;
+
+    //support
+    public static UnitType support_h, support_a;
 
     ////ENGSWEISBoss
     public static UnitType velocity, velocity_d, velocity_s, hidden, cave;
@@ -60,6 +64,152 @@ public class FUnits {
     public static UnitType e;
 
     public static void load() {
+        support_a = new UnitType("support-a") {{
+            constructor = FLegsUnit::create;
+
+            health = 12000;
+            armor = 13;
+            speed = 1.5f;
+            hitSize = 30;
+
+            weapons.add(new Weapon() {{
+                inaccuracy = 80;
+                reload = 15;
+                shootY = 15;
+
+                shoot.shots = 5;
+                shoot.shotDelay = 3;
+
+                bullet = new BasicBulletType() {{
+                    pierce = pierceBuilding = true;
+                    pierceCap = 2;
+                    width = 6;
+                    height = 21;
+                    damage = 580;
+                    speed = 9;
+                    lifetime = 60;
+                    splashDamage = 220;
+                    splashDamageRadius = 20;
+                    status = StatusEffects.blasted;
+                    statusDuration = 20;
+                    buildingDamageMultiplier = 0.22f;
+                }};
+            }});
+
+            weapons.add(new Weapon() {{
+                reload = 90;
+                inaccuracy = 0;
+
+                bullet = new BasicBulletType() {{
+                    pierce = true;
+                    pierceBuilding = true;
+                    width = 10;
+                    height = 30;
+                    damage = 1300;
+                    speed = 11;
+                    lifetime = 80;
+                    splashDamage = 100;
+                    splashDamageRadius = 40;
+                    status = StatusEffects.blasted;
+                    statusDuration = 60;
+                    buildingDamageMultiplier = 0.22f;
+
+                    fragBullets = 15;
+                    fragRandomSpread = 120;
+                    fragBullet = new BasicBulletType() {{
+                        width = height = 9;
+                        damage = 200;
+                        speed = 8;
+                        lifetime = 15;
+                        splashDamage = 80;
+                        splashDamageRadius = 12;
+                        buildingDamageMultiplier = 0.22f;
+                    }};
+
+                    bulletInterval = 20;
+                    intervalDelay = 30;
+                    intervalSpread = 5;
+                    intervalBullets = 3;
+                    intervalBullet = new SummonBulletType() {{
+                        speed = 16;
+                        lifetime = 120;
+                        drag = 0.04f;
+                        splashDamageRadius = 16;
+                        status = StatusEffects.unmoving;
+                        statusDuration = 35;
+
+                        summonRange = 150;
+                        summonNumber = 7;
+                        everySummonDelay = 0;
+                        summonDelay = 0;
+                        summon = new LaserBulletType(256) {{
+                            length = 260;
+                            width = 5;
+                            laserEffect = Fx.none;
+                            buildingDamageMultiplier = 0.22f;
+                        }};
+                    }};
+                }};
+            }});
+
+            weapons.add(new Weapon() {{
+                alwaysShooting = true;
+                mirror = false;
+                reload = 1810;
+                x = y = 0;
+                shoot.firstShotDelay = 3600;
+                bullet = new BulletType(0, 0) {{
+                    lifetime = 0;
+                    killShooter = true;
+                    despawnEffect = hitEffect = Fx.none;
+                }};
+            }});
+        }};
+        support_h = new UnitType("support-h") {{
+            constructor = UnitEntity::create;
+            commands = new UnitCommand[]{UnitCommand.moveCommand, UnitCommand.rebuildCommand};
+            defaultCommand = UnitCommand.rebuildCommand;
+
+            flying = true;
+            stepShake = 0;
+            health = 9000;
+            armor = 10;
+            speed = 2f;
+            hitSize = 14;
+            buildRange = 180;
+            buildSpeed = 3;
+            abilities.add(new StatusFieldAbility(FStatusEffects.back, 90, 60, 120) {{
+                activeEffect = Fx.healWave;
+            }});
+
+            weapons.add(new RepairBeamWeapon() {{
+                targetUnits = true;
+                targetBuildings = true;
+                rotateSpeed = 12;
+                reload = 30;
+
+                repairSpeed = 12;
+                fractionRepairSpeed = 4f;
+            }});
+            weapons.add(new BuildWeapon() {{
+                rotateSpeed = 12;
+            }});
+            weapons.add(new Weapon() {{
+                reload = 1000000;
+                alwaysShooting = true;
+                mirror = false;
+                x = y = 0;
+                shoot = new ShootPattern() {{
+                    firstShotDelay = 3600;
+                }};
+
+                bullet = new ExplosionBulletType(0, 120) {{
+                    collidesTeam = true;
+                    healAmount = 1000;
+                    healPercent = 37f;
+                }};
+            }});
+        }};
         vibrate = new UnitType("vibrate") {{
             constructor = FLegsUnit::create;
 
@@ -90,7 +240,7 @@ public class FUnits {
                     reflectable = false;
                     damage = 140;
                     speed = 8;
-                    lifetime = 240;
+                    lifetime = 60;
                     trailColor = Pal.lightishGray;
                     trailLength = 8;
                     trailWidth = 3;
@@ -99,7 +249,7 @@ public class FUnits {
                     homingRange = 1000;
 
                     maxLife = 300;
-                    downRange = 200;
+                    downRange = 275;
                     downDamage = 120;
                 }};
             }});
@@ -124,9 +274,9 @@ public class FUnits {
                 }};
                 bullet = new SummonBulletType() {{
                     width = height = 12;
-                    damage = 120;
+                    damage = 60;
                     speed = 8;
-                    lifetime = 240;
+                    lifetime = 120;
                     homingDelay = 0.1f;
                     homingRange = 1000;
                     homingPower = 0.1f;
@@ -137,13 +287,13 @@ public class FUnits {
 
                     summon = new LightningBulletType() {{
                         lightningLength = 25;
-                        damage = 90;
+                        damage = 130;
                         speed = 80;
 
                         lightningColor = Pal.redDust;
                     }};
                     summonRange = 80;
-                    summonNumber = 8;
+                    summonNumber = 10;
                 }};
             }});
             weapons.add(new Weapon() {{
@@ -167,7 +317,7 @@ public class FUnits {
                     width = height = 12;
                     damage = 100;
                     speed = 8;
-                    lifetime = 240;
+                    lifetime = 60;
                     homingDelay = 0.1f;
                     homingRange = 1000;
                     homingPower = 0.1f;
@@ -176,12 +326,12 @@ public class FUnits {
                     trailWidth = 2;
                     absorbable = false;
 
-                    summon = new MissileBulletType(5, 260) {{
+                    summon = new MissileBulletType(5, 320) {{
                         lifetime = 60;
                         frontColor = backColor = trailColor = Pal.techBlue;
                     }};
                     summonRange = 120;
-                    summonNumber = 8;
+                    summonNumber = 14;
                     everySummonDelay = 9;
                 }};
             }});
@@ -195,7 +345,7 @@ public class FUnits {
             range = maxRange = 16;
             lifetime = 300;
             trailLength = 15;
-            trailColor = Color.valueOf("00DDAAFF");
+            trailColor = Color.valueOf("00DDaAFF");
             immunities.addAll(StatusEffects.slow, FStatusEffects.tardy, FStatusEffects.StrongStop);
 
             abilities.add(new ShieldArcAbility() {{
@@ -227,48 +377,12 @@ public class FUnits {
                 }};
                 bullet = new LightningBulletType() {{
                     damage = 30;
+                    collidesTeam = true;
                     status = StatusEffects.sapped;
                     statusDuration = 150;
                     healAmount = 250;
                     lightningLength = 35;
                     lightningColor = Color.valueOf("00DDAAFF");
-                }};
-            }});
-        }};
-        rejuvenate_b = new UnitType("rejuvenate-b") {{
-            constructor = MechUnit::create;
-
-            hidden = true;
-            stepShake = 0;
-            health = 200;
-            armor = 1000;
-            speed = 0;
-            hitSize = 14;
-            abilities.add(new StatusFieldAbility(FStatusEffects.back, 15, 15, 120) {{
-                activeEffect = Fx.healWave;
-            }});
-
-            weapons.add(new RepairBeamWeapon() {{
-                targetUnits = true;
-                targetBuildings = false;
-                rotateSpeed = 12;
-                reload = 150;
-
-                repairSpeed = 3;
-                fractionRepairSpeed = 1f;
-            }});
-            weapons.add(new Weapon() {{
-                reload = 1000000;
-                alwaysShooting = true;
-                mirror = false;
-                x = y = 0;
-                shoot = new ShootPattern() {{
-                    firstShotDelay = 300;
-                }};
-
-                bullet = new ExplosionBulletType(0, 120) {{
-                    healAmount = 1000;
-                    healPercent = 7f;
                 }};
             }});
         }};
@@ -282,7 +396,7 @@ public class FUnits {
             accel = 0.9f;
             drag = 0.9f;
             hitSize = 35;
-            range = maxRange = 3600;
+            range = maxRange = 1000;
             stepShake = 0;
             isEnemy = false;
 
@@ -317,24 +431,6 @@ public class FUnits {
                     lifetime = 0;
 
                     spawnUnit = rejuvenate_a;
-                }};
-            }});
-
-            weapons.add(new Weapon() {{
-                shootCone = 360;
-                reload = 300;
-                mirror = false;
-                shootX = 0;
-                shootY = 28;
-
-                bullet = new BulletType(0, 0) {{
-                    absorbable = false;
-                    reflectable = false;
-                    hittable = false;
-                    keepVelocity = false;
-                    lifetime = 0;
-                    rangeOverride = 1000;
-                    spawnUnit = rejuvenate_b;
                 }};
             }});
         }};
@@ -436,8 +532,8 @@ public class FUnits {
                     status = FStatusEffects.seethe;
                     statusDuration = 600;
                     splashDamageRadius = 158;
-                    speed = 7;
-                    lifetime = 600;
+                    speed = 6;
+                    lifetime = 280;
                     homingPower = 0.9F;
                     homingRange = 1000;
                     homingDelay = 120;
@@ -603,22 +699,20 @@ public class FUnits {
             createScorch = false;
             createWreck = false;
 
-            weapons.add(new Weapon() {
-                {
-                    controllable = false;
-                    autoTarget = true;
-                    alwaysShooting = true;
-                    aiControllable = false;
-                    reload = 2000;
-                    bullet = new BasicBulletType() {{
-                        hitEffect = Fx.massiveExplosion;
-                        lifetime = 0;
-                        damage = 0;
-                        splashDamage = 5000;
-                        splashDamageRadius = 160;
-                    }};
-                }
-            });
+            weapons.add(new Weapon() {{
+                controllable = false;
+                autoTarget = true;
+                alwaysShooting = true;
+                aiControllable = false;
+                reload = 2000;
+                bullet = new BasicBulletType() {{
+                    hitEffect = Fx.massiveExplosion;
+                    lifetime = 0;
+                    damage = 0;
+                    splashDamage = 5000;
+                    splashDamageRadius = 160;
+                }};
+            }});
 
             weapons.add(new Weapon() {{
                 controllable = false;

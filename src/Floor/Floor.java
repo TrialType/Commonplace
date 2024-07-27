@@ -15,6 +15,7 @@ public class Floor extends Mod {
         FCommands.load();
         FEntities.load();
         FStatusEffects.load();
+        FWeathers.load();
         UnitOverride.load();
         BlockOverride.load();
         FUnits.load();
