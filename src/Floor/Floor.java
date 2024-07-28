@@ -25,5 +25,6 @@ public class Floor extends Mod {
         PFloors.load();
         FPlanetGenerators.load();
         Techs.load();
+        TechOverride.load();
     }
 }

@@ -259,7 +259,7 @@ public class UnitOverride {
         weapon.reload = 30;
         weapon.bullet.killShooter = false;
         weapon.bullet.splashDamageRadius = 60;
-        weapon.bullet.buildingDamageMultiplier = 3;
+        weapon.bullet.buildingDamageMultiplier = 2.5f;
         weapon.bullet.shootEffect = new ExplosionEffect() {{
             lifetime = 25;
             clip = 70;

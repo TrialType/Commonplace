@@ -1,31 +1,39 @@
 package Floor.FContent;
 
 import mindustry.content.Blocks;
+import mindustry.content.Items;
+import mindustry.content.Liquids;
+import mindustry.content.UnitTypes;
 import mindustry.entities.bullet.BulletType;
+import mindustry.type.ItemStack;
+import mindustry.type.LiquidStack;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.distribution.ArmoredConveyor;
 import mindustry.world.blocks.distribution.Conveyor;
 import mindustry.world.blocks.distribution.StackConveyor;
-import mindustry.world.blocks.production.Drill;
+import mindustry.world.blocks.heat.HeatProducer;
+import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.consumers.ConsumeItems;
+import mindustry.world.consumers.ConsumeLiquid;
 
 public class BlockOverride {
     public static void load() {
-        Blocks.copperWall.health = 90 * 4 * 3;
-        Blocks.copperWallLarge.health = 90 * 4 * 12;
-        Blocks.titaniumWall.health = 120 * 4 * 3;
-        Blocks.titaniumWallLarge.health = 120 * 4 * 12;
-        Blocks.plastaniumWall.health = 135 * 4 * 3;
-        Blocks.plastaniumWallLarge.health = 135 * 4 * 12;
-        Blocks.thoriumWall.health = 210 * 4 * 3;
-        Blocks.thoriumWallLarge.health = 210 * 4 * 12;
-        Blocks.phaseWall.health = 160 * 4 * 3;
-        Blocks.phaseWallLarge.health = 160 * 4 * 12;
-        Blocks.surgeWall.health = 240 * 4 * 3;
-        Blocks.surgeWallLarge.health = 240 * 4 * 12;
+        Blocks.copperWall.health = 80 * 6;
+        Blocks.copperWallLarge.health = 80 * 24;
+        Blocks.titaniumWall.health = 110 * 6;
+        Blocks.titaniumWallLarge.health = 110 * 24;
+        Blocks.plastaniumWall.health = 125 * 6;
+        Blocks.plastaniumWallLarge.health = 125 * 24;
+        Blocks.thoriumWall.health = 200 * 6;
+        Blocks.thoriumWallLarge.health = 200 * 24;
+        Blocks.phaseWall.health = 150 * 6;
+        Blocks.phaseWallLarge.health = 150 * 24;
+        Blocks.surgeWall.health = 230 * 6;
+        Blocks.surgeWallLarge.health = 230 * 24;
 
         ((ItemTurret) Blocks.duo).shoot.shots = 2;
         ((ItemTurret) Blocks.duo).reload = 10f;
-        ((ItemTurret) Blocks.duo).range = 165;
         ((ItemTurret) Blocks.duo).inaccuracy = 5;
         for (BulletType bullet : ((ItemTurret) Blocks.duo).ammoTypes.values()) {
             bullet.ammoMultiplier *= 2;
@@ -47,5 +55,161 @@ public class BlockOverride {
         ((Drill) Blocks.pneumaticDrill).drillTime = 320;
         ((Drill) Blocks.laserDrill).drillTime = 274;
         ((Drill) Blocks.blastDrill).drillTime = 274;
+
+        ((UnitFactory) Blocks.airFactory).plans.find(p -> p.unit == UnitTypes.mono).
+                requirements = ItemStack.with(Items.copper, 100, Items.lead, 70);
+
+        ((GenericCrafter) Blocks.siliconSmelter).outputItem = new ItemStack(Items.silicon, 3);
+        ((GenericCrafter) Blocks.siliconSmelter).craftTime = 60;
+        Blocks.siliconSmelter.itemCapacity = 12;
+        ConsumeItems ci = Blocks.siliconSmelter.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 2;
+        ci.items[1].amount = 4;
+        Blocks.siliconSmelter.consumePower(1);
+
+        ((AttributeCrafter) Blocks.siliconCrucible).outputItem = new ItemStack(Items.silicon, 12);
+        Blocks.siliconCrucible.itemCapacity = 36;
+
+        ((GenericCrafter) Blocks.graphitePress).outputItem = new ItemStack(Items.graphite, 3);
+        ((GenericCrafter) Blocks.graphitePress).craftTime = 135;
+        Blocks.graphitePress.itemCapacity = 12;
+        ci = Blocks.graphitePress.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 4;
+
+        ((GenericCrafter) Blocks.multiPress).outputItem = new ItemStack(Items.graphite, 3);
+        Blocks.multiPress.itemCapacity = 21;
+
+        ((GenericCrafter) Blocks.plastaniumCompressor).outputItem = new ItemStack(Items.plastanium, 3);
+        ((GenericCrafter) Blocks.plastaniumCompressor).craftTime = 90;
+        Blocks.plastaniumCompressor.itemCapacity = 12;
+        ci = Blocks.plastaniumCompressor.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 4;
+        ConsumeLiquid cl = Blocks.plastaniumCompressor.findConsumer(c -> c instanceof ConsumeLiquid);
+        cl.amount = 0.5f;
+        Blocks.plastaniumCompressor.consumePower(6);
+
+        ((GenericCrafter) Blocks.phaseWeaver).outputItem = new ItemStack(Items.plastanium, 3);
+        ((GenericCrafter) Blocks.phaseWeaver).craftTime = 180;
+        Blocks.phaseWeaver.itemCapacity = 40;
+        ci = Blocks.phaseWeaver.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 8;
+        ci.items[1].amount = 20;
+        Blocks.phaseWeaver.consumePower(10);
+
+        ((GenericCrafter) Blocks.kiln).outputItem = new ItemStack(Items.metaglass, 3);
+        ((GenericCrafter) Blocks.kiln).craftTime = 45;
+        Blocks.kiln.itemCapacity = 12;
+        ci = Blocks.kiln.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 2;
+        ci.items[1].amount = 2;
+        Blocks.kiln.consumePower(1.2f);
+
+        ((GenericCrafter) Blocks.surgeSmelter).outputItem = new ItemStack(Items.surgeAlloy, 3);
+        ((GenericCrafter) Blocks.surgeSmelter).craftTime = 112.5f;
+        Blocks.surgeSmelter.itemCapacity = 24;
+        ci = Blocks.surgeSmelter.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 6;
+        ci.items[1].amount = 8;
+        ci.items[2].amount = 4;
+        ci.items[3].amount = 6;
+        Blocks.surgeSmelter.consumePower(8);
+
+        ((GenericCrafter) Blocks.cryofluidMixer).outputLiquid = new LiquidStack(Liquids.cryofluid, 18f / 60);
+        Blocks.cryofluidMixer.liquidCapacity = 36;
+
+        ((GenericCrafter) Blocks.pyratiteMixer).outputItem = new ItemStack(Items.pyratite, 3);
+        ((GenericCrafter) Blocks.pyratiteMixer).craftTime = 120;
+        Blocks.pyratiteMixer.itemCapacity = 12;
+        ci = Blocks.pyratiteMixer.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 2;
+        ci.items[1].amount = 4;
+        ci.items[2].amount = 4;
+        Blocks.pyratiteMixer.consumePower(0.4f);
+
+        ((GenericCrafter) Blocks.blastMixer).outputItem = new ItemStack(Items.blastCompound, 3);
+        ((GenericCrafter) Blocks.blastMixer).craftTime = 120;
+        Blocks.blastMixer.itemCapacity = 12;
+        ci = Blocks.blastMixer.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 2;
+        ci.items[1].amount = 2;
+        Blocks.blastMixer.consumePower(0.8f);
+
+        ((GenericCrafter) Blocks.melter).outputLiquid = new LiquidStack(Liquids.slag, 18f / 60);
+        Blocks.melter.liquidCapacity = 15;
+
+        ((Separator) Blocks.separator).results = ItemStack.with(
+                Items.copper, 3,
+                Items.lead, 2,
+                Items.graphite, 3,
+                Items.titanium, 4
+        );
+
+        ((Separator) Blocks.disassembler).results = ItemStack.with(
+                Items.sand, 2,
+                Items.graphite, 1,
+                Items.titanium, 3,
+                Items.thorium, 4
+        );
+
+        ((GenericCrafter) Blocks.sporePress).outputLiquid = new LiquidStack(Liquids.oil, 27f / 60);
+        Blocks.sporePress.liquidCapacity = 90;
+
+        ((GenericCrafter) Blocks.pulverizer).outputItem = new ItemStack(Items.sand, 9);
+        ((GenericCrafter) Blocks.pulverizer).craftTime = 60;
+        Blocks.pulverizer.itemCapacity = 18;
+        ci = Blocks.pulverizer.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 2;
+        Blocks.pulverizer.consumePower(1f);
+
+        ((GenericCrafter) Blocks.coalCentrifuge).outputItem = new ItemStack(Items.coal, 3);
+        ((GenericCrafter) Blocks.coalCentrifuge).craftTime = 45;
+        Blocks.coalCentrifuge.itemCapacity = 18;
+        cl = Blocks.coalCentrifuge.findConsumer(c -> c instanceof ConsumeLiquid);
+        cl.amount = 0.2f;
+        Blocks.coalCentrifuge.consumePower(1.4f);
+
+        ((GenericCrafter) Blocks.siliconArcFurnace).outputItem = new ItemStack(Items.silicon, 6);
+
+        ((GenericCrafter) Blocks.electrolyzer).outputLiquids =
+                LiquidStack.with(Liquids.ozone, 6f / 60, Liquids.hydrogen, 9f / 60);
+
+        ((HeatCrafter) Blocks.atmosphericConcentrator).outputLiquid = new LiquidStack(Liquids.nitrogen, 6f / 60f);
+
+        ((HeatProducer) Blocks.oxidationChamber).craftTime = 40f * 2;
+
+        ((HeatProducer) Blocks.electricHeater).heatOutput = 4;
+
+        ((HeatProducer) Blocks.slagHeater).heatOutput = 10;
+
+        ((HeatCrafter) Blocks.carbideCrucible).outputItem = new ItemStack(Items.carbide, 3);
+        ((HeatCrafter) Blocks.carbideCrucible).craftTime = 90 * 2.25f;
+        Blocks.carbideCrucible.itemCapacity = 21;
+        ci = Blocks.carbideCrucible.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 4;
+        ci.items[1].amount = 6;
+
+        ((HeatCrafter) Blocks.surgeCrucible).outputItem = new ItemStack(Items.surgeAlloy, 3);
+        ((HeatCrafter) Blocks.surgeCrucible).craftTime = 90f * 3;
+        ((HeatCrafter) Blocks.surgeCrucible).heatRequirement = 20;
+        Blocks.surgeCrucible.itemCapacity = 21;
+        ci = Blocks.surgeCrucible.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 6;
+        cl = Blocks.surgeCrucible.findConsumer(c -> c instanceof ConsumeLiquid);
+        cl.amount = 1f;
+        Blocks.surgeCrucible.consumePower(4f);
+
+        ((HeatCrafter) Blocks.cyanogenSynthesizer).outputLiquid = new LiquidStack(Liquids.cyanogen, 3f / 40);
+        Blocks.cyanogenSynthesizer.liquidCapacity = 120;
+
+        ((HeatCrafter) Blocks.phaseSynthesizer).outputItem = new ItemStack(Items.phaseFabric, 3);
+        ((HeatCrafter) Blocks.phaseSynthesizer).craftTime = 90f * 2;
+        ((HeatCrafter) Blocks.phaseSynthesizer).heatRequirement = 16;
+        Blocks.phaseSynthesizer.itemCapacity = 42;
+        ci = Blocks.phaseSynthesizer.findConsumer(c -> c instanceof ConsumeItems);
+        ci.items[0].amount = 4;
+        ci.items[1].amount = 12;
+        cl = Blocks.phaseSynthesizer.findConsumer(c -> c instanceof ConsumeLiquid);
+        cl.amount = 4f / 60;
+        Blocks.phaseSynthesizer.consumePower(16);
     }
 }
