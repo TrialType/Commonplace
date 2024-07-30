@@ -23,6 +23,8 @@ import mindustry.entities.abilities.RepairFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootMulti;
 import mindustry.entities.pattern.ShootPattern;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Sounds;
@@ -186,13 +188,19 @@ public class UnitOverride {
             reload = 600;
             inaccuracy = 15;
             shootY = 2f;
+            x = y = 0;
             mirror = false;
             shootSound = Sounds.flame;
-            shoot = new ShootPattern() {{
+            shoot = new ShootMulti(new ShootPattern() {{
                 shots = 110;
                 shotDelay = 3;
-            }};
-
+            }}, new ShootBarrel() {{
+                barrels = new float[]{
+                        5, 0, 0,
+                        -5, 0, 0
+                };
+                shots = 2;
+            }});
             bullet = new BulletType() {{
                 absorbable = reflectable = hittable = false;
                 pierce = true;
@@ -203,7 +211,7 @@ public class UnitOverride {
                 status = StatusEffects.burning;
                 statusDuration = 3;
                 despawnEffect = hitEffect = Fx.none;
-                shootSound = Sounds.none;
+                shootSound = Sounds.flame;
                 shootEffect = new Effect(32f, 266f, e -> {
                     color(Pal.lightFlame, Pal.darkFlame, Color.gray, e.fin());
 
@@ -212,9 +220,6 @@ public class UnitOverride {
                 });
             }};
         }};
-        UnitTypes.mace.weapons.add(weapon);
-        weapon = weapon.copy();
-        weapon.x = -5;
         UnitTypes.mace.weapons.add(weapon);
 
         UnitTypes.fortress.health = 1800;
@@ -293,16 +298,69 @@ public class UnitOverride {
         weapon.bullet.damage = 23;
         weapon.bullet.lifetime = 100;
         weapon.bullet.collidesAir = true;
+        weapon.bullet.homingDelay = 15;
+        weapon.bullet.homingPower = 0.07f;
+        weapon.bullet.homingRange = 200;
+
+        UnitTypes.spiroct.health = 1500;
+        UnitTypes.spiroct.armor = 21;
+        weapon = UnitTypes.spiroct.weapons.get(0);
+        SapBulletType s = (SapBulletType) weapon.bullet;
+        s.length = 100;
+        s.damage = 33;
+        weapon = UnitTypes.spiroct.weapons.get(1);
+        s = (SapBulletType) weapon.bullet;
+        s.length = 125;
+        s.damage = 28;
+        s.fragBullets = 1;
+        s.fragBullet = new EmpBulletType() {{
+            hittable = reflectable = absorbable = false;
+            damage = 6;
+            speed = 0;
+            lifetime = 0.001f;
+            radius = 25;
+            timeIncrease = 1;
+            timeDuration = 120;
+            powerDamageScl = 1.6f;
+            powerSclDecrease = 0.3f;
+            hitUnits = false;
+            hitColor = Color.valueOf("bf92f9");
+        }};
 
         UnitTypes.arkyid.health = 28000;
 
         UnitTypes.toxopid.health = 77000;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.flare.armor = 6;
-        UnitTypes.flare.speed = 3;
-        UnitTypes.flare.health = 160;
+        UnitTypes.flare.armor = 15;
+        UnitTypes.flare.speed = 4;
+        UnitTypes.flare.health = 200;
         UnitTypes.flare.circleTarget = true;
-        UnitTypes.flare.abilities.add(new ForceFieldAbility(12, 0.2f, 240, 12 * 60));
+        weapon = UnitTypes.flare.weapons.first();
+        weapon.shoot.shots = 2;
+        weapon.shoot.shotDelay = 6;
+        weapon.bullet = new FireBulletType(4, 9) {{
+            lifetime = 45;
+            ammoMultiplier = 2;
+            radius = 8;
+            hittable = absorbable = reflectable = false;
+            collidesTiles = true;
+            collides = true;
+            pierce = false;
+            pierceBuilding = true;
+            buildingDamageMultiplier = 2f;
+            fireTrailChance = 1;
+            velMin = velMax = speed;
+        }};
+
+        UnitTypes.horizon.health = 500;
+        UnitTypes.horizon.armor = 5;
+        UnitTypes.horizon.speed = 2.15f;
+        weapon = UnitTypes.horizon.weapons.get(0);
+        weapon.shootStatus = FStatusEffects.frenzy;
+        weapon.shootStatusDuration = 60;
+        weapon.shoot.shots = 4;
+        weapon.shoot.shotDelay = 4;
+        weapon.bullet.buildingDamageMultiplier = 1.65f;
 
         UnitTypes.zenith.health = 1500;
         UnitTypes.zenith.armor = 8;
@@ -311,10 +369,8 @@ public class UnitOverride {
         weapon = UnitTypes.zenith.weapons.get(0);
         weapon.reload = 300;
         weapon.inaccuracy = 30;
-        weapon.shoot = new ShootPattern() {{
-            shots = 10;
-            shotDelay = 15;
-        }};
+        weapon.shoot.shots = 10;
+        weapon.shoot.shotDelay = 15;
         MissileBulletType m = (MissileBulletType) weapon.bullet;
         m.speed = 6;
         m.damage = 28;
@@ -585,7 +641,7 @@ public class UnitOverride {
         fAbility.max = 1000;
         weapon = UnitTypes.quasar.weapons.get(0);
         weapon.reload = 35;
-        weapon.bullet.damage = 65;
+        weapon.bullet.damage = 85;
         UnitTypes.quasar.weapons.add(new Weapon() {{
             x = y = 0;
             mirror = false;

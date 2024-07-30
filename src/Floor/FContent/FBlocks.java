@@ -9,8 +9,8 @@ import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.geom.Vec2;
+import arc.struct.EnumSet;
 import arc.util.Time;
-import arc.util.Tmp;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.TargetPriority;
@@ -30,7 +30,6 @@ import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.type.unit.MissileUnitType;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
@@ -39,9 +38,7 @@ import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BlockFlag;
-import mindustry.world.meta.BlockGroup;
 
-import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.type.ItemStack.with;
 
@@ -57,7 +54,7 @@ public class FBlocks {
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
-    public static Block buildCore, slowProject, unitUpper, reflective;
+    public static Block buildCore, slowProject, unitUpper, reflective, toHome;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -302,7 +299,7 @@ public class FBlocks {
                     }});
 
                     abilities.add(new EnergyFieldAbility(0, 12, 120) {{
-                        status = StatusEffects.unmoving;
+                        status = FStatusEffects.tardy;
                         statusDuration = 380;
                         effectRadius = 0;
                         healPercent = 0;
@@ -849,7 +846,6 @@ public class FBlocks {
                     ItemStack.with(Items.phaseFabric, 120, Items.silicon, 10), Blocks.phaseWall,
                     ItemStack.with(Items.surgeAlloy, 120, Items.silicon, 10), Blocks.surgeWall);
         }};
-
         edge = new AutoBlock("edge") {{
             size = 3;
             behind = 14;
@@ -897,10 +893,7 @@ public class FBlocks {
                 despawnEffect = Fx.blockExplosionSmoke;
             }};
 
-            flags.with(BlockFlag.battery);
-            flags.with(BlockFlag.factory);
-            flags.with(BlockFlag.generator);
-            flags.with(BlockFlag.reactor);
+            flags = EnumSet.of(BlockFlag.battery, BlockFlag.factory, BlockFlag.generator, BlockFlag.reactor);
             priority = TargetPriority.turret;
         }};
 //======================================================================================================================
@@ -919,6 +912,7 @@ public class FBlocks {
             armor = 5;
             itemCapacity = 2000;
 
+            alwaysUnlocked = true;
             unitCapModifier = 2;
             requirements(Category.effect, ItemStack.with(Items.copper, 1000, Items.lead, 1000, Items.graphite, 1000, Items.silicon, 1000, Items.titanium, 1000));
         }};
@@ -935,7 +929,15 @@ public class FBlocks {
             size = 2;
 
             consumePower(5);
-            requirements(Category.effect, ItemStack.with(Items.copper, 1));
+            requirements(Category.effect, ItemStack.with(Items.silicon, 400, Items.titanium, 400, Items.phaseFabric, 200));
+        }};
+        toHome = new CoreInputBlock("to-home") {{
+            size = 2;
+            health = 380;
+            itemCapacity = 300;
+
+            consumePower(0.5f);
+            requirements(Category.effect, ItemStack.with(Items.silicon, 20, Items.copper, 50, Items.graphite, 30));
         }};
 //======================================================================================================================
         blockOverride();

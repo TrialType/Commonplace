@@ -4,10 +4,12 @@ import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.content.UnitTypes;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.distribution.ArmoredConveyor;
 import mindustry.world.blocks.distribution.Conveyor;
 import mindustry.world.blocks.distribution.StackConveyor;
@@ -38,6 +40,26 @@ public class BlockOverride {
         for (BulletType bullet : ((ItemTurret) Blocks.duo).ammoTypes.values()) {
             bullet.ammoMultiplier *= 2;
         }
+
+        ((ItemTurret) Blocks.hail).ammoTypes.each((i, b) -> {
+            b.fragBullets = 3;
+            b.fragBullet = new BasicBulletType() {{
+                width = height = 6;
+                damage = b.damage * 0.2f;
+                lifetime = 15;
+                speed = 0.5f;
+            }};
+            b.fragRandomSpread = 360;
+        });
+
+        ((ItemTurret) Blocks.scatter).ammoTypes.each((i, b) -> {
+            b.pierceArmor = true;
+            b.pierce = true;
+            b.pierceCap = 3;
+        });
+
+        ((PowerTurret) Blocks.arc).shootType.damage = 26;
+        ((PowerTurret) Blocks.arc).shootType.lightningType.pierceArmor = true;
 
         ((Conveyor) Blocks.conveyor).speed = 0.05f;
         ((Conveyor) Blocks.conveyor).displayedSpeed = 7;
