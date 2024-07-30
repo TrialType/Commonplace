@@ -33,7 +33,4 @@ public class DesCore extends CoreBlock {
         }
         return false;
     }
-
-    public class DesCoreBuild extends CoreBuild {
-    }
 }

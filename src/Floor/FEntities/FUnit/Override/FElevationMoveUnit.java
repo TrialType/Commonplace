@@ -1,7 +1,6 @@
 package Floor.FEntities.FUnit.Override;
 
-import Floor.FTools.interfaces.FUnitUpGrade;
-import Floor.FTools.classes.UnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.struct.Bits;
@@ -27,7 +26,9 @@ import mindustry.world.blocks.environment.Floor;
 
 import java.util.Random;
 
-public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrade {
+import static Floor.FTools.classes.UnitUpGrade.getPower;
+
+public class FElevationMoveUnit extends ElevationMoveUnit implements UnitUpGrade {
     protected int damageLevel = 0;
     protected int speedLevel = 0;
     protected int healthLevel = 0;
@@ -484,7 +485,7 @@ public class FElevationMoveUnit extends ElevationMoveUnit implements FUnitUpGrad
             fu.y(y);
             fu.rotation(rotation);
             if (level >= 120) {
-                UnitUpGrade.getPower(fu, 0, false, true);
+                getPower(fu, 0, false, true);
                 fu.setLevel(level / 2);
             } else {
                 fu.setDamageLevel(damageLevel / 2);

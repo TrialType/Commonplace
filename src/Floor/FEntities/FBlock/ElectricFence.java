@@ -1,7 +1,7 @@
 package Floor.FEntities.FBlock;
 
 import Floor.FContent.FUnits;
-import Floor.FTools.interfaces.FUnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -158,7 +158,7 @@ public class ElectricFence extends Block {
             go = 0;
             for (Unit u : stopUnits) {
                 if (u != null) {
-                    if (u instanceof FUnitUpGrade uug) {
+                    if (u instanceof UnitUpGrade uug) {
                         go = go + u.hitSize * Math.max(1, uug.getSpeedLevel() * 0.75f);
                     } else {
                         go += u.hitSize;

@@ -1,6 +1,6 @@
 package Floor.FTools.interfaces;
 
-public interface FUnitUpGrade {
+public interface UnitUpGrade {
     int getLevel();
 
     void setLevel(int level);

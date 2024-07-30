@@ -1,8 +1,7 @@
 package Floor.FEntities.FBlock;
 
 import Floor.FContent.FItems;
-import Floor.FTools.interfaces.FUnitUpGrade;
-import Floor.FTools.classes.UnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
@@ -42,7 +41,7 @@ public class GradeFactory extends UnitBlock {
             FItems.shieldPower
     };
     private final static String[] numbers = {"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
-    public Seq<UnitType> grades = new Seq<>(UnitUpGrade.uppers);
+    public Seq<UnitType> grades = new Seq<>(Floor.FTools.classes.UnitUpGrade.uppers);
     public boolean out = true;
     public float constructTime = 60f * 5f;
 
@@ -724,7 +723,7 @@ public class GradeFactory extends UnitBlock {
 
             if (outing) {
                 moveOutPayload();
-            } else if (lastUnit instanceof FUnitUpGrade uug && !lastUnit.type.isBanned()) {
+            } else if (lastUnit instanceof UnitUpGrade uug && !lastUnit.type.isBanned()) {
 
                 updateLevel(uug);
                 updateNumber();
@@ -799,7 +798,7 @@ public class GradeFactory extends UnitBlock {
             }
         }
 
-        private void updateLevel(FUnitUpGrade uug) {
+        private void updateLevel(UnitUpGrade uug) {
             int choose = findIndex(item);
             if (choose == 0) {
                 level = uug.getHealthLevel();
@@ -818,7 +817,7 @@ public class GradeFactory extends UnitBlock {
             }
         }
 
-        public void gradeChange(FUnitUpGrade uug) {
+        public void gradeChange(UnitUpGrade uug) {
             if (out) {
                 uug.setLevel(uug.getLevel() - 1);
                 switch (findIndex(item)) {

@@ -1,7 +1,7 @@
 package Floor.FEntities.FAbility;
 
 import Floor.FEntities.FUnitType.UpGradeUnitType;
-import Floor.FTools.interfaces.FUnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
@@ -17,7 +17,7 @@ public class LevelSign extends Ability {
 
     @Override
     public void displayBars(Unit unit, Table table) {
-        if (unit instanceof FUnitUpGrade uug && !(unit.type instanceof UpGradeUnitType)) {
+        if (unit instanceof UnitUpGrade uug && !(unit.type instanceof UpGradeUnitType)) {
             table.row();
 
             table.add(new Bar(String.valueOf(uug.getLevel()), Pal.coalBlack, () -> 1f));

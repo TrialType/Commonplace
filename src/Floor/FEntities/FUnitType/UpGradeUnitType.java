@@ -1,6 +1,6 @@
 package Floor.FEntities.FUnitType;
 
-import Floor.FTools.interfaces.FUnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
@@ -18,7 +18,7 @@ public class UpGradeUnitType extends UnitType {
     @Override
     public void display(Unit unit, Table table) {
         super.display(unit, table);
-        if (unit instanceof FUnitUpGrade uug) {
+        if (unit instanceof UnitUpGrade uug) {
             table.row();
             table.table(dis -> {
                 dis.defaults().growX().height(20).pad(5);

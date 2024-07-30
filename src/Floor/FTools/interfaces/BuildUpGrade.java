@@ -1,6 +1,6 @@
 package Floor.FTools.interfaces;
 
-public interface FBuildUpGrade {
+public interface BuildUpGrade {
     void addExp(float exp);
 
     void upgrade();

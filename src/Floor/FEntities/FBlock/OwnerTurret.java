@@ -1,6 +1,6 @@
 package Floor.FEntities.FBlock;
 
-import Floor.FTools.interfaces.FBuildUpGrade;
+import Floor.FTools.interfaces.BuildUpGrade;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;
@@ -54,7 +54,7 @@ public class OwnerTurret extends Turret {
         return !(b instanceof ownerBuild) || ((ownerBuild) b).exp <= health * 2;
     }
 
-    public class ownerBuild extends TurretBuild implements FBuildUpGrade, ControlBlock {
+    public class ownerBuild extends TurretBuild implements BuildUpGrade, ControlBlock {
         private float exp = 0;
         private float boost = 1;
         private Effect fireEffect;

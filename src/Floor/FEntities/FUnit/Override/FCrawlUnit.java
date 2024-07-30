@@ -1,6 +1,6 @@
 package Floor.FEntities.FUnit.Override;
 
-import Floor.FTools.interfaces.FUnitUpGrade;
+import Floor.FTools.interfaces.UnitUpGrade;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.struct.Bits;
@@ -22,14 +22,13 @@ import mindustry.gen.Call;
 import mindustry.gen.CrawlUnit;
 import mindustry.gen.Sounds;
 import mindustry.input.InputHandler;
-import mindustry.io.TypeIO;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
 
 import java.util.Random;
 
-public class FCrawlUnit extends CrawlUnit implements FUnitUpGrade {
+public class FCrawlUnit extends CrawlUnit implements UnitUpGrade {
 
     protected int damageLevel = 0;
     protected int speedLevel = 0;
