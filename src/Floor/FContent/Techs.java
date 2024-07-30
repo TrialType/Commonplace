@@ -276,6 +276,10 @@ public class Techs {
                 node(eleFenceIII, ItemStack.with(Items.titanium, 4500, Items.copper, 10000, Items.silicon, 5000), Seq.with(new Objectives.SectorComplete(nuclearComplex)), () -> {
                 });
             });
+            node(longestDown, Seq.with(new Objectives.SectorComplete(impact0078)), () -> {
+                node(fullWater, Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
+                });
+            });
         });
         head = Planets.serpulo.techTree;
         //blocks
@@ -295,12 +299,10 @@ public class Techs {
                 });
                 tf.parent = t;
                 t.children.add(tf);
-            } else if (t.content == groundFactory) {
-                tf = node(outPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000), () -> {
-                });
-                tf.parent = t;
-                t.children.add(tf);
-                tf = node(inputPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000), () -> {
+            } else if (t.content == additiveReconstructor) {
+                tf = node(outPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000, titanium, 4000, thorium, 4000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
+                    node(inputPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000, titanium, 4000, thorium, 4000), () -> {
+                    });
                 });
                 tf.parent = t;
                 t.children.add(tf);
@@ -320,22 +322,10 @@ public class Techs {
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == foreshadow) {
-                tf = node(windTurret, ItemStack.with(Items.titanium, 20000, Items.copper, 26000, Items.graphite, 18000, Items.silicon, 16500, Items.surgeAlloy, 3000
-                ), () -> {
+                tf = node(windTurret, ItemStack.with(Items.titanium, 20000, Items.copper, 26000, Items.graphite, 18000, Items.silicon, 16500, Items.surgeAlloy, 3000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
                 });
                 tf.parent = t;
                 t.children.add(tf);
-            }
-        });
-        //Sectors
-        head.each(tn -> {
-            if (tn.content == impact0078) {
-                tf = node(longestDown, Seq.with(new Objectives.SectorComplete(impact0078)), () -> {
-                    node(fullWater, Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
-                    });
-                });
-                tf.parent = tn;
-                tn.children.add(tf);
             }
         });
         //units

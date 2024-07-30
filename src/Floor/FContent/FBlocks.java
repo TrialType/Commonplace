@@ -40,6 +40,8 @@ import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BlockFlag;
 
 import static arc.math.Angles.randLenVectors;
+import static mindustry.content.Items.thorium;
+import static mindustry.content.Items.titanium;
 import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
@@ -181,7 +183,7 @@ public class FBlocks {
         }};
 //======================================================================================================================
         outPowerFactory = new GradeFactory("out_power_factory") {{
-            requirements(Category.units, with(Items.copper, 2000, Items.lead, 2400, Items.silicon, 2800));
+            requirements(Category.units,  with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
 
             itemCapacity = 770;
             size = 11;
@@ -190,7 +192,7 @@ public class FBlocks {
             constructTime = 60f * 10f;
         }};
         inputPowerFactory = new GradeFactory("input_power_factory") {{
-            requirements(Category.units, with(Items.copper, 2000, Items.lead, 2400, Items.silicon, 2800));
+            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
 
             itemCapacity = 770;
             size = 11;
@@ -837,6 +839,7 @@ public class FBlocks {
         autoWall = new AutoBlock("auto-wall") {{
             size = 2;
             health = 350;
+            itemCapacity = 130;
 
             requirements(Category.defense, ItemStack.with(Items.copper, 145, Items.graphite, 35));
 
@@ -854,11 +857,11 @@ public class FBlocks {
 
             requirements(Category.defense, ItemStack.with(Items.copper, 300, Items.graphite, 120, Items.thorium, 35));
 
-            creates.putAll(ItemStack.with(Items.copper, 480, Items.silicon, 10), Blocks.copperWallLarge,
-                    ItemStack.with(Items.titanium, 480, Items.silicon, 10), Blocks.titaniumWallLarge,
-                    ItemStack.with(Items.thorium, 480, Items.silicon, 10), Blocks.thoriumWallLarge,
-                    ItemStack.with(Items.phaseFabric, 480, Items.silicon, 10), Blocks.phaseWallLarge,
-                    ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 10), Blocks.surgeWallLarge);
+            creates.putAll(ItemStack.with(Items.copper, 480, Items.silicon, 30), Blocks.copperWallLarge,
+                    ItemStack.with(Items.titanium, 480, Items.silicon, 30), Blocks.titaniumWallLarge,
+                    ItemStack.with(Items.thorium, 480, Items.silicon, 30), Blocks.thoriumWallLarge,
+                    ItemStack.with(Items.phaseFabric, 480, Items.silicon, 30), Blocks.phaseWallLarge,
+                    ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
         decoy = new Block("decoy") {{
             requirements(Category.defense, ItemStack.with(

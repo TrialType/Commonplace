@@ -1,6 +1,5 @@
 package Floor.FEntities.FBlock;
 
-import Floor.FContent.FWeathers;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -39,6 +38,8 @@ import mindustry.world.Tile;
 import mindustry.world.meta.Env;
 
 import java.util.Comparator;
+
+import static mindustry.Vars.state;
 
 public class AutoBlock extends Block {
     private int index = 0;
@@ -320,7 +321,7 @@ public class AutoBlock extends Block {
         }
 
         public void start() {
-            items.remove(creates.keys().toSeq().get(config));
+            items.remove(creates.findKey(creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id)).get(config), true));
             beginning = true;
             if (createDelay > 0) {
                 beginEffect.at(this);
@@ -336,6 +337,18 @@ public class AutoBlock extends Block {
                 step = 0;
                 createTimer = 0;
             }
+        }
+
+        @Override
+        public int getMaximumAccepted(Item item) {
+            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            ItemStack[] items = creates.findKey(blocks.get(config), true);
+            for (ItemStack stack : items) {
+                if (stack.item == item) {
+                    return stack.amount;
+                }
+            }
+            return 0;
         }
 
         @Override
