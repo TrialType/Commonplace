@@ -1,6 +1,6 @@
 package Floor.FEntities.FBlock;
 
-import Floor.FContent.FItems;
+import Floor.FContent.DefaultContent.FItems;
 import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.g2d.Draw;

@@ -1,8 +1,8 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import mindustry.type.SectorPreset;
 
-import static Floor.FContent.FPlanets.ENGSWEIS;
+import static Floor.FContent.DefaultContent.FPlanets.ENGSWEIS;
 
 public class FPlanetGenerators {
     public static SectorPreset fullWater, longestDown;

@@ -1,6 +1,6 @@
 package Floor.FEntities.FBlock;
 
-import Floor.FContent.FUnits;
+import Floor.FContent.DefaultContent.FUnits;
 import Floor.FTools.interfaces.UnitUpGrade;
 import arc.Core;
 import arc.graphics.Color;

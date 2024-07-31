@@ -1,13 +1,11 @@
 package Floor.FEntities.FAbility;
 
-import Floor.FContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FStatusEffects;
 import Floor.FEntities.FUnit.F.ENGSWEISUnitEntity;
 import arc.Core;
-import arc.math.Angles;
 import arc.math.geom.Position;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
-import arc.util.Strings;
 import arc.util.Time;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;

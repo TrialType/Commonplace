@@ -1,8 +1,6 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
-import Floor.FType.FDialog.Old.ProjectsLocated;
 import Floor.FType.FStatusEffect.WithMoreStatus;
-import arc.Core;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.content.Fx;
@@ -467,12 +465,12 @@ public class FStatusEffects {
         }};
 
 
-        ProjectsLocated.eff = new StatusEffect("eff") {{
-            show = false;
-            permanent = true;
-            healthMultiplier = Core.settings.getFloat("floor-project-heal", 1);
-            speedMultiplier = Core.settings.getFloat("floor-project-speed", 1);
-        }};
+//        ProjectsLocated.eff = new StatusEffect("eff") {{
+//            show = false;
+//            permanent = true;
+//            healthMultiplier = Core.settings.getFloat("floor-project-heal", 1);
+//            speedMultiplier = Core.settings.getFloat("floor-project-speed", 1);
+//        }};
 
         burnings.addAll(StatusEffects.burning, gasify);
     }

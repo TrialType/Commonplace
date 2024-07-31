@@ -1,16 +1,13 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import Floor.FEntities.FBlock.CorrosionEmptyFloor;
 import Floor.FEntities.FBlock.CorrosionFloor;
 import Floor.FEntities.FBlock.CorrosionSteamVent;
-import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.gl.Shader;
 import arc.struct.Seq;
 import mindustry.content.Items;
 import mindustry.content.StatusEffects;
 import mindustry.gen.Sounds;
-import mindustry.graphics.Shaders;
 import mindustry.world.Block;
 import mindustry.world.blocks.environment.Floor;
 import mindustry.content.Liquids;
@@ -18,9 +15,6 @@ import mindustry.graphics.CacheLayer;
 import mindustry.world.blocks.environment.OreBlock;
 import mindustry.world.blocks.environment.StaticWall;
 import mindustry.world.meta.Attribute;
-
-import static arc.Core.files;
-import static mindustry.Vars.tree;
 
 public class PFloors {
     public final static Seq<Block> WEFloors = new Seq<>();

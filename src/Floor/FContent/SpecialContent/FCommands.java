@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.SpecialContent;
 
 import Floor.FAI.StrongBoostAI;
 import mindustry.ai.UnitCommand;

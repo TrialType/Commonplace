@@ -1,7 +1,7 @@
 package Floor.FEntities.FUnit.F;
 
-import Floor.FContent.FEvents;
-import Floor.FContent.FUnits;
+import Floor.FContent.SpecialContent.FEvents;
+import Floor.FContent.DefaultContent.FUnits;
 import Floor.FEntities.FUnit.Override.FUnitEntity;
 import Floor.FEntities.FUnitType.ENGSWEISUnitType;
 import Floor.FTools.classes.PhysicsWorldChanger;

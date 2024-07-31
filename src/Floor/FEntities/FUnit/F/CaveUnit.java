@@ -1,8 +1,8 @@
 package Floor.FEntities.FUnit.F;
 
-import Floor.FContent.FEvents;
-import Floor.FContent.FStatusEffects;
-import Floor.FContent.FUnits;
+import Floor.FContent.SpecialContent.FEvents;
+import Floor.FContent.DefaultContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FUnits;
 import Floor.FEntities.FEffect.WaterWave;
 import arc.Events;
 import arc.graphics.Color;

@@ -1,7 +1,7 @@
 package Floor.FAI;
 
-import Floor.FContent.FStatusEffects;
-import Floor.FContent.FUnits;
+import Floor.FContent.DefaultContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FUnits;
 import Floor.FEntities.FUnit.F.ENGSWEISUnitEntity;
 import Floor.FEntities.FUnitType.ENGSWEISUnitType;
 import arc.Core;

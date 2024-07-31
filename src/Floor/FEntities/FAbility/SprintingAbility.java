@@ -1,6 +1,6 @@
 package Floor.FEntities.FAbility;
 
-import Floor.FContent.FEvents;
+import Floor.FContent.SpecialContent.FEvents;
 import arc.Core;
 import arc.Events;
 import arc.graphics.Color;

@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.SpecialContent;
 
 import Floor.FEntities.FBullet.AroundBullet;
 import Floor.FEntities.FEffectState.WaterEffectState;

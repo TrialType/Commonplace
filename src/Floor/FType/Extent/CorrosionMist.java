@@ -1,6 +1,6 @@
 package Floor.FType.Extent;
 
-import Floor.FContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FStatusEffects;
 import Floor.FTools.interfaces.Corrosion;
 import Floor.FTools.interfaces.RangePure;
 import arc.Events;

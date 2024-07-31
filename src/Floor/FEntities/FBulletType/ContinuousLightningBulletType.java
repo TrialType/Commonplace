@@ -1,6 +1,6 @@
 package Floor.FEntities.FBulletType;
 
-import Floor.FContent.FEffects;
+import Floor.FContent.DefaultContent.FEffects;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;

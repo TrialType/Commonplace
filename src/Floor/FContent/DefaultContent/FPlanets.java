@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import Floor.FType.FPlanetGenerator.ENGSWEISPlanetGenerator;
 import arc.graphics.Color;

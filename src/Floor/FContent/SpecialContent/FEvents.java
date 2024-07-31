@@ -1,9 +1,12 @@
-package Floor.FContent;
+package Floor.FContent.SpecialContent;
 
+import Floor.FContent.ProjectContent.PAbilities;
+import Floor.FContent.ProjectContent.PBullets;
+import Floor.FContent.ProjectContent.PWeapons;
 import Floor.FTools.interfaces.BuildUpGrade;
 import Floor.FTools.interfaces.UnitUpGrade;
 import Floor.FTools.interfaces.UpGradeTime;
-import Floor.FType.FDialog.New.ProjectDialog;
+import Floor.FType.FDialog.ProjectDialog;
 import Floor.FType.FDialog.Old.MoreResearchDialog;
 import Floor.FType.Extent.CorrosionMist;
 import arc.Events;
@@ -26,6 +29,11 @@ public class FEvents {
     public static void load() {
         Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.research = new MoreResearchDialog()));
         Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, ProjectDialog::create));
+        Events.on(EventType.ContentInitEvent.class, e -> {
+            PBullets.load();
+            PWeapons.load();
+            PAbilities.load();
+        });
 
         Events.on(EventType.WorldLoadEndEvent.class, e -> CorrosionMist.init());
 

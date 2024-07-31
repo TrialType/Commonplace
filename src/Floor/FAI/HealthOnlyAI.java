@@ -1,6 +1,6 @@
 package Floor.FAI;
 
-import Floor.FContent.FUnits;
+import Floor.FContent.DefaultContent.FUnits;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.Teamc;

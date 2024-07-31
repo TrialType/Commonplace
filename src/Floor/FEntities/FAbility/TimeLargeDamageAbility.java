@@ -1,6 +1,6 @@
 package Floor.FEntities.FAbility;
 
-import Floor.FContent.FEvents;
+import Floor.FContent.SpecialContent.FEvents;
 import arc.Core;
 import arc.Events;
 import arc.scene.ui.layout.Table;
@@ -11,8 +11,6 @@ import mindustry.entities.abilities.Ability;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Unit;
-import mindustry.graphics.Pal;
-import mindustry.ui.Bar;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 

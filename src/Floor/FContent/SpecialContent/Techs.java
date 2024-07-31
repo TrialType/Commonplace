@@ -1,15 +1,16 @@
-package Floor.FContent;
+package Floor.FContent.SpecialContent;
 
+import Floor.FContent.DefaultContent.FBlocks;
 import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
-import static Floor.FContent.FBlocks.*;
-import static Floor.FContent.FItems.*;
-import static Floor.FContent.FPlanetGenerators.fullWater;
-import static Floor.FContent.FPlanetGenerators.longestDown;
-import static Floor.FContent.FUnits.*;
+import static Floor.FContent.DefaultContent.FBlocks.*;
+import static Floor.FContent.DefaultContent.FItems.*;
+import static Floor.FContent.DefaultContent.FPlanetGenerators.fullWater;
+import static Floor.FContent.DefaultContent.FPlanetGenerators.longestDown;
+import static Floor.FContent.DefaultContent.FUnits.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.SectorPresets.*;

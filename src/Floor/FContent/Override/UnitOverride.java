@@ -1,6 +1,7 @@
-package Floor.FContent;
+package Floor.FContent.Override;
 
 import Floor.FAI.MissileAI_II;
+import Floor.FContent.DefaultContent.FStatusEffects;
 import Floor.FEntities.FAbility.LevelSign;
 import Floor.FEntities.FAbility.TimeLargeDamageAbility;
 import Floor.FEntities.FBulletType.ContinuousLightningBulletType;

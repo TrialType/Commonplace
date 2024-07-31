@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import Floor.FEntities.FWeather.StormDamageWeather;
 import arc.graphics.Color;

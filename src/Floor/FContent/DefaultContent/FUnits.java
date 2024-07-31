@@ -1,6 +1,7 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import Floor.FAI.*;
+import Floor.FContent.SpecialContent.FCommands;
 import Floor.FEntities.FAbility.*;
 import Floor.FEntities.FBulletType.*;
 import Floor.FEntities.FUnit.F.*;

@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import Floor.FEntities.FBlock.*;
 import Floor.FEntities.FBulletType.*;

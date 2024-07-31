@@ -1,6 +1,11 @@
 package Floor;
 
-import Floor.FContent.*;
+import Floor.FContent.DefaultContent.*;
+import Floor.FContent.Override.BlockOverride;
+import Floor.FContent.Override.TechOverride;
+import Floor.FContent.Override.UnitOverride;
+import Floor.FContent.ProjectContent.UnitProjects;
+import Floor.FContent.SpecialContent.*;
 import mindustry.mod.Mod;
 
 public class Floor extends Mod {
@@ -19,6 +24,7 @@ public class Floor extends Mod {
         UnitOverride.load();
         BlockOverride.load();
         FUnits.load();
+        UnitProjects.load();
         FEvents.load();
         FBlocks.load();
         FPlanets.load();

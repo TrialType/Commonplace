@@ -4,7 +4,7 @@ import mindustry.type.UnitType;
 
 import java.util.Random;
 
-import static Floor.FContent.FUnits.*;
+import static Floor.FContent.DefaultContent.FUnits.*;
 import static mindustry.content.UnitTypes.*;
 
 public class UnitUpGrade {

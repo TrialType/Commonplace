@@ -1,4 +1,4 @@
-package Floor.FContent;
+package Floor.FContent.DefaultContent;
 
 import arc.graphics.Color;
 import mindustry.content.StatusEffects;

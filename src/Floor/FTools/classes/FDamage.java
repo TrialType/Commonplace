@@ -1,20 +1,14 @@
 package Floor.FTools.classes;
 
-import Floor.FContent.FStatusEffects;
-import Floor.FContent.FUnits;
+import Floor.FContent.DefaultContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FUnits;
 import arc.Events;
 import arc.func.Cons;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.*;
-import arc.struct.FloatSeq;
-import arc.struct.IntFloatMap;
-import arc.struct.IntSet;
 import arc.struct.Seq;
 import arc.util.Nullable;
-import arc.util.Tmp;
-import arc.util.pooling.Pool;
-import arc.util.pooling.Pools;
 import mindustry.core.World;
 import mindustry.entities.Damage;
 import mindustry.entities.Effect;

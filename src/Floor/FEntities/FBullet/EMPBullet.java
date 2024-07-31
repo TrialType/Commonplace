@@ -1,6 +1,6 @@
 package Floor.FEntities.FBullet;
 
-import Floor.FContent.FStatusEffects;
+import Floor.FContent.DefaultContent.FStatusEffects;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;

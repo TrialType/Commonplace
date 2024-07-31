@@ -1,6 +1,6 @@
 package Floor.FEntities.FWeather;
 
-import Floor.FContent.FEffects;
+import Floor.FContent.DefaultContent.FEffects;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.Time;
