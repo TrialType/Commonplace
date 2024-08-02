@@ -1,167 +1,148 @@
 package Floor.FEntities.FBulletType;
 
-import Floor.FEntities.FBullet.AroundBullet;
+import arc.Events;
+import arc.graphics.Color;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import arc.util.Nullable;
-import arc.util.Time;
-import mindustry.ai.types.MissileAI;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
-import mindustry.entities.Mover;
+import mindustry.entities.Units;
 import mindustry.entities.bullet.BasicBulletType;
-import mindustry.game.Team;
+import mindustry.entities.bullet.BulletType;
+import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.type.StatusEffect;
-import mindustry.world.blocks.ControlBlock;
 
-import static mindustry.Vars.net;
-import static mindustry.Vars.world;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AroundBulletType extends BasicBulletType {
+    private final static Map<Bullet, Unit> units = new HashMap<>();
+    private final static Map<Unit, Boolean> lastStatus = new HashMap<>();
+
     public float targetRange = 100;
     public float circleRange = 40;
-    public StatusEffect statusEffect = StatusEffects.wet;
     public float statusTime = 120;
+    public StatusEffect statusEffect = StatusEffects.wet;
     public Effect applyEffect = Fx.none;
-
-    @Override
-    public void init() {
-        trailChance = 1;
-        trailLength = 10;
-    }
+    public BulletType roundIntervalBullet = null;
+    public float roundBulletInterval = 20;
+    public int roundIntervalBullets = 1;
+    public boolean roundIntervalCenter = true;
+    public float roundIntervalRandomSpread = 360f;
+    public float roundIntervalSpread = 0f;
+    public float roundIntervalAngle = 0f;
+    public float roundIntervalDelay = -1f;
 
     @Override
     public void update(Bullet b) {
         super.update(b);
-        if (b instanceof AroundBullet ab && ab.target != null && b.within(ab.target, circleRange + 5)) {
+
+        updateMaps(b);
+
+        if (b.data instanceof Unit u && b.within(u, circleRange + 5)) {
             Vec2 vec2 = new Vec2();
-            float bx = b.x, by = b.y, tx = ab.target.x, ty = ab.target.y;
+            float bx = b.x, by = b.y, tx = u.x, ty = u.y;
             float angle = Angles.angle(tx, ty, bx, by) + 5;
             vec2.set((float) (tx + circleRange * Math.cos(Math.toRadians(angle)) - bx), (float) (ty + circleRange * Math.sin(Math.toRadians(angle)) - by));
             vec2.setLength(speed);
             b.vel.set(vec2);
-        } else if (b instanceof AroundBullet ab && ab.target != null) {
-            Vec2 vec2 = new Vec2();
-            vec2.set(ab.target.x - ab.x, ab.target.y - ab.y);
-            vec2.setLength(speed);
-            ab.rotation(Angles.angle(ab.target.x - ab.x, ab.target.y - ab.y));
-            ab.move(vec2);
-        }
-    }
 
-    public @Nullable AroundBullet create(Teamc owner, float x, float y, float angle) {
-        return create(owner, owner.team(), x, y, angle);
-    }
-
-    public @Nullable AroundBullet create(Entityc owner, Team team, float x, float y, float angle) {
-        return create(owner, team, x, y, angle, 1f);
-    }
-
-    public @Nullable AroundBullet create(Entityc owner, Team team, float x, float y, float angle, float velocityScl) {
-        return create(owner, team, x, y, angle, -1, velocityScl, 1f, null);
-    }
-
-    public @Nullable AroundBullet create(Entityc owner, Team team, float x, float y, float angle, float velocityScl, float lifetimeScl) {
-        return create(owner, team, x, y, angle, -1, velocityScl, lifetimeScl, null);
-    }
-
-
-    public @Nullable AroundBullet create(Entityc owner, Team team, float x, float y, float angle, float velocityScl, float lifetimeScl, Mover mover) {
-        return create(owner, team, x, y, angle, -1, velocityScl, lifetimeScl, null, mover);
-    }
-
-    public @Nullable AroundBullet create(Bullet parent, float x, float y, float angle) {
-        return create(parent.owner, parent.team, x, y, angle);
-    }
-
-    public @Nullable AroundBullet create(Bullet parent, float x, float y, float angle, float velocityScl, float lifeScale) {
-        return create(parent.owner, parent.team, x, y, angle, velocityScl, lifeScale);
-    }
-
-    public @Nullable AroundBullet create(Bullet parent, float x, float y, float angle, float velocityScl) {
-        return create(parent.owner(), parent.team, x, y, angle, velocityScl);
-    }
-
-    public @Nullable AroundBullet create(@Nullable Entityc owner, Team team, float x, float y, float angle, float damage, float velocityScl, float lifetimeScl, Object data) {
-        return create(owner, team, x, y, angle, damage, velocityScl, lifetimeScl, data, null);
-    }
-
-    public @Nullable AroundBullet create(@Nullable Entityc owner, Team team, float x, float y, float angle, float damage, float velocityScl, float lifetimeScl, Object data, @Nullable Mover mover) {
-        return create(owner, team, x, y, angle, damage, velocityScl, lifetimeScl, data, mover, -1f, -1f);
-    }
-
-    public @Nullable AroundBullet create(@Nullable Entityc owner, Team team, float x, float y, float angle, float damage, float velocityScl, float lifetimeScl, Object data, @Nullable Mover mover, float aimX, float aimY) {
-        return create(owner, owner, team, x, y, angle, damage, velocityScl, lifetimeScl, data, mover, aimX, aimY);
-    }
-
-    public AroundBullet create(Entityc owner, Entityc shooter, Team team, float x, float y, float angle, float damage, float velocityScl, float lifetimeScl, Object data, @Nullable Mover mover, float aimX, float aimY) {
-        if (!Mathf.chance(createChance)) return null;
-        if (ignoreSpawnAngle) angle = 0;
-        if (spawnUnit != null) {
-            //don't spawn units clientside!
-            if (!net.client()) {
-                Unit spawned = spawnUnit.create(team);
-                spawned.set(x, y);
-                spawned.rotation = angle;
-                //immediately spawn at top speed, since it was launched
-                if (spawnUnit.missileAccelTime <= 0f) {
-                    spawned.vel.trns(angle, spawnUnit.speed);
-                }
-                //assign unit owner
-                if (spawned.controller() instanceof MissileAI ai) {
-                    if (shooter instanceof Unit unit) {
-                        ai.shooter = unit;
+            if (roundIntervalBullet != null && b.timer(3, roundBulletInterval)) {
+                if (roundIntervalCenter) {
+                    for (int i = 0; i < roundIntervalBullets; i++) {
+                        roundIntervalBullet.create(b.owner, b.team, b.x, b.y, b.angleTo(u),
+                                -1, 1, 1, null, null, u.x, u.y);
                     }
-
-                    if (shooter instanceof ControlBlock control) {
-                        ai.shooter = control.unit();
+                } else {
+                    for (int i = 0; i < roundIntervalBullets; i++) {
+                        roundIntervalBullet.create(b.owner, b.team, b.x, b.y,
+                                b.rotation() + roundIntervalAngle + Mathf.range(roundIntervalRandomSpread) +
+                                        roundIntervalSpread * (i - ((roundIntervalBullets - 1) / 2f)),
+                                -1, 1, 1, null, null, u.x, u.y);
                     }
-
                 }
-                spawned.add();
             }
-            //Since bullet init is never called, handle killing shooter here
-            if (killShooter && owner instanceof Healthc h && !h.dead()) h.kill();
 
-            //no bullet returned
-            return null;
-        }
+            if (!u.hasEffect(statusEffect) && !lastStatus.get(u)) {
+                Units.nearbyEnemies(b.team, u.x, u.y, circleRange, unit -> {
+                    applyEffect.at(b.x, b.y, 0, Color.valueOf("06172699"), unit);
 
-        AroundBullet bullet = AroundBullet.create();
-        bullet.type = this;
-        bullet.owner = owner;
-        bullet.team = team;
-        bullet.time = 0f;
-        bullet.originX = x;
-        bullet.originY = y;
-        if (!(aimX == -1f && aimY == -1f)) {
-            bullet.aimTile = world.tileWorld(aimX, aimY);
-        }
-        bullet.aimX = aimX;
-        bullet.aimY = aimY;
+                    boolean dead = unit.dead;
+                    unit.damage(damage);
+                    if (!dead && unit.dead) {
+                        Events.fire(new EventType.UnitBulletDestroyEvent(unit, b));
+                        return;
+                    }
 
-        bullet.initVel(angle, speed * velocityScl);
-        if (backMove) {
-            bullet.set(x - bullet.vel.x * Time.delta, y - bullet.vel.y * Time.delta);
+                    unit.apply(statusEffect, statusTime);
+
+                    if (lastStatus.containsKey(unit)) {
+                        if (!unit.dead) {
+                            lastStatus.put(unit, true);
+                        } else {
+                            lastStatus.remove(unit);
+                        }
+                    }
+                });
+                b.time = b.lifetime;
+            }
+        } else if (b.data instanceof Unit u) {
+            Vec2 vec2 = new Vec2();
+            vec2.set(u.x - b.x, u.y - b.y);
+            vec2.setLength(speed);
+            b.rotation(Angles.angle(u.x - b.x, u.y - b.y));
+            b.move(vec2);
         } else {
-            bullet.set(x, y);
+            updateTarget(b);
         }
-        bullet.lifetime = lifetime * lifetimeScl;
-        bullet.data = data;
-        bullet.drag = drag;
-        bullet.hitSize = hitSize;
-        bullet.mover = mover;
-        bullet.damage = (damage < 0 ? this.damage : damage) * bullet.damageMultiplier();
-        //reset trail
-        if (bullet.trail != null) {
-            bullet.trail.clear();
-        }
-        bullet.add();
+    }
 
-        if (keepVelocity && owner instanceof Velc v) bullet.vel.add(v.vel());
-        return bullet;
+    @Override
+    public void despawned(Bullet b) {
+        super.despawned(b);
+
+        Unit u = units.get(b);
+        units.remove(b);
+        units.forEach((bullet, unit) -> {
+            if (lastStatus.containsKey(u) && unit == u) {
+                lastStatus.remove(u);
+            }
+        });
+        b.data = null;
+    }
+
+    public void updateTarget(Bullet b) {
+        b.data = Units.closestEnemy(b.team, b.x, b.y, targetRange, u -> u.hasWeapons() && !find(u));
+        if (b.data == null) {
+            b.data = Units.closestEnemy(b.team, b.x, b.y, targetRange, Unitc::hasWeapons);
+        }
+        if (b.data != null) {
+            units.put(b, (Unit) b.data);
+            lastStatus.put((Unit) b.data, lastStatus.computeIfAbsent((Unit) b.data, t -> false));
+        }
+    }
+
+    public boolean find(Unit u) {
+        for (Bullet ab : units.keySet()) {
+            if (units.get(ab) == u) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateMaps(Bullet b) {
+        if (!(b.data instanceof Unit u) || u.dead || u.health <= 0 || !u.isAdded()) {
+            lastStatus.remove(Nulls.unit);
+            units.remove(b);
+            b.data = null;
+        } else {
+            if (u.hasEffect(statusEffect)) {
+                lastStatus.put(u, false);
+            }
+        }
     }
 }

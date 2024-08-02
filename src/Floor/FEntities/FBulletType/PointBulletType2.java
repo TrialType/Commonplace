@@ -1,5 +1,6 @@
 package Floor.FEntities.FBulletType;
 
+import arc.graphics.Color;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Geometry;
@@ -26,13 +27,14 @@ public class PointBulletType2 extends BulletType {
 
     public BulletType laserBulletType = null;
     public Effect laserEffect = Fx.none;
+    public Color laserColor = Color.white;
     public float laserDelay = 0;
     public float laserInterval = 0;
     public float laserSpreadRandom = 360;
     public float laserSpread = 0;
     public float laserAngle = 0;
     public float laserRange = 350f;
-    public int laserBullets = 35;
+    public int laserGroups = 35;
 
     public Effect intervalHitEffect = Fx.none;
     public Effect intervalLinkEffect = Fx.none;
@@ -49,16 +51,16 @@ public class PointBulletType2 extends BulletType {
         if (laserBulletType != null && b.time >= laserDelay && b.timer.get(3, laserInterval)) {
             float angle;
             float length;
-            for (int i = 0; i < laserBullets; i++) {
+            for (int i = 0; i < laserGroups; i++) {
                 angle = laserAngle + b.rotation() + Mathf.range(laserSpreadRandom) +
-                        ((i - (laserBullets - 1f) / 2f) * laserSpread);
+                        ((i - (laserGroups - 1f) / 2f) * laserSpread);
                 length = Mathf.range(laserRange);
                 Bullet b1 = laserBulletType.create(b.owner, b.team, b.x + Angles.trnsx(angle, length),
                         b.y + Angles.trnsy(angle, length), angle,
                         laserBulletType.damage * laserBulletType.damageMultiplier(b),
                         1, 1, null);
                 angle = laserAngle + b.rotation() + Mathf.range(laserSpreadRandom) +
-                        ((i - (laserBullets - 1f) / 2f) * laserSpread);
+                        ((i - (laserGroups - 1f) / 2f) * laserSpread);
                 length = Mathf.range(laserRange);
                 Bullet b2 = laserBulletType.create(b.owner, b.team, b.x + Angles.trnsx(angle, length),
                         b.y + Angles.trnsy(angle, length), angle,
@@ -67,7 +69,7 @@ public class PointBulletType2 extends BulletType {
                 float x1 = b1.x, y1 = b1.y, x2 = b2.x, y2 = b2.y;
                 Damage.collideLine(b1, b.team, laserBulletType.hitEffect, x1, y1,
                         Angles.angle(x1, y1, x2, y2), b1.dst(b2), false, false, -1);
-                laserEffect.at(x1, y1, 0, new Vec2(x2, y2));
+                laserEffect.at(x1, y1, 0, laserColor, new Vec2(x2, y2));
             }
         }
     }

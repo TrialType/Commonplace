@@ -4,6 +4,7 @@ import Floor.FContent.DefaultContent.FStatusEffects;
 import arc.Core;
 import arc.scene.ui.layout.Table;
 import arc.struct.IntIntMap;
+import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -29,7 +30,7 @@ import static mindustry.Vars.player;
 import static mindustry.Vars.state;
 
 public class UnitProjectBlock extends Block {
-    private static int buildNum = 0;
+    private final static Seq<Team> builds = new Seq<>();
     public float reload = 1800;
     public float pointReload = 60;
     public float laserReload = 120;
@@ -60,7 +61,7 @@ public class UnitProjectBlock extends Block {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        return buildNum == 0;
+        return !builds.contains(team);
     }
 
     @Override
@@ -78,6 +79,8 @@ public class UnitProjectBlock extends Block {
     }
 
     public class UnitProjectBuild extends Building {
+        IntIntMap map = new IntIntMap();
+        IntIntMap boostMap = new IntIntMap();
         boolean before = false;
         float pointTimer = 0;
         float laserTimer = 0;
@@ -90,55 +93,42 @@ public class UnitProjectBlock extends Block {
             laserTimer += Time.delta;
             timer = Math.max(0, timer - Time.delta);
 
-            if (before) {
-                project.applyProject(player.unit());
-                before = false;
-                applyEffect.at(player.unit());
-                lastId = player.unit().id;
-            } else if (player.unit() == null || !player.unit().spawnedByCore ||
-                    player.unit().dead || player.unit().health <= 0 || input.keyTap(Binding.respawn)) {
+            if (player.unit() == null || player.unit().dead || player.unit().health <= 0) {
                 lastId = -1;
-            } else if (player.unit().team != this.team) {
+            } else if (player.unit().team == team) {
+                if (before) {
+                    project.setMap(map, boostMap);
+                    project.applyProject(player.unit());
+                    before = false;
+                    applyEffect.at(player.unit());
+                    lastId = player.unit().id;
+                } else if (!player.unit().spawnedByCore || input.keyTap(Binding.respawn)) {
+                    lastId = -1;
+                } else if (lastId == -1) {
+                    project.setMap(map, boostMap);
+                    project.applyProject(player.unit());
+                    player.unit().apply(FStatusEffects.StrongStop, 180);
+                    applyEffect.at(player.unit().x, player.unit().y, 0, player.unit());
+                    lastId = player.unit().id;
+                }
+
+                if (lastId > 0) {
+                    Unit u = player.unit();
+                    if (pointTimer >= pointReload) {
+                        pointTimer = 0;
+                        pointEffect.at(u.x, u.y, u.rotation, u);
+                    }
+                    if (laserTimer >= laserReload) {
+                        laserTimer = 0;
+                        laserEffect.at(u.x, u.y, u.rotation, this);
+                    }
+                }
+            } else {
+                if (!builds.contains(player.unit().team)) {
+                    project.clearProject(player.unit());
+                }
                 lastId = -1;
-                project.clearProject(player.unit());
-            } else if (lastId == -1) {
-                project.applyProject(player.unit());
-                player.unit().apply(FStatusEffects.StrongStop, 180);
-                applyEffect.at(player.unit().x, player.unit().y, 0, player.unit());
-                lastId = player.unit().id;
             }
-            if (lastId > 0) {
-                Unit u = player.unit();
-                if (pointTimer >= pointReload) {
-                    pointTimer = 0;
-                    pointEffect.at(u.x, u.y, u.rotation, u);
-                }
-                if (laserTimer >= laserReload) {
-                    laserTimer = 0;
-                    laserEffect.at(u.x, u.y, u.rotation, this);
-                }
-            }
-//            if (projects == null) {
-//                ProjectsLocated.create();
-//            }
-//            Unit play = player.unit();
-//            if (play != null && play.spawnedByCore) {
-//                if (!(play.mounts[play.mounts.length - 1] == sign)) {
-//                    play.apply(FStatusEffects.StrongStop, 180);
-//                    applyEffect.at(player.unit().x, player.unit().y, 0, player.unit());
-//                    projects.upper.get(play);
-//                }
-//            }
-//            if (play != null) {
-//                if (pointTimer >= pointReload) {
-//                    pointTimer = 0;
-//                    pointEffect.at(play.x, play.y, play.rotation, play);
-//                }
-//                if (laserTimer >= laserReload) {
-//                    laserTimer = 0;
-//                    laserEffect.at(play.x, play.y, play.rotation, new float[]{this.x, this.y, play.x, play.y});
-//                }
-//            }
         }
 
         @Override
@@ -146,17 +136,16 @@ public class UnitProjectBlock extends Block {
             if (state.isEditor() || timer <= 0) {
                 table.row();
                 table.table(t -> t.button(Icon.units, () -> {
-                    project.show();
-                    table.clear();
-                    if (!Vars.net.client()) {
-                        state.set(GameState.State.paused);
+                    if (!project.isShown() && player.unit() != null && player.unit().team == this.team) {
+                        project.setWrite(m -> this.map = m, m -> this.boostMap = m);
+                        project.setMap(map, boostMap);
+                        project.show();
+                        table.clear();
+                        if (!Vars.net.client()) {
+                            state.set(GameState.State.paused);
+                        }
+                        timer = reload;
                     }
-                    timer = reload;
-//                if (projects == null) {
-//                    ProjectsLocated.create();
-//                }
-//                projects.set(player.unit());
-//                projects.show();
                 }));
             } else {
                 table.clear();
@@ -166,31 +155,16 @@ public class UnitProjectBlock extends Block {
         @Override
         public void add() {
             super.add();
-//            if (projects == null) {
-//                ProjectsLocated.create();
-//            }
-//            projects.setZero();
-            buildNum = 1;
+            map.clear();
+            boostMap.clear();
+            builds.add(this.team);
             lastId = -1;
         }
 
         @Override
         public void remove() {
             super.remove();
-            buildNum = 0;
-//            if (projects != null) {
-//                projects.setZero();
-//                if (player.unit() != null && player.unit().spawnedByCore) {
-//                    projects.upper.get(player.unit());
-//                    player.unit().unapply(eff);
-//                    WeaponMount[] mount = new WeaponMount[player.unit().type.weapons.size];
-//                    System.arraycopy(player.unit().mounts, 0, mount, 0, mount.length);
-//                    player.unit().mounts = mount;
-//                    Ability[] ability = new Ability[player.unit().type.abilities.size];
-//                    System.arraycopy(player.unit().abilities, 0, ability, 0, ability.length);
-//                    player.unit().abilities = ability;
-//                }
-//            }
+            builds.remove(this.team);
             if (state.isGame() && lastId > 0) {
                 project.clearProject(player.unit());
             }
@@ -200,17 +174,16 @@ public class UnitProjectBlock extends Block {
         public void write(Writes write) {
             super.write(write);
             write.i(lastId);
-            write.i(project.map.size);
-            project.map.forEach(e -> {
+            write.i(map.size);
+            map.forEach(e -> {
                 write.i(e.key);
                 write.i(e.value);
             });
-            write.i(project.boostMap.size);
-            project.boostMap.forEach(e -> {
+            write.i(boostMap.size);
+            boostMap.forEach(e -> {
                 write.i(e.key);
                 write.i(e.value);
             });
-            buildNum = 0;
         }
 
         @Override
@@ -220,38 +193,15 @@ public class UnitProjectBlock extends Block {
             if (lastId > 0) {
                 before = true;
             }
-            IntIntMap map = new IntIntMap();
-            IntIntMap map2 = new IntIntMap();
             int num = read.i();
             for (; num > 0; num--) {
                 map.put(read.i(), read.i());
             }
             num = read.i();
             for (; num > 0; num--) {
-                map2.put(read.i(), read.i());
+                boostMap.put(read.i(), read.i());
             }
-            project.setMap(map, map2);
-            buildNum = 1;
+            builds.add(this.team);
         }
-
-//        @Override
-//        public void write(Writes write) {
-//            super.write(write);
-//            if (player.unit() != null) {
-//                projects.set(player.unit());
-//            }
-//            projects.write(write);
-//            num = 0;
-//        }
-//
-//        @Override
-//        public void read(Reads read, byte revision) {
-//            super.read(read);
-//            if (projects == null) {
-//                ProjectsLocated.create();
-//            }
-//            projects.read(read);
-//            num = 1;
-//        }
     }
 }

@@ -1,16 +1,18 @@
 package Floor.FContent.SpecialContent;
 
 import Floor.FContent.DefaultContent.FBlocks;
+import Floor.FContent.ProjectContent.UnitProjects;
 import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static Floor.FContent.DefaultContent.FBlocks.*;
-import static Floor.FContent.DefaultContent.FItems.*;
+import static Floor.FContent.ProjectContent.FSign.*;
 import static Floor.FContent.DefaultContent.FPlanetGenerators.fullWater;
 import static Floor.FContent.DefaultContent.FPlanetGenerators.longestDown;
 import static Floor.FContent.DefaultContent.FUnits.*;
+import static Floor.FContent.ProjectContent.UnitProjects.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.SectorPresets.*;
@@ -25,23 +27,20 @@ public class Techs {
     public static void load() {
         wes = TechTree.nodeRoot("wes", buildCore, () -> {
             node(unitUpper, ItemStack.with(Items.copper, 20000, Items.lead, 20000, Items.graphite, 20000, Items.silicon, 20000, Items.titanium, 20000), () -> {
-                node(sizeProject1, ItemStack.with( silicon, 100, titanium, 100), () -> {
+                node(sizeProject1, ItemStack.with(silicon, 100, titanium, 100), () -> {
                     node(sizeProject2, ItemStack.with(silicon, 300, titanium, 300), () -> {
                         node(sizeProject3, ItemStack.with(silicon, 900, titanium, 900), () -> {
                             node(sizeProject4, ItemStack.with(silicon, 2700, titanium, 2700), () -> {
                                 node(sizeProject5, ItemStack.with(silicon, 8100, titanium, 8100), () -> {
-                                    node(sizeProject6, ItemStack.with(silicon, 24300, titanium, 24300), () -> {
-                                        node(sizeProject7, ItemStack.with(silicon, 72900, titanium, 72900), () -> {
-                                            node(sizeProject8, ItemStack.with(silicon, 218700, titanium, 218700), () -> {
-                                                node(sizeProject9, ItemStack.with(silicon, 656100, titanium, 656100), () -> {
-                                                    node(sizeProject10, ItemStack.with(silicon, 1980300, titanium, 1980300), () -> {
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    });
                                 });
                             });
+                        });
+                    });
+                });
+
+                node(handTurret, ItemStack.with(silicon, 100, titanium, 100), () -> {
+                    node(fragsAdd, ItemStack.with(silicon, 100, titanium, 100), () -> {
+                        node(damageAdder, ItemStack.with(silicon, 100, titanium, 100), () -> {
                         });
                     });
                 });

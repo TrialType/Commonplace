@@ -1,10 +1,11 @@
 package Floor.FType.FDialog;
 
-import Floor.FContent.DefaultContent.FItems;
 import Floor.FContent.DefaultContent.FStatusEffects;
-import Floor.FTools.Lists.BoostProject;
-import Floor.FTools.Lists.UnitProject;
+import Floor.FContent.ProjectContent.FSign;
+import Floor.FType.New.BoostProject;
+import Floor.FType.New.UnitProject;
 import arc.Core;
+import arc.func.Cons;
 import arc.func.Intc;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
@@ -21,6 +22,8 @@ import mindustry.gen.Unit;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 
+import java.util.Iterator;
+
 import static mindustry.Vars.*;
 
 public class ProjectDialog extends BaseDialog {
@@ -28,11 +31,17 @@ public class ProjectDialog extends BaseDialog {
     public IntIntMap map = new IntIntMap();
     public IntIntMap boostMap = new IntIntMap();
     public int heavy = 0;
+    public Cons<IntIntMap> write1 = m -> {
+    };
+    public Cons<IntIntMap> write2 = m -> {
+    };
 
     public ProjectDialog(String title) {
         super(title);
 
         hidden(() -> state.set(GameState.State.playing));
+        hidden(() -> write1.get(map));
+        hidden(() -> write2.get(boostMap));
         shown(this::rebuild);
 
         buttons.button("@back", Icon.left, () -> {
@@ -41,12 +50,14 @@ public class ProjectDialog extends BaseDialog {
             }
             Unit u = Vars.player.unit();
             if (u != null && u.health > 0 && !u.dead && u.spawnedByCore && state.isGame()) {
-                if (couldApply()) {
+                if (heavyPass() && numPass()) {
                     applyProject(u);
                     player.unit().apply(FStatusEffects.StrongStop, 180);
                     hide();
-                } else {
+                } else if (!heavyPass()) {
                     ui.showInfo(Core.bundle.get("@tooHeavy"));
+                } else {
+                    ui.showInfo(Core.bundle.get("@tooMany"));
                 }
             } else {
                 hide();
@@ -88,22 +99,22 @@ public class ProjectDialog extends BaseDialog {
             table.table(this::createHeavy).width(1000).row();
             table.table(t -> {
                 for (UnitProject p : UnitProject.all) {
-//                if (p.unlocked()) {
-                    if (!(p instanceof BoostProject)) {
-                        t.table(l -> createLine(l, p, i -> map.put(p.sid, i),
-                                map.containsKey(p.sid) ? map.get(p.sid) : 0)).width(900).row();
+                    if (p.unlocked()) {
+                        if (!(p instanceof BoostProject)) {
+                            t.table(l -> createLine(l, p, i -> map.put(p.sid, i),
+                                    map.containsKey(p.sid) ? map.get(p.sid) : 0)).width(900).row();
+                        }
                     }
-//                }
                 }
             }).width(1000).row();
             table.table(t -> {
                 for (UnitProject p : UnitProject.all) {
-//                if (p.unlocked()) {
-                    if (p instanceof BoostProject b) {
-                        t.table(l -> createLine(l, p, i -> boostMap.put(b.sid, i),
-                                boostMap.containsKey(b.sid) ? boostMap.get(b.sid) : 0)).width(900).row();
+                    if (p.unlocked()) {
+                        if (p instanceof BoostProject b) {
+                            t.table(l -> createLine(l, p, i -> boostMap.put(b.sid, i),
+                                    boostMap.containsKey(b.sid) ? boostMap.get(b.sid) : 0)).width(900).row();
+                        }
                     }
-//                }
                 }
             }).width(1000);
         });
@@ -130,24 +141,46 @@ public class ProjectDialog extends BaseDialog {
             });
         }, () -> {
         }).size(30).pad(5);
-        table.add(num + "").width(30).pad(10);
+        table.add(num + "").width(25).pad(10);
         table.button(b -> {
             b.image(Icon.up);
             b.setBackground(Tex.windowEmpty);
             b.clicked(() -> {
-                put.get(num + 1);
-                createLine(table, project, put, num + 1);
+                if (UnitProject.get(project.sid).max > num) {
+                    put.get(num + 1);
+                    createLine(table, project, put, num + 1);
+                }
             });
         }, () -> {
         }).size(30).pad(5);
-        table.label(() -> Core.bundle.format("@heavyShow", project.heavy, num)).width(200).pad(25);
+        table.add(Core.bundle.format("@maxValue", UnitProject.get(project.sid).max)).width(100).pad(10);
+        table.label(() -> Core.bundle.format("@heavyShow", project.heavy, num)).width(170).pad(25);
         table.button("", () -> ui.showText("", project.description)).size(30).pad(25);
         updateHeavy();
     }
 
-    public boolean couldApply() {
+    public boolean heavyPass() {
         updateHeavy();
         return heavy <= maxHeavy();
+    }
+
+    public boolean numPass() {
+        Iterator<IntIntMap.Entry> iterator = map.entries().iterator();
+        IntIntMap.Entry entry;
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            if (UnitProject.get(entry.key).max < entry.value) {
+                return false;
+            }
+        }
+        iterator = boostMap.entries();
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            if (UnitProject.get(entry.key).max < entry.value) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void updateHeavy() {
@@ -155,11 +188,14 @@ public class ProjectDialog extends BaseDialog {
         if (!map.isEmpty()) {
             map.forEach(e -> heavy += (int) (UnitProject.get(e.key).heavy * e.value));
         }
+        if (!boostMap.isEmpty()) {
+            boostMap.forEach(e -> heavy += (int) (UnitProject.get(e.key).heavy * e.value));
+        }
     }
 
     public int maxHeavy() {
-        for (int i = FItems.allSize.length - 1; i >= 0; i--) {
-            if (FItems.allSize[i].unlocked()) {
+        for (int i = FSign.allSize.length - 1; i >= 0; i--) {
+            if (FSign.allSize[i].unlocked()) {
                 return 1 + (int) Math.pow(2, i + 1);
             }
         }
@@ -189,6 +225,11 @@ public class ProjectDialog extends BaseDialog {
     public void setMap(IntIntMap map, IntIntMap boostMap) {
         this.map = map;
         this.boostMap = boostMap;
+    }
+
+    public void setWrite(Cons<IntIntMap> write1, Cons<IntIntMap> write2) {
+        this.write1 = write1;
+        this.write2 = write2;
     }
 
     public void load(String s) {

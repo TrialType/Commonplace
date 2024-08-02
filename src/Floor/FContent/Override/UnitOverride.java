@@ -1,12 +1,11 @@
 package Floor.FContent.Override;
 
 import Floor.FAI.MissileAI_II;
+import Floor.FContent.DefaultContent.FEffects;
 import Floor.FContent.DefaultContent.FStatusEffects;
 import Floor.FEntities.FAbility.LevelSign;
 import Floor.FEntities.FAbility.TimeLargeDamageAbility;
-import Floor.FEntities.FBulletType.ContinuousLightningBulletType;
-import Floor.FEntities.FBulletType.FlyContinuousLaserBulletType;
-import Floor.FEntities.FBulletType.MissileExplosionBulletType;
+import Floor.FEntities.FBulletType.*;
 import Floor.FEntities.FUnit.F.TimeUpGradeUnit;
 import Floor.FEntities.FUnit.Override.*;
 import Floor.FEntities.FWeapon.SuctionWeapon;
@@ -21,6 +20,7 @@ import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.ForceFieldAbility;
 import mindustry.entities.abilities.RepairFieldAbility;
+import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
@@ -42,7 +42,6 @@ import static arc.math.Angles.randLenVectors;
 
 public class UnitOverride {
     static Weapon weapon;
-    static BulletType bullet;
     static Color color;
 
     public static void load() {
@@ -484,8 +483,8 @@ public class UnitOverride {
                         bullet = new BasicBulletType() {{
                             inaccuracy = 24;
 
-                            homingRange = 1000;
-                            homingDelay = 20;
+                            homingRange = 600;
+                            homingDelay = 80;
                             homingPower = 0.07f;
                             lifetime = 120;
                             speed = 5;
@@ -495,7 +494,6 @@ public class UnitOverride {
                 }};
             }};
         }});
-
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.quad.health = 22000;
@@ -504,12 +502,194 @@ public class UnitOverride {
         UnitTypes.oct.health = 77000;
 
         /*-----------------------------------------------------------------------------*/
+        UnitTypes.risso.health = 430;
+        UnitTypes.risso.armor = 7;
+        weapon = UnitTypes.risso.weapons.get(0);
+        weapon.bullet.damage = 13.5f;
+        weapon.bullet.lifetime = 90;
+        weapon.bullet.init();
+        weapon = UnitTypes.risso.weapons.get(1);
+        weapon.bullet.lifetime = 97.5f;
+        weapon.bullet.damage = 18;
+        weapon.bullet.splashDamage = 15;
+        weapon.bullet.fragBullets = 1;
+        weapon.bullet.fragBullet = new PointBulletType2() {{
+            absorbable = reflectable = hittable = collides = false;
+
+            speed = 0;
+            damage = 0;
+            lifetime = 90;
+            despawnEffect = hitEffect = Fx.none;
+            laserDelay = 30;
+            laserInterval = 45;
+            laserSpreadRandom = 360;
+            laserRange = 77;
+            laserGroups = 3;
+            laserColor = Pal.bulletYellowBack;
+            laserEffect = FEffects.laserLinkLower;
+            laserBulletType = new BulletType(0, 16) {{
+                lifetime = 1;
+                absorbable = reflectable = hittable = keepVelocity = false;
+                despawnEffect = hitEffect = Fx.none;
+            }};
+
+            init();
+        }};
+        weapon.bullet.init();
+
+        UnitTypes.minke.health = 800;
+        UnitTypes.minke.armor = 14;
+        weapon = UnitTypes.minke.weapons.get(0);
+        weapon.reload = 120;
+        weapon.bullet = new AroundBulletType() {{
+            speed = 4.5f;
+            lifetime = 300;
+            damage = 10;
+            weapon.bullet.splashDamage = 27 * 2.25f;
+
+            trailColor = Pal.bulletYellowBack;
+            trailLength = 12;
+            trailWidth = 2;
+
+            weapon.bullet.keepVelocity = false;
+
+            statusEffect = StatusEffects.blasted;
+
+            roundIntervalCenter = true;
+            roundIntervalBullets = 1;
+            roundBulletInterval = 15;
+            roundIntervalBullet = new FlakBulletType(4.2f, 3) {{
+                lifetime = 60f;
+                ammoMultiplier = 4f;
+                shootEffect = Fx.shootSmall;
+                width = 6f;
+                height = 8f;
+                hitEffect = Fx.flakExplosion;
+                splashDamage = 27f * 1.5f;
+                splashDamageRadius = 15f;
+                homingDelay = 0;
+                homingPower = 0.1f;
+                homingRange = 1350;
+            }};
+        }};
+        weapon.bullet.init();
+        weapon = UnitTypes.minke.weapons.get(1);
+        weapon.bullet.damage = 30;
+        weapon.bullet.splashDamage = 60;
+        weapon.bullet.lifetime = 120;
+        weapon.bullet.speed = 4.5f;
+        weapon.bullet.init();
+
+        UnitTypes.bryde.health = 1410;
+        UnitTypes.bryde.armor = 20;
+        ShieldRegenFieldAbility ability = (ShieldRegenFieldAbility) UnitTypes.bryde.abilities.first();
+        ability.amount = 100;
+        ability.max = 200;
+        weapon = UnitTypes.bryde.weapons.get(0);
+        weapon.bullet.damage = 22;
+        weapon.bullet.splashDamage = 70;
+        weapon.bullet.lifetime = 126;
+        weapon.bullet.weaveMag = 0.35f;
+        weapon.bullet.weaveScale = 30;
+        weapon.bullet.weaveRandom = true;
+        weapon.bullet.fragBullet = new BasicBulletType(3.2f, 15) {{
+            collidesTiles = collidesAir = false;
+
+            hitEffect = Fx.massiveExplosion;
+            drag = -0.005f;
+            knockback = 1.5f;
+            lifetime = 35f;
+            height = 15.5f;
+            width = 15f;
+            shrinkX = 0.15f;
+            shrinkY = 0.63f;
+            shrinkInterp = Interp.slope;
+            splashDamageRadius = 40f;
+            splashDamage = 70f;
+            backColor = Pal.missileYellowBack;
+            frontColor = Pal.missileYellow;
+            trailEffect = Fx.artilleryTrail;
+            trailInterval = 2;
+            hitShake = 4f;
+
+            shootEffect = Fx.shootBig2;
+
+            status = StatusEffects.blasted;
+            statusDuration = 60f;
+        }};
+        weapon.bullet.fragBullets = 5;
+        weapon.bullet.fragRandomSpread = 30;
+        weapon.bullet.init();
+        weapon = UnitTypes.bryde.weapons.get(1);
+        weapon.bullet.damage = 18;
+        weapon.bullet.splashDamage = 15;
+        weapon.bullet.lifetime = 105;
+        weapon.bullet.init();
 
         UnitTypes.sei.health = 22000;
 
         UnitTypes.omura.health = 77000;
 
         /*-----------------------------------------------------------------------------*/
+        UnitTypes.retusa.health = 550;
+        UnitTypes.retusa.speed = 0.7f;
+        UnitTypes.retusa.armor = 8;
+        weapon = UnitTypes.retusa.weapons.get(1);
+        weapon.shoot = new ShootBarrel() {{
+            shots = 3;
+            barrels = new float[]{
+                    0, 0, 0,
+                    0, 0, 120,
+                    0, 0, 240,
+            };
+        }};
+        weapon.bullet.pierce = true;
+        weapon.bullet.pierceBuilding = true;
+        weapon.bullet.pierceCap = 3;
+        weapon.bullet.lifetime = 120.5f;
+        weapon.bullet.homingDelay = 60.5f;
+        weapon.bullet.intervalBullets = 1;
+        weapon.bullet.intervalDelay = 30.5f;
+        weapon.bullet.bulletInterval = 18f;
+        weapon.bullet.intervalBullet = new BasicBulletType() {{
+            reflectable = absorbable = collidesAir = false;
+            keepVelocity = false;
+
+            speed = 0;
+            lifetime = 180;
+            damage = 180;
+            buildingDamageMultiplier = 0.1f;
+            width = 12;
+            height = 4.8f;
+            shrinkX = shrinkY = 0;
+            frontColor = backColor = color = hitColor = Pal.heal;
+
+            collidesTeam = true;
+            healAmount = 32;
+            healPercent = 1;
+        }};
+        weapon.bullet.init();
+
+        UnitTypes.cyerce.health = 1370;
+        UnitTypes.cyerce.armor = 16;
+        weapon = UnitTypes.cyerce.weapons.get(1);
+        BulletType bullet = weapon.bullet.fragBullet;
+        bullet.speed = 4.9f;
+        weapon.bullet.lifetime = 120;
+        weapon.bullet.damage = 37.5f;
+        weapon.bullet.splashDamage = 37.5f;
+        weapon.bullet.fragBullets = 1;
+        weapon.bullet.fragBullet = new SummonBulletType() {{
+            lifetime = 0;
+            speed = 0;
+            damage = 0;
+            keepVelocity = false;
+            summonRange = 220;
+            summonNumber = 10;
+            summonDespawned = true;
+            summon = bullet;
+        }};
+        weapon.bullet.init();
 
         UnitTypes.aegires.health = 42000;
         UnitTypes.aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
@@ -543,16 +723,16 @@ public class UnitOverride {
         UnitTypes.tecta.health = 26550;
 
         UnitTypes.collaris.health = 63000;
-        bullet = UnitTypes.collaris.weapons.get(0).bullet;
+        weapon = UnitTypes.collaris.weapons.get(0);
         UnitTypes.collaris.targetAir = true;
-        bullet.damage = 520;
-        bullet.splashDamage = 85f;
-        bullet.splashDamageRadius = 20f;
-        bullet.bulletInterval = 20;
-        bullet.intervalBullets = 3;
-        bullet.intervalRandomSpread = 30;
-        bullet.intervalAngle = 0;
-        bullet.intervalBullet = new BasicBulletType() {{
+        weapon.bullet.damage = 520;
+        weapon.bullet.splashDamage = 85f;
+        weapon.bullet.splashDamageRadius = 20f;
+        weapon.bullet.bulletInterval = 20;
+        weapon.bullet.intervalBullets = 3;
+        weapon.bullet.intervalRandomSpread = 30;
+        weapon.bullet.intervalAngle = 0;
+        weapon.bullet.intervalBullet = new BasicBulletType() {{
             lifetime = 180;
             damage = 120;
             speed = 6;
@@ -564,9 +744,9 @@ public class UnitOverride {
             trailWidth = 2.2f;
             trailLength = 30;
         }};
-        bullet.fragBullet.damage = 100;
-        bullet.fragBullet.splashDamage = 92f;
-        bullet.fragBullet.splashDamageRadius = 20;
+        weapon.bullet.fragBullet.damage = 100;
+        weapon.bullet.fragBullet.splashDamage = 92f;
+        weapon.bullet.fragBullet.splashDamageRadius = 20;
 
         /*-----------------------------------------------------------------------------*/
         UnitTypes.nova.speed = 2f;
@@ -577,26 +757,25 @@ public class UnitOverride {
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
         weapon.reload = 4;
-        bullet = weapon.bullet;
-        bullet.lifetime = 90;
-        bullet.speed = 8;
-        bullet.damage = 18;
-        bullet.healAmount = 0;
-        bullet.healPercent = 0;
-        bullet.reflectable = true;
-        bullet.collidesTeam = false;
-        bullet.smokeEffect = new Effect(8, e -> {
+        weapon.bullet.lifetime = 90;
+        weapon.bullet.speed = 8;
+        weapon.bullet.damage = 18;
+        weapon.bullet.healAmount = 0;
+        weapon.bullet.healPercent = 0;
+        weapon.bullet.reflectable = true;
+        weapon.bullet.collidesTeam = false;
+        weapon.bullet.smokeEffect = new Effect(8, e -> {
             color(Color.white, color, e.fin());
             stroke(0.5f + e.fout());
             Lines.circle(e.x, e.y, e.fin() * 5f);
 
             Drawf.light(e.x, e.y, 23f, color, e.fout() * 0.7f);
         });
-        bullet.hitEffect = bullet.smokeEffect;
-        bullet.despawnEffect = bullet.smokeEffect;
-        bullet.lightColor = color;
-        ((LaserBoltBulletType) bullet).frontColor = color;
-        ((LaserBoltBulletType) bullet).backColor = color;
+        weapon.bullet.hitEffect = weapon.bullet.smokeEffect;
+        weapon.bullet.despawnEffect = weapon.bullet.smokeEffect;
+        weapon.bullet.lightColor = color;
+        ((LaserBoltBulletType) weapon.bullet).frontColor = color;
+        ((LaserBoltBulletType) weapon.bullet).backColor = color;
 
         UnitTypes.pulsar.health = 560;
         UnitTypes.pulsar.speed = 1.1f;

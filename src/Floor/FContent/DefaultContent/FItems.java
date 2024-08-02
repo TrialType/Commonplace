@@ -4,10 +4,6 @@ import mindustry.type.Item;
 
 public class FItems {
     public static Item damagePower, reloadPower, healthPower, speedPower, shieldPower, againPower;
-    public static Item sizeProject1, sizeProject2, sizeProject3, sizeProject4, sizeProject5,
-            sizeProject6, sizeProject7, sizeProject8, sizeProject9, sizeProject10;
-    public static Item[] allSize;
-
     //item
 //            blueprint1, blueprint2, blueprint3, blueprint4, blueprint5,
 //            speedProject1, speedProject2, speedProject3, speedProject4, speedProject5,
@@ -61,7 +57,6 @@ public class FItems {
             buildable = false;
             alwaysUnlocked = true;
         }};
-
 //        blueprint1 = new Item("blue-print1") {{
 //            buildable = false;
 //        }};
@@ -78,50 +73,51 @@ public class FItems {
 //            buildable = false;
 //        }};
 
-        sizeProject1 = new Item("size-project1") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject2 = new Item("size-project2") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject3 = new Item("size-project3") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject4 = new Item("size-project4") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject5 = new Item("size-project5") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject6 = new Item("size-project6") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject7 = new Item("size-project7") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject8 = new Item("size-project8") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject9 = new Item("size-project9") {{
-            hidden = true;
-            buildable = false;
-        }};
-        sizeProject10 = new Item("size-project10") {{
-            hidden = true;
-            buildable = false;
-        }};
-        allSize = new Item[]{
-                sizeProject1, sizeProject2, sizeProject3, sizeProject4, sizeProject5,
-                sizeProject6, sizeProject7, sizeProject8, sizeProject9, sizeProject10
-        };
+//        sizeProject1 = new Item("size-project1") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject2 = new Item("size-project2") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject3 = new Item("size-project3") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject4 = new Item("size-project4") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject5 = new Item("size-project5") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject6 = new Item("size-project6") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject7 = new Item("size-project7") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject8 = new Item("size-project8") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject9 = new Item("size-project9") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        sizeProject10 = new Item("size-project10") {{
+//            hidden = true;
+//            buildable = false;
+//        }};
+//        allSize = new Item[]{
+//                sizeProject1, sizeProject2, sizeProject3, sizeProject4, sizeProject5,
+//                sizeProject6, sizeProject7, sizeProject8, sizeProject9, sizeProject10
+//        };
+
 //        speedProject1 = new Item("speed-project1") {{
 //            hidden = true;
 //            buildable = false;

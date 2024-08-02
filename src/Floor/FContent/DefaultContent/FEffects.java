@@ -8,11 +8,14 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
+import arc.util.Tmp;
 import mindustry.entities.Effect;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.graphics.Drawf;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
+import static arc.util.Tmp.v1;
 
 public class FEffects {
     public static Effect lightning2 = new Effect(3, 500f, e -> {
@@ -86,5 +89,33 @@ public class FEffects {
         smokeRad = 280;
 
         sparks = 0;
-    }};
+    }}, laserLink = new Effect(25, f -> {
+        if (f.data instanceof Vec2 v) {
+            Draw.color(f.color);
+            float stroke = 6 * (0.5f - Math.abs(f.fin() - 0.5f));
+            Lines.stroke(stroke);
+            Lines.line(f.x, f.y, v.x, v.y);
+            Drawf.light(f.x, f.y, v.x, v.y, stroke + 1, f.color, 0.6f);
+        }
+    }), laserLinkLower = new Effect(25, f -> {
+        if (f.data instanceof Vec2 v) {
+            Draw.color(f.color);
+            Lines.stroke(1);
+            Vec2 from = new Vec2(v).sub(f.x, f.y), to = new Vec2(f.x, f.y);
+            if (f.fin() <= 0.35f) {
+                from.setLength(from.len() * f.fin() / 0.35f);
+                to.add(from);
+                from.set(f.x, f.y);
+            } else if (f.fin() > 0.65f) {
+                from.setLength(from.len() * f.fout() / 0.35f);
+                to.set(v);
+                from.scl(-1).add(to);
+            } else {
+                from.set(to);
+                to.set(v);
+            }
+            Lines.line(from.x, from.y, to.x, to.y);
+            Drawf.light(from.x, from.y, to.x, to.y, 4, f.color, 0.6f);
+        }
+    });
 }

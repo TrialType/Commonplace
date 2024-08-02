@@ -183,7 +183,7 @@ public class FBlocks {
         }};
 //======================================================================================================================
         outPowerFactory = new GradeFactory("out_power_factory") {{
-            requirements(Category.units,  with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
+            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
 
             itemCapacity = 770;
             size = 11;
@@ -690,7 +690,7 @@ public class FBlocks {
                     hittable = absorbable = reflectable = collides = false;
                     despawnEffect = hitEffect = Fx.none;
 
-                    laserBullets = 10;
+                    laserGroups = 10;
                     laserInterval = 10;
                     laserDelay = 0;
                     laserBulletType = new BulletType(0, 62) {{
@@ -701,15 +701,8 @@ public class FBlocks {
 
                         collides = hittable = absorbable = reflectable = false;
                     }};
-                    laserEffect = new Effect(25, f -> {
-                        if (f.data instanceof Vec2 v) {
-                            Draw.color(Color.valueOf("EBEEF5"));
-                            float stroke = 12 * (0.5f - Math.abs(f.fin() - 0.5f));
-                            Lines.stroke(stroke);
-                            Lines.line(f.x, f.y, v.x, v.y);
-                            Drawf.light(f.x, f.y, v.x, v.y, stroke + 1, Color.valueOf("EBEEF5"), 0.6f);
-                        }
-                    });
+                    laserColor = Color.valueOf("EBeEF5");
+                    laserEffect = FEffects.laserLink;
                 }};
             }});
         }};

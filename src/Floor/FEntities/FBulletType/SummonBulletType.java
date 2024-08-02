@@ -1,6 +1,7 @@
 package Floor.FEntities.FBulletType;
 
 import arc.math.Angles;
+import arc.math.Mathf;
 import arc.math.Rand;
 import arc.util.Time;
 import mindustry.entities.bullet.BasicBulletType;
@@ -11,34 +12,25 @@ import mindustry.gen.Entityc;
 
 public class SummonBulletType extends BasicBulletType {
     public BulletType summon = null;
+    public boolean summonHit = true;
+    public boolean summonDespawned = true;
     public float summonRange = 150;
     public int summonNumber = 12;
-    public float summonRad = 360;
+    public float summonRadRandom = 360;
     public float summonDelay = 0;
     public float everySummonDelay = 0;
 
     public void hit(Bullet b, float x, float y) {
         super.hit(b, x, y);
-        if (summon != null) {
-            if (summonDelay > 0) {
-                Time.run(summonDelay, () -> createSummon(b.owner, b.team, x, y, summonNumber));
+        if (summonHit && summon != null) {
+            if (everySummonDelay > 0) {
+                for (int i = 0; i < summonNumber; i++) {
+                    Time.run(summonDelay + i * everySummonDelay, () -> summon(b.owner, b.team, x, y, Mathf.range(summonRadRandom / 2)));
+                }
             } else {
-                createSummon(b.owner, b.team, x, y, summonNumber);
-            }
-        }
-    }
-
-    public void createSummon(Entityc owner, Team team, float x, float y, int number) {
-        Rand r = new Rand();
-        if (everySummonDelay <= 0) {
-            for (int i = 0; i < number; i++) {
-                summon(owner, team, x, y, r.range(summonRad));
-            }
-        } else {
-            summon(owner, team, x, y, r.range(summonRad));
-
-            if (number > 1) {
-                Time.run(everySummonDelay, () -> createSummon(owner, team, x, y, number - 1));
+                for (int i = 0; i < summonNumber; i++) {
+                    Time.run(summonDelay, () -> summon(b.owner, b.team, x, y, Mathf.range(summonRadRandom / 2)));
+                }
             }
         }
     }
@@ -48,5 +40,20 @@ public class SummonBulletType extends BasicBulletType {
         Bullet bu = summon.create(owner, team, dx + x, dy + y, -rotate);
         bu.vel.set(-dx, -dy).setLength(summon.speed);
         bu.rotation(Angles.angle(-dx, -dy));
+    }
+
+    public void despawned(Bullet b) {
+        super.despawned(b);
+        if (summonDespawned && !b.absorbed) {
+            if (everySummonDelay > 0) {
+                for (int i = 0; i < summonNumber; i++) {
+                    Time.run(summonDelay + i * everySummonDelay, () -> summon(b.owner, b.team, b.x, b.y, Mathf.range(summonRadRandom / 2)));
+                }
+            } else {
+                for (int i = 0; i < summonNumber; i++) {
+                    Time.run(summonDelay, () -> summon(b.owner, b.team, b.x, b.y, Mathf.range(summonRadRandom / 2)));
+                }
+            }
+        }
     }
 }
