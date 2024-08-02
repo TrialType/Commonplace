@@ -152,7 +152,7 @@ public class FEvents {
     }
 
     public static float getExp(float maxHealth, int level1, int level2) {
-        float multiplier = 1;
+        float multiplier =  1;
         if (level1 > level2) {
             float high = level1 - level2;
             multiplier -= 2 * high / level1;
