@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FUnit.F;
 
-import Commonplace.FContent.SpecialContent.FEvents;
+import Commonplace.FContent.SpecialContent.MEvents;
 import Commonplace.FContent.DefaultContent.FUnits;
 import Commonplace.FEntities.FUnit.Override.FUnitEntity;
 import Commonplace.FEntities.FUnitType.ENGSWEISUnitType;
@@ -182,7 +182,7 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
             u.damage(damage);
         }
         if (!dead && u.dead()) {
-            Events.fire(new FEvents.UnitDestroyOtherEvent(this, u));
+            Events.fire(new MEvents.UnitDestroyOtherEvent(this, u));
         }
     }
 

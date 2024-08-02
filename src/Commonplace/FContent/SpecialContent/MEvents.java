@@ -23,7 +23,7 @@ import static Commonplace.FTools.classes.UnitUpGrade.getPower;
 import static java.lang.Math.*;
 
 
-public class FEvents {
+public class MEvents {
     private static final Random r = new Random();
 
     public static void load() {
@@ -114,7 +114,7 @@ public class FEvents {
                 }
             }
         });
-        Events.on(FEvents.UnitDestroyOtherEvent.class, e -> {
+        Events.on(MEvents.UnitDestroyOtherEvent.class, e -> {
             if (e.other instanceof UnitUpGrade || e.other.maxHealth() >= 1000) {
                 if (e.killer instanceof UnitUpGrade uug) {
                     uug.addExp(getExp(e.other.maxHealth(), uug.getLevel(),
@@ -152,7 +152,7 @@ public class FEvents {
     }
 
     public static float getExp(float maxHealth, int level1, int level2) {
-        float multiplier =  1;
+        float multiplier = 1;
         if (level1 > level2) {
             float high = level1 - level2;
             multiplier -= 2 * high / level1;

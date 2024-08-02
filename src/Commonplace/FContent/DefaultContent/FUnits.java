@@ -1,7 +1,7 @@
 package Commonplace.FContent.DefaultContent;
 
 import Commonplace.FAI.*;
-import Commonplace.FContent.SpecialContent.FCommands;
+import Commonplace.FContent.SpecialContent.MCommands;
 import Commonplace.FEntities.FAbility.*;
 import Commonplace.FEntities.FBulletType.*;
 import Commonplace.FEntities.FUnit.F.*;
@@ -606,7 +606,7 @@ public class FUnits {
         shuttle = new ENGSWEISUnitType("shuttle") {{
             constructor = ENGSWEISUnitEntity::create;
             aiController = StrongBoostAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, FCommands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
             Speed1 = 3;
             Health2 = 57750;
@@ -1084,7 +1084,7 @@ public class FUnits {
         barb = new ENGSWEISUnitType("barb") {{
             constructor = ENGSWEISUnitEntity::create;
             aiController = StrongBoostAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, FCommands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
             flying = true;
             targetAir = targetGround = true;
 
@@ -1150,7 +1150,7 @@ public class FUnits {
         buying = new ENGSWEISUnitType("buying") {{
             constructor = TileSpawnerUnit::create;
             aiController = StrongBoostAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, FCommands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
             minSpeed = 5;
             reload = 3600;
@@ -1214,7 +1214,7 @@ public class FUnits {
         hammer = new ENGSWEISUnitType("hammer") {{
             constructor = ENGSWEISUnitEntity::create;
             aiController = StrongBoostAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, FCommands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
             health = 250;
             speed = 1.2F;
@@ -1255,7 +1255,7 @@ public class FUnits {
         transition = new ENGSWEISUnitType("transition") {{
             constructor = ENGSWEISUnitEntity::create;
             aiController = StrongBoostAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, FCommands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
             health = 22000;
             speed = 2F;

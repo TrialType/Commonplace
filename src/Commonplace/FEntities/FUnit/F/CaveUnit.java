@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FUnit.F;
 
-import Commonplace.FContent.SpecialContent.FEvents;
+import Commonplace.FContent.SpecialContent.MEvents;
 import Commonplace.FContent.DefaultContent.FStatusEffects;
 import Commonplace.FContent.DefaultContent.FUnits;
 import Commonplace.FEntities.FEffect.WaterWave;
@@ -254,7 +254,7 @@ public class CaveUnit extends UnitWaterMove {
         unit.rotation(rotate);
         unit.add();
         unit.apply(FStatusEffects.tension);
-        Events.fire(new FEvents.GetPowerEvent(unit, time * 2, false));
+        Events.fire(new MEvents.GetPowerEvent(unit, time * 2, false));
         Fx.unitSpawn.at(x, y, rotate);
     }
 }

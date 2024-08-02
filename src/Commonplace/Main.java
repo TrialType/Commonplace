@@ -16,18 +16,18 @@ public class Main extends Mod {
     @Override
     public void loadContent() {
         FSign.load();
-        FSettings.load();
+        MSettings.load();
         FLiquids.load();
         FItems.load();
-        FCommands.load();
-        FEntities.load();
+        MCommands.load();
+        MEntities.load();
         FStatusEffects.load();
         FWeathers.load();
         UnitOverride.load();
         BlockOverride.load();
         FUnits.load();
         UnitProjects.load();
-        FEvents.load();
+        MEvents.load();
         FBlocks.load();
         FPlanets.load();
         PFloors.load();

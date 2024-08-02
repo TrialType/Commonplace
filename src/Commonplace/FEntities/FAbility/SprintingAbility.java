@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FAbility;
 
-import Commonplace.FContent.SpecialContent.FEvents;
+import Commonplace.FContent.SpecialContent.MEvents;
 import arc.Core;
 import arc.Events;
 import arc.graphics.Color;
@@ -384,7 +384,7 @@ public class SprintingAbility extends Ability {
         boolean dead = u.dead();
         u.damage(damage);
         if (!dead && u.dead()) {
-            Events.fire(new FEvents.UnitDestroyOtherEvent(unit, u));
+            Events.fire(new MEvents.UnitDestroyOtherEvent(unit, u));
         }
     }
 

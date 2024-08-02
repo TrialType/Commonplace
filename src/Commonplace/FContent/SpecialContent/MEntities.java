@@ -5,7 +5,7 @@ import Commonplace.FEntities.FUnit.F.*;
 import Commonplace.FEntities.FUnit.Override.*;
 import mindustry.gen.EntityMapping;
 
-public class FEntities {
+public class MEntities {
     public static void load() {
         EntityMapping.idMap[98] = WaterEffectState::create;
         EntityMapping.idMap[100] = ENGSWEISLegsUnit::create;

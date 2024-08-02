@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FAbility;
 
-import Commonplace.FContent.SpecialContent.FEvents;
+import Commonplace.FContent.SpecialContent.MEvents;
 import arc.Core;
 import arc.Events;
 import arc.scene.ui.layout.Table;
@@ -45,7 +45,7 @@ public class TimeLargeDamageAbility extends Ability {
             boolean dead = u.dead;
             u.damage(damage);
             if (!dead && u.dead) {
-                Events.fire(new FEvents.UnitDestroyOtherEvent(unit, u));
+                Events.fire(new MEvents.UnitDestroyOtherEvent(unit, u));
             }
         });
         Units.nearbyBuildings(x, y, radius, b -> {
@@ -55,7 +55,7 @@ public class TimeLargeDamageAbility extends Ability {
                 boolean dead = b.dead;
                 b.damage(damage * buildingExpand);
                 if (!dead && b.dead) {
-                    Events.fire(new FEvents.UnitDestroyOtherEvent(unit, b));
+                    Events.fire(new MEvents.UnitDestroyOtherEvent(unit, b));
                 }
             }
         });
