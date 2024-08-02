@@ -5,6 +5,7 @@ import arc.graphics.Color;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.util.Time;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
@@ -27,6 +28,7 @@ public class AroundBulletType extends BasicBulletType {
     public float statusTime = 120;
     public StatusEffect statusEffect = StatusEffects.wet;
     public Effect applyEffect = Fx.none;
+    public Color applyColor = Color.valueOf("06172699");
     public BulletType roundIntervalBullet = null;
     public float roundBulletInterval = 20;
     public int roundIntervalBullets = 1;
@@ -43,6 +45,7 @@ public class AroundBulletType extends BasicBulletType {
         updateMaps(b);
 
         if (b.data instanceof Unit u && b.within(u, circleRange + 5)) {
+            b.fdata += Time.delta;
             Vec2 vec2 = new Vec2();
             float bx = b.x, by = b.y, tx = u.x, ty = u.y;
             float angle = Angles.angle(tx, ty, bx, by) + 5;
@@ -50,7 +53,7 @@ public class AroundBulletType extends BasicBulletType {
             vec2.setLength(speed);
             b.vel.set(vec2);
 
-            if (roundIntervalBullet != null && b.timer(3, roundBulletInterval)) {
+            if (roundIntervalBullet != null && b.fdata > roundIntervalDelay && b.timer(3, roundBulletInterval)) {
                 if (roundIntervalCenter) {
                     for (int i = 0; i < roundIntervalBullets; i++) {
                         roundIntervalBullet.create(b.owner, b.team, b.x, b.y, b.angleTo(u),
@@ -68,7 +71,7 @@ public class AroundBulletType extends BasicBulletType {
 
             if (!u.hasEffect(statusEffect) && !lastStatus.get(u)) {
                 Units.nearbyEnemies(b.team, u.x, u.y, circleRange, unit -> {
-                    applyEffect.at(b.x, b.y, 0, Color.valueOf("06172699"), unit);
+                    applyEffect.at(unit.x, unit.y, 0, applyColor, unit);
 
                     boolean dead = unit.dead;
                     unit.damage(damage);
@@ -90,6 +93,7 @@ public class AroundBulletType extends BasicBulletType {
                 b.time = b.lifetime;
             }
         } else if (b.data instanceof Unit u) {
+            b.fdata = 0;
             Vec2 vec2 = new Vec2();
             vec2.set(u.x - b.x, u.y - b.y);
             vec2.setLength(speed);
@@ -101,10 +105,10 @@ public class AroundBulletType extends BasicBulletType {
     }
 
     @Override
-    public void despawned(Bullet b) {
-        super.despawned(b);
+    public void removed(Bullet b) {
+        super.removed(b);
 
-        Unit u = units.get(b);
+        Unit u = (Unit) b.data;
         units.remove(b);
         units.forEach((bullet, unit) -> {
             if (lastStatus.containsKey(u) && unit == u) {
@@ -115,7 +119,7 @@ public class AroundBulletType extends BasicBulletType {
     }
 
     public void updateTarget(Bullet b) {
-        b.data = Units.closestEnemy(b.team, b.x, b.y, targetRange, u -> u.hasWeapons() && !find(u));
+        b.data = Units.closestEnemy(b.team, b.x, b.y, targetRange, u -> u.hasWeapons() && !had(u));
         if (b.data == null) {
             b.data = Units.closestEnemy(b.team, b.x, b.y, targetRange, Unitc::hasWeapons);
         }
@@ -125,7 +129,7 @@ public class AroundBulletType extends BasicBulletType {
         }
     }
 
-    public boolean find(Unit u) {
+    public boolean had(Unit u) {
         for (Bullet ab : units.keySet()) {
             if (units.get(ab) == u) {
                 return true;
@@ -135,14 +139,18 @@ public class AroundBulletType extends BasicBulletType {
     }
 
     public void updateMaps(Bullet b) {
-        if (!(b.data instanceof Unit u) || u.dead || u.health <= 0 || !u.isAdded()) {
-            lastStatus.remove(Nulls.unit);
-            units.remove(b);
-            b.data = null;
-        } else {
-            if (u.hasEffect(statusEffect)) {
+        if (b.data instanceof Unit u) {
+            if (u.dead || u.health <= 0 || !u.isAdded()) {
+                lastStatus.remove(u);
+                units.remove(b);
+                b.data = null;
+            } else if (u.hasEffect(statusEffect)) {
                 lastStatus.put(u, false);
             }
+        } else {
+            lastStatus.remove(null);
+            units.remove(b);
+            b.data = null;
         }
     }
 }

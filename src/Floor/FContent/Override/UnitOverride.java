@@ -543,7 +543,7 @@ public class UnitOverride {
         weapon.reload = 120;
         weapon.bullet = new AroundBulletType() {{
             speed = 4.5f;
-            lifetime = 300;
+            lifetime = 200;
             damage = 10;
             weapon.bullet.splashDamage = 27 * 2.25f;
 
@@ -551,13 +551,10 @@ public class UnitOverride {
             trailLength = 12;
             trailWidth = 2;
 
-            weapon.bullet.keepVelocity = false;
-
             statusEffect = StatusEffects.blasted;
-
-            roundIntervalCenter = true;
+            targetRange = 300;
             roundIntervalBullets = 1;
-            roundBulletInterval = 15;
+            roundBulletInterval = 5;
             roundIntervalBullet = new FlakBulletType(4.2f, 3) {{
                 lifetime = 60f;
                 ammoMultiplier = 4f;
@@ -567,11 +564,11 @@ public class UnitOverride {
                 hitEffect = Fx.flakExplosion;
                 splashDamage = 27f * 1.5f;
                 splashDamageRadius = 15f;
-                homingDelay = 0;
-                homingPower = 0.1f;
-                homingRange = 1350;
+                collidesGround = true;
+                keepVelocity = false;
             }};
         }};
+        weapon.bullet.keepVelocity = false;
         weapon.bullet.init();
         weapon = UnitTypes.minke.weapons.get(1);
         weapon.bullet.damage = 30;
