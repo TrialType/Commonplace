@@ -1,0 +1,38 @@
+package Commonplace;
+
+import Commonplace.FContent.DefaultContent.*;
+import Commonplace.FContent.Override.BlockOverride;
+import Commonplace.FContent.Override.TechOverride;
+import Commonplace.FContent.Override.UnitOverride;
+import Commonplace.FContent.ProjectContent.FSign;
+import Commonplace.FContent.ProjectContent.UnitProjects;
+import Commonplace.FContent.SpecialContent.*;
+import mindustry.mod.Mod;
+
+public class Main extends Mod {
+    public Main() {
+    }
+
+    @Override
+    public void loadContent() {
+        FSign.load();
+        FSettings.load();
+        FLiquids.load();
+        FItems.load();
+        FCommands.load();
+        FEntities.load();
+        FStatusEffects.load();
+        FWeathers.load();
+        UnitOverride.load();
+        BlockOverride.load();
+        FUnits.load();
+        UnitProjects.load();
+        FEvents.load();
+        FBlocks.load();
+        FPlanets.load();
+        PFloors.load();
+        FPlanetGenerators.load();
+        Techs.load();
+        TechOverride.load();
+    }
+}

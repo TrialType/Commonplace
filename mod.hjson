@@ -1,5 +1,5 @@
 #the mod name as displayed in-game
-displayName: "Floor"
+displayName: "Commonplace"
 
 #the internal name of your mod
 name: "floor"
@@ -8,10 +8,10 @@ name: "floor"
 author: "试做型"
 
 #the fully qualified main class of the mod
-main: "Floor.Floor"
+main: "Commonplace.Main"
 
 #the mod description as seen in the mod dialog
-description: "FloorMod"
+description: "A Commonplace Mod"
 
 #the mod version
 version: 1.0
