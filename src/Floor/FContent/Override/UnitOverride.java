@@ -544,25 +544,26 @@ public class UnitOverride {
         weapon.bullet = new AroundBulletType() {{
             speed = 4.5f;
             lifetime = 200;
-            damage = 10;
+            damage = 54;
             weapon.bullet.splashDamage = 27 * 2.25f;
 
             trailColor = Pal.bulletYellowBack;
             trailLength = 12;
             trailWidth = 2;
 
-            statusEffect = StatusEffects.blasted;
+            statusEffect = StatusEffects.slow;
+            statusTime = 300;
             targetRange = 300;
             roundIntervalBullets = 1;
             roundBulletInterval = 5;
-            roundIntervalBullet = new FlakBulletType(4.2f, 3) {{
+            roundIntervalBullet = new FlakBulletType(4.2f, 4.5f) {{
                 lifetime = 60f;
                 ammoMultiplier = 4f;
                 shootEffect = Fx.shootSmall;
                 width = 6f;
                 height = 8f;
                 hitEffect = Fx.flakExplosion;
-                splashDamage = 27f * 1.5f;
+                splashDamage = 18;
                 splashDamageRadius = 15f;
                 collidesGround = true;
                 keepVelocity = false;
@@ -595,7 +596,7 @@ public class UnitOverride {
             hitEffect = Fx.massiveExplosion;
             drag = -0.005f;
             knockback = 1.5f;
-            lifetime = 35f;
+            lifetime = 60f;
             height = 15.5f;
             width = 15f;
             shrinkX = 0.15f;
@@ -614,8 +615,8 @@ public class UnitOverride {
             status = StatusEffects.blasted;
             statusDuration = 60f;
         }};
-        weapon.bullet.fragBullets = 5;
-        weapon.bullet.fragRandomSpread = 30;
+        weapon.bullet.fragBullets = 7;
+        weapon.bullet.fragRandomSpread = 120;
         weapon.bullet.init();
         weapon = UnitTypes.bryde.weapons.get(1);
         weapon.bullet.damage = 18;
@@ -667,7 +668,29 @@ public class UnitOverride {
         }};
         weapon.bullet.init();
 
-        UnitTypes.cyerce.health = 1370;
+        UnitTypes.oxynoe.health = 1060;
+        UnitTypes.oxynoe.armor = 10;
+        UnitTypes.oxynoe.speed = 1.66f;
+        StatusFieldAbility statusFieldAbility = (StatusFieldAbility) UnitTypes.oxynoe.abilities.get(0);
+        statusFieldAbility.range = 90;
+        statusFieldAbility.duration = 420;
+        weapon = UnitTypes.oxynoe.weapons.get(0);
+        weapon.reload = 3;
+        weapon.shootStatus = FStatusEffects.deploy;
+        weapon.shootStatusDuration = 10;
+        weapon.bullet.lifetime = 27;
+        weapon.bullet.damage = 34.5f;
+        weapon.bullet.shootEffect = new Effect(32f, 120f, e -> {
+            color(Color.white, Pal.heal, Color.gray, e.fin());
+
+            randLenVectors(e.id, 12, e.finpow() * 90f, e.rotation, 10f, (x, y) -> {
+                Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.5f);
+                Drawf.light(e.x + x, e.y + y, 16f * e.fout(), Pal.heal, 0.6f);
+            });
+        });
+        weapon.bullet.init();
+
+        UnitTypes.cyerce.health = 1870;
         UnitTypes.cyerce.armor = 16;
         weapon = UnitTypes.cyerce.weapons.get(1);
         BulletType bullet = weapon.bullet.fragBullet;

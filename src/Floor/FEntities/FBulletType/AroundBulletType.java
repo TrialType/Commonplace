@@ -47,21 +47,21 @@ public class AroundBulletType extends BasicBulletType {
         if (b.data instanceof Unit u && b.within(u, circleRange + 5)) {
             b.fdata += Time.delta;
             Vec2 vec2 = new Vec2();
-            float bx = b.x, by = b.y, tx = u.x, ty = u.y;
-            float angle = Angles.angle(tx, ty, bx, by) + 5;
-            vec2.set((float) (tx + circleRange * Math.cos(Math.toRadians(angle)) - bx), (float) (ty + circleRange * Math.sin(Math.toRadians(angle)) - by));
-            vec2.setLength(speed);
+            float bx = b.x, by = b.y, ux = u.x, uy = u.y;
+            float angle = Angles.angle(ux, uy, bx, by) + 5;
+            vec2.set((float) (ux + circleRange * Math.cos(Math.toRadians(angle)) - bx), (float) (uy + circleRange * Math.sin(Math.toRadians(angle)) - by));
+            vec2.setLength(b.vel.len());
             b.vel.set(vec2);
 
             if (roundIntervalBullet != null && b.fdata > roundIntervalDelay && b.timer(3, roundBulletInterval)) {
                 if (roundIntervalCenter) {
                     for (int i = 0; i < roundIntervalBullets; i++) {
-                        roundIntervalBullet.create(b.owner, b.team, b.x, b.y, b.angleTo(u),
+                        roundIntervalBullet.create(b.owner, b.team, bx, by, b.angleTo(u),
                                 -1, 1, 1, null, null, u.x, u.y);
                     }
                 } else {
                     for (int i = 0; i < roundIntervalBullets; i++) {
-                        roundIntervalBullet.create(b.owner, b.team, b.x, b.y,
+                        roundIntervalBullet.create(b.owner, b.team, bx, by,
                                 b.rotation() + roundIntervalAngle + Mathf.range(roundIntervalRandomSpread) +
                                         roundIntervalSpread * (i - ((roundIntervalBullets - 1) / 2f)),
                                 -1, 1, 1, null, null, u.x, u.y);
@@ -70,7 +70,7 @@ public class AroundBulletType extends BasicBulletType {
             }
 
             if (!u.hasEffect(statusEffect) && !lastStatus.get(u)) {
-                Units.nearbyEnemies(b.team, u.x, u.y, circleRange, unit -> {
+                Units.nearbyEnemies(b.team, ux, uy, circleRange, unit -> {
                     applyEffect.at(unit.x, unit.y, 0, applyColor, unit);
 
                     boolean dead = unit.dead;
@@ -96,7 +96,7 @@ public class AroundBulletType extends BasicBulletType {
             b.fdata = 0;
             Vec2 vec2 = new Vec2();
             vec2.set(u.x - b.x, u.y - b.y);
-            vec2.setLength(speed);
+            vec2.setLength(b.vel.len());
             b.rotation(Angles.angle(u.x - b.x, u.y - b.y));
             b.move(vec2);
         } else {
@@ -110,11 +110,15 @@ public class AroundBulletType extends BasicBulletType {
 
         Unit u = (Unit) b.data;
         units.remove(b);
+        b.data = true;
         units.forEach((bullet, unit) -> {
-            if (lastStatus.containsKey(u) && unit == u) {
-                lastStatus.remove(u);
+            if (unit == u) {
+                b.data = false;
             }
         });
+        if ((boolean) b.data) {
+            lastStatus.remove(u);
+        }
         b.data = null;
     }
 
