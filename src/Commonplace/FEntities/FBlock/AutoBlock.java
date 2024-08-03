@@ -210,7 +210,7 @@ public class AutoBlock extends Block {
                         }
                     });
                     if (createReload <= 0 || createTimer >= createReload) {
-                        Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+                        Seq<Block> blocks = creates.values().toSeq().sort(o -> o.id);
                         Block b = blocks.get(config);
                         float cx = tileX() + (b.size + behind) * Mathf.cosDeg(rotation * 90);
                         float cy = tileY() + (b.size + behind) * Mathf.sinDeg(rotation * 90);
@@ -275,7 +275,7 @@ public class AutoBlock extends Block {
             }
             final int[] id = {0};
             t.table(s -> {
-                Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+                Seq<Block> blocks = creates.values().toSeq().sort(o -> o.id);
                 for (int i = 0; i < blocks.size; i++) {
                     int index = i;
                     Block b = blocks.get(i);
@@ -309,7 +309,7 @@ public class AutoBlock extends Block {
         }
 
         public boolean couldStart() {
-            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            Seq<Block> blocks = creates.values().toSeq().sort(o -> o.id);
             for (ItemStack stack : creates.findKey(blocks.get(config), true)) {
                 if (items.get(stack.item) < stack.amount) {
                     return false;
@@ -319,7 +319,7 @@ public class AutoBlock extends Block {
         }
 
         public void start() {
-            items.remove(creates.findKey(creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id)).get(config), true));
+            items.remove(creates.findKey(creates.values().toSeq().sort(o -> o.id).get(config), true));
             beginning = true;
             if (createDelay > 0) {
                 beginEffect.at(this);
@@ -339,7 +339,7 @@ public class AutoBlock extends Block {
 
         @Override
         public int getMaximumAccepted(Item item) {
-            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            Seq<Block> blocks = creates.values().toSeq().sort(o -> o.id);
             ItemStack[] items = creates.findKey(blocks.get(config), true);
             for (ItemStack stack : items) {
                 if (stack.item == item) {
@@ -354,7 +354,7 @@ public class AutoBlock extends Block {
             if (beginning || starting) {
                 return false;
             }
-            Seq<Block> blocks = creates.values().toSeq().sort(Comparator.comparingInt((Block o) -> o.id));
+            Seq<Block> blocks = creates.values().toSeq().sort(o -> o.id);
             ItemStack[] items = creates.findKey(blocks.get(config), true);
             ItemStack stack;
             for (ItemStack itemStack : items) {
@@ -363,30 +363,6 @@ public class AutoBlock extends Block {
                     return this.items.get(item) < itemStack.amount;
                 }
             }
-//            if (auto) {
-//                final ItemStack[][] items2 = {null};
-//                creates.each((i, b) -> {
-//                    if (items2[0] == null) {
-//                        for (ItemStack s : items) {
-//                            if (s.item == item) {
-//                                items2[0] = i;
-//                                return;
-//                            }
-//                        }
-//                    }
-//                });
-//                Seq<Item> different = new Seq<>(items.length);
-//                if (items2[0] != null) {
-//                    for (ItemStack stack : items) {
-//                        for (ItemStack itemStack : items2[0]) {
-//                            if (stack.item == itemStack.item) {
-//                                break;
-//                            }
-//                            different.add(stack.item);
-//                        }
-//                    }
-//                }
-//            }
             return false;
         }
 

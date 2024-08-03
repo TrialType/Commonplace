@@ -174,6 +174,7 @@ public class UnitProjectBlock extends Block {
         public void write(Writes write) {
             super.write(write);
             write.i(lastId);
+            write.f(timer);
             write.i(map.size);
             map.forEach(e -> {
                 write.i(e.key);
@@ -190,6 +191,7 @@ public class UnitProjectBlock extends Block {
         public void read(Reads read, byte revision) {
             super.read(read);
             lastId = read.i();
+            timer = read.f();
             if (lastId > 0) {
                 before = true;
             }

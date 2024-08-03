@@ -40,6 +40,8 @@ public class Techs {
                 node(handTurret, ItemStack.with(silicon, 100, titanium, 100), () -> {
                     node(fragsAdd, ItemStack.with(silicon, 100, titanium, 100), () -> {
                         node(damageAdder, ItemStack.with(silicon, 100, titanium, 100), () -> {
+                            node(fragDamageAdder, ItemStack.with(silicon, 100, titanium, 100), () -> {
+                            });
                         });
                     });
                 });

@@ -37,7 +37,7 @@ public class BoostProject extends UnitProject {
         for (int i : map.keys().toArray().toArray()) {
             ids.add(i);
         }
-        ids.sort(Comparator.comparingInt(o -> -((BoostProject) all.get(o)).valve));
+        ids.sort(o -> -((BoostProject) all.get(o)).valve);
         weaponBoos = w -> {
             for (int id : ids) {
                 BoostProject b = (BoostProject) all.get(id);
