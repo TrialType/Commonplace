@@ -675,6 +675,7 @@ public class UnitOverride {
         statusFieldAbility.range = 90;
         statusFieldAbility.duration = 420;
         weapon = UnitTypes.oxynoe.weapons.get(0);
+        weapon.shoot.firstShotDelay = 15;
         weapon.reload = 3;
         weapon.shootStatus = FStatusEffects.deploy;
         weapon.shootStatusDuration = 10;
@@ -773,11 +774,11 @@ public class UnitOverride {
         UnitTypes.nova.armor = 21f;
         UnitTypes.nova.health = 220;
         UnitTypes.nova.buildSpeed = 0;
-        UnitTypes.nova.abilities.add(new RepairFieldAbility(60, 60 * 8, 4));
+        UnitTypes.nova.abilities.add(new RepairFieldAbility(50, 60 * 8, 4));
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
         weapon.reload = 4;
-        weapon.bullet.lifetime = 90;
+        weapon.bullet.lifetime = 75;
         weapon.bullet.speed = 8;
         weapon.bullet.damage = 18;
         weapon.bullet.healAmount = 0;
@@ -799,7 +800,7 @@ public class UnitOverride {
 
         UnitTypes.pulsar.health = 560;
         UnitTypes.pulsar.speed = 1.1f;
-        UnitTypes.pulsar.range = 150;
+        UnitTypes.pulsar.range = 500;
         weapon = UnitTypes.pulsar.weapons.get(0);
         weapon.shoot.shots = 5;
         weapon.shoot.shotDelay = 6;
@@ -808,6 +809,7 @@ public class UnitOverride {
         weapon.bullet = new BasicBulletType() {{
             absorbable = false;
             collidesTeam = true;
+            rangeOverride = 500;
             speed = 9;
             damage = 1;
             lifetime = 50;
@@ -834,6 +836,7 @@ public class UnitOverride {
                 bulletLightningType.collidesTeam = true;
             }};
         }};
+        weapon.bullet.init();
 
         UnitTypes.quasar.health = 2200;
         ForceFieldAbility fAbility = (ForceFieldAbility) UnitTypes.quasar.abilities.get(0);

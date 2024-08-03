@@ -1,11 +1,13 @@
 package Commonplace.FContent.Override;
 
-import mindustry.content.Blocks;
-import mindustry.content.Items;
-import mindustry.content.Liquids;
-import mindustry.content.UnitTypes;
+import Commonplace.FContent.DefaultContent.FStatusEffects;
+import arc.graphics.Color;
+import arc.graphics.g2d.Fill;
+import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
+import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
@@ -16,8 +18,12 @@ import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.blocks.heat.HeatProducer;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.consumers.ConsumeLiquid;
+
+import static arc.graphics.g2d.Draw.color;
+import static arc.math.Angles.randLenVectors;
 
 public class BlockOverride {
     public static void load() {
@@ -56,6 +62,25 @@ public class BlockOverride {
             b.pierceArmor = true;
             b.pierce = true;
             b.pierceCap = 3;
+        });
+
+        ((ItemTurret) Blocks.salvo).ammoTypes.each((i, b) -> {
+            b.knockback = 4;
+            b.damage *= 1.4f;
+        });
+
+        ((ItemTurret) Blocks.scorch).reload = 8;
+        ((ItemTurret) Blocks.scorch).range = 120;
+        ((ItemTurret) Blocks.scorch).ammoTypes.each((i, b) -> {
+            b.lifetime = 36;
+            b.damage *= 1.6f;
+            b.buildingDamageMultiplier = 0.25f;
+            b.shootEffect = new Effect(34f, 80f, e -> {
+                color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());
+
+                randLenVectors(e.id, 10, e.finpow() * 120f, e.rotation, 10f, (x, y) -> Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f));
+            });
+            b.init();
         });
 
         ((PowerTurret) Blocks.arc).shootType.damage = 26;

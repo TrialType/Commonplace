@@ -210,18 +210,38 @@ public class FBlocks {
         residual = new ItemTurret("residual") {{
             requirements(Category.turret, with(Items.copper, 100, Items.graphite, 80, Items.titanium, 25, Items.silicon, 25));
             ammo(
-                    Items.titanium, new BasicBulletType(4, 15) {{
+                    Items.titanium, new BasicBulletType(4, 22.5f) {{
+                        rangeOverride = 240;
                         width = 7f;
                         height = 9f;
-                        lifetime = 60f;
+                        lifetime = 30;
                         ammoMultiplier = 4;
                         shootEffect = Fx.shootBig;
                         smokeEffect = Fx.shootBigSmoke;
                         frontColor = backColor = Color.valueOf("8da1e3");
                         pierce = true;
                         pierceCap = 3;
+
+                        fragOnHit = false;
+                        fragOnAbsorb = false;
+                        fragBullets = 3;
+                        fragSpread = 15;
+                        fragVelocityMin = fragVelocityMax = 1;
+                        fragRandomSpread = 0;
+                        fragBullet = new BasicBulletType(4, 22.5f) {{
+                            width = 7f;
+                            height = 9f;
+                            lifetime = 30;
+                            ammoMultiplier = 4;
+                            shootEffect = Fx.shootBig;
+                            smokeEffect = Fx.shootBigSmoke;
+                            frontColor = backColor = Color.valueOf("8da1e3");
+                            pierce = true;
+                            pierceCap = 3;
+                        }};
                     }},
-                    Items.thorium, new BasicBulletType(4, 18) {{
+                    Items.thorium, new BasicBulletType(4, 27) {{
+                        rangeOverride = 240;
                         width = 9f;
                         height = 12f;
                         shootEffect = Fx.shootBig;
@@ -229,9 +249,28 @@ public class FBlocks {
                         frontColor = backColor = Color.valueOf("f9a3c7");
                         reloadMultiplier = 0.9f;
                         ammoMultiplier = 4;
-                        lifetime = 60f;
+                        lifetime = 30;
                         pierce = true;
                         pierceCap = 2;
+
+                        fragOnHit = false;
+                        fragOnAbsorb = false;
+                        fragBullets = 3;
+                        fragSpread = 20;
+                        fragVelocityMin = fragVelocityMax = 1;
+                        fragRandomSpread = 0;
+                        fragBullet = new BasicBulletType(4, 40.5f) {{
+                            width = 9f;
+                            height = 12f;
+                            shootEffect = Fx.shootBig;
+                            smokeEffect = Fx.shootBigSmoke;
+                            frontColor = backColor = Color.valueOf("f9a3c7");
+                            reloadMultiplier = 0.9f;
+                            ammoMultiplier = 4;
+                            lifetime = 30;
+                            pierce = true;
+                            pierceCap = 2;
+                        }};
                     }}
             );
 
@@ -241,12 +280,11 @@ public class FBlocks {
             }};
 
             recoils = 2;
-
             recoil = 0.5f;
             shootY = 3f;
             reload = 20;
             size = 2;
-            range = 190;
+            range = 240;
             shootCone = 15f;
             ammoUseEffect = Fx.casing1;
             health = 800;
