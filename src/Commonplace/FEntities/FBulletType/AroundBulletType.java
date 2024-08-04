@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AroundBulletType extends BasicBulletType {
-    private final static Map<Bullet, Unit> units = new HashMap<>();
-    private final static Map<Unit, Boolean> lastStatus = new HashMap<>();
+    private final Map<Bullet, Unit> units = new HashMap<>();
+    private final Map<Unit, Boolean> lastStatus = new HashMap<>();
 
     public float targetRange = 100;
     public float circleRange = 40;
@@ -46,12 +46,9 @@ public class AroundBulletType extends BasicBulletType {
 
         if (b.data instanceof Unit u && b.within(u, circleRange + 5)) {
             b.fdata += Time.delta;
-            Vec2 vec2 = new Vec2();
             float bx = b.x, by = b.y, ux = u.x, uy = u.y;
             float angle = Angles.angle(ux, uy, bx, by) + 5;
-            vec2.set((float) (ux + circleRange * Math.cos(Math.toRadians(angle)) - bx), (float) (uy + circleRange * Math.sin(Math.toRadians(angle)) - by));
-            vec2.setLength(b.vel.len());
-            b.vel.set(vec2);
+            b.initVel(Angles.angle(ux + Angles.trnsx(angle, circleRange) - bx, uy + Angles.trnsy(angle, circleRange) - by), b.vel.len());
 
             if (roundIntervalBullet != null && b.fdata > roundIntervalDelay && b.timer(3, roundBulletInterval)) {
                 if (roundIntervalCenter) {
@@ -94,11 +91,7 @@ public class AroundBulletType extends BasicBulletType {
             }
         } else if (b.data instanceof Unit u) {
             b.fdata = 0;
-            Vec2 vec2 = new Vec2();
-            vec2.set(u.x - b.x, u.y - b.y);
-            vec2.setLength(b.vel.len());
-            b.rotation(Angles.angle(u.x - b.x, u.y - b.y));
-            b.move(vec2);
+            b.initVel(Angles.angle(u.x - b.x, u.y - b.y), b.vel.len());
         } else {
             updateTarget(b);
         }

@@ -1,24 +1,25 @@
 package Commonplace.FContent.Override;
 
-import Commonplace.FContent.DefaultContent.FStatusEffects;
+import Commonplace.FEntities.FBulletType.AroundBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import mindustry.content.*;
 import mindustry.entities.Effect;
-import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.bullet.BulletType;
+import mindustry.entities.bullet.*;
+import mindustry.entities.pattern.ShootSpread;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.PointDefenseTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
+import mindustry.world.blocks.defense.turrets.TractorBeamTurret;
 import mindustry.world.blocks.distribution.ArmoredConveyor;
 import mindustry.world.blocks.distribution.Conveyor;
 import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.blocks.heat.HeatProducer;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.units.UnitFactory;
-import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.consumers.ConsumeLiquid;
 
@@ -83,8 +84,62 @@ public class BlockOverride {
             b.init();
         });
 
+        ((ItemTurret) Blocks.fuse).range = 160;
+        ((ItemTurret) Blocks.fuse).shoot = new ShootSpread(7, 10);
+        ((ItemTurret) Blocks.fuse).ammoTypes.each((i, b) -> {
+            ((ShrapnelBulletType) b).length = 150;
+            b.damage /= 1.5f;
+        });
+
+        ((ItemTurret) Blocks.swarmer).range = 250;
+        ((ItemTurret) Blocks.swarmer).reload = 40;
+        ((ItemTurret) Blocks.swarmer).shoot.shots = 10;
+        ((ItemTurret) Blocks.swarmer).shoot.shotDelay = 3;
+        ((ItemTurret) Blocks.swarmer).ammoTypes.each((i, b) -> {
+            b.damage *= 1.15f;
+            b.splashDamage *= 1.15f;
+            b.lightningDamage *= 1.15f;
+            b.ammoMultiplier += 1;
+        });
+        ((ItemTurret) Blocks.swarmer).limitRange(5);
+
+        ((ItemTurret) Blocks.ripple).reload = 45;
+        ((ItemTurret) Blocks.ripple).shoot.shots = 40;
+        ((ItemTurret) Blocks.ripple).ammoTypes.each((i, b) -> {
+            b.createChance = 0.2f;
+            b.buildingDamageMultiplier = 1.5f;
+        });
+
+        ((ItemTurret) Blocks.cyclone).ammoTypes.each((i, b) -> {
+            b.damage *= 1.2f;
+            b.splashDamage *= 1.2f;
+            b.statusDuration *= 1.5f;
+            if (b.fragBullet != null) {
+                b.fragBullets += 4;
+            }
+            if (b.lightning > 0) {
+                b.lightningDamage = b.lightningDamage > 0 ? b.lightningDamage * 1.4f : b.damage;
+                b.lightningLength += 15;
+            }
+        });
+
         ((PowerTurret) Blocks.arc).shootType.damage = 26;
         ((PowerTurret) Blocks.arc).shootType.lightningType.pierceArmor = true;
+
+        ((PowerTurret) Blocks.lancer).range = 220;
+        ((PowerTurret) Blocks.lancer).shootType.damage = 160;
+        ((PowerTurret) Blocks.lancer).shootType.pierceCap = -1;
+        ((PowerTurret) Blocks.lancer).shootType.status = StatusEffects.slow;
+        ((PowerTurret) Blocks.lancer).shootType.statusDuration = 45;
+        ((LaserBulletType) ((PowerTurret) Blocks.lancer).shootType).length = 200;
+
+        Blocks.parallax.scaledHealth = 300;
+        ((TractorBeamTurret) Blocks.parallax).force = 24;
+        ((TractorBeamTurret) Blocks.parallax).range = 300;
+        ((TractorBeamTurret) Blocks.parallax).damage = 0.5f;
+        ((TractorBeamTurret) Blocks.parallax).targetGround = true;
+
+        ((PointDefenseTurret) Blocks.segment).retargetTime = 2;
 
         ((Conveyor) Blocks.conveyor).speed = 0.05f;
         ((Conveyor) Blocks.conveyor).displayedSpeed = 7;
@@ -104,7 +159,7 @@ public class BlockOverride {
         ((Drill) Blocks.blastDrill).drillTime = 274;
 
         ((UnitFactory) Blocks.airFactory).plans.find(p -> p.unit == UnitTypes.mono).
-                requirements = ItemStack.with(Items.copper, 100, Items.lead, 70);
+                requirements = ItemStack.with(Items.copper, 40, Items.lead, 40);
 
         ((GenericCrafter) Blocks.siliconSmelter).outputItem = new ItemStack(Items.silicon, 3);
         ((GenericCrafter) Blocks.siliconSmelter).craftTime = 60;

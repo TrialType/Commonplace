@@ -675,7 +675,6 @@ public class UnitOverride {
         statusFieldAbility.range = 90;
         statusFieldAbility.duration = 420;
         weapon = UnitTypes.oxynoe.weapons.get(0);
-        weapon.shoot.firstShotDelay = 15;
         weapon.reload = 3;
         weapon.shootStatus = FStatusEffects.deploy;
         weapon.shootStatusDuration = 10;
@@ -695,7 +694,7 @@ public class UnitOverride {
         UnitTypes.cyerce.armor = 16;
         weapon = UnitTypes.cyerce.weapons.get(1);
         BulletType bullet = weapon.bullet.fragBullet;
-        bullet.speed = 4.9f;
+        bullet.speed = 3.8f;
         weapon.bullet.lifetime = 120;
         weapon.bullet.damage = 37.5f;
         weapon.bullet.splashDamage = 37.5f;
@@ -802,7 +801,7 @@ public class UnitOverride {
         UnitTypes.pulsar.speed = 1.1f;
         UnitTypes.pulsar.range = 500;
         weapon = UnitTypes.pulsar.weapons.get(0);
-        weapon.shoot.shots = 5;
+        weapon.shoot.shots = 3;
         weapon.shoot.shotDelay = 6;
         weapon.reload = 360;
         weapon.inaccuracy = 12;
@@ -827,7 +826,7 @@ public class UnitOverride {
             fragBullet = new ContinuousLightningBulletType() {{
                 damage = 13;
                 lifetime = 260;
-                length = 35;
+                length = 20;
 
                 damageInterval = 60;
                 rotateSpeed = 4;

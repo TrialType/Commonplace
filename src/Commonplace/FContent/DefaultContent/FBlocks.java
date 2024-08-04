@@ -211,7 +211,6 @@ public class FBlocks {
             requirements(Category.turret, with(Items.copper, 100, Items.graphite, 80, Items.titanium, 25, Items.silicon, 25));
             ammo(
                     Items.titanium, new BasicBulletType(4, 22.5f) {{
-                        rangeOverride = 240;
                         width = 7f;
                         height = 9f;
                         lifetime = 30;
@@ -241,7 +240,6 @@ public class FBlocks {
                         }};
                     }},
                     Items.thorium, new BasicBulletType(4, 27) {{
-                        rangeOverride = 240;
                         width = 9f;
                         height = 12f;
                         shootEffect = Fx.shootBig;
@@ -288,12 +286,10 @@ public class FBlocks {
             shootCone = 15f;
             ammoUseEffect = Fx.casing1;
             health = 800;
-            inaccuracy = 0;
+            inaccuracy = 8;
             rotateSpeed = 10f;
             coolant = consumeCoolant(0.1f);
             researchCostMultiplier = 8f;
-
-            limitRange();
         }};
         mountain = new PowerTurret("mountain") {{
             requirements(Category.turret, ItemStack.with(Items.titanium, 340,
