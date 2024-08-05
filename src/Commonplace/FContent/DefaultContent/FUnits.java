@@ -608,11 +608,11 @@ public class FUnits {
             aiController = StrongBoostAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
-            Speed1 = 3;
-            Health2 = 57750;
+            speed1 = 3;
+            health2 = 57750;
             percent = 95;
             firstPercent = true;
-            HitReload = 3600;
+            hitReload = 3600;
             reload = 3600;
             minSpeed = 10;
             defend = 75;
@@ -786,8 +786,8 @@ public class FUnits {
             constructor = ENGSWEISUnitEntity::create;
 
             damage = 50;
-            HitReload = 15;
-            Speed1 = 2.5F;
+            hitReload = 15;
+            speed1 = 2.5F;
             minSpeed = 2;
 
             defend = 60;
@@ -1058,10 +1058,10 @@ public class FUnits {
             immunities.add(StatusEffects.wet);
             immunities.add(StatusEffects.sporeSlowed);
 
-            Health2 = 10000;
-            Speed1 = 3;
+            health2 = 10000;
+            speed1 = 3;
 
-            HitReload = 18;
+            hitReload = 18;
             percent = 1.5F;
             changeHel = 1000;
             damage = 200 * 1.4F;
@@ -1088,7 +1088,7 @@ public class FUnits {
             flying = true;
             targetAir = targetGround = true;
 
-            Speed1 = 0.8F;
+            speed1 = 0.8F;
             damage = 0;
             percent = 10;
             changeHel = -1;
@@ -1096,7 +1096,7 @@ public class FUnits {
             reload = 3600;
             minSpeed = 7;
             delay = 90;
-            HitReload = 90;
+            hitReload = 90;
 
             range = 40;
             maxRange = range;
@@ -1154,11 +1154,11 @@ public class FUnits {
 
             minSpeed = 5;
             reload = 3600;
-            HitReload = 3600;
+            hitReload = 3600;
             percent = 30;
             firstPercent = true;
-            Speed1 = 0.3F;
-            Health2 = 2000;
+            speed1 = 0.3F;
+            health2 = 2000;
             number = 3;
 
             defend = 15;
@@ -1226,10 +1226,10 @@ public class FUnits {
 
             percent = 20;
             firstPercent = true;
-            Health2 = 350;
+            health2 = 350;
             minSpeed = 8;
-            Speed1 = 1.0F;
-            HitReload = 3600;
+            speed1 = 1.0F;
+            hitReload = 3600;
             reload = 3600;
 
             defend = 100;
@@ -1268,10 +1268,10 @@ public class FUnits {
 
             percent = 75;
             firstPercent = true;
-            Health2 = 18000;
+            health2 = 18000;
             minSpeed = 8;
-            Speed1 = 1.3F;
-            HitReload = 3600;
+            speed1 = 1.3F;
+            hitReload = 3600;
             reload = 3600;
 
             defend = 20;

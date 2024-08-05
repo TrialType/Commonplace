@@ -23,7 +23,7 @@ public class LevelSign extends Ability {
             table.add(new Bar(String.valueOf(uug.getLevel()), Pal.coalBlack, () -> 1f));
             table.row();
 
-            table.add(new Bar(Core.bundle.get("bar.up_grade"), Color.black,
+            table.add(new Bar(Core.bundle.get("bar.up_grade"), Pal.coalBlack,
                     () -> uug.getExp() / ((4 + uug.getLevel()) * unit.maxHealth / 10)).blink(Color.white));
             table.row();
 

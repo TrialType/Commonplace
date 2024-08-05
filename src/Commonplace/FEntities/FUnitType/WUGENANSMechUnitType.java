@@ -142,17 +142,4 @@ public class WUGENANSMechUnitType extends UpGradeUnitType {
 
         Draw.reset();
     }
-
-    @Override
-    public void setStats() {
-        super.setStats();
-        stats.add(new Stat("land_time"),landTime);
-        stats.add(new Stat("out_time"),outTime);
-        stats.add(new Stat("up_damage"),upDamage);
-        stats.add(new Stat("up_range"),damageRadius);
-        stats.add(new Stat("land_reload"),landReload);
-        stats.add(new Stat("power_need"),needPower);
-        stats.add(new Stat("power_range"),powerRange);
-        stats.add(new Stat("get_range"),getRange);
-    }
 }

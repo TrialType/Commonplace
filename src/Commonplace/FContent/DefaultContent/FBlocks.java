@@ -27,6 +27,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.type.unit.MissileUnitType;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
@@ -35,10 +36,10 @@ import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BlockFlag;
+import mindustry.world.meta.Env;
 
 import static arc.math.Angles.randLenVectors;
-import static mindustry.content.Items.thorium;
-import static mindustry.content.Items.titanium;
+import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.with;
 
 public class FBlocks {
@@ -47,7 +48,7 @@ public class FBlocks {
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy;
+    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoyLarge, polymerizationWall, polymerizationWallLarge;
     //turret
     public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
     //crafting
@@ -887,19 +888,22 @@ public class FBlocks {
                     ItemStack.with(Items.phaseFabric, 480, Items.silicon, 30), Blocks.phaseWallLarge,
                     ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
-        decoy = new Block("decoy") {{
+        decoyLarge = new Decoy("decoy-large") {{
             requirements(Category.defense, ItemStack.with(
                     Items.copper, 350, Items.silicon, 250, Items.graphite, 250,
                     Items.titanium, 300, Items.thorium, 300));
 
-            size = 3;
-            health = 1000;
-            solid = true;
+            size = 2;
+            health = 2000;
+
+            farDeflect = 1.25f;
+            farDeflectChance = 0.75f;
+            adaptability = 1;
+            adaptDamageMax = 2f;
+            adaptDamageMin = 0.5f;
+            flexibility = 30;
+
             breakable = true;
-            destructible = true;
-            canOverdrive = false;
-            crushDamageMultiplier = 3;
-            researchCostMultiplier = 8;
             destroyBulletSameTeam = true;
             destroyBullet = new BulletType() {{
                 reflectable = hittable = absorbable = false;
@@ -919,9 +923,28 @@ public class FBlocks {
                 hitEffect = Fx.blockExplosionSmoke;
                 despawnEffect = Fx.blockExplosionSmoke;
             }};
-
-            flags = EnumSet.of(BlockFlag.battery, BlockFlag.factory, BlockFlag.generator, BlockFlag.reactor);
-            priority = TargetPriority.turret;
+        }};
+        polymerizationWall = new Wall("polymerization-wall") {{
+            requirements(Category.defense, ItemStack.with(thorium, 8, phaseFabric, 8, surgeAlloy, 8));
+            size = 1;
+            health = 500 * 6;
+            absorbLasers = true;
+            chanceDeflect = 15;
+            lightningDamage = 30;
+            lightningLength = 20;
+            lightningChance = 0.65f;
+            envDisabled |= Env.scorching;
+        }};
+        polymerizationWallLarge = new Wall("polymerization-wall-large") {{
+            requirements(Category.defense, ItemStack.with(thorium, 32, phaseFabric, 32, surgeAlloy, 32));
+            size = 2;
+            health = 500 * 24;
+            absorbLasers = true;
+            chanceDeflect = 20;
+            lightningDamage = 60;
+            lightningLength = 35;
+            lightningChance = 0.8f;
+            envDisabled |= Env.scorching;
         }};
 //======================================================================================================================
         slowProject = new DownProject("slow_project") {{

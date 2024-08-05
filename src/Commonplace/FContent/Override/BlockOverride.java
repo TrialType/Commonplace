@@ -1,6 +1,5 @@
 package Commonplace.FContent.Override;
 
-import Commonplace.FEntities.FBulletType.AroundBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import mindustry.content.*;
@@ -42,11 +41,13 @@ public class BlockOverride {
         Blocks.surgeWallLarge.health = 230 * 24;
 
         ((ItemTurret) Blocks.duo).shoot.shots = 2;
+        ((ItemTurret) Blocks.duo).range = 150;
         ((ItemTurret) Blocks.duo).reload = 10f;
         ((ItemTurret) Blocks.duo).inaccuracy = 5;
         for (BulletType bullet : ((ItemTurret) Blocks.duo).ammoTypes.values()) {
             bullet.ammoMultiplier *= 2;
         }
+        ((ItemTurret) Blocks.duo).limitRange(2);
 
         ((ItemTurret) Blocks.hail).ammoTypes.each((i, b) -> {
             b.fragBullets = 3;

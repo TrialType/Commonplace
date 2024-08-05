@@ -30,13 +30,6 @@ public class PureProject extends Block {
     }
 
     @Override
-    public void setStats() {
-        super.setStats();
-        stats.add(new Stat("pure-range"), protectRange);
-        stats.add(new Stat("pure-max-power"), protectLevel);
-    }
-
-    @Override
     public void setBars() {
         super.setBars();
         addBar("power", build -> new Bar(

@@ -196,8 +196,8 @@ public class StrongBoostAI extends FlyingAI {
                     first = false;
                     start = false;
                     wu.first = false;
-                    unit.health = BoostUnitType.Health2;
-                    unit.maxHealth(BoostUnitType.Health2);
+                    unit.health = BoostUnitType.health2;
+                    unit.maxHealth(BoostUnitType.health2);
                     if (number > 0 && unit.team.isAI()) {
                         Units.nearby(ux, uy, 100, 100, u -> {
                             if (number > 0 && u.team == unit.team && !FUnits.boss.contains(u.type)) {

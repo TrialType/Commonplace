@@ -94,7 +94,7 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
             float changeHel = eut.changeHel;
             float percent = eut.percent;
             boolean firstPercent = eut.firstPercent;
-            float reload = eut.HitReload;
+            float reload = eut.hitReload;
             float minSpeed = eut.minSpeed;
             boolean crazy = type == FUnits.crazy;
             if (speed() >= minSpeed) {
@@ -167,7 +167,7 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
     public float speed() {
         if (first) {
             if (type instanceof ENGSWEISUnitType eut) {
-                return eut.Speed1;
+                return eut.speed1;
             }
         }
         return super.speed();

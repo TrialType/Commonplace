@@ -11,7 +11,7 @@ public class FStatusEffects {
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
-            grow, seethe, friability, back, frenzy, deploy;
+            grow, seethe, friability, back, frenzy, deploy, impatience;
 
     public static StatusEffect pureA, pureT,
             catalyzeI, catalyzeII, catalyzeIII, catalyzeIV, catalyzeV,
@@ -125,6 +125,12 @@ public class FStatusEffects {
             reloadMultiplier = 0.6f;
             speedMultiplier = 0.1f;
         }};
+        impatience = new StatusEffect("impatience") {{
+            healthMultiplier = 0.7f;
+            damageMultiplier = 0.6f;
+            reloadMultiplier = 1.3f;
+            speedMultiplier = 1.5f;
+        }};
 
 
         pureA = new StatusEffect("pure-a") {{
@@ -153,296 +159,316 @@ public class FStatusEffects {
             damage = 0.1f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionII, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionIII, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionIV, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionV, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionVI, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionII, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionIII, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionIV, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionV, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionVI, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionII = new StatusEffect("corrosion-2") {{
             damage = 0.3f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionIII, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionIV, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionV, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionVI, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionVII, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionIII, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionIV, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionV, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionVI, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionVII, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionIII = new StatusEffect("corrosion-3") {{
             damage = 0.6f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionIV, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionV, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionVI, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionVII, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionVIII, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionIV, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionV, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionVI, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionVII, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionVIII, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionIV = new StatusEffect("corrosion-4") {{
             damage = 1f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionV, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionVI, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionVII, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionVIII, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionIX, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionV, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionVI, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionVII, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionVIII, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionIX, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionV = new StatusEffect("corrosion-5") {{
             damage = 1.5f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionVI, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionVII, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionVIII, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionIX, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionVI, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionVII, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionVIII, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionIX, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionVI = new StatusEffect("corrosion-6") {{
             damage = 1.8f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionVII, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionVIII, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionIX, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 3f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionVII, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionVIII, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionIX, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 3f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionVII = new StatusEffect("corrosion-7") {{
             damage = 2.3f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionVIII, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionIX, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 1.7f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2.5f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 3.2f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionVIII, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionIX, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 1.7f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2.5f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 3.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionVIII = new StatusEffect("corrosion-8") {{
             damage = 2.9f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionIX, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 1.4f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2.8f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 3.6f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionIX, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 1.4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2.8f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 3.6f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionIX = new StatusEffect("corrosion-9") {{
             damage = 3f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 1.2f);
-                u.unapply(this);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 1.8f);
-                u.unapply(this);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2.3f);
-                u.unapply(this);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 3f);
-                u.unapply(this);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 4f);
-                u.unapply(this);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 1.2f);
+                    u.unapply(this);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 1.8f);
+                    u.unapply(this);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2.3f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 3f);
+                    u.unapply(this);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 4f);
+                    u.unapply(this);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         corrosionX = new StatusEffect("corrosion-10") {{
             damage = 4.5f;
             transitions.put(FStatusEffects.pureA, (u, s, t) -> u.unapply(this));
             transitions.put(FStatusEffects.pureT, (u, s, t) -> u.unapply(this));
-            init(() -> trans(catalyzeI, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 1.5f);
-                u.unapply(catalyzeI);
-            }));
-            init(() -> trans(catalyzeII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2f);
-                u.unapply(catalyzeII);
-            }));
-            init(() -> trans(catalyzeIII, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 2.6f);
-                u.unapply(catalyzeIII);
-            }));
-            init(() -> trans(catalyzeIV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 3.4f);
-                u.unapply(catalyzeIV);
-            }));
-            init(() -> trans(catalyzeV, (u, s, t) -> {
-                u.apply(corrosionX, s.time * 4.5f);
-                u.unapply(catalyzeV);
-            }));
+            init(() -> {
+                trans(catalyzeI, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 1.5f);
+                    u.unapply(catalyzeI);
+                });
+                trans(catalyzeII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2f);
+                    u.unapply(catalyzeII);
+                });
+                trans(catalyzeIII, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 2.6f);
+                    u.unapply(catalyzeIII);
+                });
+                trans(catalyzeIV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 3.4f);
+                    u.unapply(catalyzeIV);
+                });
+                trans(catalyzeV, (u, s, t) -> {
+                    u.apply(corrosionX, s.time * 4.5f);
+                    u.unapply(catalyzeV);
+                });
+            });
         }};
         pWet = new WithMoreStatus("p-wet") {{
             show = false;
@@ -469,15 +495,6 @@ public class FStatusEffects {
             sign = true;
             with.addAll(StatusEffects.muddy, corrosionI);
         }};
-
-
-//        ProjectsLocated.eff = new StatusEffect("eff") {{
-//            show = false;
-//            permanent = true;
-//            healthMultiplier = Core.settings.getFloat("floor-project-heal", 1);
-//            speedMultiplier = Core.settings.getFloat("floor-project-speed", 1);
-//        }};
-
         burnings.addAll(StatusEffects.burning, gasify);
     }
 }

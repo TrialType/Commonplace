@@ -157,7 +157,7 @@ public class MEvents {
             float high = level1 - level2;
             multiplier -= 2 * high / level1;
         }
-        return maxHealth * max(Vars.state.wave / 50, 1) * Math.max(1, level2 / 30) * multiplier < 0 ? 0 : multiplier;
+        return maxHealth * max(Vars.state.wave / 50, 1) * max(1, level2 / 30) * (multiplier < 0 ? 0 : multiplier);
     }
 
     public static class UnitDestroyOtherEvent {

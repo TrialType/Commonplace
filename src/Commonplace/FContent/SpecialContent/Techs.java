@@ -50,7 +50,7 @@ public class Techs {
                 node(edge, ItemStack.with(Items.copper, 3000, Items.graphite, 1200, Items.thorium, 350), () -> {
                 });
             });
-            node(decoy, ItemStack.with(Items.copper, 3500, Items.silicon, 2500, Items.graphite, 2500, Items.titanium, 3000, Items.thorium, 3000), () -> {
+            node(decoyLarge, ItemStack.with(Items.copper, 3500, Items.silicon, 2500, Items.graphite, 2500, Items.titanium, 3000, Items.thorium, 3000), () -> {
             });
             node(FBlocks.primarySolidification, ItemStack.with(Items.metaglass, 350, Items.copper, 400, Items.lead, 250), Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
                 node(FBlocks.intermediateSolidification, ItemStack.with(Items.metaglass, 1250, Items.copper, 1500, Items.lead, 1000, Items.graphite, 1400), () -> {
@@ -114,6 +114,11 @@ public class Techs {
             } else if (t.content == foreshadow) {
                 tf = node(windTurret, ItemStack.with(Items.titanium, 20000, Items.copper, 26000, Items.graphite, 18000, Items.silicon, 16500, Items.surgeAlloy, 3000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
                 });
+                tf.parent = t;
+                t.children.add(tf);
+            } else if (t.content == surgeWall) {
+                tf = node(polymerizationWall, () -> node(polymerizationWallLarge, () -> {
+                }));
                 tf.parent = t;
                 t.children.add(tf);
             }

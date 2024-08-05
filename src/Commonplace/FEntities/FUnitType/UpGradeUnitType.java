@@ -26,7 +26,7 @@ public class UpGradeUnitType extends UnitType {
                 dis.add(new Bar(String.valueOf(uug.getLevel()), Pal.coalBlack, () -> 1f));
                 dis.row();
 
-                dis.add(new Bar(Core.bundle.get("bar.up_grade"), Color.black,
+                dis.add(new Bar(Core.bundle.get("bar.up_grade"), Pal.coalBlack,
                         () -> uug.getExp() / ((4 + uug.getLevel()) * unit.maxHealth / 10)).blink(Color.white));
                 dis.row();
 
