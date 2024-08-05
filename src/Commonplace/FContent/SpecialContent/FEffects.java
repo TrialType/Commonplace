@@ -1,4 +1,4 @@
-package Commonplace.FContent.DefaultContent;
+package Commonplace.FContent.SpecialContent;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

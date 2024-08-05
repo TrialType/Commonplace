@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FWeather;
 
-import Commonplace.FContent.DefaultContent.FEffects;
+import Commonplace.FContent.SpecialContent.FEffects;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.Time;

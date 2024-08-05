@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FBulletType;
 
-import Commonplace.FContent.DefaultContent.FEffects;
+import Commonplace.FContent.SpecialContent.FEffects;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;

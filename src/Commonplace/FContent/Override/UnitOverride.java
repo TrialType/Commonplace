@@ -1,7 +1,7 @@
 package Commonplace.FContent.Override;
 
 import Commonplace.FAI.MissileAI_II;
-import Commonplace.FContent.DefaultContent.FEffects;
+import Commonplace.FContent.SpecialContent.FEffects;
 import Commonplace.FContent.DefaultContent.FStatusEffects;
 import Commonplace.FEntities.FAbility.LevelSign;
 import Commonplace.FEntities.FAbility.TimeLargeDamageAbility;
@@ -341,7 +341,6 @@ public class UnitOverride {
         weapon.bullet = new FireBulletType(4, 9) {{
             lifetime = 45;
             ammoMultiplier = 2;
-            radius = 8;
             hittable = absorbable = reflectable = false;
             collidesTiles = true;
             collides = true;

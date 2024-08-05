@@ -1,5 +1,6 @@
 package Commonplace.FContent.DefaultContent;
 
+import Commonplace.FContent.SpecialContent.FEffects;
 import Commonplace.FEntities.FBlock.*;
 import Commonplace.FEntities.FBulletType.*;
 import arc.graphics.Color;
@@ -7,11 +8,9 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;
 import arc.math.Interp;
-import arc.struct.EnumSet;
 import arc.util.Time;
 import mindustry.content.*;
 import mindustry.entities.Effect;
-import mindustry.entities.TargetPriority;
 import mindustry.entities.abilities.EnergyFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
@@ -35,7 +34,6 @@ import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
-import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.Env;
 
 import static arc.math.Angles.randLenVectors;
@@ -889,12 +887,11 @@ public class FBlocks {
                     ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
         decoyLarge = new Decoy("decoy-large") {{
-            requirements(Category.defense, ItemStack.with(
-                    Items.copper, 350, Items.silicon, 250, Items.graphite, 250,
-                    Items.titanium, 300, Items.thorium, 300));
+            requirements(Category.defense, ItemStack.with(silicon, 250, phaseFabric, 75, blastCompound, 200,
+                    titanium, 200, thorium, 150));
 
             size = 2;
-            health = 2000;
+            health = 3500;
 
             farDeflect = 1.25f;
             farDeflectChance = 0.75f;
@@ -911,10 +908,10 @@ public class FBlocks {
                 speed = 0;
                 damage = 0;
                 splashDamageRadius = 300;
-                splashDamage = 410;
+                splashDamage = 700;
 
                 lightning = 18;
-                lightningDamage = 200;
+                lightningDamage = 100;
                 lightningLength = 60;
                 lightningLengthRand = 15;
                 lightningCone = 360;

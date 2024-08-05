@@ -1,5 +1,6 @@
 package Commonplace.FContent.DefaultContent;
 
+import Commonplace.FContent.SpecialContent.FEffects;
 import Commonplace.FEntities.FWeather.StormDamageWeather;
 import arc.graphics.Color;
 import arc.util.Time;
