@@ -40,13 +40,13 @@ import static arc.math.Angles.randLenVectors;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.with;
 
-public class FBlocks {
+public class CBlocks {
     //test
     public static Block pu;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoyLarge, polymerizationWall, polymerizationWallLarge;
+    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge;
     //turret
     public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
     //crafting
@@ -885,6 +885,40 @@ public class FBlocks {
                     ItemStack.with(Items.thorium, 480, Items.silicon, 30), Blocks.thoriumWallLarge,
                     ItemStack.with(Items.phaseFabric, 480, Items.silicon, 30), Blocks.phaseWallLarge,
                     ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
+        }};
+        decoy = new Decoy("decoy") {{
+            requirements(Category.defense, ItemStack.with(silicon, 62, blastCompound, 50, titanium, 100));
+
+            size = 1;
+            health = 1000;
+
+            farDeflect = 0.75f;
+            farDeflectChance = 0.5f;
+            adaptability = 1;
+            adaptDamageMax = 1.25f;
+            adaptDamageMin = 0.75f;
+            flexibility = 15;
+
+            breakable = true;
+            destroyBulletSameTeam = true;
+            destroyBullet = new BulletType() {{
+                reflectable = hittable = absorbable = false;
+                lifetime = 0;
+                speed = 0;
+                damage = 0;
+                splashDamageRadius = 75;
+                splashDamage = 175;
+
+                lightning = 4;
+                lightningDamage = 25;
+                lightningLength = 15;
+                lightningLengthRand = 4;
+                lightningCone = 360;
+                lightningColor = Color.valueOf("DD88DD");
+
+                hitEffect = Fx.blockExplosionSmoke;
+                despawnEffect = Fx.blockExplosionSmoke;
+            }};
         }};
         decoyLarge = new Decoy("decoy-large") {{
             requirements(Category.defense, ItemStack.with(silicon, 250, phaseFabric, 75, blastCompound, 200,

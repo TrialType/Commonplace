@@ -28,7 +28,7 @@ public class Main extends Mod {
         FUnits.load();
         UnitProjects.load();
         MEvents.load();
-        FBlocks.load();
+        CBlocks.load();
         FPlanets.load();
         PFloors.load();
         FPlanetGenerators.load();
