@@ -34,6 +34,7 @@ import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
 import static arc.math.Angles.randLenVectors;
@@ -203,7 +204,7 @@ public class CBlocks {
 
             consumePower(50f);
 
-            requirements(Category.effect, ItemStack.with(Items.copper, 1));
+            requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
         }};
 //======================================================================================================================
         residual = new ItemTurret("residual") {{
