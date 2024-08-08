@@ -8,7 +8,7 @@ import mindustry.gen.EntityMapping;
 public class MEntities {
     public static void load() {
         EntityMapping.idMap[98] = WaterEffectState::create;
-        EntityMapping.idMap[100] = ENGSWEISLegsUnit::create;
+        EntityMapping.idMap[100] = BoostLegsUnit::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;
         EntityMapping.idMap[105] = FTankUnit::create;
@@ -18,11 +18,11 @@ public class MEntities {
         EntityMapping.idMap[109] = FElevationMoveUnit::create;
         EntityMapping.idMap[110] = FCrawlUnit::create;
         EntityMapping.idMap[111] = FMechUnitLegacyNova::create;
-        EntityMapping.idMap[113] = ENGSWEISUnitEntity::create;
+        EntityMapping.idMap[113] = BoostUnitEntity::create;
         EntityMapping.idMap[114] = TileMiner::create;
         EntityMapping.idMap[115] = TileSpawnerUnit::create;
         EntityMapping.idMap[116] = HiddenUnit::create;
-        EntityMapping.idMap[117] = WUGENANSMechUnit::create;
+        EntityMapping.idMap[117] = UnderLandMechUnit::create;
         EntityMapping.idMap[118] = CaveUnit::create;
         EntityMapping.idMap[119] = TimeUpGradeUnit::create;
         EntityMapping.idMap[120] = FollowUnit::create;

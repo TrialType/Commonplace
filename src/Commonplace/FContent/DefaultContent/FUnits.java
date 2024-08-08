@@ -49,7 +49,7 @@ public class FUnits {
     ////ENGSWEISBoss
     public static UnitType velocity, velocity_d, velocity_s, hidden, cave;
 
-    //ENGSWEISFlying
+    //ENGSWEISEntity
     public static UnitType barb, hammer, buying, crazy, transition, shuttle;
 
     //ENGSWEISLand
@@ -603,20 +603,17 @@ public class FUnits {
                 }};
             }});
         }};
-        shuttle = new ENGSWEISUnitType("shuttle") {{
-            constructor = ENGSWEISUnitEntity::create;
-            aiController = StrongBoostAI::new;
+        shuttle = new BoostUnitType("shuttle") {{
+            constructor = BoostUnitEntity::create;
+            aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
             speed1 = 3;
             health2 = 57750;
-            percent = 95;
-            firstPercent = true;
+            hitPercent = 95;
+            hitFirstPercent = true;
             hitReload = 3600;
-            reload = 3600;
-            minSpeed = 10;
-            defend = 75;
-            power = 30;
+            boostReload = 3600;
 
             flying = true;
             health = 57750;
@@ -683,8 +680,8 @@ public class FUnits {
                 }};
             }});
         }};
-        velocity_s = new ENGSWEISUnitType("velocity_s") {{
-            constructor = ENGSWEISUnitEntity::create;
+        velocity_s = new BoostUnitType("velocity_s") {{
+            constructor = BoostUnitEntity::create;
             speed = 6;
             hidden = true;
         }};
@@ -737,7 +734,7 @@ public class FUnits {
             }});
         }};
         dive = new UnitType("dive") {{
-            constructor = ENGSWEISLegsUnit::create;
+            constructor = BoostLegsUnit::create;
 
             flying = false;
             speed = 0.8F;
@@ -772,7 +769,7 @@ public class FUnits {
             }});
         }};
         befall = new UnitType("befall") {{
-            constructor = ENGSWEISLegsUnit::create;
+            constructor = BoostLegsUnit::create;
 
             health = 6000;
             armor = 30;
@@ -782,16 +779,13 @@ public class FUnits {
             abilities.add(new ShieldRegenFieldAbility(200, 1000, 120, 0.01F));
             abilities.add(new TimeLargeDamageAbility());
         }};
-        velocity = new ENGSWEISUnitType("velocity") {{
-            constructor = ENGSWEISUnitEntity::create;
+        velocity = new BoostUnitType("velocity") {{
+            constructor = BoostUnitEntity::create;
 
-            damage = 50;
+            hitDamage = 50;
             hitReload = 15;
             speed1 = 2.5F;
-            minSpeed = 2;
 
-            defend = 60;
-            power = 50;
             flying = true;
             health = 100000;
             armor = 30;
@@ -1048,73 +1042,68 @@ public class FUnits {
                 }};
             }});
         }};
-        crazy = new ENGSWEISUnitType("crazy") {{
-            constructor = ENGSWEISUnitEntity::create;
-            aiController = StrongBoostAI::new;
-            defaultCommand = new UnitCommand("crazy", "crazy", u -> new StrongBoostAI());
+        crazy = new BoostUnitType("crazy") {{
+            constructor = BoostUnitEntity::create;
+            aiController = BoostFlyingAI::new;
+            defaultCommand = MCommands.STB;
             commands = new UnitCommand[]{UnitCommand.moveCommand, defaultCommand};
             immunities.add(StatusEffects.slow);
             immunities.add(StatusEffects.unmoving);
             immunities.add(StatusEffects.wet);
             immunities.add(StatusEffects.sporeSlowed);
 
-            health2 = 10000;
+            health2 = 13200;
             speed1 = 3;
 
+            range = maxRange = 200;
             hitReload = 18;
-            percent = 1.5F;
-            changeHel = 1000;
-            damage = 200 * 1.4F;
-            minSpeed = 4;
-            firstPercent = true;
+            hitPercent = 1.5F;
+            hitChangeHel = 1000;
+            hitDamage = 200 * 1.4F;
+            hitFirstPercent = true;
 
-            defend = 100;
-            power = 2;
             circleTarget = true;
             flying = true;
             targetAir = targetGround = true;
-            maxRange = range = 40;
             rotateSpeed = 360;
             speed = 7;
             drag = 1F;
             accel = 0.5F;
-            health = 6600;
-            armor = 7;
+            health = 13200;
+            armor = 23;
         }};
-        barb = new ENGSWEISUnitType("barb") {{
-            constructor = ENGSWEISUnitEntity::create;
-            aiController = StrongBoostAI::new;
+        barb = new BoostUnitType("barb") {{
+            constructor = BoostUnitEntity::create;
+            aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
             flying = true;
             targetAir = targetGround = true;
 
             speed1 = 0.8F;
-            damage = 0;
-            percent = 10;
-            changeHel = -1;
-            firstPercent = true;
-            reload = 3600;
-            minSpeed = 7;
-            delay = 90;
+            hitDamage = 0;
+            hitPercent = 10;
+            hitChangeHel = -1;
+            hitFirstPercent = true;
+            boostReload = 180;
             hitReload = 90;
 
-            range = 40;
-            maxRange = range;
             speed = 1.3F;
             rotateSpeed = 5;
             faceTarget = true;
-            health = 140;
-            armor = 2;
+            health = 240;
+            armor = 7;
             engineOffset = 7;
             engineSize = 2.5F;
             itemCapacity = 30;
             hitSize = 5;
 
             weapons.add(new Weapon("barb-weapon") {{
-                reload = 30;
+                reload = 45;
                 y = 3.8F;
                 x = 2.7F;
                 top = false;
+                shoot.shots = 5;
+                shoot.shotDelay = 7;
                 bullet = new BasicBulletType() {{
                     speed = 3.7F;
                     damage = 15;
@@ -1147,22 +1136,18 @@ public class FUnits {
             mineSpeed = 1;
             mineTier = 5;
         }};
-        buying = new ENGSWEISUnitType("buying") {{
+        buying = new BoostUnitType("buying") {{
             constructor = TileSpawnerUnit::create;
-            aiController = StrongBoostAI::new;
+            aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
-            minSpeed = 5;
-            reload = 3600;
+            boostReload = 3600;
             hitReload = 3600;
-            percent = 30;
-            firstPercent = true;
+            hitPercent = 30;
+            hitFirstPercent = true;
             speed1 = 0.3F;
             health2 = 2000;
             number = 3;
-
-            defend = 15;
-            power = 5;
 
             rotateSpeed = 5.4f;
             buildSpeed = 3f;
@@ -1176,13 +1161,12 @@ public class FUnits {
             engineSize = 3;
             accel = 0.9F;
             drag = 0.9F;
-            maxRange = range = 40;
 
             health = 2000;
-            armor = 9f;
+            armor = 19;
 
             abilities.add(new OwnerUnitSpawnAbility(transfer, 2400, 1, 1));
-            abilities.add(new ShieldRegenFieldAbility(25, 900, 90, range));
+            abilities.add(new ShieldRegenFieldAbility(90, 900, 90, range));
 
             weapons.add(new Weapon() {{
                 range = 150;
@@ -1191,11 +1175,7 @@ public class FUnits {
                 x = 2.7F;
                 top = false;
                 alternate = false;
-                shoot = new ShootBarrel() {{
-                    shots = 30;
-                    firstShotDelay = 60;
-                    shotDelay = 1;
-                }};
+                shoot.shots = 12;
                 bullet = new BasicBulletType() {{
                     homingDelay = 45;
                     homingPower = 0.1F;
@@ -1211,71 +1191,66 @@ public class FUnits {
                 }};
             }});
         }};
-        hammer = new ENGSWEISUnitType("hammer") {{
-            constructor = ENGSWEISUnitEntity::create;
-            aiController = StrongBoostAI::new;
+        hammer = new BoostUnitType("hammer") {{
+            constructor = BoostUnitEntity::create;
+            aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
-            health = 250;
+            health = 800;
             speed = 1.2F;
-            range = maxRange = 36;
-            armor = 4;
+            armor = 12;
             accel = 0.9F;
             drag = 0.9F;
             flying = true;
 
-            percent = 20;
-            firstPercent = true;
+            hitPercent = 20;
+            hitFirstPercent = true;
             health2 = 350;
-            minSpeed = 8;
             speed1 = 1.0F;
             hitReload = 3600;
-            reload = 3600;
+            boostReload = 3600;
 
-            defend = 100;
-            power = 2;
-
-            abilities.add(new ForceFieldAbility(hitSize * 2, 1, 100, 600));
+            abilities.add(new ForceFieldAbility(hitSize * 2, 0.2f, 300, 1800));
             abilities.add(new EMPAbility());
 
             weapons.add(new Weapon() {{
                 reload = 42;
                 x = y = 0;
-                shoot = new ShootSpread() {{
+                inaccuracy = 20;
+                mirror = false;
+                shoot = new ShootMulti(new ShootPattern() {{
+                    shots = 2;
+                    shotDelay = 5;
+                }}, new ShootSpread() {{
                     shots = 8;
                     spread = 22.5F;
-                }};
+                }});
                 bullet = new BasicBulletType() {{
                     damage = 28;
-                    lifetime = 90;
+                    lifetime = 60;
                     speed = 4;
                 }};
             }});
         }};
-        transition = new ENGSWEISUnitType("transition") {{
-            constructor = ENGSWEISUnitEntity::create;
-            aiController = StrongBoostAI::new;
+        transition = new BoostUnitType("transition") {{
+            constructor = BoostUnitEntity::create;
+            aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
-            health = 22000;
+            health = 66000;
             speed = 2F;
-            range = maxRange = 40;
-            armor = 14;
+            armor = 28;
             accel = 0.9F;
             drag = 0.9F;
             flying = true;
             hitSize = 40;
 
-            percent = 75;
-            firstPercent = true;
-            health2 = 18000;
-            minSpeed = 8;
+            hitPercent = 75;
+            hitFirstPercent = true;
+            health2 = 66000;
             speed1 = 1.3F;
             hitReload = 3600;
-            reload = 3600;
-
-            defend = 20;
-            power = 20;
+            boostReload = 3600;
 
             weapons.add(new Weapon() {{
                 range = 320;
@@ -1308,7 +1283,8 @@ public class FUnits {
                 alternate = false;
                 bullet = new BasicBulletType() {{
                     damage = 35;
-                    speed = 7;
+                    speed = 4;
+                    drag = -0.001f;
                     lifetime = 90;
                 }};
             }});
@@ -1400,7 +1376,7 @@ public class FUnits {
             }});
         }};
         recluse = new WUGENANSMechUnitType("recluse") {{
-            constructor = WUGENANSMechUnit::create;
+            constructor = UnderLandMechUnit::create;
             aiController = LandMoveAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, new UnitCommand("lm", "lm", u -> new LandMoveAI())};
 

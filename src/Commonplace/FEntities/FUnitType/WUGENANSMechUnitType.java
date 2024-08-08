@@ -1,6 +1,6 @@
 package Commonplace.FEntities.FUnitType;
 
-import Commonplace.FEntities.FUnit.F.WUGENANSMechUnit;
+import Commonplace.FEntities.FUnit.F.UnderLandMechUnit;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.math.Scaled;
@@ -12,7 +12,6 @@ import mindustry.entities.part.DrawPart;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
-import mindustry.world.meta.Stat;
 
 import static mindustry.Vars.player;
 
@@ -52,7 +51,7 @@ public class WUGENANSMechUnitType extends UpGradeUnitType {
 
         Draw.z(z - 0.02f);
 
-        if (mech != null && !(unit instanceof WUGENANSMechUnit wu && wu.under)) {
+        if (mech != null && !(unit instanceof UnderLandMechUnit wu && wu.under)) {
             drawMech(mech);
         }
         //side
@@ -82,7 +81,7 @@ public class WUGENANSMechUnitType extends UpGradeUnitType {
             drawPayload((Unit & Payloadc) unit);
         }
 
-        if (!(unit instanceof WUGENANSMechUnit wu && wu.under)) {
+        if (!(unit instanceof UnderLandMechUnit wu && wu.under)) {
             drawSoftShadow(unit);
         }
 
@@ -92,7 +91,7 @@ public class WUGENANSMechUnitType extends UpGradeUnitType {
             drawCrawl(c);
         }
 
-        if (!(unit instanceof WUGENANSMechUnit wu && wu.under)) {
+        if (!(unit instanceof UnderLandMechUnit wu && wu.under)) {
             if (drawBody) drawOutline(unit);
             drawWeaponOutlines(unit);
             if (engineLayer > 0) Draw.z(engineLayer);

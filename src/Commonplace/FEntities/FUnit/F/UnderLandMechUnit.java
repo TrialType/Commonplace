@@ -43,8 +43,8 @@ import java.lang.reflect.Field;
 import static mindustry.Vars.asyncCore;
 import static mindustry.Vars.world;
 
-public class WUGENANSMechUnit extends FMechUnit {
-    private static final Seq<WUGENANSMechUnit> mec = new Seq<>();
+public class UnderLandMechUnit extends FMechUnit {
+    private static final Seq<UnderLandMechUnit> mec = new Seq<>();
     public boolean under = false;
     public float power;
     public float powerNeed;
@@ -56,8 +56,8 @@ public class WUGENANSMechUnit extends FMechUnit {
     public static BeginChanger bc = new BeginChanger();
     public static PhysicsWorldChanger physicsWorldChanger;
 
-    public static WUGENANSMechUnit create() {
-        return new WUGENANSMechUnit();
+    public static UnderLandMechUnit create() {
+        return new UnderLandMechUnit();
     }
 
     @Override
@@ -480,7 +480,7 @@ public class WUGENANSMechUnit extends FMechUnit {
                 if (timerChanging > 120) {
                     power = power - wut.needPower;
                     timerChanging = 0;
-                    WUGENANSMechUnit wu = (WUGENANSMechUnit) wut.create(team);
+                    UnderLandMechUnit wu = (UnderLandMechUnit) wut.create(team);
                     wu.x = x - hitSize / 2;
                     wu.y = y - hitSize / 2;
                     wu.rotation = rotation;
@@ -564,14 +564,14 @@ public class WUGENANSMechUnit extends FMechUnit {
     public static class BeginChanger implements AsyncProcess {
         @Override
         public void begin() {
-            Seq<WUGENANSMechUnit> us = new Seq<>();
-            for (WUGENANSMechUnit eu : mec) {
+            Seq<UnderLandMechUnit> us = new Seq<>();
+            for (UnderLandMechUnit eu : mec) {
                 if (eu.dead || eu.health <= 0) {
                     us.add(eu);
                 }
             }
             mec.removeAll(us);
-            for (WUGENANSMechUnit u : mec) {
+            for (UnderLandMechUnit u : mec) {
                 if (u.under) {
                     u.physref.body.layer = 4;
                 }

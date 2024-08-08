@@ -11,7 +11,7 @@ import mindustry.ctype.ContentType;
 import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 
-public class TileSpawnerUnit extends ENGSWEISUnitEntity implements OwnerSpawner {
+public class TileSpawnerUnit extends BoostUnitEntity implements OwnerSpawner {
     private final Seq<Integer> minerId = new Seq<>();
     public Seq<Unit> miners = new Seq<>();
 

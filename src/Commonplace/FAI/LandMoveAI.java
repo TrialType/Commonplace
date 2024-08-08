@@ -1,6 +1,6 @@
 package Commonplace.FAI;
 
-import Commonplace.FEntities.FUnit.F.WUGENANSMechUnit;
+import Commonplace.FEntities.FUnit.F.UnderLandMechUnit;
 import Commonplace.FEntities.FUnitType.WUGENANSMechUnitType;
 import arc.util.Time;
 import mindustry.ai.types.GroundAI;
@@ -14,7 +14,7 @@ import mindustry.graphics.Pal;
 import static java.lang.Math.min;
 
 public class LandMoveAI extends GroundAI {
-    private WUGENANSMechUnit wu;
+    private UnderLandMechUnit wu;
     private WUGENANSMechUnitType wut;
     private Teamc powerTarget;
     private float powerRange;
@@ -148,8 +148,8 @@ public class LandMoveAI extends GroundAI {
 
     @Override
     public void init() {
-        if (unit instanceof WUGENANSMechUnit) {
-            wu = (WUGENANSMechUnit) unit;
+        if (unit instanceof UnderLandMechUnit) {
+            wu = (UnderLandMechUnit) unit;
             under = wu.under;
         }
         if (unit.type instanceof WUGENANSMechUnitType) {

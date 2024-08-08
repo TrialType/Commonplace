@@ -31,13 +31,13 @@ import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
 
-public class ENGSWEISLegsUnit extends FLegsUnit {
+public class BoostLegsUnit extends FLegsUnit {
     @Override
     public int classId() {
         return 100;
     }
 
-    protected ENGSWEISLegsUnit() {
+    protected BoostLegsUnit() {
         this.applied = new Bits(Vars.content.getBy(ContentType.status).size);
         this.curMoveOffset = new Vec2();
         this.legs = new Leg[0];
@@ -45,8 +45,8 @@ public class ENGSWEISLegsUnit extends FLegsUnit {
         this.statuses = new Seq<>();
     }
 
-    public static ENGSWEISLegsUnit create() {
-        return new ENGSWEISLegsUnit();
+    public static BoostLegsUnit create() {
+        return new BoostLegsUnit();
     }
 
     public boolean canPass(int tileX, int tileY) {

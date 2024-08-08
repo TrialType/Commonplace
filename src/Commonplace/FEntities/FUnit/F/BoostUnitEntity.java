@@ -3,14 +3,16 @@ package Commonplace.FEntities.FUnit.F;
 import Commonplace.FContent.SpecialContent.MEvents;
 import Commonplace.FContent.DefaultContent.FUnits;
 import Commonplace.FEntities.FUnit.Override.FUnitEntity;
-import Commonplace.FEntities.FUnitType.ENGSWEISUnitType;
+import Commonplace.FEntities.FUnitType.BoostUnitType;
 import Commonplace.FTools.classes.PhysicsWorldChanger;
 import arc.Events;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
+import arc.math.geom.Vec2;
 import arc.struct.Bits;
 import arc.struct.Seq;
+import arc.util.Interval;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -28,23 +30,29 @@ import java.util.Map;
 import static java.lang.Math.*;
 import static mindustry.Vars.asyncCore;
 
-public class ENGSWEISUnitEntity extends FUnitEntity {
-    public final static Seq<ENGSWEISUnitEntity> crazy = new Seq<>();
+public class BoostUnitEntity extends FUnitEntity {
+    public static final int Change = 0, Boost = 1, BoostReload = 2;
+
+    public final static Seq<BoostUnitEntity> crazy = new Seq<>();
     private final Map<Unit, Float> unitMap = new HashMap<>();
     private final Map<Building, Float> buildingMap = new HashMap<>();
-    public boolean first = true;
-    public Teamc target;
-    public static BeginChanger bc = new BeginChanger();
+    public static Changer bc = new Changer();
     public static PhysicsWorldChanger physicsWorldChanger;
 
-    protected ENGSWEISUnitEntity() {
+    public final Interval timer = new Interval(3);
+    public boolean boosting = false;
+    public boolean changing = false;
+    public boolean first = true;
+    public float target = -1;
+
+    protected BoostUnitEntity() {
         this.applied = new Bits(Vars.content.getBy(ContentType.status).size);
         this.resupplyTime = Mathf.random(10.0F);
         this.statuses = new Seq<>();
     }
 
-    public static ENGSWEISUnitEntity create() {
-        return new ENGSWEISUnitEntity();
+    public static BoostUnitEntity create() {
+        return new BoostUnitEntity();
     }
 
     public static void change() {
@@ -79,44 +87,61 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
             crazy.add(this);
             change();
         }
-
         if (!team.isAI() || FUnits.boss.contains(type)) {
             first = false;
+        }
+        if (changing && type instanceof BoostUnitType t) {
+            if (timer.get(Change, t.exchangeTime)) {
+                first = false;
+                changing = false;
+                if (t.number > 0) {
+                    int[] counter = new int[]{t.number};
+                    Units.nearby(team, x, y, range(), u -> {
+                        if (counter[0] > 0 && u instanceof BoostUnitEntity b && !b.first && !b.changing) {
+                            b.changing = true;
+                            b.timer.reset(Change, 0);
+                            if (b.type instanceof BoostUnitType ty) {
+                                ty.changeEffect.at(b);
+                            }
+                            counter[0]--;
+                        }
+                    });
+                }
+            } else {
+                vel.setZero();
+            }
+        }
+        if (boosting) {
+            vel.setZero();
         }
 
         super.update();
 
         unitMap.replaceAll((u, v) -> v + Time.delta);
         buildingMap.replaceAll((u, v) -> v + Time.delta);
-        if (moving() && type instanceof ENGSWEISUnitType eut && target != null) {
+        if (boosting && type instanceof BoostUnitType t) {
+            if (timer.get(Boost, t.boostDuration + t.boostDelay)) {
+                boosting = false;
+                timer.reset(BoostReload, 0);
+            } else if (timer.check(Boost, t.boostDelay)) {
+                float damage = t.hitDamage;
+                float changeHel = t.hitChangeHel;
+                float percent = t.hitPercent;
+                boolean firstPercent = t.hitFirstPercent;
+                float reload = t.hitReload;
+                float length = t.boostLength;
 
-            float damage = eut.damage;
-            float changeHel = eut.changeHel;
-            float percent = eut.percent;
-            boolean firstPercent = eut.firstPercent;
-            float reload = eut.hitReload;
-            float minSpeed = eut.minSpeed;
-            boolean crazy = type == FUnits.crazy;
-            if (speed() >= minSpeed) {
-
-                float length = crazy ? hitSize / 1.5f : min(speed() * 100, 100);
-                float len = (float) sqrt((x - target.x()) * (x - target.x()) + (y - target.y()) * (y - target.y()));
-                float angle1 = Angles.angle(x, y, target.x(), target.y());
+                rotation = target;
+                vel.trns(rotation, length);
                 Units.nearbyEnemies(team, x, y, length, u -> {
                     float timer = unitMap.computeIfAbsent(u, f -> reload);
                     if (timer >= reload) {
                         unitMap.put(u, 0F);
+                        float angle = Angles.angleDist(rotation, angleTo(u));
 
-                        if (crazy) {
-                            percentDamage(u, percent, damage, firstPercent, changeHel);
-                        } else {
-                            float angel2 = Angles.angle(x, y, u.x, u.y);
-                            float angle = Angles.angleDist(angle1, angel2);
-
-                            if (angle <= 90) {
-                                if (cos(toRadians(angle)) * len <= length && sin(toRadians(angle)) * len <= hitSize / 2) {
-                                    percentDamage(u, percent, damage, firstPercent, changeHel);
-                                }
+                        if (angle <= 90) {
+                            if (cos(toRadians(angle)) * dst(u) <= length && sin(toRadians(angle)) * dst(u) <= hitSize / 2) {
+                                percentDamage(u, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -126,23 +151,39 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
                         float timer = buildingMap.computeIfAbsent(b, f -> reload);
                         if (timer >= reload) {
                             buildingMap.put(b, 0F);
+                            float angle = Angles.angleDist(rotation, angleTo(b));
 
-                            if (crazy) {
-                                percentDamage(b, percent, damage, firstPercent, changeHel);
-                            } else {
-                                float angel2 = Angles.angle(x, y, b.x, b.y);
-                                float angle = Angles.angleDist(angle1, angel2);
-
-                                if (angle <= 90) {
-                                    if (cos(toRadians(angle)) * len <= length && sin(toRadians(angle)) * len <= hitSize / 2) {
-                                        percentDamage(b, percent, damage, firstPercent, changeHel);
-                                    }
+                            if (angle <= 90) {
+                                if (cos(toRadians(angle)) * dst(b) <= length && sin(toRadians(angle)) * dst(b) <= hitSize / 2) {
+                                    percentDamage(b, percent, damage, firstPercent, changeHel);
                                 }
                             }
                         }
                     }
                 });
+                lastX = x;
+                lastY = y;
+                x += vel.x;
+                y += vel.y;
+                t.boostEffect.at(lastX, lastY, rotation, this);
             }
+        } else if (type == FUnits.crazy && type instanceof BoostUnitType t) {
+            Units.nearbyEnemies(team, x, y, hitSize, u -> {
+                float timer = unitMap.computeIfAbsent(u, f -> t.hitReload);
+                if (timer >= t.hitReload) {
+                    unitMap.put(u, 0F);
+                    percentDamage(u, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                }
+            });
+            Units.nearbyBuildings(x, y, hitSize, b -> {
+                if (b.team != team) {
+                    float timer = buildingMap.computeIfAbsent(b, f -> t.hitReload);
+                    if (timer >= t.hitReload) {
+                        buildingMap.put(b, 0F);
+                        percentDamage(b, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                    }
+                }
+            });
         }
     }
 
@@ -155,18 +196,28 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
     public void read(Reads read) {
         super.read(read);
         first = read.bool();
+        changing = read.bool();
+        boosting = read.bool();
+        timer.reset(0, read.f());
+        timer.reset(1, read.f());
+        timer.reset(2, read.f());
     }
 
     @Override
     public void write(Writes write) {
         super.write(write);
         write.bool(first);
+        write.bool(changing);
+        write.bool(boosting);
+        write.f(timer.getTime(0));
+        write.f(timer.getTime(1));
+        write.f(timer.getTime(2));
     }
 
     @Override
     public float speed() {
         if (first) {
-            if (type instanceof ENGSWEISUnitType eut) {
+            if (type instanceof BoostUnitType eut) {
                 return eut.speed1;
             }
         }
@@ -186,20 +237,20 @@ public class ENGSWEISUnitEntity extends FUnitEntity {
         }
     }
 
-    public static class BeginChanger implements AsyncProcess {
+    public static class Changer implements AsyncProcess {
         @Override
         public void begin() {
-            Seq<ENGSWEISUnitEntity> us = new Seq<>();
-            for (ENGSWEISUnitEntity eu : crazy) {
-                if (eu.dead || eu.health <= 0 || eu.target == null) {
+            Seq<BoostUnitEntity> us = new Seq<>();
+            for (BoostUnitEntity eu : crazy) {
+                if (eu.dead || eu.health <= 0 || eu.target < 0) {
                     us.add(eu);
                 }
             }
 
             crazy.removeAll(us);
 
-            for (ENGSWEISUnitEntity u : crazy) {
-                if (u.target != null) {
+            for (BoostUnitEntity u : crazy) {
+                if (u.target >= 0) {
                     u.physref.body.layer = 3;
                 }
             }

@@ -595,7 +595,7 @@ public class UnitOverride {
             hitEffect = Fx.massiveExplosion;
             drag = -0.005f;
             knockback = 1.5f;
-            lifetime = 60f;
+            lifetime = 30f;
             height = 15.5f;
             width = 15f;
             shrinkX = 0.15f;

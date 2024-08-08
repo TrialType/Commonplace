@@ -29,6 +29,8 @@ public class FStatusEffects {
             dragMultiplier = 0.01f;
         }};
         StrongStop = new StatusEffect("strong_stop") {{
+            show = false;
+
             speedMultiplier = 0;
             buildSpeedMultiplier = 0;
             disarm = true;
