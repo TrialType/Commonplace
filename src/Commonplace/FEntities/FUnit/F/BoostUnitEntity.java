@@ -22,6 +22,7 @@ import mindustry.async.PhysicsProcess;
 import mindustry.ctype.ContentType;
 import mindustry.entities.Units;
 import mindustry.gen.*;
+import mindustry.world.Tile;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class BoostUnitEntity extends FUnitEntity {
     public static final int Change = 0, Boost = 1, BoostReload = 2;
 
     public final static Seq<BoostUnitEntity> crazy = new Seq<>();
+    public static final Seq<Tile> tiles = Seq.with();
     private final Map<Unit, Float> unitMap = new HashMap<>();
     private final Map<Building, Float> buildingMap = new HashMap<>();
     public static Changer bc = new Changer();
@@ -130,7 +132,6 @@ public class BoostUnitEntity extends FUnitEntity {
                 boolean firstPercent = t.hitFirstPercent;
                 float reload = t.hitReload;
                 float length = t.boostLength;
-
                 rotation = target;
                 vel.trns(rotation, length);
                 Units.nearbyEnemies(team, x, y, length, u -> {
@@ -138,7 +139,6 @@ public class BoostUnitEntity extends FUnitEntity {
                     if (timer >= reload) {
                         unitMap.put(u, 0F);
                         float angle = Angles.angleDist(rotation, angleTo(u));
-
                         if (angle <= 90) {
                             if (cos(toRadians(angle)) * dst(u) <= length && sin(toRadians(angle)) * dst(u) <= hitSize / 2) {
                                 percentDamage(u, percent, damage, firstPercent, changeHel);
@@ -152,9 +152,10 @@ public class BoostUnitEntity extends FUnitEntity {
                         if (timer >= reload) {
                             buildingMap.put(b, 0F);
                             float angle = Angles.angleDist(rotation, angleTo(b));
-
                             if (angle <= 90) {
-                                if (cos(toRadians(angle)) * dst(b) <= length && sin(toRadians(angle)) * dst(b) <= hitSize / 2) {
+                                b.tile.getLinkedTilesAs(b.block, tiles);
+                                if (tiles.contains(tile -> cos(toRadians(angle)) * dst(tile) <= length &&
+                                        sin(toRadians(angle)) * dst(tile) <= hitSize / 2)) {
                                     percentDamage(b, percent, damage, firstPercent, changeHel);
                                 }
                             }
@@ -218,7 +219,7 @@ public class BoostUnitEntity extends FUnitEntity {
     public float speed() {
         if (first) {
             if (type instanceof BoostUnitType eut) {
-                return eut.speed1;
+                return eut.speed1 * speedMultiplier;
             }
         }
         return super.speed();

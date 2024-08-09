@@ -6,16 +6,24 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
+import arc.math.Rand;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import mindustry.entities.Effect;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.gen.Unit;
 import mindustry.graphics.Drawf;
+import mindustry.graphics.Pal;
+
+import java.util.Random;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 
 public class FEffects {
+    public final static Rand rand = new Rand();
+    public final static Vec2 vec = new Vec2();
+
     public static Effect lightning2 = new Effect(3, 500f, e -> {
         if (!(e.data instanceof Seq)) return;
         Seq<Vec2> lines = e.data();
@@ -115,5 +123,43 @@ public class FEffects {
             Lines.line(from.x, from.y, to.x, to.y);
             Drawf.light(from.x, from.y, to.x, to.y, 4, f.color, 0.6f);
         }
-    });
+    }), boostDelay = new Effect(60, 60, f -> {
+        rand.setSeed(f.id);
+
+        Draw.color(Pal.accent);
+        float len, rotate;
+        for (int i = 0; i < 15; i++) {
+            len = rand.random(60) * f.fout();
+            rotate = rand.random(360);
+
+            Fill.circle(f.x + Angles.trnsx(rotate, len), f.y + Angles.trnsy(rotate, len), f.fout() * rand.random(7));
+        }
+    }), boosting = new Effect() {{
+        lifetime = 120;
+        clip = 400;
+        followParent = false;
+
+        renderer = r -> {
+            if (r.data instanceof Unit u) {
+                Draw.color(r.color);
+                float rx = r.x, ry = r.y;
+                float len = u.dst(rx, ry);
+                float rotate = r.rotation;
+                for (float i = 0f; i < len; i += 6) {
+                    if (i / len / 1.5f <= r.fin()) {
+                        float c = r.fin() - i / len / 1.5f;
+                        if (c <= 0.3f) {
+                            vec.trns(rotate, i).add(rx, ry);
+                            Fill.circle(vec.x + Angles.trnsx(rotate + 90, c * 300),
+                                    vec.y + Angles.trnsx(rotate + 90, c * 300),
+                                    6 * (0.3f - c));
+                            Fill.circle(vec.x + Angles.trnsx(rotate - 90, c * 300),
+                                    vec.y + Angles.trnsx(rotate - 90, c * 300),
+                                    6 * (0.3f - c));
+                        }
+                    }
+                }
+            }
+        };
+    }};
 }

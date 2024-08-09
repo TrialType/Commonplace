@@ -25,7 +25,8 @@ public class BoostFlyingAI extends FlyingAI {
     private BoostUnitEntity u = null;
 
     //move
-    public float last;
+    public float last = 0;
+    public int dse = 75;
 
     //for circleTarget
     public float orx;
@@ -69,7 +70,10 @@ public class BoostFlyingAI extends FlyingAI {
                 }
             } else if (target != null) {
                 moveTo(target, unit.range() * 0.3f);
-                if (unit.dst(target) < type.boostLength * type.boostDuration / 2 && u.timer.get(BoostReload, type.boostReload)) {
+                unit.lookAt(target);
+                if (unit.dst(target) < type.boostLength * type.boostDuration / 2 &&
+                        Angles.angleDist(unit.angleTo(target), unit.rotation) < 15 &&
+                        u.timer.get(BoostReload, type.boostReload)) {
                     u.boosting = true;
                     u.target = u.angleTo(target);
                     u.timer.reset(Boost, 0);
@@ -79,24 +83,21 @@ public class BoostFlyingAI extends FlyingAI {
                 }
             }
         } else {
-            if (unit.hitTime > 0 || Units.closestTarget(unit.team, ux, uy, unit.range() * 1.8f) != null) {
+            if (unit.hitTime > 0 || Units.closestTarget(unit.team, ux, uy, type.searchRange) != null) {
                 type.changeEffect.at(ux, uy, unit.rotation, unit);
                 u.changing = true;
                 u.timer.reset(Change, 0);
-            } else if (timer.get(timerTarget2, 180)) {
-                CoreBlock.CoreBuild core = unit.closestEnemyCore();
-                u.rotation += 4;
-                if (core != null) {
-                    last = u.angleTo(core) + (Mathf.chance(0.5) ? 75 : -75);
-                }
             } else {
                 u.rotation += 4;
-                float x = Mathf.cosDeg(last) + unit.x, y = Mathf.sinDeg(last) + unit.y;
-                if (x < 0 || x > world.width() * tilesize || y < 0 || y > world.height() * tilesize) {
-                    timer.reset(timerTarget2, 181);
+                float x = Mathf.cosDeg(last) * unit.speed() + ux, y = Mathf.sinDeg(last) * unit.speed() + uy;
+                if (x < 0 || x > world.width() * tilesize || y < 0 || y > world.height() * tilesize || timer.get(timerTarget2, 600)) {
+                    CoreBlock.CoreBuild core = unit.closestEnemyCore();
+                    if (core != null) {
+                        last = u.angleTo(core) + dse;
+                        dse = 360 - dse;
+                    }
                 } else {
-                    unit.vel.setLength(type.speed1);
-                    unit.vel.rotateTo(last, unit.type.rotateSpeed);
+                    unit.vel.trns(last, type.speed1);
                 }
             }
         }

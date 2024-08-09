@@ -1056,10 +1056,10 @@ public class FUnits {
             speed1 = 3;
 
             range = maxRange = 200;
-            hitReload = 18;
+            hitReload = 15;
             hitPercent = 1.5F;
             hitChangeHel = 1000;
-            hitDamage = 200 * 1.4F;
+            hitDamage = 280;
             hitFirstPercent = true;
 
             circleTarget = true;
