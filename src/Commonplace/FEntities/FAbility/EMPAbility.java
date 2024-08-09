@@ -28,30 +28,28 @@ public class EMPAbility extends Ability {
     public Effect stopEffect = Fx.lightningShoot;
     public Effect waveEffect = Fx.missileTrailSmoke;
 
-    private static int number;
     private final Seq<Position> maps = new Seq<>();
 
     @Override
     public void update(Unit unit) {
         if (!(unit instanceof BoostUnitEntity eu && eu.first) && !unit.hasEffect(FStatusEffects.StrongStop)) {
-            timer = timer + Time.delta;
+            timer = Math.min(reload, timer + Time.delta);
             if (timer >= reload) {
                 maps.clear();
-                number = 0;
                 Units.nearbyEnemies(unit.team, unit.x, unit.y, range, u -> {
-                    maps.add(u);
-                    number++;
-                });
-                Units.nearbyBuildings(unit.x, unit.y, range, b -> {
-                    if (b.team != unit.team) {
-                        maps.add(b);
-                        number++;
+                    if (u.type.estimateDps() > 0) {
+                        maps.add(u);
                     }
                 });
-                if (number >= 5) {
+                Units.nearbyBuildings(unit.x, unit.y, range, b -> {
+                    if (b.team != unit.team && (b.block.hasPower || b.block.canOverdrive)) {
+                        maps.add(b);
+                    }
+                });
+                if (maps.size >= 5) {
                     timer = 0;
                     if (delay > 0) {
-                        Time.run(delay,()->{
+                        Time.run(delay, () -> {
                             for (Position p : maps) {
                                 if (p instanceof Building b) {
                                     waveEffect.at(b.x, b.y);

@@ -134,32 +134,12 @@ public class FEffects {
 
             Fill.circle(f.x + Angles.trnsx(rotate, len), f.y + Angles.trnsy(rotate, len), f.fout() * rand.random(7));
         }
-    }), boosting = new Effect() {{
-        lifetime = 120;
-        clip = 400;
-        followParent = false;
-
-        renderer = r -> {
-            if (r.data instanceof Unit u) {
-                Draw.color(r.color);
-                float rx = r.x, ry = r.y;
-                float len = u.dst(rx, ry);
-                float rotate = r.rotation;
-                for (float i = 0f; i < len; i += 6) {
-                    if (i / len / 1.5f <= r.fin()) {
-                        float c = r.fin() - i / len / 1.5f;
-                        if (c <= 0.3f) {
-                            vec.trns(rotate, i).add(rx, ry);
-                            Fill.circle(vec.x + Angles.trnsx(rotate + 90, c * 300),
-                                    vec.y + Angles.trnsx(rotate + 90, c * 300),
-                                    6 * (0.3f - c));
-                            Fill.circle(vec.x + Angles.trnsx(rotate - 90, c * 300),
-                                    vec.y + Angles.trnsx(rotate - 90, c * 300),
-                                    6 * (0.3f - c));
-                        }
-                    }
-                }
-            }
-        };
-    }};
+    }), boosting = new Effect(60, 250, r -> {
+        Draw.color(r.color);
+        float rotate = r.rotation;
+        Fill.circle(r.x + Angles.trnsx(rotate + 90, r.finpow() * 25),
+                r.y + Angles.trnsy(rotate + 90, r.finpow() * 25), 2);
+        Fill.circle(r.x + Angles.trnsx(rotate - 90, r.finpow() * 25),
+                r.y + Angles.trnsy(rotate - 90, r.finpow() * 25), 2);
+    });
 }

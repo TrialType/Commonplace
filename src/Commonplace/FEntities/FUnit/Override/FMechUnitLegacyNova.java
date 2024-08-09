@@ -41,6 +41,7 @@ public class FMechUnitLegacyNova extends MechUnitLegacyNova implements UnitUpGra
     public float exp = 0;
 
     protected FMechUnitLegacyNova() {
+        super();
     }
 
     public static FMechUnitLegacyNova create() {

@@ -19,9 +19,11 @@ import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.async.AsyncProcess;
 import mindustry.async.PhysicsProcess;
+import mindustry.content.Fx;
 import mindustry.ctype.ContentType;
 import mindustry.entities.Units;
 import mindustry.gen.*;
+import mindustry.graphics.Pal;
 import mindustry.world.Tile;
 
 import java.lang.reflect.Field;
@@ -140,7 +142,7 @@ public class BoostUnitEntity extends FUnitEntity {
                         unitMap.put(u, 0F);
                         float angle = Angles.angleDist(rotation, angleTo(u));
                         if (angle <= 90) {
-                            if (cos(toRadians(angle)) * dst(u) <= length && sin(toRadians(angle)) * dst(u) <= hitSize / 2) {
+                            if (Mathf.sinDeg(angle) * dst(u) <= (hitSize + u.hitSize) * 0.5f) {
                                 percentDamage(u, percent, damage, firstPercent, changeHel);
                             }
                         }
@@ -151,13 +153,11 @@ public class BoostUnitEntity extends FUnitEntity {
                         float timer = buildingMap.computeIfAbsent(b, f -> reload);
                         if (timer >= reload) {
                             buildingMap.put(b, 0F);
-                            float angle = Angles.angleDist(rotation, angleTo(b));
-                            if (angle <= 90) {
-                                b.tile.getLinkedTilesAs(b.block, tiles);
-                                if (tiles.contains(tile -> cos(toRadians(angle)) * dst(tile) <= length &&
-                                        sin(toRadians(angle)) * dst(tile) <= hitSize / 2)) {
-                                    percentDamage(b, percent, damage, firstPercent, changeHel);
-                                }
+                            final float[] angle = new float[1];
+                            b.tile.getLinkedTilesAs(b.block, tiles);
+                            if (tiles.contains(tile -> (angle[0] = Angles.angleDist(rotation, angleTo(b))) <= 90 &&
+                                    Mathf.sinDeg(angle[0]) * dst(tile) <= hitSize / 2)) {
+                                percentDamage(b, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -166,7 +166,7 @@ public class BoostUnitEntity extends FUnitEntity {
                 lastY = y;
                 x += vel.x;
                 y += vel.y;
-                t.boostEffect.at(lastX, lastY, rotation, this);
+                t.boostEffect.at(lastX, lastY, rotation, Pal.accent, new Vec2(x, y));
             }
         } else if (type == FUnits.crazy && type instanceof BoostUnitType t) {
             Units.nearbyEnemies(team, x, y, hitSize, u -> {

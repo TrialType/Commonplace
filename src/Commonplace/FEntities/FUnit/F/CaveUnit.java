@@ -3,9 +3,7 @@ package Commonplace.FEntities.FUnit.F;
 import Commonplace.FContent.SpecialContent.MEvents;
 import Commonplace.FContent.DefaultContent.FStatusEffects;
 import Commonplace.FContent.DefaultContent.FUnits;
-import Commonplace.FEntities.FEffect.WaterWave;
 import arc.Events;
-import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.struct.Seq;
@@ -14,7 +12,6 @@ import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.ctype.ContentType;
 import mindustry.entities.Units;
-import mindustry.entities.effect.MultiEffect;
 import mindustry.gen.Unit;
 import mindustry.gen.UnitWaterMove;
 import mindustry.graphics.Trail;
@@ -74,8 +71,6 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.navanax,
             FUnits.transition
     });
-    private MultiEffect water = null;
-    private float timer = -1;
     private float length = -1;
     private float allTimer = -1;
     private boolean back = false;
@@ -108,30 +103,12 @@ public class CaveUnit extends UnitWaterMove {
             if (allTimer >= 21600) {
                 back = true;
                 time = 0;
-                water = null;
-                WaterWave.back = true;
-                destroy();
+                kill();
                 return;
             }
         }
 
         super.update();
-
-        if (water == null) {
-            updateEffect();
-        } else {
-            timer += Time.delta;
-            allTimer += Time.delta;
-            if (timer >= 676) {
-                water.at(this);
-                timer = timer % 676;
-            }
-            if (allTimer >= max(world.width(), world.height()) * 13.44f && allTimer % 1800 < Time.delta) {
-                back = true;
-                WaterWave.back = true;
-            }
-            applyDamage();
-        }
 
         if (back) {
             backTimer += Time.delta;
@@ -139,7 +116,6 @@ public class CaveUnit extends UnitWaterMove {
             if (backTimer >= 481) {
                 time++;
                 back = false;
-                WaterWave.back = false;
                 backTimer = 0;
                 summonTimer = 0;
             } else if (summonTimer >= 60) {
@@ -147,34 +123,6 @@ public class CaveUnit extends UnitWaterMove {
                 summonUnit();
             }
         }
-    }
-
-    public void updateEffect() {
-        WaterWave[] effects = new WaterWave[28];
-        for (int i = 0; i < 28; i++) {
-            String a;
-            if (i <= 13) {
-                a = Integer.toHexString(125 + (i + 1) * 10);
-            } else {
-                a = Integer.toHexString(255 - (i - 13) * 10);
-            }
-            int finalI = i;
-            effects[i] = new WaterWave() {{
-                startDelay = 25 * finalI;
-                sizeFrom = 0;
-                sizeTo = max(world.width(), world.height()) * 11.2f;
-                lifetime = max(world.width(), world.height()) * 13.44f;
-                strokeTo = strokeFrom = 24f;
-                colorTo = colorFrom = Color.valueOf("061726" + a);
-            }};
-        }
-
-        length = max(world.width(), world.height()) * 9;
-        water = new MultiEffect(effects);
-        WaterWave.back = false;
-        back = false;
-        timer = 676;
-        allTimer = 0;
     }
 
     public void applyDamage() {

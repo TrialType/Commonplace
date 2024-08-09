@@ -3,13 +3,8 @@ package Commonplace.FEntities.FUnitType;
 import Commonplace.FAI.BoostFlyingAI;
 import Commonplace.FContent.SpecialContent.CStats;
 import Commonplace.FContent.SpecialContent.FEffects;
-import arc.Core;
 import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
 import arc.math.Interp;
-import arc.math.Mathf;
-import arc.math.geom.Position;
-import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
@@ -23,9 +18,9 @@ public class BoostUnitType extends UpGradeUnitType {
     public float hitDamage = 1;
     public float hitPercent = 1;
     public boolean hitFirstPercent = false;
-    public float hitReload = 3600;
-    public float boostLength = 5;
-    public float boostDuration = 30;
+    public float hitReload = 60;
+    public float boostLength = 7.5f;
+    public float boostDuration = 20;
     public long boostReload = 1800;
     public float boostDelay = 60;
     public Effect boostEffect = FEffects.boosting;
@@ -37,9 +32,7 @@ public class BoostUnitType extends UpGradeUnitType {
     public int number = 0;
     public int exchangeTime = 120;
     public Effect changeEffect = new Effect(exchangeTime, e -> {
-        TextureRegion region1 = Core.atlas.find(icon1, (TextureRegion) null);
-        TextureRegion region2 = Core.atlas.find(icon2, (TextureRegion) null);
-        if (region1 != null && region2 != null && e.data instanceof Unit u) {
+        if (e.data instanceof Unit u) {
             mixcol(Pal.accent, 1f);
             if (e.fin() < 0.35) {
                 rect(icon1, u.x, u.y, u.rotation - 90f);

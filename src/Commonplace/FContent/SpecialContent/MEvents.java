@@ -3,6 +3,8 @@ package Commonplace.FContent.SpecialContent;
 import Commonplace.FContent.ProjectContent.PAbilities;
 import Commonplace.FContent.ProjectContent.PBullets;
 import Commonplace.FContent.ProjectContent.PWeapons;
+import Commonplace.FEntities.FAbility.LevelSign;
+import Commonplace.FEntities.FUnit.Override.*;
 import Commonplace.FTools.interfaces.BuildUpGrade;
 import Commonplace.FTools.interfaces.UnitUpGrade;
 import Commonplace.FTools.interfaces.UpGradeTime;
@@ -10,12 +12,15 @@ import Commonplace.FType.FDialog.ProjectDialog;
 import Commonplace.FType.FDialog.Old.MoreResearchDialog;
 import Commonplace.FType.Extent.CorrosionMist;
 import arc.Events;
+import arc.func.Prov;
+import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.ai.types.MissileAI;
 import mindustry.game.EventType;
-import mindustry.gen.Healthc;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
+import mindustry.type.UnitType;
 
 import java.util.Random;
 
@@ -24,7 +29,18 @@ import static java.lang.Math.*;
 
 
 public class MEvents {
+    private static final ObjectMap<Class<?>, Prov<? extends Unit>> classes = new ObjectMap<>();
     private static final Random r = new Random();
+
+    static {
+        classes.put(MechUnit.class, FMechUnit::create);
+        classes.put(LegsUnit.class, FLegsUnit::create);
+        classes.put(UnitEntity.class, FUnitEntity::create);
+        classes.put(UnitWaterMove.class, FUnitWaterMove::create);
+        classes.put(ElevationMoveUnit.class, FElevationMoveUnit::create);
+        classes.put(TankUnit.class, FTankUnit::create);
+        classes.put(PayloadUnit.class, FPayloadUnit::create);
+    }
 
     public static void load() {
         Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.research = new MoreResearchDialog()));
@@ -33,6 +49,14 @@ public class MEvents {
             PBullets.load();
             PWeapons.load();
             PAbilities.load();
+        });
+        Events.on(EventType.ContentInitEvent.class, e -> {
+            for (UnitType u : Vars.content.units()) {
+                if (classes.get(u.constructor.get().getClass()) != null) {
+                    u.constructor = classes.get(u.constructor.get().getClass());
+                    u.abilities.add(new LevelSign());
+                }
+            }
         });
 
         Events.on(EventType.WorldLoadEndEvent.class, e -> CorrosionMist.init());

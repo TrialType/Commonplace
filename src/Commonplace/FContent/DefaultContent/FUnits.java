@@ -1071,6 +1071,7 @@ public class FUnits {
             accel = 0.5F;
             health = 13200;
             armor = 23;
+            hitSize = 9;
         }};
         barb = new BoostUnitType("barb") {{
             constructor = BoostUnitEntity::create;
@@ -1084,7 +1085,6 @@ public class FUnits {
             hitPercent = 10;
             hitChangeHel = -1;
             hitFirstPercent = true;
-            boostReload = 180;
             hitReload = 90;
 
             speed = 1.3F;
@@ -1207,8 +1207,9 @@ public class FUnits {
             hitFirstPercent = true;
             health2 = 350;
             speed1 = 1.0F;
-            hitReload = 3600;
-            boostReload = 3600;
+            hitReload = 600;
+            boostReload = 1800;
+            boostDuration = 40;
 
             abilities.add(new ForceFieldAbility(hitSize * 2, 0.2f, 300, 1800));
             abilities.add(new EMPAbility());

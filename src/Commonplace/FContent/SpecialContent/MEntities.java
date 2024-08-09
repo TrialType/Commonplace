@@ -1,13 +1,11 @@
 package Commonplace.FContent.SpecialContent;
 
-import Commonplace.FEntities.FEffectState.WaterEffectState;
 import Commonplace.FEntities.FUnit.F.*;
 import Commonplace.FEntities.FUnit.Override.*;
 import mindustry.gen.EntityMapping;
 
 public class MEntities {
     public static void load() {
-        EntityMapping.idMap[98] = WaterEffectState::create;
         EntityMapping.idMap[100] = BoostLegsUnit::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;
