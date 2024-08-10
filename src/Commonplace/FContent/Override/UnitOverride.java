@@ -4,6 +4,7 @@ import Commonplace.FAI.MissileAI_II;
 import Commonplace.FContent.SpecialContent.FEffects;
 import Commonplace.FContent.DefaultContent.FStatusEffects;
 import Commonplace.FEntities.FAbility.LevelSign;
+import Commonplace.FEntities.FAbility.SprintingAbility2;
 import Commonplace.FEntities.FAbility.TimeLargeDamageAbility;
 import Commonplace.FEntities.FBulletType.*;
 import Commonplace.FEntities.FUnit.F.TimeUpGradeUnit;

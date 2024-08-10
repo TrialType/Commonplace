@@ -7,7 +7,7 @@ import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static Commonplace.FContent.DefaultContent.CBlocks.*;
-import static Commonplace.FContent.ProjectContent.FSign.*;
+import static Commonplace.FContent.ProjectContent.Sign.*;
 import static Commonplace.FContent.DefaultContent.FPlanetGenerators.fullWater;
 import static Commonplace.FContent.DefaultContent.FPlanetGenerators.longestDown;
 import static Commonplace.FContent.DefaultContent.FUnits.*;

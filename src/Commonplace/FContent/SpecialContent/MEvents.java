@@ -1,8 +1,8 @@
 package Commonplace.FContent.SpecialContent;
 
-import Commonplace.FContent.ProjectContent.PAbilities;
-import Commonplace.FContent.ProjectContent.PBullets;
-import Commonplace.FContent.ProjectContent.PWeapons;
+import Commonplace.FContent.ProjectContent.Abilities;
+import Commonplace.FContent.ProjectContent.Bullets;
+import Commonplace.FContent.ProjectContent.Weapons;
 import Commonplace.FEntities.FAbility.LevelSign;
 import Commonplace.FEntities.FUnit.Override.*;
 import Commonplace.FTools.interfaces.BuildUpGrade;
@@ -14,7 +14,6 @@ import Commonplace.FType.Extent.CorrosionMist;
 import arc.Events;
 import arc.func.Prov;
 import arc.struct.ObjectMap;
-import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.ai.types.MissileAI;
@@ -46,9 +45,9 @@ public class MEvents {
         Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.research = new MoreResearchDialog()));
         Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, ProjectDialog::create));
         Events.on(EventType.ContentInitEvent.class, e -> {
-            PBullets.load();
-            PWeapons.load();
-            PAbilities.load();
+            Bullets.load();
+            Weapons.load();
+            Abilities.load();
         });
         Events.on(EventType.ContentInitEvent.class, e -> {
             for (UnitType u : Vars.content.units()) {

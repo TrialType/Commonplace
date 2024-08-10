@@ -4,7 +4,7 @@ import Commonplace.FContent.DefaultContent.*;
 import Commonplace.FContent.Override.BlockOverride;
 import Commonplace.FContent.Override.TechOverride;
 import Commonplace.FContent.Override.UnitOverride;
-import Commonplace.FContent.ProjectContent.FSign;
+import Commonplace.FContent.ProjectContent.Sign;
 import Commonplace.FContent.ProjectContent.UnitProjects;
 import Commonplace.FContent.SpecialContent.*;
 import mindustry.mod.Mod;
@@ -15,7 +15,7 @@ public class Main extends Mod {
 
     @Override
     public void loadContent() {
-        FSign.load();
+        Sign.load();
         MSettings.load();
         FLiquids.load();
         FItems.load();

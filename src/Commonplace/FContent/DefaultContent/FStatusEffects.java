@@ -114,7 +114,7 @@ public class FStatusEffects {
         }};
         back = new StatusEffect("back") {{
             healthMultiplier = 2.4f;
-            damage = -100;
+            damage = -1;
         }};
         frenzy = new StatusEffect("frenzy") {{
             healthMultiplier = 2f;

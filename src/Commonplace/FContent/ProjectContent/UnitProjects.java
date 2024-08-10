@@ -11,7 +11,7 @@ public class UnitProjects {
     public static UnitProject fragsAdd, damageAdder, fragDamageAdder;
 
     public static void load() {
-        handTurret = new UnitProject(1, 2, "hand-turret", u -> UnitProject.weaponApply(PWeapons.test, u));
+        handTurret = new UnitProject(1, 2, "hand-turret", u -> UnitProject.weaponApply(Weapons.test, u));
 //====================================================================================================================
 //====================================================================================================================
 //====================================================================================================================

@@ -1,15 +1,18 @@
 package Commonplace.FContent.DefaultContent;
 
 import Commonplace.FAI.*;
+import Commonplace.FContent.ProjectContent.Bullets;
 import Commonplace.FContent.SpecialContent.MCommands;
 import Commonplace.FEntities.FAbility.*;
 import Commonplace.FEntities.FBulletType.*;
 import Commonplace.FEntities.FUnit.F.*;
 import Commonplace.FEntities.FUnit.Override.FLegsUnit;
+import Commonplace.FEntities.FUnit.Override.FUnitEntity;
 import Commonplace.FEntities.FUnitType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
@@ -43,6 +46,9 @@ public class FUnits {
     //tool
     public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a;
 
+    //command
+    public static UnitType strike;
+
     //support
     public static UnitType support_h, support_a;
 
@@ -59,13 +65,13 @@ public class FUnits {
     public static UnitType recluse;
 
     //special
-    public static UnitType bulletInterception, rejuvenate, vibrate;
+    public static UnitType bulletInterception, rejuvenate, vibrate, crane;
 
     //Test
     public static UnitType e;
 
     public static void load() {
-        support_a = new UnitType("support-a") {{
+        support_a = new UpGradeUnitType("support-a") {{
             constructor = FLegsUnit::create;
 
             health = 12000;
@@ -211,7 +217,62 @@ public class FUnits {
                 }};
             }});
         }};
-        vibrate = new UnitType("vibrate") {{
+        strike = new UpGradeUnitType("strike") {{
+            constructor = FUnitEntity::create;
+
+            flying = true;
+            faceTarget = true;
+            health = 50;
+            armor = 2;
+            speed = 5;
+            hitSize = 9;
+            range = maxRange = 500;
+
+            abilities.add(new SprintingAbility2() {{
+                rotate = false;
+                sprintingRadius = 500;
+                sprintingReload = 0;
+                sprintingDuration = 30;
+                sprintingDamage = 46;
+                sprintingLength = 12;
+            }});
+
+            weapons.add(new Weapon() {{
+                shootSound = Sounds.none;
+                bullet = Bullets.none.copy();
+                bullet.rangeOverride = 500;
+            }});
+        }};
+        crane = new UpGradeUnitType("crane") {{
+            constructor = FUnitEntity::create;
+
+            flying = true;
+            health = 100000;
+            armor = 20;
+            speed = 0.5f;
+
+            for (int i = 0; i < 5; i++) {
+                abilities.add(new UnitSpawnSupperAbility(strike, 120, Angles.trnsx(72 * i, 10), Angles.trnsy(72 * i, 10)) {{
+                    status.putAll(FStatusEffects.swift, 240f, FStatusEffects.back, 240f);
+                }});
+            }
+
+            weapons.add(new Weapon() {{
+                reload = 60;
+                mirror = false;
+                x = y = 0;
+                bullet = new PointBulletType() {{
+                    shootEffect = Fx.railShoot;
+                    lifetime = 340;
+                    speed = 1;
+                    hitEffect = Fx.massiveExplosion;
+                    damage = 0;
+                    splashDamage = 400;
+                    splashDamageRadius = 100;
+                }};
+            }});
+        }};
+        vibrate = new UpGradeUnitType("vibrate") {{
             constructor = FLegsUnit::create;
 
             speed = 1;
@@ -224,7 +285,6 @@ public class FUnits {
 
             abilities.add(new StatusFieldAbility(StatusEffects.overclock, 180, 90, 80));
             abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 420, 40));
-            abilities.add(new LevelSign());
 
             weapons.add(new Weapon() {{
                 shootCone = 360;
@@ -497,7 +557,6 @@ public class FUnits {
             abilities.add(new OwnerUnitSpawnAbility(bulletInterception_a, 600, 0, 0) {{
                 maxNum = 4;
             }});
-            abilities.add(new LevelSign());
 
 
             weapons.add(new PointDefenseWeapon() {{
@@ -733,16 +792,16 @@ public class FUnits {
                 }};
             }});
         }};
-        dive = new UnitType("dive") {{
-            constructor = BoostLegsUnit::create;
+        dive = new UpGradeUnitType("dive") {{
+            constructor = FLegsUnit::create;
 
-            flying = false;
-            speed = 0.8F;
-            health = 900;
-            armor = 18;
+            speed = 0.4F;
+            health = 6000;
+            armor = 30;
             hitSize = 13;
+            lightRadius = 1000;
 
-            weapons.add(new Weapon("dive1") {{
+            weapons.add(new Weapon() {{
                 top = false;
                 mirror = false;
                 shootY = 0f;
@@ -756,27 +815,27 @@ public class FUnits {
                     spread = 11.25F;
                 }};
                 bullet = new BasicBulletType() {{
-                    shootEffect = Fx.shootSmallFlame;
+                    shootEffect = Fx.shootPyraFlame;
                     lifetime = 20;
                     width = 0;
                     height = 0;
-                    speed = 2.3F;
-                    damage = 20;
+                    speed = 5;
+                    damage = 55;
                     despawnEffect = hitEffect = Fx.none;
-
                     status = StatusEffects.burning;
+                    statusDuration = 300;
                 }};
             }});
         }};
-        befall = new UnitType("befall") {{
-            constructor = BoostLegsUnit::create;
+        befall = new UpGradeUnitType("befall") {{
+            constructor = FLegsUnit::create;
 
-            health = 6000;
-            armor = 30;
-            speed = 1;
+            health = 10000;
+            armor = 60;
+            speed = 0.5f;
+            hitSize = 20;
             range = maxRange = 56;
 
-            abilities.add(new ShieldRegenFieldAbility(200, 1000, 120, 0.01F));
             abilities.add(new TimeLargeDamageAbility());
         }};
         velocity = new BoostUnitType("velocity") {{

@@ -6,7 +6,7 @@ import mindustry.type.Weapon;
 
 import static Commonplace.FTools.classes.ProjectUtils.init;
 
-public class PWeapons {
+public class Weapons {
     public static Weapon test = new Weapon() {{
         top = false;
         reload = 20f;

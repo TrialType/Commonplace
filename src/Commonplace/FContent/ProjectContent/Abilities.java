@@ -1,6 +1,6 @@
 package Commonplace.FContent.ProjectContent;
 
-public class PBullets {
+public class Abilities {
     public static void load() {
     }
 }

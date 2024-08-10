@@ -1,7 +1,7 @@
 package Commonplace.FType.FDialog;
 
 import Commonplace.FContent.DefaultContent.FStatusEffects;
-import Commonplace.FContent.ProjectContent.FSign;
+import Commonplace.FContent.ProjectContent.Sign;
 import Commonplace.FType.New.BoostProject;
 import Commonplace.FType.New.UnitProject;
 import arc.Core;
@@ -194,8 +194,8 @@ public class ProjectDialog extends BaseDialog {
     }
 
     public int maxHeavy() {
-        for (int i = FSign.allSize.length - 1; i >= 0; i--) {
-            if (FSign.allSize[i].unlocked()) {
+        for (int i = Sign.allSize.length - 1; i >= 0; i--) {
+            if (Sign.allSize[i].unlocked()) {
                 return 1 + (int) Math.pow(2, i + 1);
             }
         }

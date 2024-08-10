@@ -6,7 +6,6 @@ import mindustry.gen.EntityMapping;
 
 public class MEntities {
     public static void load() {
-        EntityMapping.idMap[100] = BoostLegsUnit::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;
         EntityMapping.idMap[105] = FTankUnit::create;

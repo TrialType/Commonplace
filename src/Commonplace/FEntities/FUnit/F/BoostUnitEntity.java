@@ -87,7 +87,7 @@ public class BoostUnitEntity extends FUnitEntity {
 
     @Override
     public void update() {
-        if (crazy.indexOf(this) < 0) {
+        if (crazy.indexOf(this) < 0 && type == FUnits.crazy) {
             crazy.add(this);
             change();
         }
@@ -243,7 +243,7 @@ public class BoostUnitEntity extends FUnitEntity {
         public void begin() {
             Seq<BoostUnitEntity> us = new Seq<>();
             for (BoostUnitEntity eu : crazy) {
-                if (eu.dead || eu.health <= 0 || eu.target < 0) {
+                if (eu.dead || eu.health <= 0) {
                     us.add(eu);
                 }
             }
