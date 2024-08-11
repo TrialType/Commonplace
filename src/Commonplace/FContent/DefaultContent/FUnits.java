@@ -224,23 +224,23 @@ public class FUnits {
             faceTarget = true;
             health = 50;
             armor = 2;
-            speed = 5;
+            speed = 3;
             hitSize = 9;
-            range = maxRange = 500;
+            range = maxRange = 100;
 
             abilities.add(new SprintingAbility2() {{
                 rotate = false;
-                sprintingRadius = 500;
-                sprintingReload = 0;
-                sprintingDuration = 30;
+                sprintingRadius = 100;
+                sprintingReload = 20;
+                sprintingDuration = 20;
                 sprintingDamage = 46;
-                sprintingLength = 12;
+                sprintingLength = 10;
             }});
 
             weapons.add(new Weapon() {{
                 shootSound = Sounds.none;
                 bullet = Bullets.none.copy();
-                bullet.rangeOverride = 500;
+                bullet.rangeOverride = 100;
             }});
         }};
         crane = new UpGradeUnitType("crane") {{
@@ -253,7 +253,7 @@ public class FUnits {
 
             for (int i = 0; i < 5; i++) {
                 abilities.add(new UnitSpawnSupperAbility(strike, 120, Angles.trnsx(72 * i, 10), Angles.trnsy(72 * i, 10)) {{
-                    status.putAll(FStatusEffects.swift, 240f, FStatusEffects.back, 240f);
+                    status.putAll(FStatusEffects.swift, 240f, FStatusEffects.back, 600f);
                 }});
             }
 
@@ -1200,19 +1200,17 @@ public class FUnits {
             aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, MCommands.STB};
 
-            boostReload = 3600;
-            hitReload = 3600;
+            boostReload = 1800;
+            hitReload = 600;
             hitPercent = 30;
             hitFirstPercent = true;
+            boostDuration = 25;
             speed1 = 0.3F;
             health2 = 2000;
             number = 3;
 
             rotateSpeed = 5.4f;
             buildSpeed = 3f;
-
-            drownTimeMultiplier = 4f;
-
             hitSize = 24f;
             flying = true;
             speed = 0.4f;
@@ -1220,8 +1218,7 @@ public class FUnits {
             engineSize = 3;
             accel = 0.9F;
             drag = 0.9F;
-
-            health = 2000;
+            health = 3000;
             armor = 19;
 
             abilities.add(new OwnerUnitSpawnAbility(transfer, 2400, 1, 1));
@@ -1268,7 +1265,7 @@ public class FUnits {
             speed1 = 1.0F;
             hitReload = 600;
             boostReload = 1800;
-            boostDuration = 40;
+            boostDuration = 45;
 
             abilities.add(new ForceFieldAbility(hitSize * 2, 0.2f, 300, 1800));
             abilities.add(new EMPAbility());
