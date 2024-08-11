@@ -33,7 +33,6 @@ public class Main extends Mod {
         MEvents.load();
         CBlocks.load();
         FPlanets.load();
-        PFloors.load();
         FPlanetGenerators.load();
         Techs.load();
         TechOverride.load();
