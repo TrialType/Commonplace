@@ -456,7 +456,6 @@ public class UnitOverride {
                         }};
 
                         bullet = new MissileExplosionBulletType(0, 0) {{
-
                             hittable = false;
                             lifetime = 1f;
                             speed = 0f;
