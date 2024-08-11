@@ -1,7 +1,7 @@
 package Commonplace.FType.FDialog;
 
-import Commonplace.FContent.DefaultContent.FStatusEffects;
-import Commonplace.FContent.ProjectContent.Sign;
+import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.ProjectContent.Sign;
 import Commonplace.FType.New.BoostProject;
 import Commonplace.FType.New.UnitProject;
 import arc.Core;

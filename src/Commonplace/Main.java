@@ -1,18 +1,13 @@
 package Commonplace;
 
-import Commonplace.FContent.DefaultContent.*;
-import Commonplace.FContent.Override.BlockOverride;
-import Commonplace.FContent.Override.TechOverride;
-import Commonplace.FContent.Override.UnitOverride;
-import Commonplace.FContent.ProjectContent.Sign;
-import Commonplace.FContent.ProjectContent.UnitProjects;
-import Commonplace.FContent.SpecialContent.*;
-import arc.Core;
-import arc.Events;
-import arc.util.Time;
-import mindustry.game.EventType;
+import Commonplace.Content.DefaultContent.*;
+import Commonplace.Content.Override.BlockOverride;
+import Commonplace.Content.Override.TechOverride;
+import Commonplace.Content.Override.UnitOverride;
+import Commonplace.Content.ProjectContent.Sign;
+import Commonplace.Content.ProjectContent.UnitProjects;
+import Commonplace.Content.SpecialContent.*;
 import mindustry.mod.Mod;
-import mindustry.ui.dialogs.BaseDialog;
 
 public class Main extends Mod {
     public Main() {
@@ -24,13 +19,13 @@ public class Main extends Mod {
         MSettings.load();
         FLiquids.load();
         FItems.load();
-        MCommands.load();
-        MEntities.load();
+        Commands.load();
+        Entities.load();
         FStatusEffects.load();
         FWeathers.load();
         FUnits.load();
         UnitProjects.load();
-        MEvents.load();
+        Events.load();
         CBlocks.load();
         FPlanets.load();
         FPlanetGenerators.load();
