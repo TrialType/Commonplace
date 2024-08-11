@@ -80,7 +80,7 @@ jar {
     }
 
     from(rootDir) {
-        include "upgradeLog.txt.txt"
+        include "upgradeLog.txt"
     }
 
     from("src/resources/") {

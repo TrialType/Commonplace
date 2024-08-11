@@ -6,6 +6,7 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
+import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
@@ -18,7 +19,9 @@ import mindustry.graphics.Pal;
 import java.util.Random;
 
 import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 
 public class FEffects {
     public final static Rand rand = new Rand();
@@ -141,5 +144,22 @@ public class FEffects {
                 r.y + Angles.trnsy(rotate + 90, r.finpow() * 25), 2);
         Fill.circle(r.x + Angles.trnsx(rotate - 90, r.finpow() * 25),
                 r.y + Angles.trnsy(rotate - 90, r.finpow() * 25), 2);
+    }), greenBombLarge = new Effect(40f, 800f, e -> {
+        color(Pal.heal);
+        stroke(e.fout() * 5);
+        float circleRad = 4f + e.finpow() * 520f;
+        Lines.circle(e.x, e.y, circleRad);
+
+        color(Pal.heal);
+        for (int i = 0; i < 4; i++) {
+            Drawf.tri(e.x, e.y, 48f, 800f * e.fout(), i * 90);
+        }
+
+        color();
+        for (int i = 0; i < 4; i++) {
+            Drawf.tri(e.x, e.y, 23f, 280f * e.fout(), i * 90);
+        }
+
+        Drawf.light(e.x, e.y, circleRad * 1.6f, Pal.heal, e.fout());
     });
 }

@@ -841,6 +841,8 @@ public class FUnits {
         velocity = new BoostUnitType("velocity") {{
             constructor = BoostUnitEntity::create;
 
+            hidden = true;
+
             hitDamage = 50;
             hitReload = 15;
             speed1 = 2.5F;
@@ -1473,6 +1475,8 @@ public class FUnits {
         }};
         cave = new UnitType("cave") {{
             constructor = CaveUnit::create;
+
+            hidden = true;
 
             hittable = false;
             targetable = false;

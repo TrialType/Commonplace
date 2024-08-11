@@ -50,7 +50,7 @@ public class Techs {
                 node(edge, ItemStack.with(Items.copper, 3000, Items.graphite, 1200, Items.thorium, 350), () -> {
                 });
             });
-            node(decoy, ItemStack.with(silicon, 620, blastCompound, 500, titanium, 1000), () -> {
+            node(decoy, ItemStack.with(silicon, 250, blastCompound, 150, titanium, 250), () -> {
                 node(decoyLarge, ItemStack.with(silicon, 2500, phaseFabric, 750, blastCompound, 2000, titanium, 2000, thorium, 1500), () -> {
                 });
             });

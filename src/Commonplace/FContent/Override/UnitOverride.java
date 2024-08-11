@@ -16,6 +16,8 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Interp;
 import arc.math.Rand;
+import mindustry.ai.types.BuilderAI;
+import mindustry.ai.types.CommandAI;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
@@ -513,17 +515,57 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.poly.health = 700;
+        UnitTypes.poly.buildSpeed = 1;
+        UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
 
 
         UnitTypes.mega.health = 4000;
-        UnitTypes.mega.armor = 35;
+        UnitTypes.mega.armor = 45;
         UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
 
 
         UnitTypes.quad.health = 22000;
+        UnitTypes.quad.payloadCapacity = 4 * 4 * tilePayload;
+        weapon = UnitTypes.quad.weapons.get(0);
+        weapon.ignoreRotation = true;
+        weapon.shootCone = 180f;
+        weapon.reload = 300;
+        weapon.ejectEffect = Fx.none;
+        weapon.bullet = new StrikeBulletType(){{
+            sprite = "large-bomb";
+            width = height = 960/4f;
+
+            maxRange = 240;
+
+            backColor = Pal.heal;
+            frontColor = Color.white;
+            mixColorTo = Color.white;
+
+            hitSound = Sounds.plasmaboom;
+            hitShake = 4f;
+
+            lifetime = 120;
+
+            despawnEffect = FEffects.greenBombLarge;
+            hitEffect = Fx.massiveExplosion;
+            keepVelocity = false;
+            spin = 2f;
+
+            shrinkX = shrinkY = 0.7f;
+
+            speed = 0f;
+            collides = false;
+
+            hitTeam = true;
+
+            healPercent = 15f;
+            splashDamage = 400f;
+            splashDamageRadius = 800f;
+        }};
 
 
         UnitTypes.oct.health = 77000;
+        UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
 
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;

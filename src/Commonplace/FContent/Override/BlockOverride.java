@@ -198,7 +198,7 @@ public class BlockOverride {
         cl.amount = 0.5f;
         Blocks.plastaniumCompressor.consumePower(6);
 
-        ((GenericCrafter) Blocks.phaseWeaver).outputItem = new ItemStack(Items.plastanium, 3);
+        ((GenericCrafter) Blocks.phaseWeaver).outputItem = new ItemStack(Items.phaseFabric, 3);
         ((GenericCrafter) Blocks.phaseWeaver).craftTime = 180;
         Blocks.phaseWeaver.itemCapacity = 40;
         ci = Blocks.phaseWeaver.findConsumer(c -> c instanceof ConsumeItems);

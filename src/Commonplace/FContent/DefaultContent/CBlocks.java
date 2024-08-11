@@ -888,7 +888,7 @@ public class CBlocks {
                     ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
         decoy = new Decoy("decoy") {{
-            requirements(Category.defense, ItemStack.with(silicon, 62, blastCompound, 50, titanium, 100));
+            requirements(Category.defense, ItemStack.with(silicon, 25, blastCompound, 15, titanium, 25));
 
             size = 1;
             health = 1000;
@@ -922,7 +922,7 @@ public class CBlocks {
             }};
         }};
         decoyLarge = new Decoy("decoy-large") {{
-            requirements(Category.defense, ItemStack.with(silicon, 250, phaseFabric, 75, blastCompound, 200,
+            requirements(Category.defense, ItemStack.with(silicon, 200, phaseFabric, 75, blastCompound, 200,
                     titanium, 200, thorium, 150));
 
             size = 2;
