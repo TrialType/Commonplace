@@ -908,6 +908,8 @@ public class UnitOverride {
         weapon = UnitTypes.quasar.weapons.get(0);
         weapon.reload = 35;
         weapon.bullet.damage = 85;
+        weapon.bullet.status = StatusEffects.slow;
+        weapon.bullet.statusDuration = 210;
         UnitTypes.quasar.weapons.add(new Weapon() {{
             x = y = 0;
             mirror = false;
