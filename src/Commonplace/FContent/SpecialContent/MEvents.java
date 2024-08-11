@@ -117,7 +117,7 @@ public class MEvents {
                     uug.setLevel(60 + extra);
                 } else if (Vars.state.wave > 135) {
                     getPower(uug, 0, false, true);
-                    uug.setLevel(60 + Math.min(Vars.state.wave - 135, 120));
+                    uug.setLevel(60 + Math.min(Vars.state.wave - 135, 120) + extra);
                 }
             }
         });
