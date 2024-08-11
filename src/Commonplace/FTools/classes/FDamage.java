@@ -27,14 +27,11 @@ import mindustry.world.Tile;
 import static java.lang.Math.*;
 import static mindustry.Vars.*;
 
-public class FDamage extends Damage {
+public abstract class FDamage extends Damage {
     private static final IntFloatMap damages = new IntFloatMap();
     private static final EventType.UnitDamageEvent bulletDamageEvent = new EventType.UnitDamageEvent();
     private static final Rect rect = new Rect();
     private static final Vec2 vec = new Vec2();
-
-    private FDamage() {
-    }
 
     public static void damage(Team team, float x, float y, float radius, float percent, boolean complete, boolean air, boolean ground, boolean scaled, @Nullable Bullet source) {
         Cons<Unit> cons = unit -> {
@@ -267,7 +264,6 @@ public class FDamage extends Damage {
             }
         });
     }
-
 
     public static void SqrtDamage(@Nullable Bullet bullet, Team team, float damage, float x, float y, float rotation, float length, float width) {
         float angle = rotation + 90;

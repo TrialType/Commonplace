@@ -81,33 +81,40 @@ public class MEvents {
         });
         Events.on(EventType.UnitSpawnEvent.class, e -> {
             if (e.unit instanceof UnitUpGrade uug) {
+                int extra = e.unit.isBoss() ? Vars.state.wave / 5 : 0;
                 if (Vars.state.wave >= 8 && Vars.state.wave < 18) {
-                    int n = r.nextInt(6);
+                    int n = r.nextInt(6) + extra;
                     uug.setLevel(n);
                     getPower(uug, n, true, false);
                 } else if (Vars.state.wave >= 18 && Vars.state.wave < 30) {
-                    uug.setLevel(7);
-                    getPower(uug, 7, true, false);
+                    uug.setLevel(7 + extra);
+                    getPower(uug, 7 + extra, true, false);
                 } else if (Vars.state.wave >= 30 && Vars.state.wave < 42) {
-                    uug.setLevel(13);
-                    getPower(uug, 13, true, false);
+                    uug.setLevel(13 + extra);
+                    getPower(uug, 13 + extra, true, false);
                 } else if (Vars.state.wave >= 42 && Vars.state.wave < 55) {
-                    uug.setLevel(19);
-                    getPower(uug, 19, true, false);
+                    uug.setLevel(19 + extra);
+                    getPower(uug, 19 + extra, true, false);
                 } else if (Vars.state.wave >= 55 && Vars.state.wave < 70) {
-                    uug.setLevel(25);
-                    getPower(uug, 25, true, false);
+                    uug.setLevel(25 + extra);
+                    getPower(uug, 25 + extra, true, false);
                 } else if (Vars.state.wave >= 70 && Vars.state.wave <= 85) {
-                    uug.setLevel(32);
-                    getPower(uug, 32, true, false);
+                    uug.setLevel(32 + extra);
+                    getPower(uug, 32 + extra, true, false);
                 } else if (Vars.state.wave >= 85 && Vars.state.wave <= 100) {
-                    uug.setLevel(40);
-                    getPower(uug, 40, true, false);
+                    uug.setLevel(40 + extra);
+                    getPower(uug, 40 + extra, true, false);
                 } else if (Vars.state.wave >= 100 && Vars.state.wave <= 115) {
-                    uug.setLevel(50);
-                    getPower(uug, 50, true, false);
+                    int lev = 50 + extra;
+                    uug.setLevel(lev);
+                    if (lev >= 60) {
+                        getPower(uug, 0, false, true);
+                    } else {
+                        getPower(uug, lev, true, false);
+                    }
                 } else if (Vars.state.wave >= 115 && Vars.state.wave <= 135) {
                     getPower(uug, 0, false, true);
+                    uug.setLevel(60 + extra);
                 } else if (Vars.state.wave > 135) {
                     getPower(uug, 0, false, true);
                     uug.setLevel(60 + Math.min(Vars.state.wave - 135, 120));
