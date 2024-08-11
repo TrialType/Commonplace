@@ -252,7 +252,7 @@ public class FUnits {
             speed = 0.5f;
 
             for (int i = 0; i < 5; i++) {
-                abilities.add(new UnitSpawnSupperAbility(strike, 120, Angles.trnsx(72 * i, 10), Angles.trnsy(72 * i, 10)) {{
+                abilities.add(new UnitSpawnSupperAbility(strike, 300, Angles.trnsx(72 * i, 10), Angles.trnsy(72 * i, 10)) {{
                     status.putAll(FStatusEffects.swift, 240f, FStatusEffects.back, 600f);
                 }});
             }

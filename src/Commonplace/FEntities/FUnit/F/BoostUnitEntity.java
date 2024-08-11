@@ -4,6 +4,7 @@ import Commonplace.FContent.SpecialContent.MEvents;
 import Commonplace.FContent.DefaultContent.FUnits;
 import Commonplace.FEntities.FUnit.Override.FUnitEntity;
 import Commonplace.FEntities.FUnitType.BoostUnitType;
+import Commonplace.FTools.classes.FDamage;
 import Commonplace.FTools.classes.PhysicsWorldChanger;
 import arc.Events;
 import arc.math.Angles;
@@ -30,6 +31,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Commonplace.FTools.classes.FDamage.percentDamage;
 import static java.lang.Math.*;
 import static mindustry.Vars.asyncCore;
 
@@ -143,7 +145,7 @@ public class BoostUnitEntity extends FUnitEntity {
                         float angle = Angles.angleDist(rotation, angleTo(u));
                         if (angle <= 90) {
                             if (Mathf.sinDeg(angle) * dst(u) <= (hitSize + u.hitSize) * 0.5f) {
-                                percentDamage(u, percent, damage, firstPercent, changeHel);
+                                percentDamage(this, u, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -157,7 +159,7 @@ public class BoostUnitEntity extends FUnitEntity {
                             b.tile.getLinkedTilesAs(b.block, tiles);
                             if (tiles.contains(tile -> (angle[0] = Angles.angleDist(rotation, angleTo(b))) <= 90 &&
                                     Mathf.sinDeg(angle[0]) * dst(tile) <= hitSize / 2)) {
-                                percentDamage(b, percent, damage, firstPercent, changeHel);
+                                percentDamage(this, b, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -173,7 +175,7 @@ public class BoostUnitEntity extends FUnitEntity {
                 float timer = unitMap.computeIfAbsent(u, f -> t.hitReload);
                 if (timer >= t.hitReload) {
                     unitMap.put(u, 0F);
-                    percentDamage(u, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                    percentDamage(this, u, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
                 }
             });
             Units.nearbyBuildings(x, y, hitSize, b -> {
@@ -181,7 +183,7 @@ public class BoostUnitEntity extends FUnitEntity {
                     float timer = buildingMap.computeIfAbsent(b, f -> t.hitReload);
                     if (timer >= t.hitReload) {
                         buildingMap.put(b, 0F);
-                        percentDamage(b, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                        percentDamage(this, b, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
                     }
                 }
             });
@@ -223,19 +225,6 @@ public class BoostUnitEntity extends FUnitEntity {
             }
         }
         return super.speed();
-    }
-
-    private void percentDamage(Healthc u, float percent, float damage, boolean firstPercent, float changeHel) {
-        boolean dead = u.dead();
-        if (firstPercent && u.health() > changeHel || (!firstPercent && u.health() <= changeHel)) {
-            u.health(u.health() - u.maxHealth() * percent / 100);
-            u.hitTime(1.0F);
-        } else {
-            u.damage(damage);
-        }
-        if (!dead && u.dead()) {
-            Events.fire(new MEvents.UnitDestroyOtherEvent(this, u));
-        }
     }
 
     public static class Changer implements AsyncProcess {

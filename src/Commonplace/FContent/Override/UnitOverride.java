@@ -7,6 +7,7 @@ import Commonplace.FEntities.FAbility.LevelSign;
 import Commonplace.FEntities.FAbility.SprintingAbility2;
 import Commonplace.FEntities.FAbility.TimeLargeDamageAbility;
 import Commonplace.FEntities.FBulletType.*;
+import Commonplace.FEntities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.FEntities.FUnit.F.TimeUpGradeUnit;
 import Commonplace.FEntities.FUnit.Override.*;
 import Commonplace.FEntities.FWeapon.SuctionWeapon;
@@ -25,10 +26,7 @@ import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
-import mindustry.entities.pattern.ShootBarrel;
-import mindustry.entities.pattern.ShootMulti;
-import mindustry.entities.pattern.ShootPattern;
-import mindustry.entities.pattern.ShootSpread;
+import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
 import mindustry.graphics.Drawf;
@@ -40,6 +38,7 @@ import mindustry.type.Weapon;
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
+import static mindustry.Vars.tilePayload;
 
 public class UnitOverride {
     static Weapon weapon;
@@ -97,7 +96,7 @@ public class UnitOverride {
         UnitTypes.eclipse.constructor = TimeUpGradeUnit::create;
         UnitTypes.eclipse.abilities.add(new LevelSign());
 
-        UnitTypes.poly.constructor = FUnitEntity::create;
+        UnitTypes.poly.constructor = LongLifeUnitEntity::create;
         UnitTypes.poly.abilities.add(new LevelSign());
         UnitTypes.mega.constructor = FPayloadUnit::create;
         UnitTypes.mega.abilities.add(new LevelSign());
@@ -227,11 +226,11 @@ public class UnitOverride {
         weapon = UnitTypes.fortress.weapons.get(0);
         weapon.bullet.lightning = 6;
         weapon.bullet.lightColor = Pal.bulletYellow;
-        weapon.bullet.lightningDamage = 3;
+        weapon.bullet.lightningDamage = 13;
         weapon.bullet.lightningLength = 6;
         weapon.bullet.lightningCone = 360;
         weapon.bullet.incendChance = 0.1f;
-        weapon.bullet.incendAmount = 1;
+        weapon.bullet.incendAmount = 3;
         UnitTypes.fortress.weapons.add(new Weapon() {{
             reload = 18;
             rotate = true;
@@ -412,11 +411,17 @@ public class UnitOverride {
             sprintingRadius = 150;
             rotate = false;
         }});
+        weapon = UnitTypes.antumbra.weapons.first();
+        weapon.bullet.damage *= 1.2f;
+        weapon.bullet.status = StatusEffects.slow;
+        weapon.bullet.statusDuration = 60;
 
         UnitTypes.eclipse.health = 77000;
         UnitTypes.eclipse.weapons.add(new Weapon() {{
             reload = 480;
             bullet = new MissileExplosionBulletType(0, 0) {{
+                rangeOverride = 300;
+
                 withHealth = true;
 
                 hittable = false;
@@ -431,10 +436,13 @@ public class UnitOverride {
                 spawnUnit = new UnitType("eclipse1") {{
                     lifetime = 1260;
 
+                    range = 600;
+
                     constructor = TimedKillUnit::create;
                     controller = u -> new MissileAI_II();
                     hidden = true;
                     flying = true;
+                    shootOnDeath = false;
                     health = 38500;
                     speed = 0.1f;
                     armor = 13;
@@ -461,7 +469,6 @@ public class UnitOverride {
                             keepVelocity = false;
 
                             spawnUnit = new UnitType("eclipse2") {{
-                                range = maxRange = 1000;
                                 hidden = true;
                                 flying = true;
                                 targetable = false;
@@ -486,12 +493,12 @@ public class UnitOverride {
                     }});
                     weapons.add(new Weapon() {{
                         reload = 20;
-                        shoot = new ShootPattern() {{
+                        shoot = new ShootAlternate() {{
                             shots = 3;
+                            barrels = 3;
+                            shotDelay = 5f;
                         }};
                         bullet = new BasicBulletType() {{
-                            inaccuracy = 24;
-
                             homingRange = 600;
                             homingDelay = 80;
                             homingPower = 0.07f;
@@ -504,6 +511,14 @@ public class UnitOverride {
             }};
         }});
         /*-----------------------------------------------------------------------------*/
+
+        UnitTypes.poly.health = 700;
+
+
+        UnitTypes.mega.health = 4000;
+        UnitTypes.mega.armor = 35;
+        UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
+
 
         UnitTypes.quad.health = 22000;
 

@@ -2,11 +2,14 @@ package Commonplace.FTools.classes;
 
 import Commonplace.FContent.DefaultContent.FStatusEffects;
 import Commonplace.FContent.DefaultContent.FUnits;
+import Commonplace.FContent.SpecialContent.MEvents;
+import arc.Core;
 import arc.Events;
 import arc.func.Cons;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.*;
+import arc.struct.IntFloatMap;
 import arc.struct.Seq;
 import arc.util.Nullable;
 import mindustry.core.World;
@@ -21,24 +24,28 @@ import mindustry.type.StatusEffect;
 import mindustry.world.Tile;
 
 import static java.lang.Math.*;
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class FDamage extends Damage {
+    private static final IntFloatMap damages = new IntFloatMap();
     private static final EventType.UnitDamageEvent bulletDamageEvent = new EventType.UnitDamageEvent();
     private static final Rect rect = new Rect();
     private static final Vec2 vec = new Vec2();
+
     private FDamage() {
     }
-    public static void damage(Team team, float x, float y, float radius, float damage, boolean complete, boolean air, boolean ground, boolean scaled, @Nullable Bullet source) {
+
+    public static void damage(Team team, float x, float y, float radius, float percent, boolean complete, boolean air, boolean ground, boolean scaled, @Nullable Bullet source) {
         Cons<Unit> cons = unit -> {
             if (unit.team == team || !unit.checkTarget(air, ground) || !unit.hittable() || !unit.within(x, y, radius + (scaled ? unit.hitSize / 2f : 0f))) {
                 return;
             }
             boolean dead = unit.dead;
-            float amount = calculateDamage(scaled ? Math.max(0, unit.dst(x, y) - unit.type.hitSize / 2) : unit.dst(x, y), radius, damage);
-            unit.health(unit.health() - amount);
-            unit.hitTime = 1.0F;
+            float amount = calculateDamage(scaled ? Math.max(0, unit.dst(x, y) - unit.type.hitSize / 2) : unit.dst(x, y), radius, percent * unit.maxHealth);
+            float shield = unit.shield;
+            unit.shield = 0;
+            unit.damagePierce(amount);
+            unit.shield = shield;
             if (unit.health() <= 0) unit.dead(true);
             if (source != null) {
                 Events.fire(bulletDamageEvent.set(unit, source));
@@ -50,7 +57,7 @@ public class FDamage extends Damage {
             float dst = vec.set(unit.x - x, unit.y - y).len();
             unit.vel.add(vec.setLength((1f - dst / radius) * 2f / unit.mass()));
 
-            if (complete && damage >= 9999999f && unit.isPlayer()) {
+            if (complete && percent * unit.maxHealth >= 9999999f && unit.isPlayer()) {
                 Events.fire(EventType.Trigger.exclusionDeath);
             }
         };
@@ -62,24 +69,83 @@ public class FDamage extends Damage {
         }
         if (ground) {
             if (!complete) {
-                tileDamage(team, World.toTile(x), World.toTile(y), radius / tilesize, damage * (source == null ? 1f : source.type.buildingDamageMultiplier), source);
+                tileDamage(team, World.toTile(x), World.toTile(y), radius / tilesize, percent, source);
             } else {
-                completeDamage(team, x, y, radius, damage);
+                completeDamage(team, x, y, radius, percent);
             }
         }
 
     }
 
-    private static void completeDamage(Team team, float x, float y, float radius, float damage) {
+    private static void completeDamage(Team team, float x, float y, float radius, float percent) {
         int trad = (int) (radius / tilesize);
         for (int dx = -trad; dx <= trad; dx++) {
             for (int dy = -trad; dy <= trad; dy++) {
                 Tile tile = world.tile(Math.round(x / tilesize) + dx, Math.round(y / tilesize) + dy);
                 if (tile != null && tile.build != null && (team == null || team != tile.team()) && dx * dx + dy * dy <= trad * trad) {
-                    tile.build.damage(team, damage);
+                    tile.build.damage(team, percent * tile.build.maxHealth);
                 }
             }
         }
+    }
+
+    public static void tileDamage(Team team, int x, int y, float baseRadius, float percent, @Nullable Bullet source) {
+        Core.app.post(() -> {
+            var in = world.build(x, y);
+            if (in != null && in.team != team && in.block.size > 1 && in.health > percent * in.maxHealth) {
+                in.damage(team, percent * in.maxHealth * Math.min((in.block.size), baseRadius * 0.4f));
+                return;
+            }
+            float radius = Math.min(baseRadius, 100), rad2 = radius * radius;
+            int rays = Mathf.ceil(radius * 2 * Mathf.pi);
+            double spacing = Math.PI * 2.0 / rays;
+            damages.clear();
+            for (int i = 0; i <= rays; i++) {
+                float dealt = 0f;
+                int startX = x;
+                int startY = y;
+                int endX = x + (int) (Math.cos(spacing * i) * radius), endY = y + (int) (Math.sin(spacing * i) * radius);
+
+                int xDist = Math.abs(endX - startX);
+                int yDist = -Math.abs(endY - startY);
+                int xStep = (startX < endX ? +1 : -1);
+                int yStep = (startY < endY ? +1 : -1);
+                int error = xDist + yDist;
+
+                while (startX != endX || startY != endY) {
+                    var build = world.build(startX, startY);
+                    if (build != null && build.team != team) {
+                        float edgeScale = 0.6f;
+                        float mult = (1f - (Mathf.dst2(startX, startY, x, y) / rad2) + edgeScale) / (1f + edgeScale);
+                        float next = percent * (in == null ? 1 : in.maxHealth) * mult - dealt;
+                        int p = Point2.pack(startX, startY);
+                        damages.put(p, Math.max(damages.get(p), next));
+                        dealt += build.health;
+                        if (next - dealt <= 0) {
+                            break;
+                        }
+                    }
+                    if (2 * error - yDist > xDist - 2 * error) {
+                        error += yDist;
+                        startX += xStep;
+                    } else {
+                        error += xDist;
+                        startY += yStep;
+                    }
+                }
+            }
+            for (var e : damages) {
+                int cx = Point2.x(e.key), cy = Point2.y(e.key);
+                var build = world.build(cx, cy);
+                if (build != null) {
+                    if (source != null) {
+                        build.damage(source, team, e.value);
+                    } else {
+                        build.damage(team, e.value);
+                    }
+                }
+            }
+        });
     }
 
     private static float calculateDamage(float dist, float radius, float damage) {
@@ -184,5 +250,24 @@ public class FDamage extends Damage {
                 }
             }
         });
+    }
+
+    public static void percentDamage(Unit killer, Healthc u, float percent, float damage, boolean firstPercent, float changeHel) {
+        boolean dead = u.dead();
+        if (firstPercent && u.health() > changeHel || (!firstPercent && u.health() <= changeHel)) {
+            if (u instanceof Shieldc s) {
+                float shield = s.shield();
+                s.shield(0);
+                u.damagePierce(u.health() - u.maxHealth() * percent / 100);
+                s.shield(shield);
+            } else {
+                u.damagePierce(u.health() - u.maxHealth() * percent / 100);
+            }
+        } else {
+            u.damage(damage);
+        }
+        if (!dead && u.dead() && killer != null) {
+            Events.fire(new MEvents.UnitDestroyOtherEvent(killer, u));
+        }
     }
 }

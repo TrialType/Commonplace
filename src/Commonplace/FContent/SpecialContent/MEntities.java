@@ -15,6 +15,7 @@ public class MEntities {
         EntityMapping.idMap[109] = FElevationMoveUnit::create;
         EntityMapping.idMap[110] = FCrawlUnit::create;
         EntityMapping.idMap[111] = FMechUnitLegacyNova::create;
+        EntityMapping.idMap[112] = LongLifeUnitEntity::create;
         EntityMapping.idMap[113] = BoostUnitEntity::create;
         EntityMapping.idMap[114] = TileMiner::create;
         EntityMapping.idMap[115] = TileSpawnerUnit::create;

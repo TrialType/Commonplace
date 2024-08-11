@@ -61,6 +61,7 @@ public class PercentBulletType extends BasicBulletType {
             Events.fire(new EventType.UnitBulletDestroyEvent(unit, b));
         }
         handlePierce(b, health, entity.x(), entity.y());
+
         super.hit(b, b.x(), b.y());
     }
 
@@ -73,8 +74,9 @@ public class PercentBulletType extends BasicBulletType {
         if (splashDamageRadius > 0 && !b.absorbed) {
             if (WS) {
                 FDamage.damage(b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
-            } else
+            } else {
                 Damage.damage(b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
+            }
             if (status != StatusEffects.none) {
                 Damage.status(b.team, x, y, splashDamageRadius, status, statusDuration, collidesAir, collidesGround);
             }
@@ -88,28 +90,6 @@ public class PercentBulletType extends BasicBulletType {
                 indexer.eachBlock(null, x, y, splashDamageRadius, other -> other.team != b.team, other -> Fires.create(other.tile));
             }
         }
-    }
-
-    @Override
-    public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
-        if (WS) {
-            splashDamage = ((build.maxHealth()) * percent / 100);
-        }
-        if (WL) {
-            lightningDamage = ((build.maxHealth()) * lightningPercent * 1.503F / 100);
-        }
-        if (makeFire && build.team != b.team) {
-            Fires.create(build.tile);
-        }
-
-        if (heals() && build.team == b.team && !(build.block instanceof ConstructBlock)) {
-            healEffect.at(build.x, build.y, 0f, healColor, build.block);
-            build.heal(healPercent / 100f * build.maxHealth + healAmount);
-        } else if (build.team != b.team && direct) {
-            hit(b);
-        }
-
-        handlePierce(b, initialHealth, x, y);
     }
 
     public void hit(Bullet b) {

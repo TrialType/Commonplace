@@ -7,7 +7,12 @@ import Commonplace.FContent.Override.UnitOverride;
 import Commonplace.FContent.ProjectContent.Sign;
 import Commonplace.FContent.ProjectContent.UnitProjects;
 import Commonplace.FContent.SpecialContent.*;
+import arc.Core;
+import arc.Events;
+import arc.util.Time;
+import mindustry.game.EventType;
 import mindustry.mod.Mod;
+import mindustry.ui.dialogs.BaseDialog;
 
 public class Main extends Mod {
     public Main() {
@@ -23,8 +28,6 @@ public class Main extends Mod {
         MEntities.load();
         FStatusEffects.load();
         FWeathers.load();
-        UnitOverride.load();
-        BlockOverride.load();
         FUnits.load();
         UnitProjects.load();
         MEvents.load();
@@ -34,5 +37,7 @@ public class Main extends Mod {
         FPlanetGenerators.load();
         Techs.load();
         TechOverride.load();
+        UnitOverride.load();
+        BlockOverride.load();
     }
 }

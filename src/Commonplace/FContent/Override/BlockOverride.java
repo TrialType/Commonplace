@@ -9,6 +9,7 @@ import mindustry.entities.pattern.ShootSpread;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
+import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.PointDefenseTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
@@ -36,9 +37,15 @@ public class BlockOverride {
         Blocks.thoriumWall.health = 200 * 6;
         Blocks.thoriumWallLarge.health = 200 * 24;
         Blocks.phaseWall.health = 150 * 6;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 13;
         Blocks.phaseWallLarge.health = 150 * 24;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 20;
         Blocks.surgeWall.health = 230 * 6;
+        ((Wall) Blocks.surgeWall).lightningChance = 0.2f;
+        ((Wall) Blocks.surgeWall).lightningDamage = 30;
         Blocks.surgeWallLarge.health = 230 * 24;
+        ((Wall) Blocks.surgeWallLarge).lightningChance = 0.3f;
+        ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
 
         ((ItemTurret) Blocks.duo).shoot.shots = 2;
         ((ItemTurret) Blocks.duo).range = 150;
