@@ -53,7 +53,7 @@ public class CBlocks {
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
-    public static Block buildCore, slowProject, unitUpper, reflective, toHome;
+    public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -979,7 +979,7 @@ public class CBlocks {
             envDisabled |= Env.scorching;
         }};
 //======================================================================================================================
-        slowProject = new DownProject("slow_project") {{
+        slowProject = new DownProject("slow-project") {{
             requirements(Category.effect, with(Items.lead, 100, Items.titanium, 75, Items.silicon, 75, Items.plastanium, 30));
             range = 8;
             downSpeed = 0.9f;
@@ -988,7 +988,7 @@ public class CBlocks {
             size = 2;
             consumeItem(Items.phaseFabric).boost();
         }};
-        buildCore = new DesCore("buildCore") {{
+        buildCore = new DesCore("build-core") {{
             size = 3;
             health = 500;
             armor = 5;
@@ -1013,13 +1013,20 @@ public class CBlocks {
             consumePower(5);
             requirements(Category.effect, ItemStack.with(Items.silicon, 400, Items.titanium, 400, Items.phaseFabric, 200));
         }};
-        toHome = new CoreInputBlock("to-home") {{
+        coreLaunch = new CoreLaunchBlock("core-launch") {{
             size = 2;
             health = 380;
-            itemCapacity = 300;
 
             consumePower(0.5f);
             requirements(Category.effect, ItemStack.with(Items.silicon, 20, Items.copper, 50, Items.graphite, 30));
+        }};
+        coreLaunchLarge = new CoreLaunchBlock("core-launch-large") {{
+            size = 3;
+            health = 800;
+            reload = 600;
+
+            consumePower(1.2f);
+            requirements(Category.effect, ItemStack.with(silicon, 30, titanium, 60, graphite, 40));
         }};
 //======================================================================================================================
         blockOverride();

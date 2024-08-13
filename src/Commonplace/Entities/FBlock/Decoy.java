@@ -40,7 +40,7 @@ public class Decoy extends Wall {
         super.setStats();
 
         if (flexibility > 0) {
-            stats.add(Stats.adaptDamageLossMax, adaptDamageMax == 0 ? 1 : adaptDamageMin / adaptDamageMax);
+            stats.add(Stats.adaptDamageLossMax, adaptDamageMax == 0 ? 1 : (1 - adaptDamageMin / adaptDamageMax) * 100);
             stats.add(Stats.adaptability, adaptability);
             stats.add(Stats.adaptLoss, adaptLoss);
             stats.add(Stats.flexibility, flexibility);

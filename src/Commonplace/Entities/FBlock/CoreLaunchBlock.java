@@ -13,14 +13,17 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.blocks.storage.CoreBlock;
 
-public class CoreInputBlock extends Block {
+public class CoreLaunchBlock extends Block {
     public Effect startEffect = Fx.none;
     public float reload = 1800;
 
-    public CoreInputBlock(String name) {
+    public CoreLaunchBlock(String name) {
         super(name);
 
+        itemCapacity = 300;
         hasItems = true;
+        hasPower = true;
+        connectedPower = true;
         update = true;
         solid = true;
         destructible = true;
@@ -31,12 +34,12 @@ public class CoreInputBlock extends Block {
     @Override
     public void setBars() {
         super.setBars();
-        addBar("to", (WithUnitBuild build) -> new Bar(Core.bundle.get("bar.cold"), Pal.redLight, () -> build.time / reload));
+        addBar("to", (CoreLaunchBuild build) -> new Bar(Core.bundle.get("bar.cold"), Pal.redLight, () -> build.time / reload));
         addBar("items", build -> new Bar(Core.bundle.format("bar.items", build.items.total()),
                 Pal.redLight, () -> build.items.total() * 1f / itemCapacity));
     }
 
-    public class WithUnitBuild extends Building {
+    public class CoreLaunchBuild extends Building {
         public float time = 0;
 
         @Override

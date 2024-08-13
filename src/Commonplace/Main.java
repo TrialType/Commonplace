@@ -2,6 +2,7 @@ package Commonplace;
 
 import Commonplace.Content.DefaultContent.*;
 import Commonplace.Content.Override.BlockOverride;
+import Commonplace.Content.Override.SectorPresetOverride;
 import Commonplace.Content.Override.TechOverride;
 import Commonplace.Content.Override.UnitOverride;
 import Commonplace.Content.ProjectContent.Sign;
@@ -28,8 +29,9 @@ public class Main extends Mod {
         Events.load();
         CBlocks.load();
         FPlanets.load();
-        FPlanetGenerators.load();
+        FSectorPresets.load();
         Techs.load();
+        SectorPresetOverride.load();
         TechOverride.load();
         UnitOverride.load();
         BlockOverride.load();

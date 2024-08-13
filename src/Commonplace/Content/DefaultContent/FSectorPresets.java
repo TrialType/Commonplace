@@ -4,7 +4,7 @@ import mindustry.type.SectorPreset;
 
 import static Commonplace.Content.DefaultContent.FPlanets.ENGSWEIS;
 
-public class FPlanetGenerators {
+public class FSectorPresets {
     public static SectorPreset fullWater, longestDown;
 
     public static void load() {

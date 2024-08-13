@@ -522,6 +522,8 @@ public class UnitOverride {
 
 
         UnitTypes.quad.health = 22000;
+        UnitTypes.quad.speed = 2;
+        UnitTypes.quad.range = 270;
         UnitTypes.quad.payloadCapacity = 4 * 4 * tilePayload;
         weapon = UnitTypes.quad.weapons.get(0);
         weapon.ignoreRotation = true;
@@ -532,7 +534,7 @@ public class UnitOverride {
             sprite = "large-bomb";
             width = height = 960 / 4f;
 
-            maxRange = 240;
+            maxRange = 300;
 
             backColor = Pal.heal;
             frontColor = Color.white;
@@ -891,11 +893,11 @@ public class UnitOverride {
                 lifetime = 260;
                 length = 20;
 
-                damageInterval = 60;
+                damageInterval = 15;
                 rotateSpeed = 4;
 
-                bulletLightningType.healPercent = 1f;
-                bulletLightningType.collidesTeam = true;
+                healPercent = 1f;
+                collidesTeam = true;
             }};
         }};
         weapon.bullet.init();

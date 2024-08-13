@@ -1,6 +1,7 @@
 package Commonplace.Entities.FBulletType;
 
 import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Tools.Classes.FDamage;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -9,22 +10,23 @@ import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
 import arc.struct.IntSet;
+import arc.struct.ObjectMap;
 import arc.struct.Seq;
-import mindustry.content.Fx;
+import arc.util.Time;
 import mindustry.core.World;
 import mindustry.entities.Effect;
-import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.game.Team;
 import mindustry.gen.Bullet;
+import mindustry.gen.Entityc;
+import mindustry.gen.Healthc;
 import mindustry.graphics.Pal;
 import mindustry.world.Tile;
 
-
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class ContinuousLightningBulletType extends ContinuousBulletType {
+    private static final ObjectMap<Bullet, Seq<HitTimer>> hits = new ObjectMap<>();
     private static final Rand random = new Rand();
     private static final IntSet hit = new IntSet();
     private static final float hitRange = 30f;
@@ -33,19 +35,20 @@ public class ContinuousLightningBulletType extends ContinuousBulletType {
 
     public float radius = 6.25f;
     public float rotateSpeed = 5;
+    public float reload = 60;
     public Color baseColor = Pal.heal;
     public Color bulletLightningColor = Pal.heal;
-    public BulletType bulletLightningType = new BulletType(0, 0) {{
-        reflectable = hittable = absorbable = false;
-        lifetime = 20;
-        despawnEffect = hitEffect = Fx.none;
-    }};
 
     @Override
     public void update(Bullet b) {
+        Seq<HitTimer> ids = hits.get(b);
+        ids.remove(h -> h.entity == null || (h.entity instanceof Healthc heal && (heal.dead() || heal.health() <= 0)));
+        ids.each(HitTimer::update);
+
         b.vel.setZero();
-        if ((!b.timer.check(3, time)) || (b.timer.get(3, time) && b.timer.get(4, damageInterval))) {
+        if ((!b.timer.check(3, time)) || (b.timer.get(3, time) && b.timer.get(4, reload))) {
             if (!(b.data instanceof Seq<?>)) {
+                ids.each(h -> h.set(damageInterval));
                 b.data = create(b.team, b.rotation(), b.id);
             }
             if (!continuous) return;
@@ -84,11 +87,22 @@ public class ContinuousLightningBulletType extends ContinuousBulletType {
 
     @Override
     public void applyDamage(Bullet b) {
-        if (bulletLightningType != null && b.data instanceof Seq<?>) {
+        if (b.data instanceof Seq<?>) {
             //noinspection unchecked
             Seq<Vec2> vs = points((Seq<Vec2>) b.data, b.x, b.y);
+            Vec2 before = null;
             for (Vec2 v : vs) {
-                bulletLightningType.create(b.owner, b.team, v.x, v.y, 0, damage, 1, 1, null, null);
+                if (before != null) {
+                    FDamage.collideLineInterval(b, b.team, hitEffect, before.x, before.y, before.angleTo(v), before.dst(v), false, false, -1,
+                            i -> hits.get(b).add(new HitTimer(i, damageInterval)),
+                            i -> !hits.get(b).contains(h -> h.entity == i),
+                            i -> hits.get(b).contains(h -> h.entity == i && h.get(damageInterval)));
+                }
+                before = v;
+//                FDamage.collidePointInterval(b, b.team, hitEffect, v.x, v.y,
+//                        i -> hits.get(b).add(new HitTimer(i, damageInterval)),
+//                        i -> !hits.get(b).contains(h -> h.entity == i),
+//                        i -> hits.get(b).contains(h -> h.entity == i && h.get(damageInterval)));
             }
         }
     }
@@ -108,6 +122,19 @@ public class ContinuousLightningBulletType extends ContinuousBulletType {
         super.init();
 
         time = 400 / rotateSpeed;
+    }
+
+    @Override
+    public void init(Bullet b) {
+        super.init(b);
+        hits.put(b, new Seq<>());
+    }
+
+    @Override
+    public void removed(Bullet b) {
+        super.removed(b);
+        hits.get(b).clear();
+        hits.remove(b);
     }
 
     public Seq<Vec2> create(Team team, float rotation, int seed) {
@@ -146,5 +173,31 @@ public class ContinuousLightningBulletType extends ContinuousBulletType {
         }
 
         return lines;
+    }
+
+    public static class HitTimer {
+        public Entityc entity;
+        public float timer;
+
+        public HitTimer(Entityc entity, float timer) {
+            this.entity = entity;
+            this.timer = timer;
+        }
+
+        public void update() {
+            timer += Time.delta;
+        }
+
+        public boolean get(float reload) {
+            if (timer >= reload) {
+                timer = 0;
+                return true;
+            }
+            return false;
+        }
+
+        public void set(float timer) {
+            this.timer = timer;
+        }
     }
 }

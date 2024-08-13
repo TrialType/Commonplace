@@ -8,8 +8,8 @@ import mindustry.type.ItemStack;
 
 import static Commonplace.Content.DefaultContent.CBlocks.*;
 import static Commonplace.Content.ProjectContent.Sign.*;
-import static Commonplace.Content.DefaultContent.FPlanetGenerators.fullWater;
-import static Commonplace.Content.DefaultContent.FPlanetGenerators.longestDown;
+import static Commonplace.Content.DefaultContent.FSectorPresets.fullWater;
+import static Commonplace.Content.DefaultContent.FSectorPresets.longestDown;
 import static Commonplace.Content.DefaultContent.FUnits.*;
 import static Commonplace.Content.ProjectContent.UnitProjects.*;
 import static mindustry.content.Blocks.*;
@@ -99,7 +99,9 @@ public class Techs {
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == conveyor) {
-                tf = node(toHome, ItemStack.with(Items.copper, 500, silicon, 200, graphite, 300), Seq.with(new Objectives.Research(silicon)), () -> {
+                tf = node(coreLaunch, ItemStack.with(Items.copper, 500, silicon, 200, graphite, 300), Seq.with(new Objectives.Research(silicon)), () -> {
+                    node(coreLaunchLarge, ItemStack.with(titanium, 600, silicon, 300, graphite, 400), Seq.with(new Objectives.SectorComplete(extractionOutpost)), () -> {
+                    });
                 });
                 tf.parent = t;
                 t.children.add(tf);

@@ -4,14 +4,19 @@ import Commonplace.Content.DefaultContent.FStatusEffects;
 import Commonplace.Content.DefaultContent.FUnits;
 import Commonplace.Content.SpecialContent.Events;
 import arc.Core;
+import arc.func.Boolf;
 import arc.func.Cons;
 import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.struct.IntFloatMap;
+import arc.struct.IntSet;
 import arc.struct.Seq;
 import arc.util.Nullable;
+import arc.util.Tmp;
+import arc.util.pooling.Pool;
+import arc.util.pooling.Pools;
 import mindustry.core.World;
 import mindustry.entities.Damage;
 import mindustry.entities.Effect;
@@ -28,9 +33,132 @@ import static mindustry.Vars.*;
 
 public abstract class FDamage extends Damage {
     private static final IntFloatMap damages = new IntFloatMap();
+    private static final IntSet collidedBlocks = new IntSet();
+    private static final Seq<Collided> collided = new Seq<>();
+    private static final Pool<Collided> collidePool = Pools.get(Collided.class, Collided::new);
     private static final EventType.UnitDamageEvent bulletDamageEvent = new EventType.UnitDamageEvent();
+    private static final Rect hitrect = new Rect();
     private static final Rect rect = new Rect();
-    private static final Vec2 vec = new Vec2();
+    private static final Vec2 vec = new Vec2(), seg1 = new Vec2(), seg2 = new Vec2();
+
+    public static void collidePointInterval(Bullet hitter, Team team, Effect effect, float x, float y, Cons<Entityc> apply, Boolf<Entityc> add, Boolf<Entityc> damageable) {
+        if (hitter.type.collidesGround) {
+            Building build = world.build(World.toTile(x), World.toTile(y));
+
+            if (build != null && hitter.damage > 0) {
+                float health = build.health;
+
+                if (build.team != team && build.collide(hitter)) {
+                    if (damageable.get(build)) {
+                        build.collision(hitter);
+                        hitter.type.hit(hitter, x, y);
+                    } else if (add.get(build)) {
+                        apply.get(build);
+                    }
+                }
+
+                if (hitter.type.testCollision(hitter, build)) {
+                    hitter.type.hitTile(hitter, build, x, y, health, false);
+                }
+            }
+        }
+
+        Units.nearbyEnemies(team, rect.setCentered(x, y, 1f), u -> {
+            if (u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()) {
+                if (damageable.get(u)) {
+                    effect.at(x, y);
+                    u.collision(hitter, x, y);
+                    hitter.collision(u, x, y);
+                } else if (add.get(u)) {
+                    apply.get(u);
+                }
+            }
+        });
+    }
+
+    public static void collideLineInterval(Bullet hitter, Team team, Effect effect, float x, float y, float angle, float length, boolean large, boolean laser, int pierceCap, Cons<Entityc> apply, Boolf<Entityc> add, Boolf<Entityc> damageable) {
+        length = findLength(hitter, length, laser, pierceCap);
+
+        collidedBlocks.clear();
+        vec.trnsExact(angle, length);
+
+        if (hitter.type.collidesGround) {
+            seg1.set(x, y);
+            seg2.set(seg1).add(vec);
+            World.raycastEachWorld(x, y, seg2.x, seg2.y, (cx, cy) -> {
+                Building tile = world.build(cx, cy);
+                boolean collide = tile != null && tile.collide(hitter) && hitter.checkUnderBuild(tile, cx * tilesize, cy * tilesize)
+                        && ((tile.team != team && tile.collide(hitter)) || hitter.type.testCollision(hitter, tile)) && collidedBlocks.add(tile.pos());
+                if (collide) {
+                    collided.add(collidePool.obtain().set(cx * tilesize, cy * tilesize, tile));
+
+                    for (Point2 p : Geometry.d4) {
+                        Tile other = world.tile(p.x + cx, p.y + cy);
+                        if (other != null && (large || Intersector.intersectSegmentRectangle(seg1, seg2, other.getBounds(Tmp.r1)))) {
+                            Building build = other.build;
+                            if (build != null && hitter.checkUnderBuild(build, cx * tilesize, cy * tilesize) && collidedBlocks.add(build.pos())) {
+                                collided.add(collidePool.obtain().set((p.x + cx * tilesize), (p.y + cy) * tilesize, build));
+                            }
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+        float expand = 3f;
+
+        rect.setPosition(x, y).setSize(vec.x, vec.y).normalize().grow(expand * 2f);
+        float x2 = vec.x + x, y2 = vec.y + y;
+
+        Units.nearbyEnemies(team, rect, u -> {
+            if (u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()) {
+                u.hitbox(hitrect);
+
+                Vec2 vec = Geometry.raycastRect(x, y, x2, y2, hitrect.grow(expand * 2));
+
+                if (vec != null) {
+                    collided.add(collidePool.obtain().set(vec.x, vec.y, u));
+                }
+            }
+        });
+
+        int[] collideCount = {0};
+        collided.sort(c -> hitter.dst2(c.x, c.y));
+        collided.each(c -> {
+            if (hitter.damage > 0 && (pierceCap <= 0 || collideCount[0] < pierceCap)) {
+                if (c.target instanceof Unit u) {
+                    if (damageable.get(u)) {
+                        effect.at(c.x, c.y);
+                        u.collision(hitter, c.x, c.y);
+                        hitter.collision(u, c.x, c.y);
+                        collideCount[0]++;
+                    } else if (add.get(u)) {
+                        apply.get(u);
+                    }
+                } else if (c.target instanceof Building tile) {
+                    float health = tile.health;
+
+                    if (tile.team != team && tile.collide(hitter)) {
+                        if (damageable.get(tile)) {
+                            tile.collision(hitter);
+                            hitter.type.hit(hitter, c.x, c.y);
+                            collideCount[0]++;
+                        } else if (add.get(tile)) {
+                            apply.get(tile);
+                        }
+                    }
+
+                    if (hitter.type.testCollision(hitter, tile)) {
+                        hitter.type.hitTile(hitter, tile, c.x, c.y, health, false);
+                    }
+                }
+            }
+        });
+
+        collidePool.freeAll(collided);
+        collided.clear();
+    }
 
     public static void damage(Team team, float x, float y, float radius, float percent, boolean complete, boolean air, boolean ground, boolean scaled, @Nullable Bullet source) {
         Cons<Unit> cons = unit -> {
