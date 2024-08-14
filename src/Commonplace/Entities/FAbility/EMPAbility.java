@@ -42,7 +42,7 @@ public class EMPAbility extends Ability {
                     }
                 });
                 Units.nearbyBuildings(unit.x, unit.y, range, b -> {
-                    if (b.team != unit.team && (b.block.hasPower || b.block.canOverdrive)) {
+                    if (b.team != unit.team) {
                         maps.add(b);
                     }
                 });
@@ -50,6 +50,7 @@ public class EMPAbility extends Ability {
                     timer = 0;
                     if (delay > 0) {
                         Time.run(delay, () -> {
+                            timer = 0;
                             for (Position p : maps) {
                                 if (p instanceof Building b) {
                                     waveEffect.at(b.x, b.y);

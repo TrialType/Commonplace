@@ -1,5 +1,6 @@
 package Commonplace.Content.Override;
 
+import Commonplace.Content.DefaultContent.FUnits;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import mindustry.content.*;
@@ -9,6 +10,7 @@ import mindustry.entities.pattern.ShootSpread;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
+import mindustry.type.UnitType;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.PointDefenseTurret;
@@ -19,6 +21,7 @@ import mindustry.world.blocks.distribution.Conveyor;
 import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.blocks.heat.HeatProducer;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.consumers.ConsumeLiquid;
@@ -46,6 +49,20 @@ public class BlockOverride {
         Blocks.surgeWallLarge.health = 230 * 24;
         ((Wall) Blocks.surgeWallLarge).lightningChance = 0.3f;
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
+
+        UnitFactory uf = (UnitFactory) Blocks.airFactory;
+        uf.plans.add(new UnitFactory.UnitPlan(FUnits.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
+        Reconstructor rt = (Reconstructor) Blocks.additiveReconstructor;
+        rt.upgrades.add(new UnitType[]{FUnits.barb, FUnits.hammer});
+        rt = (Reconstructor) Blocks.multiplicativeReconstructor;
+        rt.upgrades.add(new UnitType[]{FUnits.hammer, FUnits.buying});
+        rt = (Reconstructor) Blocks.exponentialReconstructor;
+        rt.upgrades.add(new UnitType[]{FUnits.buying, FUnits.crazy});
+        rt = (Reconstructor) Blocks.tetrativeReconstructor;
+        rt.upgrades.add(new UnitType[]{FUnits.crazy, FUnits.transition});
+
+        ItemTurret turret = (ItemTurret) Blocks.salvo;
+        turret.ammoTypes.each((i, b) -> b.damage += 4);
 
         ((ItemTurret) Blocks.duo).shoot.shots = 2;
         ((ItemTurret) Blocks.duo).range = 150;

@@ -62,7 +62,9 @@ public class Techs {
                     });
                 });
             });
-            node(mountain, ItemStack.with(Items.titanium, 3400, Items.copper, 3000, Items.graphite, 3500), Seq.with(new Objectives.SectorComplete(stainedMountains)), () -> {
+            node(tranquil, Seq.with(new Objectives.SectorComplete(stainedMountains)), () -> {
+                node(mountain, ItemStack.with(plastanium, 1200, Items.titanium, 5000, Items.graphite, 5000), () -> {
+                });
             });
             node(eleFenceII, ItemStack.with(Items.titanium, 3500, Items.copper, 6000, Items.silicon, 3000), Seq.with(new Objectives.SectorComplete(saltFlats)), () -> {
                 node(eleFenceIII, ItemStack.with(Items.titanium, 4500, Items.copper, 10000, Items.silicon, 5000), Seq.with(new Objectives.SectorComplete(nuclearComplex)), () -> {

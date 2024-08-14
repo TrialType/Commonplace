@@ -6,37 +6,32 @@ import Commonplace.Entities.FBulletType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.math.Angles;
-import arc.math.Interp;
 import arc.util.Time;
 import mindustry.content.*;
 import mindustry.entities.Effect;
-import mindustry.entities.abilities.EnergyFieldAbility;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.ExplosionEffect;
-import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Building;
-import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
-import mindustry.type.unit.MissileUnitType;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
-import mindustry.world.blocks.units.Reconstructor;
-import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
+import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.with;
@@ -291,58 +286,42 @@ public class CBlocks {
             coolant = consumeCoolant(0.1f);
             researchCostMultiplier = 8f;
         }};
-        mountain = new PowerTurret("mountain") {{
-            requirements(Category.turret, ItemStack.with(Items.titanium, 340,
-                    Items.copper, 300, Items.graphite, 350
+        tranquil = new PowerTurret("tranquil") {{
+            requirements(Category.turret, ItemStack.with(Items.titanium, 200,
+                    silicon, 120, Items.graphite, 200
             ));
             consume(new ConsumePower(8, 480, false));
 
             size = 2;
             recoil = 3;
-            range = 540;
+            range = 200;
             health = 1000;
             rotateSpeed = 10f;
-            researchCostMultiplier = 8f;
+            researchCostMultiplier = 10;
             canOverdrive = false;
 
             shootY = 3f;
-            reload = 400;
-            inaccuracy = 0;
+            reload = 30;
             shootCone = 15f;
 
-            shootType = new BulletType(0, 0) {{
-                rangeOverride = 540;
-                ammoMultiplier = 2f;
-                absorbable = reflectable = hittable = collides = false;
-                spawnUnit = new MissileUnitType("billow1") {{
-                    health = 600;
-                    armor = 24;
-                    lifetime = 360;
-                    speed = 1.5f;
-                    trailLength = 0;
-                    hidden = true;
-                    playerControllable = false;
-                    logicControllable = false;
+            shootType = new BasicBulletType() {{
+                width = height = 20;
+                damage = 15;
+                speed = 10;
+                lifetime = 21;
 
-                    abilities.add(new EnergyFieldAbility(1, 60, 300) {{
-                        status = FStatusEffects.suppress;
-                        statusDuration = 420;
-                        effectRadius = 0;
-                        healPercent = 1;
-                    }});
+                trailLength = 15;
+                trailWidth = 5;
+                trailColor = Pal.heal;
 
-                    abilities.add(new EnergyFieldAbility(0, 12, 120) {{
-                        status = FStatusEffects.tardy;
-                        statusDuration = 380;
-                        effectRadius = 0;
-                        healPercent = 0;
-                        sectors = 3;
-                        color = Pal.redderDust;
-                        healEffect = hitEffect = damageEffect = Fx.none;
-                        shootSound = Sounds.none;
-                    }});
+                status = FStatusEffects.torn;
+                statusDuration = 240;
 
-                }};
+                rangeOverride = 200;
+                reflectable = false;
+                collidesTiles = false;
+                pierce = true;
+                pierceCap = 5;
             }};
         }};
         fireBoost = new OwnerTurret("fire_boost") {{
@@ -380,134 +359,56 @@ public class CBlocks {
                     Items.plastanium, 900
             ));
         }};
-        tranquil = new PowerTurret("tranquil") {{
-            consume(new ConsumePower(20, 0, false));
+        mountain = new PowerTurret("mountain") {{
+            consume(new ConsumePower(15, 0, false));
 
             health = 2000;
-            size = 4;
+            size = 3;
 
-            recoil = 2f;
+            recoil = 6f;
             range = 400;
-            reload = 90;
+            reload = 15;
             consumesPower = true;
             hasPower = true;
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shootType = new BulletType() {{
-                hittable = reflectable = absorbable = false;
+            shoot.shots = 2;
+            shoot.shotDelay = 10;
+            shoot.firstShotDelay = 80;
+            shootType = new StrikeBulletType() {{
+                absorbable = false;
 
-                speed = 4.5f;
-                lifetime = 90;
+                sprite = "circle";
+                hitSize = 25;
+                width = 30;
+                height = 30;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = Pal.heal;
 
-                trailChance = 1f;
-                trailInterp = Interp.slope;
-                trailWidth = 4.5f;
-                trailLength = 19;
-                trailEffect = new MultiEffect(Fx.artilleryTrail, Fx.artilleryTrailSmoke);
-                rangeOverride = 200;
+                damage = 15;
+                lifetime = 45;
+                speed = 9;
+                knockback = 2;
+                buildingDamageMultiplier = 0.1f;
+                status = FStatusEffects.suppress;
+                statusDuration = 240;
 
-                status = StatusEffects.unmoving;
-                statusDuration = 60;
-                splashDamageRadius = 60;
-                splashDamage = 32;
-
-                shootEffect = smokeEffect = Fx.none;
-                hitEffect = new ExplosionEffect() {{
-                    lifetime = 360;
-                    waveColor = Pal.redLight;
-                    waveRadBase = 60;
-                    waveRad = 61;
-                    waveStroke = 4;
-                    waveLife = 45;
-                    smokes = 13;
-                    smokeRad = 60;
-                    smokeColor = Pal.redLight;
-                    smokeSizeBase = 0;
-                    smokeSize = 5;
-                }};
-                despawnEffect = hitEffect;
-
-                parts.add(new ShapePart() {{
-                    radius = 5.5f;
-                    radiusTo = 5.5f;
-                    circle = true;
-                    color = colorTo = Pal.redLight;
-                }});
-
-                fragRandomSpread = 360;
-                fragBullets = 6;
-                fragLifeMax = 2.5f;
-                fragLifeMin = 2f;
-                fragVelocityMin = 0.4f;
-                fragVelocityMax = 0.5f;
-                fragOnAbsorb = true;
-                fragOnHit = true;
-                fragBullet = new BulletType() {{
-                    damage = 12;
-                    splashDamageRadius = 24;
-                    status = FStatusEffects.torn;
-                    statusDuration = 240;
-
-                    hitEffect = new ExplosionEffect() {{
-                        lifetime = 300;
-
-                        waveColor = Pal.redLight;
-                        waveRadBase = 28;
-                        waveRad = 24;
-                        waveStroke = 1;
-                        waveLife = 240;
-
-                        smokes = 14;
-                        smokeRad = 16;
-                        smokeColor = Pal.redLight;
-                        smokeSizeBase = 0;
-                        smokeSize = 3;
-                    }};
-                    despawnEffect = hitEffect;
-                }};
-
-                intervalDelay = 2;
-                bulletInterval = 8;
-                intervalSpread = 22;
-                intervalAngle = -11;
-                intervalBullets = 2;
-                intervalBullet = new BasicBulletType() {{
-                    speed = 1.5f;
-                    lifetime = 90;
-
-                    frontColor = backColor = trailColor = Pal.redLight;
-                    trailLength = 7;
-
-                    status = FStatusEffects.torn;
-                    statusDuration = 240;
-
-                    splashDamageRadius = 24;
-                    splashDamage = 12;
-
-                    hitEffect = new ExplosionEffect() {{
-                        lifetime = 240;
-
-                        waveColor = Pal.redLight;
-                        waveRadBase = 16;
-                        waveRad = 28;
-                        waveStroke = 1;
-                        waveLife = 240;
-
-                        smokes = 12;
-                        smokeRad = 16;
-                        smokeColor = Pal.redLight;
-                        smokeSizeBase = 0;
-                        smokeSize = 3;
-                    }};
-                    despawnEffect = hitEffect;
-                }};
+                baseForce = 3;
+                splashDamage = 10;
+                splashDamageRadius = 160;
+                chargeEffect = Fx.greenLaserCharge;
+                hitEffect = despawnEffect = new Effect(90, e -> {
+                    color(Pal.heal);
+                    stroke(e.fout() * 7);
+                    Lines.circle(e.x, e.y, 4f + e.finpow() * 160);
+                });
             }};
 
             requirements(Category.turret, ItemStack.with(
-                    Items.copper, 1000,
-                    Items.titanium, 700,
-                    Items.graphite, 800
+                    plastanium, 120,
+                    Items.titanium, 500,
+                    Items.graphite, 500
             ));
         }};
         windTurret = new ItemTurret("wind_turret") {{
@@ -1028,23 +929,5 @@ public class CBlocks {
             consumePower(1.2f);
             requirements(Category.effect, ItemStack.with(silicon, 30, titanium, 60, graphite, 40));
         }};
-//======================================================================================================================
-        blockOverride();
-    }
-
-    public static void blockOverride() {
-        UnitFactory uf = (UnitFactory) Blocks.airFactory;
-        uf.plans.add(new UnitFactory.UnitPlan(FUnits.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
-        Reconstructor rt = (Reconstructor) Blocks.additiveReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.barb, FUnits.hammer});
-        rt = (Reconstructor) Blocks.multiplicativeReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.hammer, FUnits.buying});
-        rt = (Reconstructor) Blocks.exponentialReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.buying, FUnits.crazy});
-        rt = (Reconstructor) Blocks.tetrativeReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.crazy, FUnits.transition});
-
-        ItemTurret turret = (ItemTurret) Blocks.salvo;
-        turret.ammoTypes.each((i, b) -> b.damage += 4);
     }
 }

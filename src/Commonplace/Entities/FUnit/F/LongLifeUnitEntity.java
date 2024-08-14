@@ -17,6 +17,10 @@ public class LongLifeUnitEntity extends FUnitEntity {
 
     @Override
     public void rawDamage(float damage) {
-        super.rawDamage(damage * Math.min(1, 1 - hitTime));
+        if (damage > this.health + this.shield + this.armor) {
+            super.rawDamage(damage);
+        } else {
+            super.rawDamage(damage * Math.min(1, hitTime * 2 - 1));
+        }
     }
 }
