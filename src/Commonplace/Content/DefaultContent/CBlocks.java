@@ -38,14 +38,14 @@ import static mindustry.type.ItemStack.with;
 
 public class CBlocks {
     //test
-    public static Block pu, wall;
+    public static Block pu;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
+    public static Block fourNet, fireBoost, windTurret, plain, hill, residual;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
@@ -287,80 +287,7 @@ public class CBlocks {
             coolant = consumeCoolant(0.1f);
             researchCostMultiplier = 8f;
         }};
-        tranquil = new PowerTurret("tranquil") {{
-            requirements(Category.turret, ItemStack.with(Items.titanium, 200,
-                    silicon, 120, Items.graphite, 200
-            ));
-            consume(new ConsumePower(8, 480, false));
-
-            size = 2;
-            recoil = 3;
-            range = 200;
-            health = 1000;
-            rotateSpeed = 10f;
-            researchCostMultiplier = 10;
-            canOverdrive = false;
-
-            shootY = 3f;
-            reload = 30;
-            shootCone = 15f;
-
-            shootType = new BasicBulletType() {{
-                width = height = 20;
-                damage = 15;
-                speed = 10;
-                lifetime = 21;
-
-                trailLength = 15;
-                trailWidth = 5;
-                trailColor = Pal.heal;
-
-                status = FStatusEffects.torn;
-                statusDuration = 240;
-
-                rangeOverride = 200;
-                reflectable = false;
-                collidesTiles = false;
-                pierce = true;
-                pierceCap = 5;
-            }};
-        }};
-        fireBoost = new OwnerTurret("fire_boost") {{
-            targetAir = targetGround = true;
-
-            health = 3000;
-            size = 4;
-            range = 260;
-            shootY = 35;
-            reload = 5;
-            recoil = 3;
-            inaccuracy = 15;
-
-            bullet = new ownerBulletType(8f, 8) {{
-                absorbable = hittable = reflectable = false;
-
-                lifetime = 6.7f;
-                splashDamage = 6;
-                splashDamageRadius = 20;
-
-                despawnEffect = hitEffect = Fx.none;
-
-                pierce = true;
-                pierceBuilding = true;
-                status = StatusEffects.burning;
-                statusDuration = 240;
-            }};
-
-            requirements(Category.turret, ItemStack.with(
-                    Items.titanium, 1500,
-                    Items.graphite, 1500,
-                    Items.graphite, 2000,
-                    Items.silicon, 1500,
-                    Items.phaseFabric, 1500,
-                    Items.plastanium, 900
-            ));
-        }};
-        mountain = new PowerTurret("mountain") {{
+        hill = new PowerTurret("hill") {{
             consume(new ConsumePower(15, 0, false));
 
             health = 2000;
@@ -410,6 +337,79 @@ public class CBlocks {
                     plastanium, 120,
                     Items.titanium, 500,
                     Items.graphite, 500
+            ));
+        }};
+        plain = new PowerTurret("plain") {{
+            requirements(Category.turret, ItemStack.with(Items.titanium, 200,
+                    silicon, 120, Items.graphite, 200
+            ));
+            consume(new ConsumePower(8, 480, false));
+
+            size = 2;
+            recoil = 3;
+            range = 300;
+            health = 1000;
+            rotateSpeed = 10f;
+            researchCostMultiplier = 10;
+            canOverdrive = false;
+
+            shootY = 3f;
+            reload = 30;
+            shootCone = 15f;
+
+            shootType = new BasicBulletType() {{
+                width = height = 20;
+                damage = 15;
+                speed = 15;
+                lifetime = 21;
+
+                trailLength = 7;
+                trailWidth = 3;
+                trailColor = Pal.heal;
+
+                status = FStatusEffects.torn;
+                statusDuration = 240;
+
+                rangeOverride = 300;
+                reflectable = false;
+                collidesTiles = false;
+                pierce = true;
+                pierceCap = 5;
+            }};
+        }};
+        fireBoost = new OwnerTurret("fire_boost") {{
+            targetAir = targetGround = true;
+
+            health = 3000;
+            size = 4;
+            range = 260;
+            shootY = 35;
+            reload = 5;
+            recoil = 3;
+            inaccuracy = 15;
+
+            bullet = new ownerBulletType(8f, 8) {{
+                absorbable = hittable = reflectable = false;
+
+                lifetime = 6.7f;
+                splashDamage = 6;
+                splashDamageRadius = 20;
+
+                despawnEffect = hitEffect = Fx.none;
+
+                pierce = true;
+                pierceBuilding = true;
+                status = StatusEffects.burning;
+                statusDuration = 240;
+            }};
+
+            requirements(Category.turret, ItemStack.with(
+                    Items.titanium, 1500,
+                    Items.graphite, 1500,
+                    Items.graphite, 2000,
+                    Items.silicon, 1500,
+                    Items.phaseFabric, 1500,
+                    Items.plastanium, 900
             ));
         }};
         windTurret = new ItemTurret("wind_turret") {{
