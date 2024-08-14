@@ -40,14 +40,14 @@ public class BlockOverride {
         Blocks.thoriumWall.health = 200 * 6;
         Blocks.thoriumWallLarge.health = 200 * 24;
         Blocks.phaseWall.health = 150 * 6;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 13;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 14;
         Blocks.phaseWallLarge.health = 150 * 24;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 20;
-        Blocks.surgeWall.health = 230 * 6;
-        ((Wall) Blocks.surgeWall).lightningChance = 0.2f;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 21;
+        Blocks.surgeWall.health = 250 * 6;
+        ((Wall) Blocks.surgeWall).lightningChance = 0.3f;
         ((Wall) Blocks.surgeWall).lightningDamage = 30;
-        Blocks.surgeWallLarge.health = 230 * 24;
-        ((Wall) Blocks.surgeWallLarge).lightningChance = 0.3f;
+        Blocks.surgeWallLarge.health = 250 * 24;
+        ((Wall) Blocks.surgeWallLarge).lightningChance = 0.4f;
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
 
         UnitFactory uf = (UnitFactory) Blocks.airFactory;

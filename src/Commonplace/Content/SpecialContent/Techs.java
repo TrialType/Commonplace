@@ -127,6 +127,11 @@ public class Techs {
                 }));
                 tf.parent = t;
                 t.children.add(tf);
+            } else if (t.content == titaniumWall) {
+                tf = node(weakPowerWall, () -> node(weakPowerWallLarge, () -> node(superPowerWall, () -> node(superPowerWallLarge, () -> {
+                }))));
+                tf.parent = t;
+                t.children.add(tf);
             }
         });
         //units

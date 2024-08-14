@@ -38,11 +38,12 @@ import static mindustry.type.ItemStack.with;
 
 public class CBlocks {
     //test
-    public static Block pu;
+    public static Block pu, wall;
     //units
     public static Block outPowerFactory, inputPowerFactory;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge;
+    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
+            weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
     public static Block fourNet, fireBoost, windTurret, tranquil, mountain, residual;
     //crafting
@@ -878,6 +879,70 @@ public class CBlocks {
             lightningLength = 35;
             lightningChance = 0.8f;
             envDisabled |= Env.scorching;
+        }};
+        weakPowerWall = new PowerWall("weak-power-wall") {{
+            requirements(Category.defense, ItemStack.with(copper, 6, titanium, 6, silicon, 3));
+
+            health = 100 * 6;
+            size = 1;
+
+            lightningChance = 0.25f;
+            lightningLength = 12;
+            lightningDamage = 20;
+            chanceDeflect = 8;
+            healChance = 0.25f;
+            healPercent = 0.024f;
+            powerHit = 10f;
+
+            consumePower(0.2f);
+        }};
+        weakPowerWallLarge = new PowerWall("weak-power-wall-large") {{
+            requirements(Category.defense, ItemStack.with(copper, 24, titanium, 24, silicon, 12));
+
+            health = 100 * 24;
+            size = 2;
+
+            lightningChance = 0.25f;
+            lightningLength = 12;
+            lightningDamage = 20;
+            chanceDeflect = 8;
+            healChance = 0.25f;
+            healPercent = 0.024f;
+            powerHit = 10f;
+
+            consumePower(0.2f);
+        }};
+        superPowerWall = new PowerWall("super-power-wall") {{
+            requirements(Category.defense, ItemStack.with(thorium, 6, surgeAlloy, 6, silicon, 3));
+
+            health = 220 * 6;
+            size = 1;
+
+            lightningChance = 0.5f;
+            lightningLength = 15;
+            lightningDamage = 40;
+            chanceDeflect = 12;
+            healChance = 0.25f;
+            healPercent = 0.03f;
+            powerHit = 25;
+
+            consumePower(0.5f);
+        }};
+        superPowerWallLarge = new PowerWall("super-power-wall-large") {{
+            requirements(Category.defense, ItemStack.with(thorium, 24, surgeAlloy, 24, silicon, 12));
+
+            health = 220 * 24;
+            size = 2;
+
+            lightningChance = 0.5f;
+            lightningLength = 15;
+            lightningDamage = 40;
+            chanceDeflect = 12;
+            healChance = 0.25f;
+            healPercent = 0.03f;
+            powerHit = 25;
+
+            consumePower(0.5f);
         }};
 //======================================================================================================================
         slowProject = new DownProject("slow-project") {{
