@@ -63,7 +63,11 @@ public class Techs {
                 });
             });
             node(plain, Seq.with(new Objectives.SectorComplete(stainedMountains)), () -> {
-                node(hill, ItemStack.with(plastanium, 1200, Items.titanium, 5000, Items.graphite, 5000), () -> {
+                node(hill, ItemStack.with(plastanium, 1200, Items.titanium, 5000, Items.graphite, 5000), Seq.with(new Objectives.SectorComplete(impact0078)), () -> {
+                });
+                node(life, ItemStack.with(titanium, 10000, thorium, 6000, plastanium, 3500, silicon, 8000), Seq.with(new Objectives.SectorComplete(tarFields)), () -> {
+                });
+                node(steadyRain, ItemStack.with(titanium, 16000, plastanium, 6000, silicon, 10000), Seq.with(new Objectives.SectorComplete(overgrowth)), () -> {
                 });
             });
             node(eleFenceII, ItemStack.with(Items.titanium, 3500, Items.copper, 6000, Items.silicon, 3000), Seq.with(new Objectives.SectorComplete(saltFlats)), () -> {
@@ -118,7 +122,7 @@ public class Techs {
                 tf.parent = t;
                 t.children.add(tf);
             } else if (t.content == foreshadow) {
-                tf = node(windTurret, ItemStack.with(Items.titanium, 20000, Items.copper, 26000, Items.graphite, 18000, Items.silicon, 16500, Items.surgeAlloy, 3000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
+                tf = node(wind, ItemStack.with(Items.titanium, 20000, Items.copper, 26000, Items.graphite, 18000, Items.silicon, 16500, Items.surgeAlloy, 3000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
                 });
                 tf.parent = t;
                 t.children.add(tf);

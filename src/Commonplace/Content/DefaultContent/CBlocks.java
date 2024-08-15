@@ -45,7 +45,7 @@ public class CBlocks {
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, windTurret, plain, hill, residual;
+    public static Block fourNet, fireBoost, wind, plain, hill, residual, life, steadyRain, wonton;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
     //effect
@@ -203,6 +203,280 @@ public class CBlocks {
             requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
         }};
 //======================================================================================================================
+        hill = new PowerTurret("hill") {{
+            consume(new ConsumePower(15, 0, false));
+
+            health = 2000;
+            size = 3;
+
+            recoil = 6f;
+            range = 350;
+            reload = 15;
+            consumesPower = true;
+            hasPower = true;
+            consumeAmmoOnce = false;
+            canOverdrive = false;
+
+            shoot.shots = 2;
+            shoot.shotDelay = 10;
+            shoot.firstShotDelay = 80;
+            shootType = new StrikeBulletType() {{
+                absorbable = false;
+
+                sprite = "circle";
+                hitSize = 25;
+                width = 30;
+                height = 30;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = Pal.heal;
+
+                damage = 15;
+                lifetime = 35;
+                speed = 10;
+                knockback = 1;
+                buildingDamageMultiplier = 0.1f;
+                status = FStatusEffects.suppress;
+                statusDuration = 240;
+
+                baseForce = 1.5f;
+                splashDamage = 10;
+                splashDamageRadius = 160;
+                chargeEffect = Fx.greenLaserCharge;
+                hitEffect = despawnEffect = new Effect(90, e -> {
+                    color(Pal.heal);
+                    stroke(e.fout() * 7);
+                    Lines.circle(e.x, e.y, 4f + e.finpow() * 160);
+                });
+            }};
+
+            requirements(Category.turret, ItemStack.with(
+                    plastanium, 120,
+                    Items.titanium, 500,
+                    Items.graphite, 500
+            ));
+        }};
+        plain = new PowerTurret("plain") {{
+            requirements(Category.turret, ItemStack.with(Items.titanium, 100,
+                    silicon, 70, Items.graphite, 100
+            ));
+            consume(new ConsumePower(8, 480, false));
+
+            size = 2;
+            recoil = 3;
+            range = 300;
+            health = 1000;
+            rotateSpeed = 10f;
+            researchCostMultiplier = 100;
+            canOverdrive = false;
+
+            shootY = 3f;
+            reload = 30;
+            shootCone = 15f;
+
+            shootType = new BasicBulletType() {{
+                width = height = 20;
+                damage = 15;
+                speed = 15;
+                lifetime = 21;
+
+                trailLength = 7;
+                trailWidth = 3;
+                trailColor = Pal.heal;
+
+                status = FStatusEffects.torn;
+                statusDuration = 240;
+
+                rangeOverride = 300;
+                reflectable = false;
+                collidesTiles = false;
+                pierce = true;
+                pierceCap = 5;
+            }};
+        }};
+        life = new ItemTurret("life") {{
+            requirements(Category.turret, ItemStack.with(titanium, 100, thorium, 60, plastanium, 35, silicon, 80));
+
+            health = 1000;
+            size = 3;
+            reload = 90;
+            range = 500;
+            recoil = 6;
+
+            ammo(
+                    titanium,
+                    new PointBulletType2() {{
+                        lifetime = 42f;
+                        speed = 12;
+                        damage = 40;
+
+                        fragVelocityMin = fragVelocityMax = fragLifeMin = fragLifeMax = 1;
+                        fragBullets = 10;
+                        fragSpread = 36;
+                        fragRandomSpread = 0;
+                        buildingDamageMultiplier = 0.1f;
+                        fragBullet = new BasicBulletType() {{
+                            pierce = true;
+                            collidesTiles = false;
+
+                            sprite = "circle";
+                            width = height = 20;
+                            shrinkX = shrinkY = 0;
+                            frontColor = backColor = Color.valueOf("8da1e3");
+                            lifetime = 20;
+                            speed = 14;
+                            damage = 30;
+                            bulletInterval = 4;
+                            intervalAngle = 180;
+                            intervalRandomSpread = 0;
+                            intervalDelay = 4;
+                            intervalBullet = new BasicBulletType() {{
+                                collidesTiles = false;
+                                pierce = true;
+                                pierceCap = 2;
+                                sprite = "circle";
+                                width = height = 10;
+                                shrinkX = shrinkY = 0;
+                                frontColor = backColor = Color.valueOf("8da1e3");
+                                damage = 25;
+                                speed = 14;
+                                lifetime = 20;
+                            }};
+                        }};
+                    }}, thorium,
+                    new PointBulletType2() {{
+                        lifetime = 42f;
+                        speed = 12;
+                        damage = 35;
+
+                        fragVelocityMin = fragVelocityMax = fragLifeMin = fragLifeMax = 1;
+                        fragBullets = 10;
+                        fragSpread = 36;
+                        fragRandomSpread = 0;
+                        buildingDamageMultiplier = 0.1f;
+                        fragBullet = new BasicBulletType() {{
+                            pierce = true;
+                            pierceArmor = true;
+                            collidesTiles = false;
+
+                            sprite = "circle";
+                            width = height = 20;
+                            shrinkX = shrinkY = 0;
+                            frontColor = backColor = Color.valueOf("f9a3c7");
+                            lifetime = 20;
+                            speed = 12;
+                            damage = 25;
+
+                            bulletInterval = 4;
+                            intervalAngle = 180;
+                            intervalRandomSpread = 0;
+                            intervalDelay = 4;
+                            intervalBullet = new BasicBulletType() {{
+                                collidesTiles = false;
+                                pierceArmor = true;
+                                pierce = true;
+                                pierceCap = 2;
+
+                                sprite = "circle";
+                                width = height = 10;
+                                shrinkX = shrinkY = 0;
+                                frontColor = backColor = Color.valueOf("f9a3c7");
+                                damage = 20;
+                                speed = 12;
+                                lifetime = 20;
+                            }};
+                        }};
+                    }}, surgeAlloy,
+                    new PointBulletType2() {{
+                        lifetime = 42f;
+                        speed = 12;
+                        damage = 40;
+
+                        fragVelocityMin = fragVelocityMax = fragLifeMin = fragLifeMax = 1;
+                        fragBullets = 10;
+                        fragSpread = 36;
+                        fragRandomSpread = 0;
+                        buildingDamageMultiplier = 0.1f;
+                        fragBullet = new BasicBulletType() {{
+                            pierce = true;
+                            collidesTiles = false;
+
+                            sprite = "circle";
+                            width = height = 20;
+                            shrinkX = shrinkY = 0;
+                            frontColor = backColor = Color.valueOf("f3e979");
+                            lifetime = 30;
+                            speed = 10;
+                            damage = 30;
+
+                            lightning = 3;
+                            lightningDamage = 0;
+                            lightningLength = 3;
+
+                            bulletInterval = 6;
+                            intervalBullets = 3;
+                            intervalAngle = 180;
+                            intervalRandomSpread = 0;
+                            intervalDelay = 6;
+                            intervalBullet = new LightningBulletType() {{
+                                lightningLength = 40;
+                                lightningLengthRand = 20;
+                                lightningColor = hitColor = Color.valueOf("f3e979");
+                                damage = 15;
+                                speed = 0;
+                            }};
+                        }};
+                    }}, plastanium,
+                    new PointBulletType2() {{
+                        lifetime = 42f;
+                        speed = 12;
+                        damage = 30;
+                        splashDamage = 25;
+                        splashDamageRadius = 12;
+
+                        fragVelocityMin = fragVelocityMax = fragLifeMin = fragLifeMax = 1;
+                        fragBullets = 10;
+                        fragSpread = 36;
+                        fragRandomSpread = 0;
+                        buildingDamageMultiplier = 0.1f;
+                        fragBullet = new BasicBulletType() {{
+                            pierce = true;
+                            collidesTiles = false;
+
+                            sprite = "circle";
+                            width = height = 20;
+                            shrinkX = shrinkY = 0;
+                            frontColor = backColor = Color.valueOf("cbd97f");
+                            lifetime = 20;
+                            speed = 10;
+                            damage = 20;
+
+                            splashDamage = 25;
+                            splashDamageRadius = 16;
+
+                            bulletInterval = 4;
+                            intervalAngle = 180;
+                            intervalRandomSpread = 0;
+                            intervalDelay = 4;
+                            intervalBullet = new BasicBulletType() {{
+                                collidesTiles = false;
+                                pierce = true;
+                                pierceCap = 2;
+
+                                sprite = "circle";
+                                width = height = 10;
+                                shrinkX = shrinkY = 0;
+                                frontColor = backColor = Color.valueOf("cbd97f");
+
+                                damage = 15;
+                                speed = 10;
+                                lifetime = 20;
+                                splashDamage = 25;
+                                splashDamageRadius = 8;
+                            }};
+                        }};
+                    }}
+            );
+        }};
         residual = new ItemTurret("residual") {{
             requirements(Category.turret, with(Items.copper, 100, Items.graphite, 80, Items.titanium, 25, Items.silicon, 25));
             ammo(
@@ -287,132 +561,172 @@ public class CBlocks {
             coolant = consumeCoolant(0.1f);
             researchCostMultiplier = 8f;
         }};
-        hill = new PowerTurret("hill") {{
-            consume(new ConsumePower(15, 0, false));
-
-            health = 2000;
-            size = 3;
-
-            recoil = 6f;
-            range = 400;
-            reload = 15;
-            consumesPower = true;
-            hasPower = true;
-            consumeAmmoOnce = false;
-            canOverdrive = false;
-
-            shoot.shots = 2;
-            shoot.shotDelay = 10;
-            shoot.firstShotDelay = 80;
-            shootType = new StrikeBulletType() {{
-                absorbable = false;
-
-                sprite = "circle";
-                hitSize = 25;
-                width = 30;
-                height = 30;
-                shrinkX = shrinkY = 0;
-                frontColor = backColor = Pal.heal;
-
-                damage = 15;
-                lifetime = 45;
-                speed = 9;
-                knockback = 2;
-                buildingDamageMultiplier = 0.1f;
-                status = FStatusEffects.suppress;
-                statusDuration = 240;
-
-                baseForce = 3;
-                splashDamage = 10;
-                splashDamageRadius = 160;
-                chargeEffect = Fx.greenLaserCharge;
-                hitEffect = despawnEffect = new Effect(90, e -> {
-                    color(Pal.heal);
-                    stroke(e.fout() * 7);
-                    Lines.circle(e.x, e.y, 4f + e.finpow() * 160);
-                });
-            }};
-
-            requirements(Category.turret, ItemStack.with(
-                    plastanium, 120,
-                    Items.titanium, 500,
-                    Items.graphite, 500
-            ));
-        }};
-        plain = new PowerTurret("plain") {{
-            requirements(Category.turret, ItemStack.with(Items.titanium, 200,
-                    silicon, 120, Items.graphite, 200
-            ));
-            consume(new ConsumePower(8, 480, false));
+        wonton = new ItemTurret("wonton") {{
+            requirements(Category.turret, ItemStack.with(titanium, 30, plastanium, 30, silicon, 30));
 
             size = 2;
+            health = 700;
             recoil = 3;
-            range = 300;
-            health = 1000;
-            rotateSpeed = 10f;
-            researchCostMultiplier = 10;
-            canOverdrive = false;
-
-            shootY = 3f;
             reload = 30;
-            shootCone = 15f;
+            range = 400;
+            targetGround = false;
 
-            shootType = new BasicBulletType() {{
-                width = height = 20;
-                damage = 15;
-                speed = 15;
-                lifetime = 21;
+            shoot.shots = 8;
+            inaccuracy = 3;
 
-                trailLength = 7;
-                trailWidth = 3;
-                trailColor = Pal.heal;
+            ammo(
+                    titanium,
+                    new FlakBulletType() {{
+                        flakDelay = 0;
+                        explodeRange = 15;
+                        explodeDelay = 0;
 
-                status = FStatusEffects.torn;
-                statusDuration = 240;
+                        lifetime = 100;
+                        speed = 7;
+                        drag = 0.02f;
+                        damage = 20;
+                        splashDamage = 40;
+                        splashDamageRadius = 20;
 
-                rangeOverride = 300;
-                reflectable = false;
-                collidesTiles = false;
-                pierce = true;
-                pierceCap = 5;
-            }};
+                        ammoMultiplier = 4;
+
+                        status = FStatusEffects.torn;
+                        statusDuration = 120;
+                    }}, metaglass,
+                    new FlakBulletType() {{
+                        flakDelay = 0;
+                        explodeRange = 15;
+                        explodeDelay = 0;
+
+                        lifetime = 100;
+                        speed = 7;
+                        drag = 0.02f;
+                        damage = 20;
+                        splashDamage = 40;
+                        splashDamageRadius = 20;
+
+                        ammoMultiplier = 4;
+
+                        pierce = true;
+                        pierceCap = 3;
+
+                        fragBullets = 5;
+                        fragBullet = new FlakBulletType() {{
+                            flakDelay = 0;
+                            explodeRange = 15;
+                            explodeDelay = 0;
+
+                            lifetime = 90;
+                            speed = 5;
+                            drag = 0.05f;
+                            damage = 12;
+                            splashDamage = 20;
+                            splashDamageRadius = 20;
+                        }};
+                    }}, plastanium,
+                    new FlakBulletType() {{
+                        flakDelay = 0;
+                        explodeRange = 15;
+                        explodeDelay = 0;
+
+                        ammoMultiplier = 4;
+                        pierceArmor = true;
+
+                        lifetime = 100;
+                        speed = 7;
+                        drag = 0.02f;
+                        damage = 40;
+                        splashDamage = 60;
+                        splashDamageRadius = 20;
+
+                        status = FStatusEffects.tardy;
+                        statusDuration = 120;
+                    }}
+            );
         }};
-        fireBoost = new OwnerTurret("fire_boost") {{
-            targetAir = targetGround = true;
+        steadyRain = new ItemTurret("steady-rain") {{
+            requirements(Category.turret, ItemStack.with(titanium, 160, plastanium, 60, silicon, 100));
 
-            health = 3000;
-            size = 4;
-            range = 260;
-            shootY = 35;
-            reload = 5;
-            recoil = 3;
-            inaccuracy = 15;
+            size = 3;
+            health = 1400;
+            recoil = 4;
+            reload = 90;
+            range = 300;
+            targetAir = false;
 
-            bullet = new ownerBulletType(8f, 8) {{
-                absorbable = hittable = reflectable = false;
+            shoot.shots = 4;
+            shoot.shotDelay = 6;
+            inaccuracy = 9;
+            ammo(
+                    graphite,
+                    new ArtilleryBulletType() {{
+                        width = height = 10;
+                        frontColor = backColor = hitColor = Color.valueOf("b2c6d2");
+                        speed = 3;
+                        damage = 0;
+                        splashDamage = 65;
+                        splashDamageRadius = 20;
+                        status = StatusEffects.slow;
+                        statusDuration = 60;
+                    }}, thorium,
+                    new ArtilleryBulletType() {{
+                        width = height = 10;
+                        frontColor = backColor = hitColor = Color.valueOf("f9a3c7");
+                        speed = 5;
+                        damage = 0;
+                        splashDamage = 75;
+                        splashDamageRadius = 20;
 
-                lifetime = 6.7f;
-                splashDamage = 6;
-                splashDamageRadius = 20;
+                        fragBullets = 5;
+                        fragBullet = new ArtilleryBulletType() {{
+                            width = height = 6;
+                            frontColor = backColor = hitColor = Color.valueOf("f9a3c7");
 
-                despawnEffect = hitEffect = Fx.none;
+                            damage = 0;
+                            speed = 2;
+                            lifetime = 45;
+                            splashDamage = 35;
+                            splashDamageRadius = 8;
+                        }};
+                    }}, plastanium,
+                    new ArtilleryBulletType() {{
+                        width = height = 10;
+                        frontColor = backColor = hitColor = Color.valueOf("cbd97f");
+                        speed = 3;
+                        damage = 0;
+                        splashDamage = 60;
+                        splashDamageRadius = 12;
+                        buildingDamageMultiplier = 3;
+                    }}, phaseFabric,
+                    new ArtilleryBulletType() {{
+                        width = height = 10;
+                        frontColor = backColor = hitColor = Color.valueOf("f4ba6e");
 
-                pierce = true;
-                pierceBuilding = true;
-                status = StatusEffects.burning;
-                statusDuration = 240;
-            }};
+                        speed = 4;
+                        damage = 0;
+                        splashDamage = 115;
+                        splashDamageRadius = 20;
+                        status = StatusEffects.sapped;
+                        statusDuration = 60;
+                        knockback = 3;
 
-            requirements(Category.turret, ItemStack.with(
-                    Items.titanium, 1500,
-                    Items.graphite, 1500,
-                    Items.graphite, 2000,
-                    Items.silicon, 1500,
-                    Items.phaseFabric, 1500,
-                    Items.plastanium, 900
-            ));
+                        fragBullets = 7;
+                        fragBullet = new ArtilleryBulletType() {{
+                            width = height = 6;
+                            frontColor = backColor = hitColor = Color.valueOf("f4ba6e");
+
+                            speed = 2;
+                            lifetime = 60;
+                            damage = 0;
+                            splashDamage = 80;
+                            splashDamageRadius = 20;
+                            knockback = 2;
+                        }};
+                    }}
+            );
+            limitRange();
         }};
-        windTurret = new ItemTurret("wind_turret") {{
+        wind = new ItemTurret("wind") {{
             requirements(Category.turret, ItemStack.with(
                     Items.titanium, 2000,
                     Items.copper, 2600,
@@ -638,6 +952,41 @@ public class CBlocks {
                     laserEffect = Effects.laserLink;
                 }};
             }});
+        }};
+        fireBoost = new OwnerTurret("fire_boost") {{
+            targetAir = targetGround = true;
+
+            health = 3000;
+            size = 4;
+            range = 260;
+            shootY = 35;
+            reload = 5;
+            recoil = 3;
+            inaccuracy = 15;
+
+            bullet = new ownerBulletType(8f, 8) {{
+                absorbable = hittable = reflectable = false;
+
+                lifetime = 6.7f;
+                splashDamage = 6;
+                splashDamageRadius = 20;
+
+                despawnEffect = hitEffect = Fx.none;
+
+                pierce = true;
+                pierceBuilding = true;
+                status = StatusEffects.burning;
+                statusDuration = 240;
+            }};
+
+            requirements(Category.turret, ItemStack.with(
+                    Items.titanium, 1500,
+                    Items.graphite, 1500,
+                    Items.graphite, 2000,
+                    Items.silicon, 1500,
+                    Items.phaseFabric, 1500,
+                    Items.plastanium, 900
+            ));
         }};
         fourNet = new LiquidTurret("four_net") {{
             scaledHealth = 10000;

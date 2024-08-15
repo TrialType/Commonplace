@@ -12,6 +12,7 @@ import mindustry.entities.Units;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.game.EventType;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.type.StatusEffect;
 
@@ -36,6 +37,7 @@ public class AroundBulletType extends BasicBulletType {
     public float roundIntervalSpread = 0f;
     public float roundIntervalAngle = 0f;
     public float roundIntervalDelay = -1f;
+    public float roundBulletDelay = -1f;
 
     @Override
     public void update(Bullet b) {
@@ -50,17 +52,40 @@ public class AroundBulletType extends BasicBulletType {
             b.initVel(Angles.angle(ux + Angles.trnsx(angle, circleRange) - bx, uy + Angles.trnsy(angle, circleRange) - by), b.vel.len());
 
             if (roundIntervalBullet != null && b.fdata > roundIntervalDelay && b.timer(3, roundBulletInterval)) {
+                Entityc owner = b.owner;
+                Team team = b.team;
                 if (roundIntervalCenter) {
+                    float a = b.angleTo(u);
                     for (int i = 0; i < roundIntervalBullets; i++) {
-                        roundIntervalBullet.create(b.owner, b.team, bx, by, b.angleTo(u),
-                                -1, 1, 1, null, null, u.x, u.y);
+                        if (roundBulletDelay > 0) {
+                            if (roundIntervalBullet.chargeEffect != null) {
+                                roundIntervalBullet.chargeEffect.at(bx, by, a, hitColor);
+                            }
+                            Time.run(roundBulletDelay, () -> roundIntervalBullet.create(owner, team, bx, by, a,
+                                    -1, 1, 1, null, null, ux, uy));
+                        } else {
+                            roundIntervalBullet.create(owner, team, bx, by, a,
+                                    -1, 1, 1, null, null, ux, uy);
+                        }
                     }
                 } else {
+                    float ro = b.rotation();
                     for (int i = 0; i < roundIntervalBullets; i++) {
-                        roundIntervalBullet.create(b.owner, b.team, bx, by,
-                                b.rotation() + roundIntervalAngle + Mathf.range(roundIntervalRandomSpread) +
-                                        roundIntervalSpread * (i - ((roundIntervalBullets - 1) / 2f)),
-                                -1, 1, 1, null, null, u.x, u.y);
+                        if (roundBulletDelay > 0) {
+                            if (roundIntervalBullet.chargeEffect != null) {
+                                roundIntervalBullet.chargeEffect.at(bx, by);
+                            }
+                            int finalI = i;
+                            Time.run(roundBulletDelay, () -> roundIntervalBullet.create(owner, team, bx, by,
+                                    ro + roundIntervalAngle + Mathf.range(roundIntervalRandomSpread) +
+                                            roundIntervalSpread * (finalI - ((roundIntervalBullets - 1) / 2f)),
+                                    -1, 1, 1, null, null, ux, uy));
+                        } else {
+                            roundIntervalBullet.create(owner, team, bx, by,
+                                    ro + roundIntervalAngle + Mathf.range(roundIntervalRandomSpread) +
+                                            roundIntervalSpread * (i - ((roundIntervalBullets - 1) / 2f)),
+                                    -1, 1, 1, null, null, ux, uy);
+                        }
                     }
                 }
             }

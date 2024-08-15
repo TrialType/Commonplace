@@ -10,13 +10,11 @@ import Commonplace.Entities.FBulletType.*;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.Entities.FUnit.F.TimeUpGradeUnit;
 import Commonplace.Entities.FUnit.Override.*;
-import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Interp;
 import arc.math.Rand;
-import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
@@ -773,7 +771,7 @@ public class UnitOverride {
             summonRange = 220;
             summonNumber = 10;
             summonDespawned = true;
-            summon = bullet;
+            summonBullet = bullet;
         }};
         weapon.bullet.init();
 

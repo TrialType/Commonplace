@@ -147,13 +147,14 @@ public class FUnits {
 
                         summonRange = 150;
                         summonNumber = 7;
-                        everySummonDelay = 0;
-                        summonDelay = 0;
-                        summon = new LaserBulletType(256) {{
+                        summonInterval = 0;
+                        summonDelay = 40;
+                        summonBullet = new LaserBulletType(256) {{
                             length = 260;
                             width = 5;
                             laserEffect = Fx.none;
                             buildingDamageMultiplier = 0.22f;
+                            chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
                         }};
                     }};
                 }};
@@ -346,7 +347,7 @@ public class FUnits {
                     trailWidth = 2;
                     hittable = false;
 
-                    summon = new LightningBulletType() {{
+                    summonBullet = new LightningBulletType() {{
                         lightningLength = 25;
                         damage = 130;
                         speed = 80;
@@ -387,13 +388,13 @@ public class FUnits {
                     trailWidth = 2;
                     absorbable = false;
 
-                    summon = new MissileBulletType(5, 320) {{
+                    summonBullet = new MissileBulletType(5, 320) {{
                         lifetime = 60;
                         frontColor = backColor = trailColor = Pal.techBlue;
                     }};
                     summonRange = 120;
                     summonNumber = 14;
-                    everySummonDelay = 9;
+                    summonInterval = 9;
                 }};
             }});
         }};

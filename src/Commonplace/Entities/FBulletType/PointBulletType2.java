@@ -12,6 +12,7 @@ import mindustry.entities.Damage;
 import mindustry.entities.Effect;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
+import mindustry.entities.bullet.PointBulletType;
 import mindustry.gen.Building;
 import mindustry.gen.Bullet;
 import mindustry.gen.Unit;
@@ -40,6 +41,16 @@ public class PointBulletType2 extends BulletType {
     public Effect intervalLinkEffect = Fx.none;
     public boolean intervalPoint = true;
     public float intervalRange = 350f;
+
+    public PointBulletType2() {
+        super();
+
+        scaleLife = true;
+        collides = false;
+        reflectable = false;
+        keepVelocity = false;
+        backMove = false;
+    }
 
     @Override
     public void update(Bullet b) {

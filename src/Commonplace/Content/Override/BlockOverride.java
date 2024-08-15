@@ -148,6 +148,10 @@ public class BlockOverride {
             }
         });
 
+        ((ItemTurret) Blocks.foreshadow).range = 800;
+        ((ItemTurret) Blocks.foreshadow).ammoTypes.get((Items.surgeAlloy)).damage *= 1.25f;
+        ((ItemTurret) Blocks.foreshadow).limitRange(0);
+
         ((PowerTurret) Blocks.arc).shootType.damage = 26;
         ((PowerTurret) Blocks.arc).shootType.lightningType.pierceArmor = true;
 

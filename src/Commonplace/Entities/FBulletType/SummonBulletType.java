@@ -10,47 +10,79 @@ import mindustry.gen.Bullet;
 import mindustry.gen.Entityc;
 
 public class SummonBulletType extends BasicBulletType {
-    public BulletType summon = null;
+    public BulletType summonBullet = null;
     public boolean summonHit = true;
     public boolean summonDespawned = true;
     public float summonRange = 150;
     public int summonNumber = 12;
     public float summonRadRandom = 360;
     public float summonDelay = 0;
-    public float everySummonDelay = 0;
+    public float summonInterval = 0;
 
     public void hit(Bullet b, float x, float y) {
         super.hit(b, x, y);
-        if (summonHit && summon != null) {
-            if (everySummonDelay > 0) {
-                for (int i = 0; i < summonNumber; i++) {
-                    Time.run(summonDelay + i * everySummonDelay, () -> summon(b.owner, b.team, x, y, Mathf.range(summonRadRandom / 2)));
+        if (summonHit && summonBullet != null) {
+            Team team = b.team;
+            Entityc owner = b.owner;
+            if (summonInterval > 0) {
+                for (int i = 1; i < summonNumber + 1; i++) {
+                    Time.run(i * summonInterval, () -> {
+                        float rotation = Mathf.range(summonRadRandom / 2);
+                        float dx = Angles.trnsx(rotation, summonRange);
+                        float dy = Angles.trnsy(rotation, summonRange);
+                        if (summonDelay > 0 && summonBullet.chargeEffect != null) {
+                            summonBullet.chargeEffect.at(dx + x, dy + y, Angles.angle(-dx + x, -dy + y), hitColor);
+                        }
+                        Time.run(summonDelay, () -> summon(owner, team, dx + x, dy + y, Angles.angle(-dx, -dy)));
+                    });
                 }
             } else {
                 for (int i = 0; i < summonNumber; i++) {
-                    Time.run(summonDelay, () -> summon(b.owner, b.team, x, y, Mathf.range(summonRadRandom / 2)));
+                    float rotation = Mathf.range(summonRadRandom / 2);
+                    float dx = Angles.trnsx(rotation, summonRange);
+                    float dy = Angles.trnsy(rotation, summonRange);
+                    if (summonDelay > 0 && summonBullet.chargeEffect != null) {
+                        summonBullet.chargeEffect.at(dx + x, dy + y, Angles.angle(-dx + x, -dy + y), hitColor);
+                    }
+                    Time.run(summonDelay, () -> summon(owner, team, dx + x, dy + y, Angles.angle(-dx, -dy)));
                 }
             }
         }
     }
 
     public void summon(Entityc owner, Team team, float x, float y, float rotate) {
-        float dx = (float) (summonRange * Math.cos(rotate)), dy = (float) (summonRange * Math.sin(rotate));
-        Bullet bu = summon.create(owner, team, dx + x, dy + y, -rotate);
-        bu.vel.set(-dx, -dy).setLength(summon.speed);
-        bu.rotation(Angles.angle(-dx, -dy));
+        Bullet bu = summonBullet.create(owner, team, x, y, rotate);
+        bu.vel.trns(rotate, summonBullet.speed);
+        bu.rotation(rotate);
     }
 
     public void despawned(Bullet b) {
         super.despawned(b);
         if (summonDespawned && !b.absorbed) {
-            if (everySummonDelay > 0) {
-                for (int i = 0; i < summonNumber; i++) {
-                    Time.run(summonDelay + i * everySummonDelay, () -> summon(b.owner, b.team, b.x, b.y, Mathf.range(summonRadRandom / 2)));
+            float x = b.x, y = b.y;
+            Team team = b.team;
+            Entityc owner = b.owner;
+            if (summonInterval > 0) {
+                for (int i = 1; i < summonNumber + 1; i++) {
+                    Time.run(i * summonInterval, () -> {
+                        float rotation = Mathf.range(summonRadRandom / 2);
+                        float dx = Angles.trnsx(rotation, summonRange);
+                        float dy = Angles.trnsy(rotation, summonRange);
+                        if (summonDelay > 0 && summonBullet.chargeEffect != null) {
+                            summonBullet.chargeEffect.at(dx + x, dy + y, Angles.angle(-dx + x, -dy + y), hitColor);
+                        }
+                        Time.run(summonDelay, () -> summon(owner, team, dx + x, dy + y, Angles.angle(-dx, -dy)));
+                    });
                 }
             } else {
                 for (int i = 0; i < summonNumber; i++) {
-                    Time.run(summonDelay, () -> summon(b.owner, b.team, b.x, b.y, Mathf.range(summonRadRandom / 2)));
+                    float rotation = Mathf.range(summonRadRandom / 2);
+                    float dx = Angles.trnsx(rotation, summonRange);
+                    float dy = Angles.trnsy(rotation, summonRange);
+                    if (summonDelay > 0 && summonBullet.chargeEffect != null) {
+                        summonBullet.chargeEffect.at(dx + x, dy + y, Angles.angle(-dx + x, -dy + y), hitColor);
+                    }
+                    Time.run(summonDelay, () -> summon(owner, team, dx + x, dy + y, Angles.angle(-dx, -dy)));
                 }
             }
         }
