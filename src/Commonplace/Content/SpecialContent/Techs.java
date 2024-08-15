@@ -116,8 +116,12 @@ public class Techs {
                 });
                 tf.parent = t;
                 t.children.add(tf);
+                tf = node(forceProjectorLarge, () -> {
+                });
+                tf.parent = t;
+                t.children.add(tf);
             } else if (t.content == salvo) {
-                tf = node(residual, with(Items.copper, 1000, Items.graphite, 800, Items.titanium, 250, Items.silicon, 250), () -> {
+                tf = node(scattering, with(Items.copper, 1000, Items.graphite, 800, Items.titanium, 250, Items.silicon, 250), () -> {
                 });
                 tf.parent = t;
                 t.children.add(tf);
@@ -134,6 +138,16 @@ public class Techs {
             } else if (t.content == titaniumWall) {
                 tf = node(weakPowerWall, () -> node(weakPowerWallLarge, () -> node(superPowerWall, () -> node(superPowerWallLarge, () -> {
                 }))));
+                tf.parent = t;
+                t.children.add(tf);
+            } else if (t.content == phaseWeaver) {
+                tf = node(phaseAmplifier, () -> {
+                });
+                tf.parent = t;
+                t.children.add(tf);
+            } else if (t.content == mendProjector) {
+                tf = node(mendProjectorLarge, () -> {
+                });
                 tf.parent = t;
                 t.children.add(tf);
             }

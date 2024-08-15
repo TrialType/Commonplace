@@ -21,10 +21,13 @@ import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.ForceProjector;
+import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
+import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.meta.BuildVisibility;
@@ -45,11 +48,13 @@ public class CBlocks {
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, wind, plain, hill, residual, life, steadyRain, wonton;
+    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton;
     //crafting
-    public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification;
+    public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
+            phaseAmplifier;
     //effect
-    public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge;
+    public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
+            forceProjectorLarge;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -174,6 +179,19 @@ public class CBlocks {
             requirements(Category.crafting, ItemStack.with(Items.metaglass, 1500, Items.copper, 1450,
                     Items.lead, 1400, Items.graphite, 1350, Items.titanium, 1400, Items.thorium, 1450, Items.surgeAlloy, 500));
         }};
+        phaseAmplifier = new GenericCrafter("phase-amplifier") {{
+            requirements(Category.crafting, ItemStack.with(phaseFabric, 25, thorium, 80, copper, 100));
+            outputItem = new ItemStack(phaseFabric, 5);
+            consumeItems(ItemStack.with(phaseFabric, 1, graphite, 5));
+            consumePower(15);
+            envEnabled |= Env.space;
+            craftEffect = Fx.smeltsmoke;
+            researchCostMultiplier = 10;
+            hasPower = true;
+            craftTime = 60;
+            size = 3;
+            itemCapacity = 20;
+        }};
 //======================================================================================================================
         outPowerFactory = new GradeFactory("out_power_factory") {{
             requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
@@ -203,6 +221,46 @@ public class CBlocks {
             requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
         }};
 //======================================================================================================================
+        butte = new PowerTurret("butte") {{
+            requirements(Category.turret, ItemStack.with(phaseFabric, 75, thorium, 350, plastanium, 200, surgeAlloy, 100));
+            consume(new ConsumePower(25, 0, false));
+
+            health = 3000;
+            size = 4;
+
+            recoil = 6f;
+            range = 500;
+            reload = 45;
+            consumesPower = true;
+            hasPower = true;
+            consumeAmmoOnce = false;
+            canOverdrive = false;
+
+            shoot.shots = 35;
+            shoot.shotDelay = 4;
+            inaccuracy = 30;
+            shootType = new BasicBulletType() {{
+                hitSize = 25;
+                width = 12;
+                height = 12;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = trailColor = hitColor = Pal.heal;
+                trailLength = 15;
+                trailWidth = 3;
+
+                damage = 15;
+                lifetime = 50;
+                speed = 10;
+                knockback = 1;
+                buildingDamageMultiplier = 0.1f;
+                status = FStatusEffects.loose;
+                statusDuration = 240;
+
+                splashDamage = 10;
+                splashDamageRadius = 8;
+                hitEffect = despawnEffect = Fx.hitBulletColor;
+            }};
+        }};
         hill = new PowerTurret("hill") {{
             consume(new ConsumePower(15, 0, false));
 
@@ -477,7 +535,7 @@ public class CBlocks {
                     }}
             );
         }};
-        residual = new ItemTurret("residual") {{
+        scattering = new ItemTurret("scattering") {{
             requirements(Category.turret, with(Items.copper, 100, Items.graphite, 80, Items.titanium, 25, Items.silicon, 25));
             ammo(
                     Items.titanium, new BasicBulletType(4, 22.5f) {{
@@ -1342,6 +1400,33 @@ public class CBlocks {
 
             consumePower(1.2f);
             requirements(Category.effect, ItemStack.with(silicon, 30, titanium, 60, graphite, 40));
+        }};
+        mendProjectorLarge = new MendProjector("mend-projector-large") {{
+            requirements(Category.effect, with(Items.titanium, 100, Items.silicon, 150, phaseFabric, 50));
+            consumePower(7.5f);
+            size = 3;
+            reload = 300f;
+            range = 180;
+            healPercent = 30;
+            phaseBoost = 20;
+            phaseRangeBoost = 125f;
+            scaledHealth = 320;
+            researchCostMultiplier = 10;
+            consumeItem(Items.phaseFabric).boost();
+        }};
+        forceProjectorLarge = new ForceProjector("force-projector-large") {{
+            requirements(Category.effect, with(Items.titanium, 200, thorium, 150, Items.silicon, 125, phaseFabric, 25));
+            size = 4;
+            phaseRadiusBoost = 150;
+            radius = 251.7f;
+            shieldHealth = 4000f;
+            cooldownNormal = 3f;
+            cooldownLiquid = 1.5f;
+            cooldownBrokenBase = 0.25f;
+            researchCostMultiplier = 10;
+
+            itemConsumer = consumeItem(Items.phaseFabric).boost();
+            consumePower(6f);
         }};
     }
 }
