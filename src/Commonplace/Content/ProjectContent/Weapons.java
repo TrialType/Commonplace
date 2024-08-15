@@ -7,7 +7,7 @@ import mindustry.type.Weapon;
 import static Commonplace.Tools.Classes.ProjectUtils.init;
 
 public class Weapons {
-    public static Weapon test = new Weapon() {{
+    public static Weapon smaleWeapon = new Weapon() {{
         top = false;
         reload = 20f;
         x = 3f;
@@ -25,6 +25,6 @@ public class Weapons {
     }};
 
     public static void load() {
-        init(test);
+        init(smaleWeapon);
     }
 }

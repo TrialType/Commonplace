@@ -46,7 +46,6 @@ public class Events {
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
             Bullets.load();
             Weapons.load();
-            Abilities.load();
         });
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
             for (UnitType u : Vars.content.units()) {

@@ -16,6 +16,7 @@ import mindustry.Vars;
 import mindustry.core.GameState;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
+import mindustry.game.Gamemode;
 import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.gen.Unit;
@@ -99,7 +100,7 @@ public class ProjectDialog extends BaseDialog {
             table.table(this::createHeavy).width(1000).row();
             table.table(t -> {
                 for (UnitProject p : UnitProject.all) {
-                    if (p.unlocked()) {
+                    if (p.unlocked() || state.isEditor() || state.rules.infiniteResources) {
                         if (!(p instanceof BoostProject)) {
                             t.table(l -> createLine(l, p, i -> map.put(p.sid, i),
                                     map.containsKey(p.sid) ? map.get(p.sid) : 0)).width(900).row();
@@ -109,7 +110,7 @@ public class ProjectDialog extends BaseDialog {
             }).width(1000).row();
             table.table(t -> {
                 for (UnitProject p : UnitProject.all) {
-                    if (p.unlocked()) {
+                    if (p.unlocked() || state.isEditor() || state.rules.infiniteResources) {
                         if (p instanceof BoostProject b) {
                             t.table(l -> createLine(l, p, i -> boostMap.put(b.sid, i),
                                     boostMap.containsKey(b.sid) ? boostMap.get(b.sid) : 0)).width(900).row();

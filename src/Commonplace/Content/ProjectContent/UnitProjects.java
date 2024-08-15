@@ -8,10 +8,15 @@ import mindustry.entities.bullet.BulletType;
 
 public class UnitProjects {
     public static UnitProject handTurret;
+    public static UnitProject shield;
     public static UnitProject fragsAdd, damageAdder, fragDamageAdder;
 
     public static void load() {
-        handTurret = new UnitProject(1, 2, "hand-turret", u -> UnitProject.weaponApply(Weapons.test, u));
+        shield = new UnitProject(2, 2, "shield", u -> UnitProject.abilityApply(Abilities.shield, u));
+//====================================================================================================================
+//====================================================================================================================
+//====================================================================================================================
+        handTurret = new UnitProject(1, 2, "hand-turret", u -> UnitProject.weaponApply(Weapons.smaleWeapon, u));
 //====================================================================================================================
 //====================================================================================================================
 //====================================================================================================================

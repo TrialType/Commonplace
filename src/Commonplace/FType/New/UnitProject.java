@@ -5,6 +5,7 @@ import arc.func.Cons;
 import arc.struct.Seq;
 import mindustry.ctype.ContentType;
 import mindustry.ctype.UnlockableContent;
+import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.Weapon;
@@ -69,6 +70,15 @@ public class UnitProject extends UnlockableContent {
             mount[mount.length - 1] = new WeaponMount(w);
         }
         u.mounts = mount;
+    }
+
+    public static void abilityApply(Ability ability, Unit u) {
+        Ability[] abilities = new Ability[u.abilities.length + 1];
+        System.arraycopy(u.abilities, 0, abilities, 0, u.abilities.length);
+        abilities[abilities.length - 1] = ability.copy();
+        abilities[abilities.length - 1].init(u.type);
+        BoostProject.abilityBoos.get(ability);
+        u.abilities = abilities;
     }
 
     @Override
