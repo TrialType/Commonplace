@@ -863,7 +863,7 @@ public class UnitOverride {
 
         UnitTypes.pulsar.health = 560;
         UnitTypes.pulsar.speed = 1.1f;
-        UnitTypes.pulsar.range = 500;
+        UnitTypes.pulsar.range = 220;
         weapon = UnitTypes.pulsar.weapons.get(0);
         weapon.shoot.shots = 3;
         weapon.shoot.shotDelay = 6;
@@ -872,10 +872,10 @@ public class UnitOverride {
         weapon.bullet = new BasicBulletType() {{
             absorbable = false;
             collidesTeam = true;
-            rangeOverride = 500;
-            speed = 9;
+            rangeOverride = 200;
+            speed = 5;
             damage = 1;
-            lifetime = 50;
+            lifetime = 40;
             healPercent = 2f;
             width = height = 25;
             homingDelay = 0;
