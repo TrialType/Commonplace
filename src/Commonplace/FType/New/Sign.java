@@ -12,4 +12,9 @@ public class Sign extends UnlockableContent {
     public ContentType getContentType() {
         return ContentType.typeid_UNUSED;
     }
+
+    @Override
+    public boolean isHidden() {
+        return true;
+    }
 }

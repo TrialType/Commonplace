@@ -30,10 +30,10 @@ public class Main extends Mod {
         CBlocks.load();
         FPlanets.load();
         FSectorPresets.load();
-        Techs.load();
         SectorPresetOverride.load();
         TechOverride.load();
         UnitOverride.load();
         BlockOverride.load();
+        Techs.load();
     }
 }

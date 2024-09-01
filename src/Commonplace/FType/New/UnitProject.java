@@ -88,6 +88,11 @@ public class UnitProject extends UnlockableContent {
     }
 
     @Override
+    public boolean isHidden() {
+        return true;
+    }
+
+    @Override
     public ContentType getContentType() {
         return ContentType.typeid_UNUSED;
     }

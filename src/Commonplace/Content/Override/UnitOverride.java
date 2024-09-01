@@ -181,6 +181,7 @@ public class UnitOverride {
 
         UnitTypes.mace.health = 1000;
         UnitTypes.mace.armor = 8;
+        UnitTypes.mace.weapons.get(0).shootCone = 200;
         UnitTypes.mace.weapons.get(0).bullet.incendChance = 1;
         UnitTypes.mace.weapons.get(0).bullet.incendAmount = 2;
         weapon = new Weapon() {{

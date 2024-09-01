@@ -666,7 +666,7 @@ public class FUnits {
         shuttle = new BoostUnitType("shuttle") {{
             constructor = BoostUnitEntity::create;
             aiController = BoostFlyingAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
 
             speed1 = 3;
             health2 = 57750;
@@ -1107,7 +1107,7 @@ public class FUnits {
         crazy = new BoostUnitType("crazy") {{
             constructor = BoostUnitEntity::create;
             aiController = BoostFlyingAI::new;
-            defaultCommand = Commands.STB;
+            defaultCommand = Commands.boostFlying;
             commands = new UnitCommand[]{UnitCommand.moveCommand, defaultCommand};
             immunities.add(StatusEffects.slow);
             immunities.add(StatusEffects.unmoving);
@@ -1138,7 +1138,7 @@ public class FUnits {
         barb = new BoostUnitType("barb") {{
             constructor = BoostUnitEntity::create;
             aiController = BoostFlyingAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
             flying = true;
             targetAir = targetGround = true;
 
@@ -1201,7 +1201,7 @@ public class FUnits {
         buying = new BoostUnitType("buying") {{
             constructor = TileSpawnerUnit::create;
             aiController = BoostFlyingAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
 
             boostReload = 1800;
             hitReload = 600;
@@ -1253,7 +1253,7 @@ public class FUnits {
         hammer = new BoostUnitType("hammer") {{
             constructor = BoostUnitEntity::create;
             aiController = BoostFlyingAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
 
             health = 800;
             speed = 1.2F;
@@ -1295,7 +1295,7 @@ public class FUnits {
         transition = new BoostUnitType("transition") {{
             constructor = BoostUnitEntity::create;
             aiController = BoostFlyingAI::new;
-            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.STB};
+            commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
 
             health = 66000;
             speed = 2F;
