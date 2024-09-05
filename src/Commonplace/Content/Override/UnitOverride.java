@@ -7,6 +7,7 @@ import Commonplace.Entities.FAbility.LevelSign;
 import Commonplace.Entities.FAbility.SprintingAbility2;
 import Commonplace.Entities.FAbility.TimeLargeDamageAbility;
 import Commonplace.Entities.FBulletType.*;
+import Commonplace.Entities.FUnit.F.Garrison;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.Entities.FUnit.F.TimeUpGradeUnit;
 import Commonplace.Entities.FUnit.Override.*;

@@ -17,6 +17,7 @@ import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.ai.UnitCommand;
+import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
@@ -66,6 +67,9 @@ public class FUnits {
 
     //special
     public static UnitType bulletInterception, rejuvenate, vibrate, crane;
+
+    //attack
+    public static UnitType garrison, herald, exterminate, execute, hello;
 
     //Test
     public static UnitType e;
@@ -1493,6 +1497,90 @@ public class FUnits {
             drag = 1;
             range = maxRange = 1000;
             targetAir = targetGround = true;
+        }};
+
+        //attack
+        garrison = new UnitType("garrison") {{
+            constructor = Garrison::new;
+            controller = u -> new GarrisonAI();
+
+            hitSize = 20;
+            health = 2500000;
+            armor = 100;
+            speed = 0.35f;
+            legCount = 8;
+            stepShake = 0;
+            legMaxLength = 45;
+            legLength = 45;
+            legGroupSize = 2;
+            legContinuousMove = false;
+
+            weapons.add(new Weapon() {{
+                reload = 600;
+                mirror = false;
+                x = y = 0;
+                shootStatus = FStatusEffects.deploy;
+                shootStatusDuration = 5;
+                bullet = new BasicBulletType() {{
+                    damage = 10000;
+                    speed = 10;
+                    lifetime = 90;
+                    pierce = true;
+                    pierceBuilding = true;
+                    pierceCap = 8;
+
+                    hitSize = 12;
+                    width = height = 12;
+                    trailWidth = 2;
+                    trailLength = 10;
+
+                    splashDamage = 2000;
+                    splashDamageRadius = 52;
+
+                    hitColor = Pal.bulletYellowBack;
+                    hitEffect = despawnEffect = Fx.scatheExplosion;
+                }};
+            }});
+        }};
+
+        exterminate = new UnitType("exterminate") {{
+            constructor = ElevationMoveUnit::create;
+
+            hovering = true;
+            health = 100000;
+            armor = 250;
+            speed = 3;
+            
+        }};
+
+        herald = new UnitType("herald") {{
+            constructor = MechUnit::create;
+            aiController = SuicideAI::new;
+
+            health = 40000;
+            armor = 300;
+            speed = 10;
+
+            abilities.add(new SpawnDeathAbility(exterminate, 1, 0));
+
+            weapons.addAll(new Weapon() {{
+                x = y = 0;
+                shoot.firstShotDelay = 1800;
+                reload = 3600;
+                shootStatus = StatusEffects.unmoving;
+                shootStatusDuration = 3600;
+                bullet = new ExplosionBulletType(3000, 80) {{
+                    shootCone = 360;
+                }};
+            }}, new Weapon() {{
+                x = y = 0;
+                reload = 12;
+                bullet = new ExplosionBulletType(1400, 40) {{
+                    killShooter = false;
+                    shootCone = 360;
+                    buildingDamageMultiplier = 0.5f;
+                }};
+            }});
         }};
 
         boss.add(velocity);

@@ -1,11 +1,8 @@
-package Commonplace.Entities.FUnit.Override;
+package Commonplace.Entities.FUnit.F;
 
-import Commonplace.Tools.Interfaces.UnitUpGrade;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import arc.struct.Bits;
-import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.io.Reads;
@@ -13,12 +10,10 @@ import arc.util.io.Writes;
 import arc.util.pooling.Pools;
 import mindustry.Vars;
 import mindustry.content.Fx;
-import mindustry.ctype.ContentType;
 import mindustry.entities.Damage;
 import mindustry.entities.Effect;
 import mindustry.entities.Leg;
 import mindustry.entities.abilities.Ability;
-import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.units.StatusEntry;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Building;
@@ -31,68 +26,53 @@ import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
 
-import java.util.Random;
+public class Garrison extends LegsUnit {
+    public int hits = 0;
+    public float reloadAdder = 1;
+    public float speedAdder = 1;
+    public boolean stopFinally = false;
 
-import static Commonplace.Tools.Classes.UnitUpGrade.getPower;
-
-public class FLegsUnit extends LegsUnit implements UnitUpGrade {
-    protected int damageLevel = 0;
-    protected int speedLevel = 0;
-    protected int healthLevel = 0;
-    protected int reloadLevel = 0;
-    protected int againLevel = 0;
-    protected int shieldLevel = 0;
-    protected ShieldRegenFieldAbility sfa = null;
-
-    public int level = 0;
-    public float exp = 0;
-    protected FLegsUnit() {
-        this.applied = new Bits(Vars.content.getBy(ContentType.status).size);
-        this.curMoveOffset = new Vec2();
-        this.legs = new Leg[0];
-        this.resupplyTime = Mathf.random(10.0F);
-        this.statuses = new Seq<>();
-    }
-
-    public static FLegsUnit create() {
-        return new FLegsUnit();
-    }
-    @Override
-    public int classId(){
-        return 103;
+    public static Garrison create() {
+        return new Garrison();
     }
 
     @Override
-    public void read(Reads read) {
-        super.read(read);
-        level = read.i();
-        exp = read.f();
-        damageLevel = read.i();
-        speedLevel = read.i();
-        reloadLevel = read.i();
-        healthLevel = read.i();
-        againLevel = read.i();
-        shieldLevel = read.i();
+    public int classId() {
+        return 102;
     }
 
     @Override
-    public void write(Writes write) {
-        super.write(write);
-        write.i(level);
-        write.f(exp);
-        write.i(damageLevel);
-        write.i(speedLevel);
-        write.i(reloadLevel);
-        write.i(healthLevel);
-        write.i(againLevel);
-        write.i(shieldLevel);
-    }
+    public void update() {
+        boolean stop = !moving() || isShooting();
+        if (stop) {
+            vel.setZero();
+            boolean fi = true;
+            if (!stopFinally) {
+                for (Leg l : legs) {
+                    if (l.base.dst(this) > type.legLength * type.legLengthScl * 0.65f) {
+                        fi = false;
+                        break;
+                    }
+                }
+            }
+            stopFinally = fi;
+        } else {
+            stopFinally = false;
+        }
 
-    @Override
-    public void update(){
-        if (shieldLevel > 0 && sfa == null) {
-            sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
-                    maxHealth * shieldLevel / 10, 120, 60);
+        if (isShooting()) {
+            reloadAdder += Time.delta / 45;
+        } else {
+            reloadAdder = Math.max(1, reloadAdder - Time.delta / 45);
+        }
+
+        if (moving()) {
+            speedAdder = Math.min(speedAdder + Time.delta / 45, 6);
+            armor = type.armor;
+        } else if (stopFinally) {
+            speedAdder = 1;
+            armor = Math.min(armor + Time.delta / 45, 10000);
+            heal(1);
         }
 
         float offset;
@@ -117,13 +97,13 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
         if (this.type.bounded) {
             offset = 0.0F;
             range = 0.0F;
-            cx = (float)Vars.world.unitHeight();
-            cy = (float)Vars.world.unitWidth();
+            cx = (float) Vars.world.unitHeight();
+            cy = (float) Vars.world.unitWidth();
             if (Vars.state.rules.limitMapArea && !this.team.isAI()) {
-                offset = (float)(Vars.state.rules.limitY * 8);
-                range = (float)(Vars.state.rules.limitX * 8);
-                cx = (float)(Vars.state.rules.limitHeight * 8) + offset;
-                cy = (float)(Vars.state.rules.limitWidth * 8) + range;
+                offset = (float) (Vars.state.rules.limitY * 8);
+                range = (float) (Vars.state.rules.limitX * 8);
+                cx = (float) (Vars.state.rules.limitHeight * 8) + offset;
+                cy = (float) (Vars.state.rules.limitWidth * 8) + range;
             }
 
             if (!Vars.net.client() || this.isLocal()) {
@@ -179,7 +159,7 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
         this.updateDrowning();
         this.hitTime -= Time.delta / 9.0F;
         this.stack.amount = Mathf.clamp(this.stack.amount, 0, this.itemCapacity());
-        this.itemTime = Mathf.lerpDelta(this.itemTime, (float)Mathf.num(this.hasItem()), 0.05F);
+        this.itemTime = Mathf.lerpDelta(this.itemTime, (float) Mathf.num(this.hasItem()), 0.05F);
         if (Mathf.dst(this.deltaX(), this.deltaY()) > 0.001F) {
             this.baseRotation = Angles.moveToward(this.baseRotation, Mathf.angle(this.deltaX(), this.deltaY()), this.type.rotateSpeed);
         }
@@ -194,28 +174,48 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
         }
 
         range = this.type.legSpeed;
+        //group number
         int div = Math.max(this.legs.length / this.type.legGroupSize, 2);
-        this.moveSpace = offset / 1.6F / ((float)div / 2.0F) * this.type.legMoveSpace;
-        this.totalLength += this.type.legContinuousMove ? this.type.speed * this.speedMultiplier * Time.delta : Mathf.dst(this.deltaX(), this.deltaY());
-        cy = this.moveSpace * 0.85F * this.type.legForwardScl;
+        //number
+        this.moveSpace = offset / 1.6F / ((float) div / 2.0F) * this.type.legMoveSpace;
         boolean moving = this.moving();
+        float adder;
+        if (stop && !stopFinally) {
+            adder = range * Time.delta * 3;
+        } else if (type.legContinuousMove) {
+            adder = type.speed * this.speedMultiplier * Time.delta;
+        } else {
+            adder = Mathf.dst(this.deltaX(), this.deltaY());
+        }
+        this.totalLength += adder;
+        cy = this.moveSpace * 0.85F * this.type.legForwardScl;
+        //move length
         Vec2 moveOffset = !moving ? Tmp.v4.setZero() : Tmp.v4.trns(Angles.angle(this.deltaX(), this.deltaY()), cy);
         moveOffset = this.curMoveOffset.lerpDelta(moveOffset, 0.1F);
         this.lastDeepFloor = null;
         int deeps = 0;
 
-        for(int i = 0; i < this.legs.length; ++i) {
+        for (int i = 0; i < this.legs.length; ++i) {
             float dstRot = this.legAngle(i);
             Vec2 baseOffset = this.legOffset(Tmp.v5, i).add(this.x, this.y);
             Leg l = this.legs[i];
+            //limit length
             l.joint.sub(baseOffset).clampLength(this.type.legMinLength * offset / 2.0F, this.type.legMaxLength * offset / 2.0F).add(baseOffset);
             l.base.sub(baseOffset).clampLength(this.type.legMinLength * offset, this.type.legMaxLength * offset).add(baseOffset);
-            float stageF = (this.totalLength + (float)i * this.type.legPairOffset) / this.moveSpace;
-            int stage = (int)stageF;
+
+            //same leg only the path change this
+            float stageF = (this.totalLength + (float) i * this.type.legPairOffset) / this.moveSpace;
+            int stage = (int) stageF;
+
+            //group that should move
             int group = stage % div;
+
+            //only same group could move
             boolean move = i % div == group;
+
+            //left or right
             boolean side = i < this.legs.length / 2;
-            boolean backLeg = Math.abs((float)i + 0.5F - (float)this.legs.length / 2.0F) <= 0.501F;
+            boolean backLeg = Math.abs((float) i + 0.5F - (float) this.legs.length / 2.0F) <= 0.501F;
             if (backLeg && this.type.flipBackLegs) {
                 side = !side;
             }
@@ -225,6 +225,8 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
             }
 
             l.moving = move;
+
+            //height thought stage > 0 but only when it is moving it draw shadow
             l.stage = moving ? stageF % 1.0F : Mathf.lerpDelta(l.stage, 0.0F, 0.1F);
             floor = Vars.world.floorWorld(l.base.x, l.base.y);
             if (floor.isDeep()) {
@@ -232,7 +234,9 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
                 this.lastDeepFloor = floor;
             }
 
-            if (l.group != group) {
+            //these two not same mean move full length
+            if (l.group != group && (!stop || stopFinally)) {
+                //only the last move leg make effect
                 if (!move && (moving || !this.type.legContinuousMove) && i % div == l.group) {
                     if (!Vars.headless && !this.inFogTo(Vars.player.team())) {
                         if (floor.isLiquid) {
@@ -255,8 +259,11 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
                 l.group = group;
             }
 
-            Vec2 legDest = Tmp.v1.trns(dstRot, offset * this.type.legLengthScl).add(baseOffset).add(moveOffset);
+            //the most far leg point
+            Vec2 legDest = !stop ? Tmp.v1.trns(dstRot, offset * this.type.legLengthScl).add(baseOffset).add(moveOffset) :
+                    Tmp.v1.trns(dstRot, offset * this.type.legLengthScl * 0.5f).add(baseOffset).add(moveOffset);
             Vec2 jointDest = Tmp.v2;
+            //find the "arrow from unit" mover into jointDest for joint move
             InverseKinematics.solve(offset / 2.0F, offset / 2.0F, Tmp.v6.set(l.base).sub(baseOffset), side, jointDest);
             jointDest.add(baseOffset);
             Tmp.v6.set(baseOffset).lerp(l.base, 0.5F);
@@ -266,7 +273,9 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
                 l.joint.lerpDelta(jointDest, moveFract / 2.0F);
             }
 
+            //joint move only if not move
             l.joint.lerpDelta(jointDest, range / 4.0F);
+            //if leg too far pick up
             l.joint.sub(baseOffset).clampLength(this.type.legMinLength * offset / 2.0F, this.type.legMaxLength * offset / 2.0F).add(baseOffset);
             l.base.sub(baseOffset).clampLength(this.type.legMinLength * offset, this.type.legMaxLength * offset).add(baseOffset);
         }
@@ -291,11 +300,11 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
                 this.mineTimer = 0.0F;
             } else if (this.mining() && item != null) {
                 this.mineTimer += Time.delta * this.type.mineSpeed;
-                if (Mathf.chance(0.06 * (double)Time.delta)) {
+                if (Mathf.chance(0.06 * (double) Time.delta)) {
                     Fx.pulverizeSmall.at(this.mineTile.worldx() + Mathf.range(4.0F), this.mineTile.worldy() + Mathf.range(4.0F), 0.0F, item.color);
                 }
 
-                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float)item.hardness * 15.0F : 15.0F)) {
+                if (this.mineTimer >= 50.0F + (this.type.mineHardnessScaling ? (float) item.hardness * 15.0F : 15.0F)) {
                     this.mineTimer = 0.0F;
                     if (Vars.state.rules.sector != null && this.team() == Vars.state.rules.defaultTeam) {
                         Vars.state.rules.sector.info.handleProduction(item, 1);
@@ -339,13 +348,13 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
             index = 0;
 
             label416:
-            while(true) {
-                while(true) {
+            while (true) {
+                while (true) {
                     if (index >= this.statuses.size) {
                         break label416;
                     }
 
-                    StatusEntry entry = (StatusEntry)this.statuses.get(index++);
+                    StatusEntry entry = this.statuses.get(index++);
                     entry.time = Math.max(entry.time - Time.delta, 0.0F);
                     if (entry.effect != null && (!(entry.time <= 0.0F) || entry.effect.permanent)) {
                         this.applied.set(entry.effect.id);
@@ -365,28 +374,9 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
                 }
             }
         }
-        speedMultiplier *= (1 + speedLevel * 0.2f);
-        damageMultiplier *= (1 + damageLevel * 0.2f);
-        reloadMultiplier *= (1 + reloadLevel * 0.2f);
-        heal(maxHealth * healthLevel * 0.0001f);
-        if (sfa != null) {
-            sfa.update(this);
-        }
 
-        if (level > 60) {
-            int boost2 = level - 60;
-            float lBoost = (float) Math.pow(1.01f, boost2);
-            healthMultiplier *= lBoost;
-            if (speedMultiplier * lBoost >= 10) {
-                float hb = 1 + (lBoost * speedMultiplier / 10);
-                speedMultiplier = 10;
-                healthMultiplier *= hb;
-            } else {
-                speedMultiplier *= lBoost;
-            }
-            damageMultiplier *= lBoost;
-            reloadMultiplier *= lBoost;
-        }
+        reloadMultiplier *= reloadAdder;
+        speedMultiplier *= speedAdder;
 
         if (Vars.net.client() && !this.isLocal() || this.isRemote()) {
             this.interpolate();
@@ -412,7 +402,7 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
             this.team.data().updateCount(this.type, -1);
         }
 
-        if (Vars.state.rules.unitAmmo && this.ammo < (float)this.type.ammoCapacity - 1.0E-4F) {
+        if (Vars.state.rules.unitAmmo && this.ammo < (float) this.type.ammoCapacity - 1.0E-4F) {
             this.resupplyTime += Time.delta;
             if (this.resupplyTime > 10.0F) {
                 this.type.ammoType.resupply(this);
@@ -423,7 +413,7 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
         Ability[] var25 = this.abilities;
         index = var25.length;
 
-        for(div = 0; div < index; ++div) {
+        for (div = 0; div < index; ++div) {
             Ability a = var25[div];
             a.update(this);
         }
@@ -502,119 +492,35 @@ public class FLegsUnit extends LegsUnit implements UnitUpGrade {
         WeaponMount[] var31 = this.mounts;
         index = var31.length;
 
-        for(div = 0; div < index; ++div) {
+        for (div = 0; div < index; ++div) {
             WeaponMount mount = var31[div];
             mount.weapon.update(this, mount);
         }
     }
 
     @Override
-    public void kill() {
-        if ((new Random()).nextInt(10) + 1 <= againLevel) {
-            FLegsUnit fu = (FLegsUnit) type.create(team);
-            fu.x(x);
-            fu.y(y);
-            fu.rotation(rotation);
-            if (level >= 120) {
-                getPower(fu, 0, false, true);
-                fu.setLevel(level / 2);
-            } else {
-                fu.setDamageLevel(damageLevel / 2);
-                fu.setHealthLevel(healthLevel / 2);
-                fu.setSpeedLevel(speedLevel / 2);
-                fu.setShieldLevel(shieldLevel / 2);
-                fu.setReloadLevel(reloadLevel / 2);
-                fu.setLevel(damageLevel / 2 + healthLevel / 2 + speedLevel / 2 + shieldLevel / 2 + reloadLevel / 2);
-            }
-            if(shieldLevel >= 2){
-                fu.sfa = new ShieldRegenFieldAbility(maxHealth / 200 * shieldLevel,
-                        maxHealth * shieldLevel / 20, 120, 60);
-            }
-            fu.health(maxHealth / 10 * againLevel);
-            fu.add();
+    public void rawDamage(float amount) {
+        hits++;
+        if (hits > 20) {
+            hits %= 20;
+            heal(1000);
         }
-        super.kill();
+        super.rawDamage(amount);
     }
+
     @Override
-    public int getLevel() {
-        return level;
+    public void read(Reads read) {
+        super.read(read);
+        reloadAdder = read.f();
+        speedAdder = read.f();
+        hits = read.i();
     }
+
     @Override
-    public void setLevel(int l){
-        level = l;
-    }
-    @Override
-    public float getExp() {
-        return exp;
-    }
-    @Override
-    public void addExp(float exp) {
-        this.exp = exp + this.exp;
-    }
-    @Override
-    public int number() {
-        int number = 0;
-        while (exp > (4 + level) * maxHealth / 10) {
-            exp = exp - (4 + level) * maxHealth / 10;
-            level++;
-            number++;
-        }
-        return number;
-    }
-
-    public int getDamageLevel() {
-        return damageLevel;
-    }
-
-    public void setDamageLevel(int damageLevel) {
-        this.damageLevel = damageLevel;
-    }
-
-    public int getSpeedLevel() {
-        return speedLevel;
-    }
-
-    public void setSpeedLevel(int speedLevel) {
-        this.speedLevel = speedLevel;
-    }
-
-    public int getHealthLevel() {
-        return healthLevel;
-    }
-
-    public void setHealthLevel(int healthLevel) {
-        this.healthLevel = healthLevel;
-    }
-
-    public int getReloadLevel() {
-        return reloadLevel;
-    }
-
-    public void setReloadLevel(int reloadLevel) {
-        this.reloadLevel = reloadLevel;
-    }
-
-    public int getAgainLevel() {
-        return againLevel;
-    }
-
-    public void setAgainLevel(int againLevel) {
-        this.againLevel = againLevel;
-    }
-
-    public int getShieldLevel() {
-        return shieldLevel;
-    }
-
-    public void setShieldLevel(int shieldLevel) {
-        this.shieldLevel = shieldLevel;
-    }
-    @Override
-    public void sfa(int level) {
-        sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
-                maxHealth * shieldLevel / 10, 120, 60);
-    }
-    public int baseLevel() {
-        return damageLevel + shieldLevel + speedLevel + healthLevel + reloadLevel + againLevel;
+    public void write(Writes write) {
+        super.write(write);
+        write.f(reloadAdder);
+        write.f(speedAdder);
+        write.i(hits);
     }
 }

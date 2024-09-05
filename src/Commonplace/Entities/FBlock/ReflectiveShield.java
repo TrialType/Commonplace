@@ -35,6 +35,7 @@ public class ReflectiveShield extends Block {
     public float peaceRange = 50;
     public float numUse = 0.25f;
     public float damageUse = 0.1f;
+    public float maxDamage = 30;
 
     public ReflectiveShield(String name) {
         super(name);
@@ -121,9 +122,10 @@ public class ReflectiveShield extends Block {
                 angles.each((b, f) -> {
                     if (inRange(b)) {
                         if (!within(b, peaceRange)) b.keepAlive = true;
-                        vec.trns(f + 180, b.type.speed * speedForce + force * efficiency);
+                        float mu = b.damage > maxDamage ? 0.2f : 1f;
+                        vec.trns(f + 180, mu * (b.type.speed * speedForce * efficiency + force * efficiency));
                         b.vel.add(vec);
-                        powerUsing += b.damage * damageUse;
+                        powerUsing += b.damage * damageUse / mu;
                     } else {
                         if (Angles.angleDist(b.vel.angle(), angles.get(b)) > 120) {
                             b.time = 0;
