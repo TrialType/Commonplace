@@ -379,14 +379,6 @@ public class SprintingAbility extends Ability {
         }
     }
 
-    protected void damage(Unit unit, Healthc u, float damage) {
-        boolean dead = u.dead();
-        u.damage(damage);
-        if (!dead && u.dead()) {
-            arc.Events.fire(new Events.UnitDestroyOtherEvent(unit, u));
-        }
-    }
-
     protected void applyDamage(float x, float y, float damage, Unit killer) {
         Units.nearbyEnemies(killer.team, x, y, maxLength, u -> {
             float angel2 = Angles.angle(x, y, u.x, u.y);
@@ -395,7 +387,7 @@ public class SprintingAbility extends Ability {
 
             if (angle <= 90) {
                 if (cos(toRadians(angle)) * len <= maxLength && sin(toRadians(angle)) * len <= killer.hitSize * 1.4f) {
-                    damage(killer, u, damage);
+                    u.damage(damage);
                 }
             }
         });
@@ -407,7 +399,7 @@ public class SprintingAbility extends Ability {
 
                 if (angle <= 90) {
                     if (cos(toRadians(angle)) * len <= maxLength && sin(toRadians(angle)) * len <= killer.hitSize * 1.4f) {
-                        damage(killer, b, damage);
+                        b.damage(damage);
                     }
                 }
             }

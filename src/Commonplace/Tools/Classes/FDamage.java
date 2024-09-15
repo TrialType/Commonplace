@@ -490,8 +490,7 @@ public abstract class FDamage extends Damage {
         });
     }
 
-    public static void percentDamage(Unit killer, Healthc u, float percent, float damage, boolean firstPercent, float changeHel) {
-        boolean dead = u.dead();
+    public static void percentDamage(Healthc u, float percent, float damage, boolean firstPercent, float changeHel) {
         if (firstPercent && u.health() > changeHel || (!firstPercent && u.health() <= changeHel)) {
             if (u instanceof Shieldc s) {
                 float shield = s.shield();
@@ -503,9 +502,6 @@ public abstract class FDamage extends Damage {
             }
         } else {
             u.damage(damage);
-        }
-        if (!dead && u.dead() && killer != null) {
-            arc.Events.fire(new Events.UnitDestroyOtherEvent(killer, u));
         }
     }
 }

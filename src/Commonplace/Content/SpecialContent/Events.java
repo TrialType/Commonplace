@@ -6,7 +6,6 @@ import Commonplace.Entities.FUnit.Override.*;
 import Commonplace.Tools.Classes.Listener;
 import Commonplace.Tools.Classes.UnitPeculiarity;
 import Commonplace.Tools.Interfaces.BuildUpGrade;
-import Commonplace.Tools.Interfaces.PeculiarityC;
 import Commonplace.FType.FDialog.ProjectDialog;
 import Commonplace.FType.FDialog.Old.MoreResearchDialog;
 import arc.Core;
@@ -57,6 +56,7 @@ public class Events {
             dialog.show();
         }).width(200).height(54).bottom())));
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, ProjectDialog::create));
+
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
             Bullets.load();
             Weapons.load();
@@ -69,9 +69,32 @@ public class Events {
             }
         });
 
-        arc.Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (e.unit instanceof PeculiarityC) {
-                UnitPeculiarity.apply(e.unit, 5, 0.6f, 0.3f);
+        arc.Events.on(EventType.UnitCreateEvent.class, e -> UnitPeculiarity.apply(e.unit, 5, 0.5f, 0.2f));
+        arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
+            int wave = Vars.state.wave;
+            int extra = e.unit.isBoss() ? wave / 20 : 0;
+            if (wave < 8) {
+                UnitPeculiarity.apply(e.unit, 0, r.nextInt(1), r.nextInt(3));
+            } else if (wave < 18) {
+                UnitPeculiarity.apply(e.unit, 0, r.nextInt(2), r.nextInt(3));
+            } else if (wave < 30) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(1) + extra, r.nextInt(3), r.nextInt(3));
+            } else if (wave < 42) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, r.nextInt(5), r.nextInt(3));
+            } else if (wave < 55) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(4) + extra, r.nextInt(5), r.nextInt(2));
+            } else if (wave < 70) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(5) + extra, r.nextInt(6), r.nextInt(2));
+            } else if (wave <= 85) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(7) + extra, r.nextInt(7), r.nextInt(2));
+            } else if (wave <= 100) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(10) + extra, r.nextInt(8), r.nextInt(1));
+            } else if (wave <= 115) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(12) + extra, r.nextInt(8), r.nextInt(1));
+            } else if (wave <= 135) {
+                UnitPeculiarity.apply(e.unit, r.nextInt(15) + extra, r.nextInt(10), r.nextInt(1));
+            } else {
+                UnitPeculiarity.apply(e.unit, r.nextInt(15 + Math.min(20, (wave - 135) / 3)) + extra, r.nextInt(15), 0);
             }
         });
 
@@ -98,16 +121,6 @@ public class Events {
         } else {
             t.setColor(Color.black);
             t.image(Icon.lock).center();
-        }
-    }
-
-    public static class UnitDestroyOtherEvent {
-        public Unit killer;
-        public Healthc other;
-
-        public UnitDestroyOtherEvent(Unit killer, Healthc other) {
-            this.killer = killer;
-            this.other = other;
         }
     }
 

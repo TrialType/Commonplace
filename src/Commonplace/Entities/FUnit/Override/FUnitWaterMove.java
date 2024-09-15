@@ -9,7 +9,7 @@ import mindustry.gen.UnitWaterMove;
 import mindustry.io.TypeIO;
 
 public class FUnitWaterMove extends UnitWaterMove implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FUnitWaterMove create() {

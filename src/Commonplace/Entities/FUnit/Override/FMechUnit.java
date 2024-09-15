@@ -9,7 +9,7 @@ import mindustry.gen.MechUnit;
 import mindustry.io.TypeIO;
 
 public class FMechUnit extends MechUnit implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FMechUnit create() {

@@ -9,7 +9,7 @@ import mindustry.gen.LegsUnit;
 import mindustry.io.TypeIO;
 
 public class FLegsUnit extends LegsUnit implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FLegsUnit create() {

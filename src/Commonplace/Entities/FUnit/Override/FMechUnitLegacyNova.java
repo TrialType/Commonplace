@@ -9,7 +9,7 @@ import mindustry.gen.MechUnitLegacyNova;
 import mindustry.io.TypeIO;
 
 public class FMechUnitLegacyNova extends MechUnitLegacyNova implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FMechUnitLegacyNova create() {

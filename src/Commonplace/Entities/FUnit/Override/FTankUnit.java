@@ -9,7 +9,7 @@ import mindustry.gen.TankUnit;
 import mindustry.io.TypeIO;
 
 public class FTankUnit extends TankUnit implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FTankUnit create() {

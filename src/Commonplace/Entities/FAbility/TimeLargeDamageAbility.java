@@ -41,21 +41,13 @@ public class TimeLargeDamageAbility extends Ability {
         Units.nearbyEnemies(team, x, y, radius, u -> {
             float timer = unitTimes.computeIfAbsent(u, uu -> 0F);
             float damage = (float) Math.pow(baseDamage, timer / 120) * baseDamage / 4;
-            boolean dead = u.dead;
             u.damage(damage);
-            if (!dead && u.dead) {
-                arc.Events.fire(new Events.UnitDestroyOtherEvent(unit, u));
-            }
         });
         Units.nearbyBuildings(x, y, radius, b -> {
             if (b.team != team) {
                 float timer = buildingTimes.computeIfAbsent(b, uu -> 0F);
                 float damage = (float) Math.pow(baseDamage, timer / 120) * baseDamage / 4;
-                boolean dead = b.dead;
                 b.damage(damage * buildingExpand);
-                if (!dead && b.dead) {
-                    arc.Events.fire(new Events.UnitDestroyOtherEvent(unit, b));
-                }
             }
         });
     }

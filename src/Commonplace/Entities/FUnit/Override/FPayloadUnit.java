@@ -9,7 +9,7 @@ import mindustry.gen.*;
 import mindustry.io.TypeIO;
 
 public class FPayloadUnit extends PayloadUnit implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FPayloadUnit create() {

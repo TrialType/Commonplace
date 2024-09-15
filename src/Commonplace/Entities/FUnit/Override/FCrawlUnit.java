@@ -9,7 +9,7 @@ import mindustry.gen.CrawlUnit;
 import mindustry.io.TypeIO;
 
 public class FCrawlUnit extends CrawlUnit implements PeculiarityC {
-    protected boolean uploaded = false;
+    protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
     public static FCrawlUnit create() {

@@ -195,6 +195,9 @@ public class ProjectDialog extends BaseDialog {
     }
 
     public int maxHeavy() {
+        if(state.rules.infiniteResources){
+            return 1 + (int) Math.pow(2, Sign.allSize.length);
+        }
         for (int i = Sign.allSize.length - 1; i >= 0; i--) {
             if (Sign.allSize[i].unlocked()) {
                 return 1 + (int) Math.pow(2, i + 1);

@@ -140,7 +140,7 @@ public class BoostUnitEntity extends FUnitEntity {
                         float angle = Angles.angleDist(rotation, angleTo(u));
                         if (angle <= 90) {
                             if (Mathf.sinDeg(angle) * dst(u) <= (hitSize + u.hitSize) * 0.5f) {
-                                percentDamage(this, u, percent, damage, firstPercent, changeHel);
+                                percentDamage(u, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -154,7 +154,7 @@ public class BoostUnitEntity extends FUnitEntity {
                             b.tile.getLinkedTilesAs(b.block, tiles);
                             if (tiles.contains(tile -> (angle[0] = Angles.angleDist(rotation, angleTo(b))) <= 90 &&
                                     Mathf.sinDeg(angle[0]) * dst(tile) <= hitSize / 2)) {
-                                percentDamage(this, b, percent, damage, firstPercent, changeHel);
+                                percentDamage(b, percent, damage, firstPercent, changeHel);
                             }
                         }
                     }
@@ -170,7 +170,7 @@ public class BoostUnitEntity extends FUnitEntity {
                 float timer = unitMap.computeIfAbsent(u, f -> t.hitReload);
                 if (timer >= t.hitReload) {
                     unitMap.put(u, 0F);
-                    percentDamage(this, u, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                    percentDamage(u, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
                 }
             });
             Units.nearbyBuildings(x, y, hitSize, b -> {
@@ -178,7 +178,7 @@ public class BoostUnitEntity extends FUnitEntity {
                     float timer = buildingMap.computeIfAbsent(b, f -> t.hitReload);
                     if (timer >= t.hitReload) {
                         buildingMap.put(b, 0F);
-                        percentDamage(this, b, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
+                        percentDamage(b, t.hitPercent, t.hitDamage, t.hitFirstPercent, t.hitChangeHel);
                     }
                 }
             });
