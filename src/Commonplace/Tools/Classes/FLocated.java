@@ -16,16 +16,13 @@ import java.util.Map;
 
 import static mindustry.Vars.*;
 
-public class FLocated {
+public abstract class FLocated {
     public static final Map<Tile, TileMiner> tm = new HashMap<>();
     public static IntSeq[][][] ores;
     public static ObjectIntMap<Item> allOres;
     public static final int quadrantSize = 20;
     public static int quadWidth, quadHeight;
     private static int index = -1;
-
-    private FLocated() {
-    }
 
     public static boolean couldMine(TileMiner unit, Tile tile) {
         update();

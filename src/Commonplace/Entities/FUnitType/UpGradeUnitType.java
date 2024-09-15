@@ -1,6 +1,6 @@
 package Commonplace.Entities.FUnitType;
 
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
@@ -18,7 +18,7 @@ public class UpGradeUnitType extends UnitType {
     @Override
     public void display(Unit unit, Table table) {
         super.display(unit, table);
-        if (unit instanceof UnitUpGrade uug) {
+        if (unit instanceof PeculiarityC uug) {
             table.row();
             table.table(dis -> {
                 dis.defaults().growX().height(20).pad(5);

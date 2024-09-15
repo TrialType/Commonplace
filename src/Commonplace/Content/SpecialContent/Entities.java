@@ -23,7 +23,6 @@ public class Entities {
         EntityMapping.idMap[116] = HiddenUnit::create;
         EntityMapping.idMap[117] = UnderLandMechUnit::create;
         EntityMapping.idMap[118] = CaveUnit::create;
-        EntityMapping.idMap[119] = TimeUpGradeUnit::create;
         EntityMapping.idMap[120] = FollowUnit::create;
         EntityMapping.idMap[121] = SpawnerUnit::create;
     }

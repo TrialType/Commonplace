@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBlock;
 
 import Commonplace.Content.DefaultContent.FItems;
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
@@ -723,7 +723,7 @@ public class GradeFactory extends UnitBlock {
 
             if (outing) {
                 moveOutPayload();
-            } else if (lastUnit instanceof UnitUpGrade uug && !lastUnit.type.isBanned()) {
+            } else if (lastUnit instanceof PeculiarityC uug && !lastUnit.type.isBanned()) {
 
                 updateLevel(uug);
                 updateNumber();
@@ -798,7 +798,7 @@ public class GradeFactory extends UnitBlock {
             }
         }
 
-        private void updateLevel(UnitUpGrade uug) {
+        private void updateLevel(PeculiarityC uug) {
             int choose = findIndex(item);
             if (choose == 0) {
                 level = uug.getHealthLevel();
@@ -817,7 +817,7 @@ public class GradeFactory extends UnitBlock {
             }
         }
 
-        public void gradeChange(UnitUpGrade uug) {
+        public void gradeChange(PeculiarityC uug) {
             if (out) {
                 uug.setLevel(uug.getLevel() - 1);
                 switch (findIndex(item)) {

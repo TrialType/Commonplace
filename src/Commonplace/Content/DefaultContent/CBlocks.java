@@ -639,7 +639,7 @@ public class CBlocks {
                         explodeRange = 15;
                         explodeDelay = 0;
 
-                        lifetime = 100;
+                        lifetime = 150;
                         speed = 7;
                         drag = 0.02f;
                         damage = 20;
@@ -656,7 +656,7 @@ public class CBlocks {
                         explodeRange = 15;
                         explodeDelay = 0;
 
-                        lifetime = 100;
+                        lifetime = 75;
                         speed = 7;
                         drag = 0.02f;
                         damage = 20;
@@ -674,7 +674,7 @@ public class CBlocks {
                             explodeRange = 15;
                             explodeDelay = 0;
 
-                            lifetime = 90;
+                            lifetime = 125;
                             speed = 5;
                             drag = 0.05f;
                             damage = 12;
@@ -690,7 +690,7 @@ public class CBlocks {
                         ammoMultiplier = 4;
                         pierceArmor = true;
 
-                        lifetime = 100;
+                        lifetime = 150;
                         speed = 7;
                         drag = 0.02f;
                         damage = 40;

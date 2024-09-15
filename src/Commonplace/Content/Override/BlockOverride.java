@@ -99,7 +99,7 @@ public class BlockOverride {
         ((ItemTurret) Blocks.scorch).range = 120;
         ((ItemTurret) Blocks.scorch).ammoTypes.each((i, b) -> {
             b.lifetime = 36;
-            b.damage *= 1.6f;
+            b.damage *= 1.2f;
             b.buildingDamageMultiplier = 0.25f;
             b.shootEffect = new Effect(34f, 80f, e -> {
                 color(Pal.lightPyraFlame, Pal.darkPyraFlame, Color.gray, e.fin());

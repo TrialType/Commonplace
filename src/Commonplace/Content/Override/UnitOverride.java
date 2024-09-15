@@ -7,9 +7,7 @@ import Commonplace.Entities.FAbility.LevelSign;
 import Commonplace.Entities.FAbility.SprintingAbility2;
 import Commonplace.Entities.FAbility.TimeLargeDamageAbility;
 import Commonplace.Entities.FBulletType.*;
-import Commonplace.Entities.FUnit.F.Garrison;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
-import Commonplace.Entities.FUnit.F.TimeUpGradeUnit;
 import Commonplace.Entities.FUnit.Override.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
@@ -93,7 +91,7 @@ public class UnitOverride {
         UnitTypes.zenith.abilities.add(new LevelSign());
         UnitTypes.antumbra.constructor = FUnitEntity::create;
         UnitTypes.antumbra.abilities.add(new LevelSign());
-        UnitTypes.eclipse.constructor = TimeUpGradeUnit::create;
+        UnitTypes.eclipse.constructor = FUnitEntity::create;
         UnitTypes.eclipse.abilities.add(new LevelSign());
 
         UnitTypes.poly.constructor = LongLifeUnitEntity::create;

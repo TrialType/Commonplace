@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBlock;
 
 import Commonplace.Content.DefaultContent.FUnits;
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -158,7 +158,7 @@ public class ElectricFence extends Block {
             go = 0;
             for (Unit u : stopUnits) {
                 if (u != null) {
-                    if (u instanceof UnitUpGrade uug) {
+                    if (u instanceof PeculiarityC uug) {
                         go = go + u.hitSize * Math.max(1, uug.getSpeedLevel() * 0.75f);
                     } else {
                         go += u.hitSize;

@@ -1,6 +1,6 @@
 package Commonplace.Entities.FUnit.Override;
 
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.util.Time;
@@ -28,7 +28,7 @@ import java.util.Random;
 
 import static Commonplace.Tools.Classes.UnitUpGrade.getPower;
 
-public class FMechUnitLegacyNova extends MechUnitLegacyNova implements UnitUpGrade {
+public class FMechUnitLegacyNova extends MechUnitLegacyNova implements PeculiarityC {
     protected int damageLevel = 0;
     protected int speedLevel = 0;
     protected int healthLevel = 0;

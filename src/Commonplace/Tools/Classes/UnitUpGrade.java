@@ -1,5 +1,6 @@
 package Commonplace.Tools.Classes;
 
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import mindustry.type.UnitType;
 
 import java.util.Random;
@@ -31,7 +32,7 @@ public class UnitUpGrade {
     private UnitUpGrade() {
     }
 
-    public static void getPower(Commonplace.Tools.Interfaces.UnitUpGrade uug, int number, boolean get, boolean full) {
+    public static void getPower(PeculiarityC uug, int number, boolean get, boolean full) {
         if (full) {
             uug.setLevel(60);
             uug.setAgainLevel(10);
@@ -49,7 +50,7 @@ public class UnitUpGrade {
         }
     }
 
-    private static void getPower(Commonplace.Tools.Interfaces.UnitUpGrade uug, int index, int start) {
+    private static void getPower(PeculiarityC uug, int index, int start) {
         switch (list[index]) {
             case "healthy": {
                 if (uug.getHealthLevel() >= 10) {
@@ -115,7 +116,7 @@ public class UnitUpGrade {
         }
     }
 
-    private static int getIndex(Commonplace.Tools.Interfaces.UnitUpGrade uug) {
+    private static int getIndex(PeculiarityC uug) {
         int damage = uug.getDamageLevel() + 1;
         int speed = uug.getSpeedLevel() + 1;
         int reload = uug.getReloadLevel() + 1;

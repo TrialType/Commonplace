@@ -79,10 +79,6 @@ jar {
         include "mod.hjson"
     }
 
-    from(rootDir) {
-        include "upgradeLog.txt"
-    }
-
     from("src/resources/") {
         include "**"
     }

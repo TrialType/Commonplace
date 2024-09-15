@@ -1,7 +1,7 @@
 package Commonplace.Entities.FAbility;
 
 import Commonplace.Content.SpecialContent.Events;
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.math.Angles;
 import arc.struct.ObjectMap;
 import arc.util.Time;
@@ -43,7 +43,7 @@ public class UnitSpawnSupperAbility extends UnitSpawnAbility {
             u.rotation = unit.rotation;
             arc.Events.fire(new EventType.UnitCreateEvent(u, null, unit));
 
-            if (u instanceof UnitUpGrade uug && power) {
+            if (u instanceof PeculiarityC uug && power) {
                 if (rand) {
                     arc.Events.fire(new Events.GetPowerEvent(u, num, false));
                 } else {

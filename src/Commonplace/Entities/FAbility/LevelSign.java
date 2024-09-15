@@ -1,7 +1,7 @@
 package Commonplace.Entities.FAbility;
 
 import Commonplace.Entities.FUnitType.UpGradeUnitType;
-import Commonplace.Tools.Interfaces.UnitUpGrade;
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
@@ -17,7 +17,7 @@ public class LevelSign extends Ability {
 
     @Override
     public void displayBars(Unit unit, Table table) {
-        if (unit instanceof UnitUpGrade uug && !(unit.type instanceof UpGradeUnitType)) {
+        if (unit instanceof PeculiarityC uug && !(unit.type instanceof UpGradeUnitType)) {
             table.row();
 
             table.add(new Bar(String.valueOf(uug.getLevel()), Pal.coalBlack, () -> 1f));
