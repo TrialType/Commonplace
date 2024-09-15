@@ -97,13 +97,6 @@ public class Techs {
                 });
                 tf.parent = t;
                 t.children.add(tf);
-            } else if (t.content == additiveReconstructor) {
-                tf = node(outPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000, titanium, 4000, thorium, 4000), Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
-                    node(inputPowerFactory, ItemStack.with(Items.copper, 5000, Items.lead, 6000, Items.silicon, 8000, titanium, 4000, thorium, 4000), () -> {
-                    });
-                });
-                tf.parent = t;
-                t.children.add(tf);
             } else if (t.content == conveyor) {
                 tf = node(coreLaunch, ItemStack.with(Items.copper, 500, silicon, 200, graphite, 300), Seq.with(new Objectives.Research(silicon)), () -> {
                     node(coreLaunchLarge, ItemStack.with(titanium, 600, silicon, 300, graphite, 400), Seq.with(new Objectives.SectorComplete(extractionOutpost)), () -> {

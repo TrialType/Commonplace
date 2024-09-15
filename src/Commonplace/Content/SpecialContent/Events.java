@@ -2,7 +2,6 @@ package Commonplace.Content.SpecialContent;
 
 import Commonplace.Content.ProjectContent.Bullets;
 import Commonplace.Content.ProjectContent.Weapons;
-import Commonplace.Entities.FAbility.LevelSign;
 import Commonplace.Entities.FUnit.Override.*;
 import Commonplace.Tools.Classes.Listener;
 import Commonplace.Tools.Classes.UnitPeculiarity;
@@ -66,7 +65,6 @@ public class Events {
             for (UnitType u : Vars.content.units()) {
                 if (classes.get(u.constructor.get().getClass()) != null) {
                     u.constructor = classes.get(u.constructor.get().getClass());
-                    u.abilities.add(new LevelSign());
                 }
             }
         });
@@ -79,11 +77,7 @@ public class Events {
 
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof BuildUpGrade fug) {
-                if (e.unit instanceof PeculiarityC uug) {
-                    fug.addExp(e.unit.maxHealth * Math.max(1, uug.getLevel() / 15));
-                } else {
-                    fug.addExp(e.unit.maxHealth);
-                }
+                fug.addExp(e.unit.maxHealth);
             }
         });
         arc.Events.on(EventType.BuildingBulletDestroyEvent.class, e -> {

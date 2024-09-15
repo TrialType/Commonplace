@@ -1,5 +1,6 @@
 package Commonplace.Tools.Classes;
 
+import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.entities.bullet.BulletType;
@@ -20,17 +21,21 @@ public abstract class UnitPeculiarity {
         blackList.addAll(alpha, beta, gamma, mono);
 
         Peculiarity HealGrow = u -> {
-            u.maxHealth *= 1.5f;
-            u.health *= 1.5f;
+            u.maxHealth = (int) (u.maxHealth * 1.1f);
+            u.health = (int) (u.health * 1.1f);
         };
-        Peculiarity HealBreak = u -> u.maxHealth *= 0.75f;
+        Peculiarity HealBreak = u -> {
+            u.maxHealth = (int) (u.maxHealth * 0.95f);
+            u.health = Math.min(u.maxHealth, u.health);
+        };
         Peculiarity HealToDamage = u -> {
             for (WeaponMount mount : u.mounts) {
                 BulletType bullet = mount.weapon.bullet.copy();
-                bullet.damage *= 1.25f;
+                bullet.damage *= 1.05f;
                 mount.weapon.bullet = bullet;
             }
-            u.maxHealth *= 0.75f;
+            u.maxHealth = (int) (u.maxHealth * 0.95f);
+            u.health = Math.min(u.maxHealth, u.health);
         };
 
         all.addAll(HealGrow, HealBreak, HealToDamage);
@@ -39,58 +44,35 @@ public abstract class UnitPeculiarity {
         badPeculiarity.addAll(HealBreak);
     }
 
-    public static void applyWell(Unit u, int num) {
-        Mathf.randomSeed(u.id);
-        wellPeculiarity.shuffle();
-        num = Math.min(num, wellPeculiarity.size);
-        for (int i = 0; i < num; i++) {
-            wellPeculiarity.get(i).apply(u);
-        }
+    public static void applyWell(Unit u, PeculiarityC p) {
+        Peculiarity peculiarity = wellPeculiarity.random();
+        peculiarity.apply(u);
+        p.apply(all.indexOf(peculiarity));
     }
 
-    public static void applyWell(Unit u) {
-        Mathf.randomSeed(u.id);
-        wellPeculiarity.random().apply(u);
+    public static void applyBad(Unit u, PeculiarityC p) {
+        Peculiarity peculiarity = badPeculiarity.random();
+        peculiarity.apply(u);
+        p.apply(all.indexOf(peculiarity));
     }
 
-    public static void applyBad(Unit u, int num) {
-        Mathf.randomSeed(u.id);
-        badPeculiarity.shuffle();
-        num = Math.min(num, badPeculiarity.size);
-        for (int i = 0; i < num; i++) {
-            badPeculiarity.get(i).apply(u);
-        }
-    }
-
-    public static void applyBad(Unit u) {
-        Mathf.randomSeed(u.id);
-        badPeculiarity.random().apply(u);
-    }
-
-    public static void applyMidden(Unit u, int num) {
-        Mathf.randomSeed(u.id);
-        middenPeculiarity.shuffle();
-        num = Math.min(num, middenPeculiarity.size);
-        for (int i = 0; i < num; i++) {
-            middenPeculiarity.get(i).apply(u);
-        }
-    }
-
-    public static void applyMidden(Unit u) {
-        Mathf.randomSeed(u.id);
-        middenPeculiarity.random().apply(u);
+    public static void applyMidden(Unit u, PeculiarityC p) {
+        Peculiarity peculiarity = middenPeculiarity.random();
+        peculiarity.apply(u);
+        p.apply(all.indexOf(peculiarity));
     }
 
     public static void apply(Unit u, int num, float well, float midden) {
-        Mathf.randomSeed(u.id);
-        for (int i = 0; i < num; i++) {
-            float value = Mathf.random(1f);
-            if (value >= well) {
-                applyWell(u);
-            } else if (value >= midden) {
-                applyMidden(u);
-            } else {
-                applyBad(u);
+        if (u instanceof PeculiarityC p && !blackList.contains(u.type)) {
+            for (int i = 0; i < num; i++) {
+                float value = Mathf.random(1f);
+                if (value >= well) {
+                    applyWell(u, p);
+                } else if (value >= midden) {
+                    applyMidden(u, p);
+                } else {
+                    applyBad(u, p);
+                }
             }
         }
     }

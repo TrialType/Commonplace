@@ -75,7 +75,7 @@ public class FUnits {
     public static UnitType e;
 
     public static void load() {
-        support_a = new UpGradeUnitType("support-a") {{
+        support_a = new UnitType("support-a") {{
             constructor = FLegsUnit::create;
 
             health = 12000;
@@ -222,7 +222,7 @@ public class FUnits {
                 }};
             }});
         }};
-        strike = new UpGradeUnitType("strike") {{
+        strike = new UnitType("strike") {{
             constructor = FUnitEntity::create;
 
             flying = true;
@@ -248,7 +248,7 @@ public class FUnits {
                 bullet.rangeOverride = 100;
             }});
         }};
-        crane = new UpGradeUnitType("crane") {{
+        crane = new UnitType("crane") {{
             constructor = FUnitEntity::create;
 
             flying = true;
@@ -277,7 +277,7 @@ public class FUnits {
                 }};
             }});
         }};
-        vibrate = new UpGradeUnitType("vibrate") {{
+        vibrate = new UnitType("vibrate") {{
             constructor = FLegsUnit::create;
 
             speed = 1;
@@ -539,7 +539,7 @@ public class FUnits {
                 }};
             }});
         }};
-        bulletInterception = new UpGradeUnitType("bulletInterception") {{
+        bulletInterception = new UnitType("bulletInterception") {{
             constructor = SpawnerUnit::create;
 
             hitSize = 45;
@@ -797,7 +797,7 @@ public class FUnits {
                 }};
             }});
         }};
-        dive = new UpGradeUnitType("dive") {{
+        dive = new UnitType("dive") {{
             constructor = FLegsUnit::create;
 
             speed = 0.4F;
@@ -832,7 +832,7 @@ public class FUnits {
                 }};
             }});
         }};
-        befall = new UpGradeUnitType("befall") {{
+        befall = new UnitType("befall") {{
             constructor = FLegsUnit::create;
 
             health = 10000;
@@ -1542,7 +1542,6 @@ public class FUnits {
                 }};
             }});
         }};
-
         exterminate = new UnitType("exterminate") {{
             constructor = ElevationMoveUnit::create;
 
@@ -1552,7 +1551,6 @@ public class FUnits {
             speed = 3;
             
         }};
-
         herald = new UnitType("herald") {{
             constructor = MechUnit::create;
             aiController = SuicideAI::new;

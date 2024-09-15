@@ -20,7 +20,7 @@ public class LongLifeUnitEntity extends FUnitEntity {
         if (damage > this.health + this.shield + this.armor) {
             super.rawDamage(damage);
         } else {
-            super.rawDamage(damage * Math.min(1, hitTime * 2 - 1));
+            super.rawDamage(damage * Math.min(1, 1 - hitTime));
         }
     }
 }

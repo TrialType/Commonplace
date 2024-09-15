@@ -42,8 +42,6 @@ import static mindustry.type.ItemStack.with;
 public class CBlocks {
     //test
     public static Block pu;
-    //units
-    public static Block outPowerFactory, inputPowerFactory;
     //defense
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
@@ -191,26 +189,6 @@ public class CBlocks {
             craftTime = 60;
             size = 3;
             itemCapacity = 20;
-        }};
-//======================================================================================================================
-        outPowerFactory = new GradeFactory("out_power_factory") {{
-            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
-
-            itemCapacity = 770;
-            size = 11;
-            consumePower(500);
-
-            constructTime = 60f * 10f;
-        }};
-        inputPowerFactory = new GradeFactory("input_power_factory") {{
-            requirements(Category.units, with(Items.copper, 500, Items.lead, 600, Items.silicon, 800, titanium, 400, thorium, 400));
-
-            itemCapacity = 770;
-            size = 11;
-            consumePower(500);
-
-            constructTime = 60f * 10f;
-            out = false;
         }};
 //======================================================================================================================
         pu = new PureProject("pu") {{

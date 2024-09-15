@@ -3,6 +3,7 @@ package Commonplace.Entities.FUnit.F;
 import Commonplace.Entities.FUnit.Override.FMechUnit;
 import Commonplace.Entities.FUnitType.WUGENANSMechUnitType;
 import Commonplace.Tools.Classes.PhysicsWorldChanger;
+import Commonplace.Tools.Classes.UnitPeculiarity;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
@@ -93,9 +94,9 @@ public class UnderLandMechUnit extends FMechUnit {
 
     @Override
     public void update() {
-        if (shieldLevel > 0 && sfa == null) {
-            sfa = new ShieldRegenFieldAbility(maxHealth / 100 * shieldLevel,
-                    maxHealth * shieldLevel / 10, 120, 60);
+        if (!uploaded) {
+            UnitPeculiarity.load(this, pes.items);
+            uploaded = true;
         }
 
         if (mec.indexOf(this) < 0) {
@@ -319,28 +320,6 @@ public class UnderLandMechUnit extends FMechUnit {
                 }
             }
         }
-        speedMultiplier *= (1 + speedLevel * 0.2f);
-        damageMultiplier *= (1 + damageLevel * 0.2f);
-        reloadMultiplier *= (1 + reloadLevel * 0.2f);
-        heal(maxHealth * healthLevel * 0.0001f);
-        if (sfa != null) {
-            sfa.update(this);
-        }
-
-        if (level > 60) {
-            int boost2 = level - 60;
-            float lBoost = (float) Math.pow(1.01f, boost2);
-            healthMultiplier *= lBoost;
-            if (speedMultiplier * lBoost >= 10) {
-                float hb = 1 + (lBoost * speedMultiplier / 10);
-                speedMultiplier = 10;
-                healthMultiplier *= hb;
-            } else {
-                speedMultiplier *= lBoost;
-            }
-            damageMultiplier *= lBoost;
-            reloadMultiplier *= lBoost;
-        }
 
         if (speedMultiplier * boost >= 10) {
             float hb = 1 + (boost * speedMultiplier / 10);
@@ -561,6 +540,22 @@ public class UnderLandMechUnit extends FMechUnit {
         return this.elevation < 0.001F && !under;
     }
 
+    @Override
+    public void read(Reads read) {
+        super.read(read);
+        under = read.bool();
+        power = read.f();
+        timerChanging = read.f();
+    }
+
+    @Override
+    public void write(Writes write) {
+        super.write(write);
+        write.bool(under);
+        write.f(power);
+        write.f(timerChanging);
+    }
+
     public static class BeginChanger implements AsyncProcess {
         @Override
         public void begin() {
@@ -577,324 +572,5 @@ public class UnderLandMechUnit extends FMechUnit {
                 }
             }
         }
-    }
-
-    @Override
-    public void read(Reads read) {
-        short REV = read.s();
-        int statuses_LENGTH;
-        int INDEX;
-        StatusEntry statuses_ITEM;
-        if (REV == 0) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            read.bool();
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 1) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 2) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 3) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 4) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 5) {
-            this.ammo = read.f();
-            read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 6) {
-            this.ammo = read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        } else {
-            if (REV != 7) {
-                throw new IllegalArgumentException("Unknown revision '" + REV + "' for entity type 'mace'");
-            }
-
-            TypeIO.readAbilities(read, this.abilities);
-            this.ammo = read.f();
-            this.baseRotation = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        }
-
-        level = read.i();
-        exp = read.f();
-
-        under = read.bool();
-        power = read.f();
-        timerChanging = read.f();
-
-        level = read.i();
-        exp = read.f();
-
-        damageLevel = read.i();
-        speedLevel = read.i();
-        reloadLevel = read.i();
-        healthLevel = read.i();
-        againLevel = read.i();
-        shieldLevel = read.i();
-        this.afterRead();
-    }
-
-    @Override
-    public void write(Writes write) {
-        write.s(7);
-        TypeIO.writeAbilities(write, this.abilities);
-        write.f(this.ammo);
-        write.f(this.baseRotation);
-        TypeIO.writeController(write, this.controller);
-        write.f(this.elevation);
-        write.d(this.flag);
-        write.f(this.health);
-        write.bool(this.isShooting);
-        TypeIO.writeTile(write, this.mineTile);
-        TypeIO.writeMounts(write, this.mounts);
-        write.i(this.plans.size);
-
-        int INDEX;
-        for (INDEX = 0; INDEX < this.plans.size; ++INDEX) {
-            TypeIO.writePlan(write, this.plans.get(INDEX));
-        }
-
-        write.f(this.rotation);
-        write.f(this.shield);
-        write.bool(this.spawnedByCore);
-        TypeIO.writeItems(write, this.stack);
-        write.i(this.statuses.size);
-
-        for (INDEX = 0; INDEX < this.statuses.size; ++INDEX) {
-            TypeIO.writeStatus(write, this.statuses.get(INDEX));
-        }
-
-        TypeIO.writeTeam(write, this.team);
-        write.s(this.type.id);
-        write.bool(this.updateBuilding);
-        TypeIO.writeVec2(write, this.vel);
-        write.f(this.x);
-        write.f(this.y);
-
-        write.i(level);
-        write.f(exp);
-        write.bool(under);
-        write.f(power);
-        write.f(timerChanging);
-        write.i(level);
-        write.f(exp);
-        write.i(damageLevel);
-        write.i(speedLevel);
-        write.i(reloadLevel);
-        write.i(healthLevel);
-        write.i(againLevel);
-        write.i(shieldLevel);
     }
 }

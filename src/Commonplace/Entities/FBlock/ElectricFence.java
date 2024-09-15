@@ -158,11 +158,7 @@ public class ElectricFence extends Block {
             go = 0;
             for (Unit u : stopUnits) {
                 if (u != null) {
-                    if (u instanceof PeculiarityC uug) {
-                        go = go + u.hitSize * Math.max(1, uug.getSpeedLevel() * 0.75f);
-                    } else {
-                        go += u.hitSize;
-                    }
+                    go += u.hitSize;
                 }
             }
             if (go >= maxFenceSize) {

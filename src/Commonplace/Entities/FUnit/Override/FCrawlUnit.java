@@ -1,27 +1,16 @@
 package Commonplace.Entities.FUnit.Override;
 
+import Commonplace.Tools.Classes.UnitPeculiarity;
 import Commonplace.Tools.Interfaces.PeculiarityC;
-import arc.math.Mathf;
-import arc.struct.Bits;
 import arc.struct.IntSeq;
-import arc.struct.Seq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.Vars;
-import mindustry.ctype.ContentType;
 import mindustry.gen.CrawlUnit;
 import mindustry.io.TypeIO;
 
 public class FCrawlUnit extends CrawlUnit implements PeculiarityC {
+    protected boolean uploaded = false;
     protected IntSeq pes = new IntSeq();
-
-    protected FCrawlUnit() {
-        this.applied = new Bits(Vars.content.getBy(ContentType.status).size);
-        this.crawlTime = Mathf.random(100.0F);
-        this.lastCrawlSlowdown = 1.0F;
-        this.resupplyTime = Mathf.random(10.0F);
-        this.statuses = new Seq<>();
-    }
 
     public static FCrawlUnit create() {
         return new FCrawlUnit();
@@ -33,9 +22,19 @@ public class FCrawlUnit extends CrawlUnit implements PeculiarityC {
     }
 
     @Override
+    public void update() {
+        if (!uploaded) {
+            UnitPeculiarity.load(this, pes.items);
+            uploaded = true;
+        }
+        super.update();
+    }
+
+    @Override
     public void read(Reads read) {
         super.read(read);
         pes = TypeIO.readIntSeq(read);
+        uploaded = false;
     }
 
     public void write(Writes write) {

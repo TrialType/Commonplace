@@ -8,10 +8,11 @@ import arc.math.Interp;
 import mindustry.entities.Effect;
 import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
+import mindustry.type.UnitType;
 
 import static arc.graphics.g2d.Draw.*;
 
-public class BoostUnitType extends UpGradeUnitType {
+public class BoostUnitType extends UnitType {
     public String icon1 = "error";
     public String icon2 = "error";
     public float hitChangeHel = -1;

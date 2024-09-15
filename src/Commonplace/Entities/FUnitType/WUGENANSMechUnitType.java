@@ -12,11 +12,12 @@ import mindustry.entities.part.DrawPart;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
+import mindustry.type.UnitType;
 
 import static mindustry.Vars.player;
 
 
-public class WUGENANSMechUnitType extends UpGradeUnitType {
+public class WUGENANSMechUnitType extends UnitType {
     private final static Vec2 legOffset = new Vec2();
     public float landTime = 60;
     public float outTime = 60;
