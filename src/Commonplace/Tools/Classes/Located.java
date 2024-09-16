@@ -7,7 +7,6 @@ import arc.struct.ObjectIntMap;
 import arc.struct.Seq;
 import mindustry.type.Item;
 import mindustry.world.Tile;
-import mindustry.world.blocks.environment.AirBlock;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
