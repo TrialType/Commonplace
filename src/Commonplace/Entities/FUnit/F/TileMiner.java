@@ -1,27 +1,22 @@
 package Commonplace.Entities.FUnit.F;
 
 
-import Commonplace.AI.PoseBridgeCommand;
-import Commonplace.Tools.Classes.FLocated;
+import Commonplace.Tools.Classes.Located;
 import Commonplace.Tools.Interfaces.OwnerSpawner;
 import arc.math.Angles;
 import arc.math.Mathf;
-import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import arc.util.pooling.Pools;
 import mindustry.Vars;
-import mindustry.ai.types.CommandAI;
 import mindustry.content.Blocks;
 import mindustry.content.Fx;
-import mindustry.ctype.ContentType;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.StatusEntry;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
-import mindustry.io.TypeIO;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
@@ -156,14 +151,19 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
 
                 if (this.mineTimer >= 1200) {
                     this.mineTimer = 0.0F;
+                    floor = mineTile.overlay().itemDrop == null ? mineTile.floor() : mineTile.overlay();
                     if (tiles[0] == null) {
-                        tiles[0] = mineTile.overlay();
+                        tiles[0] = floor;
                     } else if (tiles[1] == null) {
-                        tiles[1] = mineTile.overlay();
+                        tiles[1] = floor;
                     }
-                    FLocated.removeOre(mineTile);
-                    FLocated.tm.remove(mineTile);
-                    mineTile.setOverlay(Blocks.air);
+                    Located.removeOre(mineTile);
+                    Located.miners.remove(mineTile);
+                    if (mineTile.overlay().itemDrop == null) {
+                        mineTile.setFloor(Blocks.stone.asFloor());
+                    } else {
+                        mineTile.setOverlay(Blocks.air);
+                    }
                     mineTile.overlay().drawBase(mineTile);
                     this.mineTile = null;
                     this.mineTimer = 0.0F;
@@ -344,10 +344,6 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
         }
     }
 
-    protected TileMiner() {
-        super();
-    }
-
     public static TileMiner create() {
         return new TileMiner();
     }
@@ -359,270 +355,21 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
 
     @Override
     public void read(Reads read) {
-        short REV = read.s();
-        int statuses_LENGTH;
-        int INDEX;
-        StatusEntry statuses_ITEM;
-        if (REV == 0) {
-            this.ammo = read.f();
-            read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            read.bool();
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 1) {
-            this.ammo = read.f();
-            read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 2) {
-            this.ammo = read.f();
-            read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 3) {
-            this.ammo = read.f();
-            read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 4) {
-            this.ammo = read.f();
-            read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.x = read.f();
-            this.y = read.f();
-        } else if (REV == 5) {
-            this.ammo = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        } else {
-            if (REV != 6) {
-                throw new IllegalArgumentException("Unknown revision '" + REV + "' for entity type 'mono'");
-            }
-
-            TypeIO.readAbilities(read, this.abilities);
-            this.ammo = read.f();
-            this.controller = TypeIO.readController(read, this.controller);
-            this.elevation = read.f();
-            this.flag = read.d();
-            this.health = read.f();
-            this.isShooting = read.bool();
-            this.mineTile = TypeIO.readTile(read);
-            TypeIO.readMounts(read, this.mounts);
-            this.plans = TypeIO.readPlansQueue(read);
-            this.rotation = read.f();
-            this.shield = read.f();
-            this.spawnedByCore = read.bool();
-            this.stack = TypeIO.readItems(read, this.stack);
-            statuses_LENGTH = read.i();
-            this.statuses.clear();
-
-            for (INDEX = 0; INDEX < statuses_LENGTH; ++INDEX) {
-                statuses_ITEM = TypeIO.readStatus(read);
-                if (statuses_ITEM != null) {
-                    this.statuses.add(statuses_ITEM);
-                }
-            }
-
-            this.team = TypeIO.readTeam(read);
-            this.type = Vars.content.getByID(ContentType.unit, read.s());
-            this.updateBuilding = read.bool();
-            this.vel = TypeIO.readVec2(read, this.vel);
-            this.x = read.f();
-            this.y = read.f();
-        }
-
+        super.read(read);
 
         int number = read.i();
         for (int i = 0; i < number; i++) {
             tiles[i] = content.block(read.i()).asFloor();
         }
         sid = read.i();
-        FLocated.tm.put(mineTile, this);
+        Located.miners.put(mineTile, this);
         mineTimer = read.f();
-        if (controller instanceof CommandAI && !(controller instanceof PoseBridgeCommand)) {
-            controller = new PoseBridgeCommand();
-            controller.unit(this);
-        }
         this.afterRead();
     }
 
     @Override
     public void write(Writes write) {
-        write.s(6);
-        TypeIO.writeAbilities(write, this.abilities);
-        write.f(this.ammo);
-        TypeIO.writeController(write, this.controller);
-        write.f(this.elevation);
-        write.d(this.flag);
-        write.f(this.health);
-        write.bool(this.isShooting);
-        TypeIO.writeTile(write, this.mineTile);
-        TypeIO.writeMounts(write, this.mounts);
-        write.i(this.plans.size);
-
-        int INDEX;
-        for (INDEX = 0; INDEX < this.plans.size; ++INDEX) {
-            TypeIO.writePlan(write, this.plans.get(INDEX));
-        }
-
-        write.f(this.rotation);
-        write.f(this.shield);
-        write.bool(this.spawnedByCore);
-        TypeIO.writeItems(write, this.stack);
-        write.i(this.statuses.size);
-
-        for (INDEX = 0; INDEX < this.statuses.size; ++INDEX) {
-            TypeIO.writeStatus(write, this.statuses.get(INDEX));
-        }
-
-        TypeIO.writeTeam(write, this.team);
-        write.s(this.type.id);
-        write.bool(this.updateBuilding);
-        TypeIO.writeVec2(write, this.vel);
-        write.f(this.x);
-        write.f(this.y);
-
+        super.write(write);
 
         int number = 0;
         for (Floor tile : tiles) {
@@ -644,11 +391,6 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
     public void clearItem() {
         super.clearItem();
         tiles[0] = tiles[1] = null;
-    }
-
-    @Override
-    public Seq<Unit> unit() {
-        return null;
     }
 
     @Override

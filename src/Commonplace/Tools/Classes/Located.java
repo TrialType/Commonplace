@@ -2,6 +2,7 @@ package Commonplace.Tools.Classes;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
 import arc.math.Mathf;
+import arc.struct.IntIntMap;
 import arc.struct.IntSeq;
 import arc.struct.ObjectIntMap;
 import arc.struct.Seq;
@@ -16,8 +17,8 @@ import java.util.Map;
 
 import static mindustry.Vars.*;
 
-public abstract class FLocated {
-    public static final Map<Tile, TileMiner> tm = new HashMap<>();
+public abstract class Located {
+    public static final Map<Tile, TileMiner> miners = new HashMap<>();
     public static IntSeq[][][] ores;
     public static ObjectIntMap<Item> allOres;
     public static final int quadrantSize = 20;
@@ -26,18 +27,18 @@ public abstract class FLocated {
 
     public static boolean couldMine(TileMiner unit, Tile tile) {
         update();
-        return tm.get(tile) == unit || tm.get(tile) == null;
+        return miners.get(tile) == unit || miners.get(tile) == null;
     }
 
     public static void update() {
         Seq<Tile> ts = new Seq<>();
-        for (Tile t : tm.keySet()) {
-            if (tm.get(t).dead || tm.get(t).health() <= 0 || tm.get(t) == Nulls.unit) {
+        for (Tile t : miners.keySet()) {
+            if (miners.get(t).dead || miners.get(t).health() <= 0 || miners.get(t) == Nulls.unit) {
                 ts.add(t);
             }
         }
         for (Tile t : ts) {
-            tm.remove(t);
+            miners.remove(t);
         }
     }
 
@@ -87,8 +88,8 @@ public abstract class FLocated {
         get();
         Item item = tile.drop();
         if (ores[item.id] != null) {
-            int qx = (tile.x / FLocated.quadrantSize);
-            int qy = (tile.y / FLocated.quadrantSize);
+            int qx = (tile.x / Located.quadrantSize);
+            int qy = (tile.y / Located.quadrantSize);
             ores[item.id][qx][qy].removeValue(tile.pos());
             allOres.increment(item, -1);
         }

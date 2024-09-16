@@ -1181,8 +1181,10 @@ public class FUnits {
             constructor = TileMiner::create;
             defaultCommand = new UnitCommand("TileMine", "TileMine", TileMinerAI::new);
             aiController = TileMinerAI::new;
-            commands = new UnitCommand[]{defaultCommand, new UnitCommand("TilePut", "TilePut", TilePutAI::new)};
-            controller = u -> !playerControllable || (u.team.isAI() && !u.team.rules().rtsAi) ? aiController.get() : new PoseBridgeCommand();
+            commands = new UnitCommand[]{
+                    defaultCommand,
+                    new UnitCommand("TilePut", "TilePut", TilePutAI::new)
+            };
             hidden = true;
             alwaysUnlocked = true;
             isEnemy = false;
@@ -1549,7 +1551,7 @@ public class FUnits {
             health = 100000;
             armor = 250;
             speed = 3;
-            
+
         }};
         herald = new UnitType("herald") {{
             constructor = MechUnit::create;

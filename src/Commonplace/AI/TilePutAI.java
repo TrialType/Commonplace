@@ -1,66 +1,69 @@
 package Commonplace.AI;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
-import Commonplace.Tools.Classes.FLocated;
-import Commonplace.Tools.Interfaces.PoseBridge;
+import Commonplace.Tools.Classes.Located;
 import arc.math.geom.Vec2;
 import arc.struct.IntSeq;
 import mindustry.entities.units.AIController;
 import mindustry.gen.Unit;
 import mindustry.world.Tile;
-import mindustry.world.blocks.environment.AirBlock;
 import mindustry.world.blocks.environment.Floor;
+import mindustry.world.blocks.environment.OreBlock;
 
 import static mindustry.Vars.world;
 
-public class TilePutAI extends AIController implements PoseBridge {
+public class TilePutAI extends AIController {
     protected Vec2 pose = null;
-    protected TileMiner tm = null;
+    protected TileMiner miner = null;
 
     public TilePutAI(Unit unit) {
         this.unit = unit;
     }
+
     @Override
     public void updateMovement() {
-        if (tm != null && pose != null) {
-            moveTo(pose, 0.1F);
-            if (unit.within(pose, unit.hitSize / 2)) {
-                Floor[] items = tm.tiles;
-                int index = -1;
-                if (items[0] != null) {
-                    index = 0;
-                } else if (items[1] != null) {
-                    index = 1;
+        pose = unit.command().targetPos;
+        if (miner != null && pose != null) {
+            moveTo(pose, unit.hitSize * 1.5f);
+            if (unit.within(pose, unit.hitSize * 3)) {
+                Floor floor = null;
+                int index = 0;
+                for (; index < miner.tiles.length; index++) {
+                    if (miner.tiles[index] != null) {
+                        floor = miner.tiles[index];
+                        break;
+                    }
                 }
+
                 Tile tile = world.tileWorld(pose.x, pose.y);
-                if (tile != null && tile.overlay().itemDrop == null && index >= 0 && tile.block() instanceof AirBlock) {
-                    tile.setOverlay(items[index]);
+                if (tile != null && floor != null && ((floor instanceof OreBlock && tile.overlay().itemDrop == null) || (!(floor instanceof OreBlock) && !tile.floor().isLiquid)) && !tile.block().solid) {
+                    if (floor instanceof OreBlock) {
+                        tile.setOverlay(floor);
+                    } else {
+                        tile.setFloor(floor);
+                    }
                     tile.overlay().drawBase(tile);
-                    IntSeq is = FLocated.ores[items[index].itemDrop.id][tile.x / FLocated.quadrantSize][tile.y / FLocated.quadrantSize];
+
+                    IntSeq is = Located.ores[floor.itemDrop.id][tile.x / Located.quadrantSize][tile.y / Located.quadrantSize];
                     if (is == null) {
-                        is = FLocated.ores[items[index].itemDrop.id][tile.x / FLocated.quadrantSize][tile.y / FLocated.quadrantSize] = new IntSeq(false, 16);
+                        is = Located.ores[floor.itemDrop.id][tile.x / Located.quadrantSize][tile.y / Located.quadrantSize] = new IntSeq(false, 16);
                     }
                     is.add(tile.pos());
-                    FLocated.allOres.increment(items[index].itemDrop, 1);
-                    items[index] = null;
+                    Located.allOres.increment(floor.itemDrop, 1);
+                    miner.tiles[index] = null;
                 }
             }
         } else {
             if (unit instanceof TileMiner) {
-                tm = (TileMiner) unit;
+                miner = (TileMiner) unit;
             }
         }
     }
 
     @Override
-    public void setPose(Vec2 vec2) {
-        pose = vec2;
-    }
-
-    @Override
     public void init() {
         if (unit instanceof TileMiner) {
-            this.tm = (TileMiner) unit;
+            this.miner = (TileMiner) unit;
         }
     }
 }
