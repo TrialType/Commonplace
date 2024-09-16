@@ -30,12 +30,14 @@ public class TileMinerAI extends AIController {
     @Override
     public void updateMovement() {
         if (miner != null) {
-            boolean full = miner.tiles[0] != null && miner.tiles[1] != null;
-
             if (!miner.canMine()) return;
 
-            if (ore != null && (!miner.validMine(ore) || ore.solid() || (miners.containsKey(ore) && miners.get(ore) != miner) ||
-                    !ore.within(miner, miner.hitSize * 5))) {
+            boolean full = miner.tiles[0] != null && miner.tiles[1] != null;
+            float range = miner.hitSize * 6;
+
+            if (ore != null && (!miner.validMine(ore) || ore.solid() ||
+                    (miners.containsKey(ore) && miners.get(ore) != miner) ||
+                    !ore.within(miner, range * 1.25f))) {
                 ore = null;
                 miner.mineTile = null;
             }
@@ -63,8 +65,8 @@ public class TileMinerAI extends AIController {
                     }
 
                     if (ore != null) {
-                        moveTo(ore, unit.hitSize * 4);
-                        if (unit.within(ore, unit.hitSize * 4)) {
+                        moveTo(ore, range * 0.8f);
+                        if (miner.within(ore, range) && (!miners.containsKey(ore) || miners.get(ore) == miner)) {
                             miner.mineTile = ore;
                             miners.put(ore, miner);
                         }
@@ -78,7 +80,7 @@ public class TileMinerAI extends AIController {
                 } else {
                     targetPos = unit.command().targetPos;
                     if (targetPos != null) {
-                        moveTo(targetPos, unit.hitSize * 4);
+                        moveTo(targetPos, range * 0.8f);
 
                         Tile tile = world.tileWorld((int) (targetPos.x), (int) (targetPos.y));
                         if (tile != null && unit.canMine(tile.drop())) {
@@ -89,8 +91,8 @@ public class TileMinerAI extends AIController {
                         }
                     }
                     if (ore != null) {
-                        if (unit.within(ore, unit.hitSize * 4)) {
-                            unit.mineTile = ore;
+                        if (miner.within(ore, range) && (!miners.containsKey(ore) || miners.get(ore) == miner)) {
+                            miner.mineTile = ore;
                             miners.put(ore, miner);
                         }
                     }

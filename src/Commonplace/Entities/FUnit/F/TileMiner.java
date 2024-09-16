@@ -33,7 +33,6 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
 
     @Override
     public void update() {
-
         if (sid >= 0 && spawner == null) {
             spawner = Groups.unit.getByID(sid);
             sid = -1;

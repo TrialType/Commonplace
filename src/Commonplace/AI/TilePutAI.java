@@ -36,7 +36,9 @@ public class TilePutAI extends AIController {
                 }
 
                 Tile tile = world.tileWorld(pose.x, pose.y);
-                if (tile != null && floor != null && ((floor instanceof OreBlock && tile.overlay().itemDrop == null) || (!(floor instanceof OreBlock) && !tile.floor().isLiquid)) && !tile.block().solid) {
+                if (tile != null && !tile.floor().isLiquid && !tile.solid() && floor != null &&
+                        ((floor instanceof OreBlock) ? tile.overlay() : tile.floor()).itemDrop == null) {
+
                     if (floor instanceof OreBlock) {
                         tile.setOverlay(floor);
                     } else {

@@ -2,11 +2,9 @@ package Commonplace.Tools.Classes;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
 import arc.math.Mathf;
-import arc.struct.IntIntMap;
 import arc.struct.IntSeq;
 import arc.struct.ObjectIntMap;
 import arc.struct.Seq;
-import mindustry.gen.Nulls;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.AirBlock;
@@ -27,23 +25,24 @@ public abstract class Located {
 
     public static boolean couldMine(TileMiner unit, Tile tile) {
         update();
-        return miners.get(tile) == unit || miners.get(tile) == null;
+        return !miners.containsKey(tile) || miners.get(tile) == unit;
     }
 
     public static void update() {
-        Seq<Tile> ts = new Seq<>();
-        for (Tile t : miners.keySet()) {
-            if (miners.get(t).dead || miners.get(t).health() <= 0 || miners.get(t) == Nulls.unit) {
-                ts.add(t);
+        Seq<Tile> remove = new Seq<>();
+        for (Tile tile : miners.keySet()) {
+            TileMiner miner = miners.get(tile);
+            if (miner == null || miner.dead || miner.health() <= 0 || miner.mineTile != tile) {
+                remove.add(tile);
             }
         }
-        for (Tile t : ts) {
+        for (Tile t : remove) {
             miners.remove(t);
         }
     }
 
-    public static Tile findOre(TileMiner sm, Item item) {
-        get();
+    public static Tile findOre(TileMiner miner, Item item) {
+        init();
         if (ores[item.id] != null) {
             float minDst = 0f;
             Tile closest = null;
@@ -53,8 +52,8 @@ public abstract class Located {
                     if (arr != null && arr.size > 0) {
                         for (int i = 0; i < arr.size; i++) {
                             Tile tile = world.tile(arr.get(i));
-                            if (tile.block() instanceof AirBlock && couldMine(sm, tile)) {
-                                float dst = Mathf.dst2(sm.x, sm.y, tile.worldx(), tile.worldy());
+                            if (!tile.solid() && couldMine(miner, tile)) {
+                                float dst = Mathf.dst2(miner.x, miner.y, tile.worldx(), tile.worldy());
                                 if (closest == null || dst < minDst) {
                                     closest = tile;
                                     minDst = dst;
@@ -65,18 +64,18 @@ public abstract class Located {
                 }
             }
             if (closest == null) {
-                int si = sm.type.mineItems.indexOf(item);
+                int idx = miner.type.mineItems.indexOf(item);
                 if (index < 0) {
-                    index = si;
+                    index = idx;
                 }
-                if (si == index - 1 || si == sm.type.mineItems.size - 1 && index == 0) {
+                if (idx == index - 1 || idx == miner.type.mineItems.size - 1 && index == 0) {
                     index = -1;
-                    return null;
+                    return closest;
                 }
-                if (si == sm.type.mineItems.size - 1) {
-                    closest = findOre(sm, sm.type.mineItems.get(0));
+                if (idx == miner.type.mineItems.size - 1) {
+                    closest = findOre(miner, miner.type.mineItems.get(0));
                 } else {
-                    closest = findOre(sm, sm.type.mineItems.get(si + 1));
+                    closest = findOre(miner, miner.type.mineItems.get(idx + 1));
                 }
             }
             return closest;
@@ -85,7 +84,7 @@ public abstract class Located {
     }
 
     public static void removeOre(Tile tile) {
-        get();
+        init();
         Item item = tile.drop();
         if (ores[item.id] != null) {
             int qx = (tile.x / Located.quadrantSize);
@@ -95,13 +94,8 @@ public abstract class Located {
         }
     }
 
-    public static boolean hasOre(Item item) {
-        get();
-        return allOres.get(item) > 0;
-    }
-
     @SuppressWarnings("unchecked")
-    public static void get() {
+    public static void init() {
         Field field1;
         Field field2;
         Field field3;
