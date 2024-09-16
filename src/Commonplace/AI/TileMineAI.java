@@ -14,17 +14,17 @@ import mindustry.world.blocks.storage.CoreBlock;
 import static Commonplace.Tools.Classes.Located.miners;
 import static mindustry.Vars.world;
 
-public class TileMinerAI extends AIController {
+public class TileMineAI extends AIController {
     protected TileMiner miner = null;
     protected Item targetItem;
     protected Tile ore;
     protected Vec2 targetPos;
 
-    public TileMinerAI(Unit unit) {
+    public TileMineAI(Unit unit) {
         this.unit = unit;
     }
 
-    public TileMinerAI() {
+    public TileMineAI() {
     }
 
     @Override

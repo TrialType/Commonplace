@@ -3,6 +3,7 @@ package Commonplace.Entities.FUnit.F;
 
 import Commonplace.Tools.Classes.Located;
 import Commonplace.Tools.Interfaces.OwnerSpawner;
+import arc.graphics.g2d.Draw;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.util.Time;
@@ -17,6 +18,7 @@ import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.StatusEntry;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
+import mindustry.graphics.Drawf;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
@@ -29,7 +31,15 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
     private int sid = -1;
     public Unit spawner;
     public Floor[] tiles = new Floor[2];
-    public Tile lastMineTile = null;
+
+    public static TileMiner create() {
+        return new TileMiner();
+    }
+
+    @Override
+    public int classId() {
+        return 114;
+    }
 
     @Override
     public void update() {
@@ -134,15 +144,7 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
 //                this.mineTimer = 0.0F;
 //            } else
             if (this.mining() && item != null) {
-                if (mineTile.within(this, hitSize * 5)) {
-                    this.mineTimer += Time.delta;
-                } else if (lastMineTile != mineTile) {
-                    mineTimer = 0;
-                } else {
-                    this.mineTimer = 0;
-                    mineTile = null;
-                }
-                lastMineTile = mineTile;
+                mineTimer += Time.delta;
 
                 if (Mathf.chance(0.06 * (double) Time.delta)) {
                     Fx.pulverizeSmall.at(this.mineTile.worldx() + Mathf.range(4.0F), this.mineTile.worldy() + Mathf.range(4.0F), 0.0F, item.color);
@@ -175,7 +177,6 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
             }
         } else {
             mineTimer = 0;
-            lastMineTile = null;
         }
 
         this.shieldAlpha -= Time.delta / 15.0F;
@@ -343,13 +344,17 @@ public class TileMiner extends UnitEntityLegacyMono implements OwnerSpawner {
         }
     }
 
-    public static TileMiner create() {
-        return new TileMiner();
-    }
-
     @Override
-    public int classId() {
-        return 114;
+    public void draw() {
+        super.draw();
+
+        float dx = Angles.trnsx(rotation + 90, hitSize), dy = Angles.trnsy(rotation + 90, hitSize);
+        if (tiles[0] != null) {
+            Draw.rect(tiles[0].itemDrop.uiIcon, x + dx, y + dy,rotation);
+        }
+        if (tiles[1] != null) {
+            Draw.rect(tiles[1].itemDrop.uiIcon, x - dx, y - dy,rotation);
+        }
     }
 
     @Override

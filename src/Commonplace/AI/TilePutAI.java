@@ -42,7 +42,9 @@ public class TilePutAI extends AIController {
                     if (floor instanceof OreBlock) {
                         tile.setOverlay(floor);
                     } else {
+                        Floor overlay = tile.overlay();
                         tile.setFloor(floor);
+                        tile.setOverlay(overlay);
                     }
                     tile.overlay().drawBase(tile);
 

@@ -1179,8 +1179,8 @@ public class FUnits {
         }};
         transfer = new TileMinerUnitType("transfer") {{
             constructor = TileMiner::create;
-            defaultCommand = new UnitCommand("TileMine", "TileMine", TileMinerAI::new);
-            aiController = TileMinerAI::new;
+            defaultCommand = new UnitCommand("TileMine", "TileMine", TileMineAI::new);
+            aiController = TileMineAI::new;
             commands = new UnitCommand[]{
                     defaultCommand,
                     new UnitCommand("TilePut", "TilePut", TilePutAI::new)
