@@ -49,6 +49,13 @@ public class UnitOverride {
         UnitTypes.gamma.buildSpeed = 2f;
         UnitTypes.gamma.mineSpeed = 12f;
 
+        UnitTypes.evoke.buildSpeed = 1.7f;
+        UnitTypes.evoke.mineSpeed = 9f;
+        UnitTypes.incite.buildSpeed = 2f;
+        UnitTypes.incite.mineSpeed = 12f;
+        UnitTypes.emanate.buildSpeed = 2.3f;
+        UnitTypes.emanate.mineSpeed = 13.5f;
+
         UnitTypes.dagger.constructor = FMechUnit::create;
         UnitTypes.mace.constructor = FMechUnit::create;
         UnitTypes.fortress.constructor = FMechUnit::create;
@@ -178,7 +185,7 @@ public class UnitOverride {
         weapon.bullet.lightningDamage = 13;
         weapon.bullet.lightningLength = 6;
         weapon.bullet.lightningCone = 360;
-        weapon.bullet.incendChance = 0.1f;
+        weapon.bullet.incendChance = 0.3f;
         weapon.bullet.incendAmount = 3;
         UnitTypes.fortress.weapons.add(new Weapon() {{
             reload = 18;

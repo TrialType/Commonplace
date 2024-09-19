@@ -1,7 +1,6 @@
 package Commonplace.Entities.FUnitType;
 
 import Commonplace.AI.BoostFlyingAI;
-import Commonplace.Content.SpecialContent.Stats;
 import Commonplace.Content.SpecialContent.Effects;
 import arc.graphics.g2d.Draw;
 import arc.math.Interp;
@@ -56,19 +55,5 @@ public class BoostUnitType extends UnitType {
     public BoostUnitType(String name) {
         super(name);
         aiController = BoostFlyingAI::new;
-    }
-
-    @Override
-    public void setStats() {
-        super.setStats();
-        stats.add(Stats.speed1, speed1);
-        stats.add(Stats.health2, health2);
-        stats.add(Stats.change_time, exchangeTime);
-        stats.add(Stats.activate_number, number);
-        stats.add(Stats.boost_reload, boostReload);
-        stats.add(Stats.hit_damage, hitDamage);
-        stats.add(Stats.hit_percent, hitPercent);
-        stats.add(Stats.first_percent, hitFirstPercent);
-        stats.add(Stats.change_hel, hitChangeHel);
     }
 }

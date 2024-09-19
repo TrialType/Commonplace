@@ -1189,11 +1189,12 @@ public class FUnits {
             alwaysUnlocked = true;
             isEnemy = false;
             useUnitCap = false;
+            playerControllable = logicControllable = false;
 
             flying = true;
-            health = 400;
+            health = 600;
             speed = 1.7F;
-            armor = 7;
+            armor = 9;
             drag = 0.8F;
             accel = 0.8F;
             rotateSpeed = 4;
@@ -1240,18 +1241,19 @@ public class FUnits {
                 x = 2.7F;
                 top = false;
                 alternate = false;
-                shoot.shots = 12;
+                shoot.shots = 15;
+                shoot.shotDelay = 1;
                 bullet = new BasicBulletType() {{
                     homingDelay = 45;
                     homingPower = 0.1F;
                     homingRange = 1000;
-                    inaccuracy = 30;
+                    inaccuracy = 360;
                     weaveRandom = true;
                     speed = 3.7F;
                     damage = 1;
                     lifetime = 240;
-                    splashDamage = 150;
-                    splashDamageRadius = 25.5F;
+                    splashDamage = 15;
+                    splashDamageRadius = 12;
                     trailChance = 1F;
                 }};
             }});

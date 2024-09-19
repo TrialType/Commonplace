@@ -231,7 +231,7 @@ public abstract class UnitPeculiarity {
                 u.mounts[i] = new WeaponMount(weapon);
             }
         });
-        Peculiarity Hill = new Peculiarity(u -> {
+        Peculiarity Strong = new Peculiarity(u -> {
             u.maxHealth = (int) (u.maxHealth * 5f);
             u.health = (int) (u.health * 5f);
         });
@@ -241,19 +241,19 @@ public abstract class UnitPeculiarity {
             for (int i = 0; i < u.mounts.length; i++) {
                 Weapon weapon = u.mounts[i].weapon.copy();
                 BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.05f;
+                bullet.damage *= 1.1f;
                 weapon.bullet = bullet;
                 u.mounts[i] = new WeaponMount(weapon);
             }
-            u.maxHealth = (int) (u.maxHealth * 0.95f);
+            u.maxHealth = (int) (u.maxHealth * 0.9f);
             u.health = Math.min(u.maxHealth, u.health);
         });
         Peculiarity DamageToReload = new Peculiarity(u -> {
             for (int i = 0; i < u.mounts.length; i++) {
                 Weapon weapon = u.mounts[i].weapon.copy();
                 BulletType bullet = weapon.bullet.copy();
-                weapon.reload *= 1.05f;
-                bullet.damage *= 0.95f;
+                weapon.reload *= 1.1f;
+                bullet.damage *= 0.9f;
                 weapon.bullet = bullet;
                 u.mounts[i] = new WeaponMount(weapon);
             }
@@ -268,16 +268,28 @@ public abstract class UnitPeculiarity {
                 u.mounts[i] = new WeaponMount(weapon);
             }
         });
+        Peculiarity Heal2ReloadToDamage = new Peculiarity(u -> {
+            for (int i = 0; i < u.mounts.length; i++) {
+                Weapon weapon = u.mounts[i].weapon.copy();
+                BulletType bullet = weapon.bullet.copy();
+                weapon.reload *= 1.1f;
+                bullet.damage *= 1.35f;
+                weapon.bullet = bullet;
+                u.mounts[i] = new WeaponMount(weapon);
+            }
+            u.maxHealth = (int) (u.maxHealth * 0.75f);
+            u.health = Math.min(u.maxHealth, u.health);
+        });
         Peculiarity Glass = new Peculiarity(u -> {
             for (int i = 0; i < u.mounts.length; i++) {
                 Weapon weapon = u.mounts[i].weapon.copy();
                 BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 4.5f;
+                bullet.damage *= 6.5f;
                 weapon.bullet = bullet;
                 u.mounts[i] = new WeaponMount(weapon);
             }
-            u.maxHealth = 35;
-            u.health = Math.min(35, u.health);
+            u.maxHealth = Math.max((int) (u.type.health / 100), 35);
+            u.health = Math.min(u.maxHealth, u.health);
         }, 3);
         Peculiarity Stone = new Peculiarity(u -> {
             for (int i = 0; i < u.mounts.length; i++) {
@@ -287,6 +299,15 @@ public abstract class UnitPeculiarity {
             }
             u.maxHealth *= 15;
             u.health *= 15;
+        });
+        Peculiarity Hill = new Peculiarity(u -> {
+            for (int i = 0; i < u.mounts.length; i++) {
+                Weapon weapon = u.mounts[i].weapon.copy();
+                weapon.reload *= 10;
+                u.mounts[i] = new WeaponMount(weapon);
+            }
+            u.maxHealth *= 25;
+            u.health *= 25;
         });
 
         //bad
@@ -371,7 +392,7 @@ public abstract class UnitPeculiarity {
                 ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2,
                 ReloadGrow3, ReloadGrow3, ReloadGrow3,
 
-                Hill
+                Strong
         );
         middenPeculiarity.addAll(
                 HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage,
@@ -383,7 +404,10 @@ public abstract class UnitPeculiarity {
                 FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage,
                 FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage,
 
-                Glass, Stone
+                Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage,
+                Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage,
+
+                Glass, Stone, Hill
         );
         badPeculiarity.addAll(
                 HealBreak, HealBreak, HealBreak, HealBreak, HealBreak, HealBreak,
@@ -414,7 +438,7 @@ public abstract class UnitPeculiarity {
             id = all.size;
             all.add(this);
             this.apply = apply;
-            this.value = 0;
+            this.value = 1;
         }
 
         public Peculiarity(Cons<Unit> apply, int value) {

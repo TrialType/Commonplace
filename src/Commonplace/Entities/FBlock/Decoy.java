@@ -1,6 +1,5 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Content.SpecialContent.Stats;
 import arc.Events;
 import arc.math.Mathf;
 import arc.struct.EnumSet;
@@ -33,22 +32,6 @@ public class Decoy extends Wall {
 
         flags = EnumSet.of(BlockFlag.battery, BlockFlag.factory, BlockFlag.generator, BlockFlag.reactor);
         priority = TargetPriority.core;
-    }
-
-    @Override
-    public void setStats() {
-        super.setStats();
-
-        if (flexibility > 0) {
-            stats.add(Stats.adaptDamageLossMax, adaptDamageMax == 0 ? 1 : (1 - adaptDamageMin / adaptDamageMax) * 100);
-            stats.add(Stats.adaptability, adaptability);
-            stats.add(Stats.adaptLoss, adaptLoss);
-            stats.add(Stats.flexibility, flexibility);
-        }
-        if (farDeflectChance > 0) {
-            stats.add(Stats.farDeflect, farDeflect);
-            stats.add(Stats.farDeflectChance, farDeflectChance);
-        }
     }
 
     public class DecoyBuild extends WallBuild {

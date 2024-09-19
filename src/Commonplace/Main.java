@@ -19,7 +19,6 @@ public class Main extends Mod {
         Sign.load();
         MSettings.load();
         FLiquids.load();
-        FItems.load();
         Commands.load();
         Entities.load();
         FStatusEffects.load();
