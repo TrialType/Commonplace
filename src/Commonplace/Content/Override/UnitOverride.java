@@ -9,7 +9,6 @@ import Commonplace.Entities.FBulletType.*;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.Entities.FUnit.Override.*;
 import Commonplace.FType.EffectTypes.PackEffect;
-import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -760,43 +759,54 @@ public class UnitOverride {
         weapon.bullet.hitEffect = Effects.LightningCircle;
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
-        weapon.bullet.statusDuration = 30;
+        weapon.bullet.statusDuration = 90;
 
         UnitTypes.quell.health = 22000;
         UnitTypes.quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
 
         UnitTypes.disrupt.health = 42000;
         UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
-        UnitTypes.disrupt.weapons.add(new Weapon("") {{
+        UnitTypes.disrupt.weapons.add(new Weapon() {{
             mirror = false;
             x = 0;
             y = 30;
             shootX = 0;
             shootY = 0;
-            reload = 150;
+            reload = 480;
             inaccuracy = 0;
             shootCone = 60;
             rotate = false;
+            parentizeEffects = true;
 
-//            parts.addAll(new RegionPart("disrupt-blade") {{
-//                progress = PartProgress.warmup;
-//                heatColor = Color.valueOf("9c50ff");
-//                x = 0;
-//                y = 0;
-//                moveRot = 0;
-//                moveY = -5f;
-//                moveX = -5f;
-//                top = true;
-//                mirror = true;
-//                outline = false;
-//            }});
+            parts.add(new RegionPart("") {{
+                progress = PartProgress.warmup.blend(PartProgress.reload, 0.13f);
+                heatColor = Color.valueOf("9c50ff");
+                x = 0;
+                y = 0;
+                moveRot = 0;
+                moveY = -5f;
+                moveX = -5f;
+                top = true;
+                mirror = true;
+                outline = false;
+                name = "disrupt-blade";
+            }});
 
-            shoot.firstShotDelay = 120;
+            shoot.firstShotDelay = 150;
             bullet = new EffectBulletType() {{
-                lifetime = 300;
-                speed = 1;
-                damage = 100;
+                lifetime = 360;
+                speed = 0.8f;
+                damage = 1500;
+                splashDamage = 800;
+                splashDamageRadius = 80;
+                status = StatusEffects.electrified;
+                statusDuration = 210;
                 inaccuracy = 0;
+                homingPower = 0.05f;
+                homingRange = 800;
+                keepVelocity = false;
+
+                hittable = reflectable = absorbable = false;
 
                 parts.addAll(new ShapePart() {{
                     circle = true;
@@ -825,8 +835,8 @@ public class UnitOverride {
                         Effects.ball,
                         new PackEffect(
                                 Effects.lightningSmallIn, Pal.suppress.cpy().mul(1.3f), 0, 0,
-                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75,
-                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75
+                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75, 88, 85, 86, 94, 96, 99, 102, 103, 105,
+                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75, 88, 85, 86, 94, 96, 99, 102, 103, 105
                         )
                 );
             }};

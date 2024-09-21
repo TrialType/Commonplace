@@ -220,8 +220,8 @@ public class Effects {
 
         Draw.color(c.color.cpy().mul(1.69f));
         Lines.stroke(1.2f);
-        EffectMultipleTimes e = new EffectMultipleTimes(4, 60, len, 0.05f, 1.2f, 15, 0.55f);
-        for (int i = 0; i < 25; i++) {
+        EffectMultipleTimes e = new EffectMultipleTimes(4, 45, len, 0.05f, 1.2f, 15, 0.55f);
+        for (int i = 0; i < 20; i++) {
             int finalI = i;
             c.scaled(c.lifetime, r -> {
                 r.id += finalI + 1;
@@ -229,7 +229,7 @@ public class Effects {
                 LightningGrows.get(r);
             });
         }
-    }), ball = new Effect(120, 120, c -> {
+    }), ball = new Effect(150, 120, c -> {
         Draw.z(Layer.effect);
         Color color = Pal.suppress;
         float rad = Math.min(1, c.fin()) * (4 + Mathf.absin(8f, 1f));
