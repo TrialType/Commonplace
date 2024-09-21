@@ -1,4 +1,4 @@
-package Commonplace.FType.FDialog;
+package Commonplace.FType.Dialogs;
 
 import Commonplace.Content.DefaultContent.FStatusEffects;
 import Commonplace.Content.ProjectContent.Sign;
@@ -16,7 +16,6 @@ import mindustry.Vars;
 import mindustry.core.GameState;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
-import mindustry.game.Gamemode;
 import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.gen.Unit;

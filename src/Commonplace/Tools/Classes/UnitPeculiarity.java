@@ -9,10 +9,16 @@ import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
+import mindustry.type.weapons.RepairBeamWeapon;
 
 import static mindustry.content.UnitTypes.*;
 
 public abstract class UnitPeculiarity {
+    static final int ChangeNumberOrAddProject = 0;
+    static final int Default = 1;
+    static final int None = 2;
+    static final int LimitAll = 3;
+
     public static final Seq<UnitType> blackList = new Seq<>();
     public static final Seq<Peculiarity> all = new Seq<>();
     public static final Seq<Peculiarity> wellPeculiarity = new Seq<>();
@@ -171,210 +177,61 @@ public abstract class UnitPeculiarity {
         blackList.addAll(alpha, beta, gamma, mono);
 
         //well
-        Peculiarity HealGrow = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 1.1f);
-            u.health = (int) (u.health * 1.1f);
-        });
-        Peculiarity HealGrow2 = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 1.3f);
-            u.health = (int) (u.health * 1.3f);
-        });
-        Peculiarity HealGrow3 = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 1.6f);
-            u.health = (int) (u.health * 1.6f);
-        });
-        Peculiarity DamageGrow = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.1f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity DamageGrow2 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.3f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity DamageGrow3 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.6f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadGrow = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 0.95f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadGrow2 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 0.85f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadGrow3 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 0.7f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity Strong = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 5f);
-            u.health = (int) (u.health * 5f);
-        });
+        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.1f, 0));
+        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.3f, 0));
+        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.6f, 0));
+        Peculiarity DamageGrow = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f)));
+        Peculiarity DamageGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.3f, f -> w.reload *= f)));
+        Peculiarity DamageGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.6f, f -> w.reload *= f)));
+        Peculiarity ReloadGrow = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.95f));
+        Peculiarity ReloadGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.85f));
+        Peculiarity ReloadGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.7f));
+        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 5f, 0));
 
         //midden
         Peculiarity HealToDamage = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.1f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-            u.maxHealth = (int) (u.maxHealth * 0.9f);
-            u.health = Math.min(u.maxHealth, u.health);
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f));
+            resetHealth(u, 0.9f, 1);
         });
-        Peculiarity DamageToReload = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                weapon.reload *= 1.1f;
-                bullet.damage *= 0.9f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity FragsToDamage = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 1.1f;
-                bullet.fragBullets -= 1;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
+        Peculiarity DamageToReload = new Peculiarity(u -> applyWeapon(u, w -> {
+            w.reload *= 1.1f;
+            w.bullet = resetDamage(w.bullet, 0.9f, f -> w.reload *= f);
+        }));
+        Peculiarity FragsToDamage = new Peculiarity(u -> applyWeapon(u, w -> {
+            w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
+            w.bullet.fragBullets -= 1;
+        }), ChangeNumberOrAddProject);
         Peculiarity Heal2ReloadToDamage = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                weapon.reload *= 1.1f;
-                bullet.damage *= 1.35f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-            u.maxHealth = (int) (u.maxHealth * 0.75f);
-            u.health = Math.min(u.maxHealth, u.health);
+            applyWeapon(u, w -> {
+                w.reload *= 1.1f;
+                w.bullet = resetDamage(w.bullet, 1.35f, f -> w.reload *= f);
+            });
+            resetHealth(u, 0.75f, 1);
         });
         Peculiarity Glass = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 6.5f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-            u.maxHealth = Math.max((int) (u.type.health / 100), 35);
-            u.health = Math.min(u.maxHealth, u.health);
-        }, 3);
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 6.5f, f -> w.reload *= f));
+            resetHealth(u, 0.01f, 35);
+        }, LimitAll);
         Peculiarity Stone = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 5;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-            u.maxHealth *= 15;
-            u.health *= 15;
+            applyWeapon(u, w -> w.reload *= 5);
+            resetHealth(u, 15, 0);
         });
         Peculiarity Hill = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 10;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-            u.maxHealth *= 25;
-            u.health *= 25;
+            applyWeapon(u, w -> w.reload *= 15);
+            resetHealth(u, 25, 0);
         });
 
         //bad
-        Peculiarity HealBreak = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 0.95f);
-            u.health = Math.min(u.maxHealth, u.health);
-        });
-        Peculiarity HealBreak2 = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 0.85f);
-            u.health = Math.min(u.maxHealth, u.health);
-        });
-        Peculiarity HealBreak3 = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 0.7f);
-            u.health = Math.min(u.maxHealth, u.health);
-        });
-        Peculiarity DamageBreak = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 0.95f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity DamageBreak2 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 0.85f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity DamageBreak3 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                BulletType bullet = weapon.bullet.copy();
-                bullet.damage *= 0.7f;
-                weapon.bullet = bullet;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadBreak = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 1.1f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadBreak2 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 1.3f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity ReloadBreak3 = new Peculiarity(u -> {
-            for (int i = 0; i < u.mounts.length; i++) {
-                Weapon weapon = u.mounts[i].weapon.copy();
-                weapon.reload *= 1.6f;
-                u.mounts[i] = new WeaponMount(weapon);
-            }
-        });
-        Peculiarity Incomplete = new Peculiarity(u -> {
-            u.maxHealth = (int) (u.maxHealth * 0.45f);
-            u.health = Math.min(u.maxHealth, u.health);
-        });
+        Peculiarity HealBreak = new Peculiarity(u -> resetHealth(u, 0.95f, 1));
+        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.85f, 1));
+        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.7f, 1));
+        Peculiarity DamageBreak = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.95f, f -> w.reload *= f)));
+        Peculiarity DamageBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.85f, f -> w.reload *= f)));
+        Peculiarity DamageBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.7f, f -> w.reload *= f)));
+        Peculiarity ReloadBreak = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.1f));
+        Peculiarity ReloadBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.3f));
+        Peculiarity ReloadBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.6f));
+        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.45f, 1));
 
         wellPeculiarity.addAll(
                 HealGrow, HealGrow, HealGrow, HealGrow, HealGrow, HealGrow,
@@ -429,6 +286,54 @@ public abstract class UnitPeculiarity {
         );
     }
 
+    public static void applyWeapon(Unit target, Cons<Weapon> apply) {
+        for (int i = 0; i < target.mounts.length; i++) {
+            if (!(target.mounts[i] instanceof RepairBeamWeapon.HealBeamMount)) {
+                Weapon weapon = target.mounts[i].weapon.copy();
+                apply.get(weapon);
+                target.mounts[i] = new WeaponMount(weapon);
+            }
+        }
+    }
+
+    public static BulletType resetDamage(BulletType bullet, float des, Cons<Float> weapon) {
+        BulletType type = bullet.copy();
+        type.damage *= des;
+        type.splashDamage *= des;
+        type.lightningDamage *= des;
+        if (type.fragBullet != null && type.fragBullets >= 1) {
+            type.fragBullet = resetDamage(type.fragBullet, des, weapon);
+        }
+        if (type.intervalBullet != null && type.intervalBullets >= 1) {
+            type.intervalBullet = resetDamage(type.intervalBullet, des, weapon);
+        }
+        if (type.spawnUnit != null) {
+            if (des == 0) {
+                weapon.get(100000000f);
+            } else {
+                weapon.get(1 / des);
+            }
+        }
+        if (type.despawnUnit != null) {
+            if (des == 0) {
+                weapon.get(100000000f);
+            } else {
+                weapon.get(1 / des);
+            }
+        }
+        return type;
+    }
+
+    public static void resetHealth(Unit u, float des, float min) {
+        if (des >= 1) {
+            u.maxHealth = (int) (u.maxHealth * des);
+            u.health = Math.min(u.maxHealth, u.health * des);
+        } else {
+            u.maxHealth = Math.max((int) (u.maxHealth * des), min);
+            u.health = Math.min(u.maxHealth, u.health);
+        }
+    }
+
     public static class Peculiarity implements Cons<Unit> {
         final Cons<Unit> apply;
         final int id;
@@ -438,7 +343,7 @@ public abstract class UnitPeculiarity {
             id = all.size;
             all.add(this);
             this.apply = apply;
-            this.value = 1;
+            this.value = Default;
         }
 
         public Peculiarity(Cons<Unit> apply, int value) {

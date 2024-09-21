@@ -24,7 +24,7 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 
-import static Commonplace.FType.FDialog.ProjectDialog.project;
+import static Commonplace.FType.Dialogs.ProjectDialog.project;
 import static arc.Core.input;
 import static mindustry.Vars.player;
 import static mindustry.Vars.state;

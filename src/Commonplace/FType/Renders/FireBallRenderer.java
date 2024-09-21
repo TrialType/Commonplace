@@ -1,6 +1,6 @@
-package Commonplace.FType.FRender;
+package Commonplace.FType.Renders;
 
-import Commonplace.FType.FShaders.FireBallShader;
+import Commonplace.FType.Shaders.FireBallShader;
 import arc.Events;
 import arc.graphics.Color;
 import arc.graphics.g2d.Bloom;

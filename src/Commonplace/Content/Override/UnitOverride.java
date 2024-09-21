@@ -8,6 +8,8 @@ import Commonplace.Entities.FAbility.TimeLargeDamageAbility;
 import Commonplace.Entities.FBulletType.*;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.Entities.FUnit.Override.*;
+import Commonplace.FType.EffectTypes.PackEffect;
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -23,6 +25,9 @@ import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.entities.effect.MultiEffect;
+import mindustry.entities.part.RegionPart;
+import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
@@ -750,12 +755,82 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.obviate.health = 8050;
+        weapon = UnitTypes.obviate.weapons.first();
+        weapon.bullet.despawnEffect = Effects.LightningCircle;
+        weapon.bullet.hitEffect = Effects.LightningCircle;
+        weapon.bullet.splashDamageRadius = 12;
+        weapon.bullet.status = StatusEffects.electrified;
+        weapon.bullet.statusDuration = 30;
 
         UnitTypes.quell.health = 22000;
         UnitTypes.quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
 
         UnitTypes.disrupt.health = 42000;
         UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
+        UnitTypes.disrupt.weapons.add(new Weapon("") {{
+            mirror = false;
+            x = 0;
+            y = 30;
+            shootX = 0;
+            shootY = 0;
+            reload = 150;
+            inaccuracy = 0;
+            shootCone = 60;
+            rotate = false;
+
+//            parts.addAll(new RegionPart("disrupt-blade") {{
+//                progress = PartProgress.warmup;
+//                heatColor = Color.valueOf("9c50ff");
+//                x = 0;
+//                y = 0;
+//                moveRot = 0;
+//                moveY = -5f;
+//                moveX = -5f;
+//                top = true;
+//                mirror = true;
+//                outline = false;
+//            }});
+
+            shoot.firstShotDelay = 120;
+            bullet = new EffectBulletType() {{
+                lifetime = 300;
+                speed = 1;
+                damage = 100;
+                inaccuracy = 0;
+
+                parts.addAll(new ShapePart() {{
+                    circle = true;
+                    color = colorTo = Pal.suppress;
+                    radius = 5 * 0.33f;
+                    radiusTo = 6 * 0.33f;
+                }}, new ShapePart() {{
+                    circle = true;
+                    hollow = true;
+                    color = colorTo = Pal.suppress;
+                    radius = 5;
+                    radiusTo = 6;
+                    stroke = strokeTo = 2;
+                }});
+
+                hitColor = Pal.sap;
+                trailColor = Pal.suppress;
+                despawnEffect = hitEffect = Effects.LightningCircleLarge;
+                trailEffect = Effects.lightningSmallOut;
+                trailInterval = 1;
+                trailWidth = 0;
+                trailLength = 0;
+
+                shootEffect = Fx.none;
+                chargeEffect = new MultiEffect(
+                        Effects.ball,
+                        new PackEffect(
+                                Effects.lightningSmallIn, Pal.suppress.cpy().mul(1.3f), 0, 0,
+                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75,
+                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75
+                        )
+                );
+            }};
+        }});
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.anthicus.health = 10150;

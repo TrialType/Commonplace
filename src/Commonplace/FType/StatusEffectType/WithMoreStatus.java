@@ -1,4 +1,4 @@
-package Commonplace.FType.FStatusEffect;
+package Commonplace.FType.StatusEffectType;
 
 import arc.math.Mathf;
 import arc.struct.Seq;

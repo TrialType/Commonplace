@@ -1,4 +1,4 @@
-package Commonplace.FType.FDialog.Old;
+package Commonplace.FType.Dialogs.Old;
 
 import arc.struct.ObjectMap;
 import arc.struct.Seq;

@@ -1,4 +1,4 @@
-package Commonplace.FType.FPlanetGenerator;
+package Commonplace.FType.PlanetGenerators;
 
 import arc.graphics.Color;
 import arc.math.geom.Vec3;

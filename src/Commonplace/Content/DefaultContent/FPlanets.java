@@ -1,6 +1,6 @@
 package Commonplace.Content.DefaultContent;
 
-import Commonplace.FType.FPlanetGenerator.ENGSWEISPlanetGenerator;
+import Commonplace.FType.PlanetGenerators.ENGSWEISPlanetGenerator;
 import arc.graphics.Color;
 import mindustry.content.Planets;
 import mindustry.game.Team;

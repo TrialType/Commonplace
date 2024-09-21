@@ -1,4 +1,4 @@
-package Commonplace.FType.FShaders;
+package Commonplace.FType.Shaders;
 
 import arc.Core;
 import arc.graphics.gl.Shader;
