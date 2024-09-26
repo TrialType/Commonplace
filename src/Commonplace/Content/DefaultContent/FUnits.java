@@ -1,6 +1,7 @@
 package Commonplace.Content.DefaultContent;
 
 import Commonplace.AI.*;
+import Commonplace.Content.Override.UnitOverride;
 import Commonplace.Content.ProjectContent.Bullets;
 import Commonplace.Content.SpecialContent.Commands;
 import Commonplace.Entities.FAbility.*;
@@ -16,7 +17,9 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
+import mindustry.Vars;
 import mindustry.ai.UnitCommand;
+import mindustry.ai.types.MissileAI;
 import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -45,7 +48,7 @@ import static arc.math.Angles.randLenVectors;
 public class FUnits {
     public static Seq<UnitType> boss = new Seq<>();
     //tool
-    public static UnitType transfer, shuttlev_I, bulletInterception_a, rejuvenate_a;
+    public static UnitType transfer, shuttle1, bulletInterception_a, rejuvenate_a;
 
     //command
     public static UnitType strike;
@@ -606,15 +609,15 @@ public class FUnits {
                 }};
             }});
         }};
-        shuttlev_I = new UnitType("shuttlev_I") {{
-            constructor = UnitEntity::create;
+        shuttle1 = new UnitType("shuttle1") {{
+            constructor = TimedKillUnit::create;
+            controller = u -> new MissileAI();
 
             flying = true;
-            health = 1000;
-            armor = 47;
-            speed = 9;
-            drag = 0;
-            accel = 0;
+            health = 6000;
+            armor = 30;
+            speed = 3;
+            lifetime = 1200;
             logicControllable = false;
             playerControllable = false;
             useUnitCap = false;
@@ -622,48 +625,32 @@ public class FUnits {
             physics = false;
             faceTarget = false;
             allowedInPayloads = false;
-            rotateSpeed = 0;
-            alwaysUnlocked = true;
             hidden = true;
-            engines.add(new UnitEngine(0, -2.8F, 0.3F, -90));
-            engines.add(new UnitEngine(3, -2.8F, 1, -90));
-            engines.add(new UnitEngine(-3, -2.8F, 1, -90));
+
             weapons.add(new Weapon() {{
-                x = 2;
-                reload = 0.125F;
-                controllable = false;
-                autoTarget = true;
-                alwaysShooting = true;
-                aiControllable = false;
-                shoot = new ShootBarrel() {{
-                    shots = 1;
-                    shotDelay = 0;
+                mirror = false;
+                x = 0;
+                reload = 30f;
+
+                shootStatus = StatusEffects.slow;
+                shootStatusDuration = 37;
+                shoot = new ShootAlternate() {{
+                    shots = 12;
+                    shotDelay = 3;
+                    barrels = 3;
+                    spread = 9;
                 }};
-                bullet = new BasicBulletType() {
-                    {
-                        absorbable = true;
-                        speed = 1;
-                        width = 4;
-                        height = 4;
-                        damage = 13;
-                        lifetime = 750;
-                        weaveScale = 1540;
-                        weaveMag = 0.8F;
-                        pierce = true;
-                        pierceBuilding = true;
-                        lightning = 3;
-                        lightningDamage = 13;
-                        lightningLength = 3;
-                    }
-                };
-            }});
-            weapons.add(new Weapon() {{
-                alwaysShooting = true;
-                shoot = new ShootBarrel() {{
-                    firstShotDelay = 150;
-                }};
-                bullet = new ExplosionBulletType() {{
-                    damage = 0;
+                bullet = new BasicBulletType() {{
+                    speed = 2;
+                    drag = -0.1f;
+                    width = 12;
+                    height = 36;
+                    damage = 70;
+                    lifetime = 16;
+                    splashDamage = 45;
+                    splashDamageRadius = 32;
+                    rangeOverride = 200;
+                    hitEffect = despawnEffect = Fx.shockwave;
                 }};
             }});
         }};
@@ -697,12 +684,9 @@ public class FUnits {
                 mirror = false;
                 rotate = false;
                 alternate = true;
-                bullet = new BasicBulletType() {
-                    {
-                        keepVelocity = true;
-                        spawnUnit = shuttlev_I;
-                    }
-                };
+                bullet = new BulletType() {{
+                    spawnUnit = shuttle1;
+                }};
             }});
             weapons.add(new Weapon() {{
                 reload = 37;
@@ -1122,7 +1106,7 @@ public class FUnits {
             speed1 = 3;
 
             range = maxRange = 200;
-            hitReload = 15;
+            hitReload = 7;
             hitPercent = 1.5F;
             hitChangeHel = 1000;
             hitDamage = 280;
@@ -1163,17 +1147,18 @@ public class FUnits {
             itemCapacity = 30;
             hitSize = 5;
 
-            weapons.add(new Weapon("barb-weapon") {{
-                reload = 45;
+            weapons.add(new Weapon() {{
+                reload = 60;
                 y = 3.8F;
-                x = 2.7F;
-                top = false;
+                x = 0;
+                mirror = false;
                 shoot.shots = 5;
                 shoot.shotDelay = 7;
                 bullet = new BasicBulletType() {{
-                    speed = 3.7F;
-                    damage = 15;
-                    lifetime = 60;
+                    width = height = 16;
+                    speed = 5;
+                    damage = 20;
+                    lifetime = 44.4f;
                 }};
             }});
         }};
@@ -1553,7 +1538,6 @@ public class FUnits {
             health = 100000;
             armor = 250;
             speed = 3;
-
         }};
         herald = new UnitType("herald") {{
             constructor = MechUnit::create;
@@ -1561,26 +1545,31 @@ public class FUnits {
 
             health = 40000;
             armor = 300;
-            speed = 10;
+            speed = 2;
+            maxRange = 100;
 
-            abilities.add(new SpawnDeathAbility(exterminate, 1, 0));
+            abilities.add(new BoostExplosionAbility());
 
-            weapons.addAll(new Weapon() {{
+            weapons.add(new Weapon() {{
+                mirror = false;
                 x = y = 0;
-                shoot.firstShotDelay = 1800;
-                reload = 3600;
-                shootStatus = StatusEffects.unmoving;
-                shootStatusDuration = 3600;
-                bullet = new ExplosionBulletType(3000, 80) {{
-                    shootCone = 360;
+                reload = 150;
+
+                shoot = new ShootBarrel() {{
+                    barrels = new float[]{0f, 0f, 180f};
                 }};
-            }}, new Weapon() {{
-                x = y = 0;
-                reload = 12;
-                bullet = new ExplosionBulletType(1400, 40) {{
-                    killShooter = false;
-                    shootCone = 360;
-                    buildingDamageMultiplier = 0.5f;
+
+                bullet = new BulletType(0, 0) {{
+                    lifetime = 0;
+                    collides = collidesAir = collidesTiles = false;
+                    reflectable = absorbable = hittable = false;
+                    keepVelocity = false;
+
+                    recoil = 60;
+                    rangeOverride = 100;
+
+                    shootSound = Sounds.none;
+                    hitEffect = despawnEffect = Fx.none;
                 }};
             }});
         }};

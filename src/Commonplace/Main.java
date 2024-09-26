@@ -1,19 +1,12 @@
 package Commonplace;
 
 import Commonplace.Content.DefaultContent.*;
-import Commonplace.Content.Override.BlockOverride;
-import Commonplace.Content.Override.SectorPresetOverride;
-import Commonplace.Content.Override.TechOverride;
-import Commonplace.Content.Override.UnitOverride;
-import Commonplace.Content.ProjectContent.Sign;
-import Commonplace.Content.ProjectContent.UnitProjects;
+import Commonplace.Content.Override.*;
+import Commonplace.Content.ProjectContent.*;
 import Commonplace.Content.SpecialContent.*;
 import mindustry.mod.Mod;
 
 public class Main extends Mod {
-    public Main() {
-    }
-
     @Override
     public void loadContent() {
         Sign.load();

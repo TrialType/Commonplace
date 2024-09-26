@@ -78,7 +78,7 @@ public class TileMineAI extends AIController {
                 if (full) {
                     moveTo(miner.spawner, 5);
                 } else {
-                    targetPos = unit.command().targetPos;
+                    targetPos = unit.command() == null ? null : unit.command().targetPos;
                     if (targetPos != null) {
                         moveTo(targetPos, range * 0.8f);
 

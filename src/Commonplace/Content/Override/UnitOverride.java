@@ -1,6 +1,7 @@
 package Commonplace.Content.Override;
 
 import Commonplace.AI.MissileAI_II;
+import Commonplace.Content.DefaultContent.FUnits;
 import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Content.DefaultContent.FStatusEffects;
 import Commonplace.Entities.FAbility.SprintingAbility2;
@@ -9,6 +10,7 @@ import Commonplace.Entities.FBulletType.*;
 import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
 import Commonplace.Entities.FUnit.Override.*;
 import Commonplace.FType.EffectTypes.PackEffect;
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -28,6 +30,7 @@ import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.RegionPart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
+import mindustry.gen.ElevationMoveUnit;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
 import mindustry.graphics.Drawf;
@@ -765,31 +768,30 @@ public class UnitOverride {
         UnitTypes.quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
 
         UnitTypes.disrupt.health = 42000;
+        UnitTypes.disrupt.uiIcon = UnitTypes.disrupt.fullIcon = Core.atlas.find("disrupt");
         UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
         UnitTypes.disrupt.weapons.add(new Weapon() {{
             mirror = false;
             x = 0;
-            y = 30;
+            y = 0;
             shootX = 0;
-            shootY = 0;
+            shootY = 30;
             reload = 480;
             inaccuracy = 0;
             shootCone = 60;
             rotate = false;
             parentizeEffects = true;
 
-            parts.add(new RegionPart("") {{
+            parts.add(new RegionPart("commonplace-disrupt-blade") {{
                 progress = PartProgress.warmup.blend(PartProgress.reload, 0.13f);
                 heatColor = Color.valueOf("9c50ff");
                 x = 0;
                 y = 0;
                 moveRot = 0;
-                moveY = -5f;
-                moveX = -5f;
-                top = true;
+                moveY = -3f;
+                moveX = 0;
                 mirror = true;
                 outline = false;
-                name = "disrupt-blade";
             }});
 
             shoot.firstShotDelay = 150;
@@ -836,7 +838,7 @@ public class UnitOverride {
                         new PackEffect(
                                 Effects.lightningSmallIn, Pal.suppress.cpy().mul(1.3f), 0, 0,
                                 0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75, 88, 85, 86, 94, 96, 99, 102, 103, 105,
-                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75, 88, 85, 86, 94, 96, 99, 102, 103, 105
+                                26, 35, 50, 53, 75, 88, 94, 102, 105
                         )
                 );
             }};
