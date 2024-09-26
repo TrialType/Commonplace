@@ -30,7 +30,6 @@ import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.RegionPart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
-import mindustry.gen.ElevationMoveUnit;
 import mindustry.gen.Sounds;
 import mindustry.gen.TimedKillUnit;
 import mindustry.graphics.Drawf;
@@ -499,7 +498,7 @@ public class UnitOverride {
 
             maxRange = 300;
 
-            backColor = Pal.heal;
+            hitColor = backColor = Pal.heal;
             frontColor = Color.white;
             mixColorTo = Color.white;
 
@@ -508,7 +507,7 @@ public class UnitOverride {
 
             lifetime = 120;
 
-            despawnEffect = Effects.greenBombLarge;
+            despawnEffect = Effects.BombLarge;
             hitEffect = Fx.massiveExplosion;
             keepVelocity = false;
             spin = 2f;

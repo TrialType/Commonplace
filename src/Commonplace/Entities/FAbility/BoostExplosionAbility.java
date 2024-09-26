@@ -6,7 +6,7 @@ import mindustry.entities.abilities.Ability;
 import mindustry.gen.Unit;
 
 public class BoostExplosionAbility extends Ability {
-    public float minSpeed = 30;
+    public float minSpeed = 5;
     public float splashDamage = 1400;
     public float splashDamageRadius = 80;
 
@@ -18,7 +18,7 @@ public class BoostExplosionAbility extends Ability {
             unit.vel.setZero();
             get = false;
             Damage.damage(unit.team, unit.x, unit.y, splashDamageRadius, splashDamage, false, true, true, false, null);
-            Fx.flakExplosionBig.at(unit);
+            Fx.massiveExplosion.at(unit);
         } else if (unit.vel.len() > minSpeed) {
             get = true;
         }

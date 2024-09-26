@@ -1,9 +1,9 @@
 package Commonplace.Content.DefaultContent;
 
 import Commonplace.AI.*;
-import Commonplace.Content.Override.UnitOverride;
 import Commonplace.Content.ProjectContent.Bullets;
 import Commonplace.Content.SpecialContent.Commands;
+import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Entities.FAbility.*;
 import Commonplace.Entities.FBulletType.*;
 import Commonplace.Entities.FUnit.F.*;
@@ -17,10 +17,10 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import mindustry.Vars;
 import mindustry.ai.UnitCommand;
+import mindustry.ai.types.FlyingAI;
+import mindustry.ai.types.GroundAI;
 import mindustry.ai.types.MissileAI;
-import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
@@ -29,6 +29,7 @@ import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.ParticleEffect;
 import mindustry.entities.effect.WaveEffect;
+import mindustry.entities.part.FlarePart;
 import mindustry.entities.part.HoverPart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
@@ -611,7 +612,7 @@ public class FUnits {
         }};
         shuttle1 = new UnitType("shuttle1") {{
             constructor = TimedKillUnit::create;
-            controller = u -> new MissileAI();
+            controller = u -> new FlyingAI();
 
             flying = true;
             health = 6000;
@@ -642,14 +643,14 @@ public class FUnits {
                 }};
                 bullet = new BasicBulletType() {{
                     speed = 2;
-                    drag = -0.1f;
+                    drag = -0.2f;
                     width = 12;
                     height = 36;
                     damage = 70;
                     lifetime = 16;
                     splashDamage = 45;
                     splashDamageRadius = 32;
-                    rangeOverride = 200;
+                    rangeOverride = 160;
                     hitEffect = despawnEffect = Fx.shockwave;
                 }};
             }});
@@ -1536,17 +1537,109 @@ public class FUnits {
 
             hovering = true;
             health = 100000;
-            armor = 250;
-            speed = 3;
+            armor = 70;
+            speed = 2;
+
+            weapons.add(new Weapon() {{
+                mirror = false;
+                x = y = 0;
+                reload = 90;
+                shootCone = 360;
+
+                shoot = new ShootAlternate(7);
+                shoot.shots = 2;
+
+                bullet = new BulletType() {{
+                    damage = 0;
+                    speed = 4;
+                    lifetime = 180;
+
+                    homingRange = 720;
+                    homingPower = 0.2f;
+
+                    hittable = absorbable = false;
+                    reflectable = true;
+                    keepVelocity = false;
+                    despawnHit = true;
+
+                    hitEffect = despawnEffect = new Effect(90, 170, c -> {
+                        Draw.color(Pal.redderDust);
+                        Lines.stroke(5 * c.fout());
+                        Lines.circle(c.x, c.y, 150 * c.fin());
+                    });
+
+                    fragBullets = 1;
+                    fragBullet = new ContinuousCircleBulletType() {{
+                        reflectable = absorbable = hittable = false;
+
+                        speed = 0;
+                        lifetime = 240;
+                        damage = 200;
+                        damageTo = 600;
+                        damageInterval = 15;
+                        length = 60;
+                        lengthTo = 0;
+
+                        status = StatusEffects.slow;
+                        statusDuration = 15;
+
+                        fragOnHit = false;
+                        fragBullets = 1;
+                        fragBullet = new BulletType() {{
+                            reflectable = absorbable = hittable = false;
+
+                            lifetime = 0;
+                            damage = 0;
+                            speed = 0;
+                            splashDamage = 1000;
+                            splashDamageRadius = 100;
+
+                            status = StatusEffects.blasted;
+                            statusDuration = 90;
+
+                            hitColor = Pal.redderDust;
+                            hitEffect = despawnEffect = Effects.BombMid;
+                        }};
+
+                        parts.addAll(new FlarePart() {{
+                            sides = 3;
+                            rotate = true;
+                            spinSpeed = 20;
+                            radius = 45;
+                            radiusTo = 0;
+                            stroke = 2.5f;
+                            color1 = color2 = Pal.redderDust;
+                        }}, new FlarePart() {{
+                            sides = 3;
+                            rotate = true;
+                            rotation = 180;
+                            spinSpeed = 20;
+                            radius = 45;
+                            radiusTo = 0;
+                            stroke = 2.5f;
+                            color1 = color2 = Pal.redderDust;
+                        }});
+                    }};
+
+                    parts.add(new FlarePart() {{
+                        sides = 3;
+                        rotate = true;
+                        spinSpeed = 12;
+                        radius = radiusTo = 30;
+                        stroke = 2.5f;
+                        color1 = color2 = Pal.redderDust;
+                    }});
+                }};
+            }});
         }};
         herald = new UnitType("herald") {{
             constructor = MechUnit::create;
-            aiController = SuicideAI::new;
+            aiController = GroundAI::new;
 
             health = 40000;
             armor = 300;
             speed = 2;
-            maxRange = 100;
+            maxRange = 200;
 
             abilities.add(new BoostExplosionAbility());
 
@@ -1554,8 +1647,12 @@ public class FUnits {
                 mirror = false;
                 x = y = 0;
                 reload = 150;
+                shootStatus = FStatusEffects.back;
+                shootStatusDuration = 10;
 
                 shoot = new ShootBarrel() {{
+                    shots = 6;
+                    shotDelay = 1;
                     barrels = new float[]{0f, 0f, 180f};
                 }};
 
@@ -1565,9 +1662,10 @@ public class FUnits {
                     reflectable = absorbable = hittable = false;
                     keepVelocity = false;
 
-                    recoil = 60;
-                    rangeOverride = 100;
+                    recoil = 10;
+                    rangeOverride = 150;
 
+                    shootEffect = Fx.none;
                     shootSound = Sounds.none;
                     hitEffect = despawnEffect = Fx.none;
                 }};

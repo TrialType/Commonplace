@@ -156,13 +156,14 @@ public class Effects {
                 c.y + Angles.trnsy(rotate + 90, c.finpow() * 25), 2);
         Fill.circle(c.x + Angles.trnsx(rotate - 90, c.finpow() * 25),
                 c.y + Angles.trnsy(rotate - 90, c.finpow() * 25), 2);
-    }), greenBombLarge = new Effect(40f, 800f, e -> {
-        color(Pal.heal);
+    }), BombLarge = new Effect(40f, 800f, e -> {
+        Color color = e.color;
+        color(color);
         stroke(e.fout() * 5);
         float circleRad = 4f + e.finpow() * 520f;
         Lines.circle(e.x, e.y, circleRad);
 
-        color(Pal.heal);
+        color(color);
         for (int i = 0; i < 4; i++) {
             Drawf.tri(e.x, e.y, 48f, 800f * e.fout(), i * 90);
         }
@@ -172,7 +173,25 @@ public class Effects {
             Drawf.tri(e.x, e.y, 23f, 280f * e.fout(), i * 90);
         }
 
-        Drawf.light(e.x, e.y, circleRad * 1.6f, Pal.heal, e.fout());
+        Drawf.light(e.x, e.y, circleRad * 1.6f, color, e.fout());
+    }), BombMid = new Effect(40f, 120, e -> {
+        Color color = e.color;
+        color(color);
+        stroke(e.fout() * 5);
+        float circleRad = 4f + e.finpow() * 17f;
+        Lines.circle(e.x, e.y, circleRad);
+
+        color(color);
+        for (int i = 0; i < 4; i++) {
+            Drawf.tri(e.x, e.y, 12f, 110f * e.fout(), i * 90);
+        }
+
+        color();
+        for (int i = 0; i < 4; i++) {
+            Drawf.tri(e.x, e.y, 6f, 42f * e.fout(), i * 90);
+        }
+
+        Drawf.light(e.x, e.y, circleRad * 1.6f, color, e.fout());
     }), lightningDown = new Effect(15, c -> {
         rand.setSeed(c.id);
         Seq<Vec2> lines = new Seq<>();
