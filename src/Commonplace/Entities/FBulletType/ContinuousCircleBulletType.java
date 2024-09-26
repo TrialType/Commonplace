@@ -13,5 +13,9 @@ public class ContinuousCircleBulletType extends ContinuousBulletType {
         Damage.damage(b.team, b.x, b.y, length * (1 - b.fin()) + b.fin() * lengthTo,
                 damage * (1 - b.fin()) + b.fin() * damageTo,
                 false, collidesAir, collidesTiles, false, b);
+        if (status != null) {
+            Damage.status(b.team, b.x, b.y, length * (1 - b.fin()) + b.fin() * lengthTo,
+                    status, statusDuration, collidesAir, collidesTiles);
+        }
     }
 }
