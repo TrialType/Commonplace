@@ -797,8 +797,8 @@ public class UnitOverride {
             bullet = new EffectBulletType() {{
                 lifetime = 360;
                 speed = 0.8f;
-                damage = 1500;
-                splashDamage = 800;
+                damage = 600;
+                splashDamage = 300;
                 splashDamageRadius = 80;
                 status = StatusEffects.electrified;
                 statusDuration = 210;
@@ -825,7 +825,7 @@ public class UnitOverride {
 
                 hitColor = Pal.sap;
                 trailColor = Pal.suppress;
-                despawnEffect = hitEffect = Effects.LightningCircleLarge;
+                despawnEffect = hitEffect = Fx.none;
                 trailEffect = Effects.lightningSmallOut;
                 trailInterval = 1;
                 trailWidth = 0;
@@ -836,10 +836,37 @@ public class UnitOverride {
                         Effects.ball,
                         new PackEffect(
                                 Effects.lightningSmallIn, Pal.suppress.cpy().mul(1.3f), 0, 0,
-                                0, 3, 26, 27, 35, 49, 50, 53, 66, 70, 75, 88, 85, 86, 94, 96, 99, 102, 103, 105,
+                                0, 3, 26, 27, 35, 53, 66, 88, 85, 86, 94, 103, 105,
                                 26, 35, 50, 53, 75, 88, 94, 102, 105
                         )
                 );
+
+                fragBullets = 1;
+                fragBullet = new BulletType() {{
+                    absorbable = reflectable = hittable = collides = false;
+
+                    parts.addAll(new ShapePart() {{
+                        circle = true;
+                        color = colorTo = Pal.suppress;
+                        radius = radiusTo = 6 * 0.33f;
+                    }}, new ShapePart() {{
+                        circle = true;
+                        hollow = true;
+                        color = colorTo = Pal.suppress;
+                        radius = radiusTo = 6;
+                        stroke = strokeTo = 2;
+                    }});
+
+                    damage = speed = 0;
+                    lifetime = 240;
+                    intervalBullets = 5;
+                    bulletInterval = 3;
+                    intervalBullet = new LightningBulletType() {{
+                        damage = 60;
+                        lightningLength = 6;
+                        lightningColor = Pal.sap;
+                    }};
+                }};
             }};
         }});
         /*-----------------------------------------------------------------------------*/

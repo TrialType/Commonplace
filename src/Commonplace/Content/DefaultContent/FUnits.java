@@ -1,7 +1,6 @@
 package Commonplace.Content.DefaultContent;
 
 import Commonplace.AI.*;
-import Commonplace.Content.ProjectContent.Bullets;
 import Commonplace.Content.SpecialContent.Commands;
 import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Entities.FAbility.*;
@@ -18,9 +17,8 @@ import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.ai.UnitCommand;
-import mindustry.ai.types.FlyingAI;
 import mindustry.ai.types.GroundAI;
-import mindustry.ai.types.MissileAI;
+import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
@@ -226,30 +224,30 @@ public class FUnits {
                 }};
             }});
         }};
-        strike = new UnitType("strike") {{
-            constructor = FUnitEntity::create;
+        strike = new MissileUnitType("strike") {{
+            constructor = TimedKillUnit::create;
+            controller = u -> new FlyingFinderAI();
 
             flying = true;
             faceTarget = true;
-            health = 50;
-            armor = 2;
-            speed = 3;
+            circleTarget = true;
+            health = 12000;
+            armor = 15;
+            speed = 6;
             hitSize = 9;
-            range = maxRange = 100;
+            lifetime = 167;
 
-            abilities.add(new SprintingAbility2() {{
-                rotate = false;
-                sprintingRadius = 100;
-                sprintingReload = 20;
-                sprintingDuration = 20;
-                sprintingDamage = 46;
-                sprintingLength = 10;
-            }});
+            range = maxRange = 300;
 
             weapons.add(new Weapon() {{
-                shootSound = Sounds.none;
-                bullet = Bullets.none.copy();
-                bullet.rangeOverride = 100;
+                x = y = 0;
+                shootCone = 360;
+                mirror = false;
+                shootOnDeath = true;
+
+                bullet = new ExplosionBulletType(180, 32) {{
+                    rangeOverride = 4;
+                }};
             }});
         }};
         crane = new UnitType("crane") {{
@@ -260,24 +258,46 @@ public class FUnits {
             armor = 20;
             speed = 0.5f;
 
-            for (int i = 0; i < 5; i++) {
-                abilities.add(new UnitSpawnSupperAbility(strike, 300, Angles.trnsx(72 * i, 10), Angles.trnsy(72 * i, 10)) {{
-                    status.putAll(FStatusEffects.swift, 240f, FStatusEffects.back, 600f);
-                }});
-            }
-
             weapons.add(new Weapon() {{
                 reload = 60;
                 mirror = false;
                 x = y = 0;
                 bullet = new PointBulletType() {{
                     shootEffect = Fx.railShoot;
+                    trailEffect = Fx.none;
                     lifetime = 340;
                     speed = 1;
                     hitEffect = Fx.massiveExplosion;
                     damage = 0;
                     splashDamage = 400;
                     splashDamageRadius = 100;
+                }};
+            }});
+
+            weapons.add(new Weapon() {{
+                reload = 90;
+                x = y = 0;
+                mirror = false;
+
+                shoot = new ShootAlternate() {{
+                    barrels = 5;
+                    spread = 12;
+                    shots = 5;
+                }};
+
+                bullet = new BulletType() {{
+                    collides = reflectable = absorbable = hittable = false;
+                    shootEffect = despawnEffect = hitEffect = Fx.none;
+
+                    spawnUnit = strike;
+
+                    lifetime = 0;
+                    speed = 0;
+                    damage = 0;
+                    splashDamage = 0;
+                    splashDamageRadius = 0;
+
+                    rangeOverride = 1000;
                 }};
             }});
         }};
@@ -612,7 +632,7 @@ public class FUnits {
         }};
         shuttle1 = new UnitType("shuttle1") {{
             constructor = TimedKillUnit::create;
-            controller = u -> new FlyingAI();
+            controller = u -> new FlyingFinderAI();
 
             flying = true;
             health = 6000;
@@ -631,19 +651,19 @@ public class FUnits {
             weapons.add(new Weapon() {{
                 mirror = false;
                 x = 0;
-                reload = 30f;
+                reload = 10f;
 
                 shootStatus = StatusEffects.slow;
                 shootStatusDuration = 37;
                 shoot = new ShootAlternate() {{
-                    shots = 12;
+                    shots = 4;
                     shotDelay = 3;
                     barrels = 3;
-                    spread = 9;
+                    spread = 20;
                 }};
                 bullet = new BasicBulletType() {{
-                    speed = 2;
-                    drag = -0.2f;
+                    speed = 3.5f;
+                    drag = -0.1f;
                     width = 12;
                     height = 36;
                     damage = 70;
@@ -675,7 +695,6 @@ public class FUnits {
             drag = 0.1F;
             faceTarget = true;
             rotateSpeed = 3;
-            maxRange = range = 40;
             strafePenalty = 0;
             engines.add(new UnitEngine(0, -25, 5, -90));
             engines.add(new UnitEngine(13.7F, -24, 4, -90));
@@ -687,6 +706,7 @@ public class FUnits {
                 alternate = true;
                 bullet = new BulletType() {{
                     spawnUnit = shuttle1;
+                    rangeOverride = 400;
                 }};
             }});
             weapons.add(new Weapon() {{
@@ -1546,7 +1566,7 @@ public class FUnits {
                 reload = 90;
                 shootCone = 360;
 
-                shoot = new ShootAlternate(7);
+                shoot = new ShootAlternate(15);
                 shoot.shots = 2;
 
                 bullet = new BulletType() {{
@@ -1583,7 +1603,7 @@ public class FUnits {
                         status = StatusEffects.slow;
                         statusDuration = 15;
 
-                        fragOnHit = false;
+                        despawnHit = true;
                         fragBullets = 1;
                         fragBullet = new BulletType() {{
                             reflectable = absorbable = hittable = false;
