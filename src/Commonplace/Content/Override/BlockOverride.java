@@ -1,6 +1,7 @@
 package Commonplace.Content.Override;
 
 import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Entities.FBulletType.ProtectKillerBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import mindustry.content.*;
@@ -68,9 +69,36 @@ public class BlockOverride {
         ((ItemTurret) Blocks.duo).range = 150;
         ((ItemTurret) Blocks.duo).reload = 10f;
         ((ItemTurret) Blocks.duo).inaccuracy = 5;
-        for (BulletType bullet : ((ItemTurret) Blocks.duo).ammoTypes.values()) {
-            bullet.ammoMultiplier *= 2;
-        }
+        ((ItemTurret) Blocks.duo).ammoTypes.clear();
+        ((ItemTurret) Blocks.duo).ammo(
+                Items.copper, new ProtectKillerBulletType() {{
+                    speed = 2.5f;
+                    damage = 9;
+                    width = 7f;
+                    height = 9f;
+                    lifetime = 60f;
+                    ammoMultiplier = 4;
+                }},
+                Items.graphite, new ProtectKillerBulletType() {{
+                    speed = 3.5f;
+                    damage = 18;
+                    width = 9f;
+                    height = 12f;
+                    reloadMultiplier = 0.6f;
+                    ammoMultiplier = 8;
+                    lifetime = 60f;
+                }},
+                Items.silicon, new ProtectKillerBulletType() {{
+                    speed = 3f;
+                    damage = 12;
+                    width = 7f;
+                    height = 9f;
+                    homingPower = 0.1f;
+                    reloadMultiplier = 1.5f;
+                    ammoMultiplier = 10;
+                    lifetime = 60f;
+                }}
+        );
         ((ItemTurret) Blocks.duo).limitRange(2);
 
         ((ItemTurret) Blocks.hail).ammoTypes.each((i, b) -> {

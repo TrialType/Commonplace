@@ -40,6 +40,7 @@ import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.BuildWeapon;
 import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.world.blocks.defense.turrets.ContinuousTurret;
 
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
@@ -261,16 +262,18 @@ public class FUnits {
             weapons.add(new Weapon() {{
                 reload = 60;
                 mirror = false;
+                continuous = alwaysContinuous = true;
                 x = y = 0;
-                bullet = new PointBulletType() {{
-                    shootEffect = Fx.railShoot;
-                    trailEffect = Fx.none;
-                    lifetime = 340;
-                    speed = 1;
+                bullet = new PointLaserBulletType() {{
                     hitEffect = Fx.massiveExplosion;
-                    damage = 0;
-                    splashDamage = 400;
-                    splashDamageRadius = 100;
+                    shootEffect = Fx.railShoot;
+                    lifetime = 2;
+                    speed = 0;
+                    damage = 200;
+                    splashDamage = 200;
+                    splashDamageRadius = 40;
+
+                    rangeOverride = 300;
                 }};
             }});
 
@@ -630,7 +633,7 @@ public class FUnits {
                 }};
             }});
         }};
-        shuttle1 = new UnitType("shuttle1") {{
+        shuttle1 = new MissileUnitType("shuttle1") {{
             constructor = TimedKillUnit::create;
             controller = u -> new FlyingFinderAI();
 
