@@ -1103,28 +1103,48 @@ public class CBlocks {
                     Items.copper, 4999, Items.thorium, 4999, Items.silicon, 4999, Items.phaseFabric, 4999));
         }};
         scale = new DrillTurret("scale") {{
-            requirements(Category.turret, ItemStack.with(copper, 1));
+            requirements(Category.turret, ItemStack.with(copper, 60));
 
-            size = 2;
-            reload = 45;
+            health = 350;
+            size = 1;
+            clipSize = 1;
+            reload = 30;
+            range = 150;
+            inaccuracy = 5;
 
-            baseType = new BasicBulletType(7, 10) {{
-                lifetime = 45;
-                width = height = 24;
+            baseType = new BasicBulletType(7, 20) {{
+                width = height = 10;
                 shrinkX = shrinkY = 0;
+
+                collidesAir = false;
             }};
 
-            applier.put(copper, b -> b.damage += 5);
-            applier.put(lead, b -> b.lifetime += 10);
-            applier.put(titanium, b -> {
-                if (b.status == null) {
-                    b.status = StatusEffects.electrified;
-                    b.statusDuration = 15;
+            applier.put(copper, b -> {
+                if (b.pierce) {
+                    b.pierceCap += 1;
                 } else {
-                    b.statusDuration += 15;
+                    b.pierce = b.pierceBuilding = true;
+                    b.pierceCap = 2;
                 }
+                b.damage += 10;
+                b.reloadMultiplier *= 1.5f;
             });
-            applier.put(thorium, b -> b.damage += 15);
+            applier.put(lead, b -> {
+                b.collidesAir = true;
+                b.lifetime += 10;
+                b.splashDamage += 10;
+                b.splashDamageRadius += 4;
+            });
+            applier.put(titanium, b -> {
+                b.damage += 20;
+                b.lifetime += 15;
+                b.splashDamage += 10;
+                b.splashDamageRadius += 6;
+            });
+
+            shootApplier.put(titanium, s -> s.shots += 1);
+
+            limitRange(baseType, 7);
         }};
 //======================================================================================================================
         eleFenceII = new ElectricFence("ele_fenceII") {{

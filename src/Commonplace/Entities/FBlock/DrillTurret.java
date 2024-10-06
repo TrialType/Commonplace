@@ -1,29 +1,35 @@
 package Commonplace.Entities.FBlock;
 
+import arc.func.Boolf;
 import arc.func.Cons;
+import arc.math.Angles;
+import arc.math.Mathf;
 import arc.struct.IntIntMap;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
+import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.entities.bullet.BulletType;
+import mindustry.entities.pattern.ShootPattern;
 import mindustry.game.Team;
+import mindustry.gen.Building;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.Turret;
-import mindustry.world.meta.BlockGroup;
 
 import static mindustry.Vars.world;
 
 public class DrillTurret extends Turret {
     public BulletType baseType;
     public ObjectMap<Item, Cons<BulletType>> applier = new ObjectMap<>();
+    public ObjectMap<Item, Cons<ShootPattern>> shootApplier = new ObjectMap<>();
+    public ObjectMap<Boolf<Building>, Cons<BulletType>> specialApplier = new ObjectMap<>();
+    public ObjectMap<Boolf<Building>, Cons<ShootPattern>> specialShootApplier = new ObjectMap<>();
 
     public DrillTurret(String name) {
         super(name);
-
-        group = BlockGroup.drills;
     }
 
     @Override
@@ -51,6 +57,7 @@ public class DrillTurret extends Turret {
 
     public class DrillTurretBuild extends TurretBuild {
         BulletType type;
+        ShootPattern shootType;
         Seq<Tile> tiles = new Seq<>();
         IntIntMap items = new IntIntMap();
 
@@ -74,12 +81,54 @@ public class DrillTurret extends Turret {
             return true;
         }
 
+        @Override
+        protected void updateReload() {
+            float num = 0;
+            for (int n : items.values().toArray().toArray()) {
+                num += n;
+            }
+            float multiplier = hasAmmo() ? peekAmmo().reloadMultiplier : 1f;
+            multiplier *= num / size / size;
+
+            reloadCounter += delta() * multiplier * baseReloadSpeed();
+
+            //cap reload for visual reasons
+            reloadCounter = Math.min(reloadCounter, reload);
+        }
+
+        @Override
+        protected void shoot(BulletType type) {
+            float
+                    bulletX = x + Angles.trnsx(rotation - 90, shootX, shootY),
+                    bulletY = y + Angles.trnsy(rotation - 90, shootX, shootY);
+
+            if (shootType.firstShotDelay > 0) {
+                chargeSound.at(bulletX, bulletY, Mathf.random(soundPitchMin, soundPitchMax));
+                type.chargeEffect.at(bulletX, bulletY, rotation);
+            }
+
+            shootType.shoot(barrelCounter, (xOffset, yOffset, angle, delay, mover) -> {
+                queuedBullets++;
+                if (delay > 0f) {
+                    Time.run(delay, () -> bullet(type, xOffset, yOffset, angle, mover));
+                } else {
+                    bullet(type, xOffset, yOffset, angle, mover);
+                }
+            }, () -> barrelCounter++);
+
+            if (consumeAmmoOnce) {
+                useAmmo();
+            }
+        }
+
         public void inspect() {
             IntIntMap map = new IntIntMap();
             readItems(map);
             if (!map.equals(items)) {
                 items = map;
                 readBullet(items);
+                readShoot(items);
+                readSpecial();
             }
         }
 
@@ -87,6 +136,8 @@ public class DrillTurret extends Turret {
             readTiles(tiles);
             readItems(items);
             readBullet(items);
+            readShoot(items);
+            readSpecial();
         }
 
         public void readTiles(Seq<Tile> tiles) {
@@ -112,10 +163,37 @@ public class DrillTurret extends Turret {
         public void readBullet(IntIntMap items) {
             type = baseType.copy();
             for (int id : items.keys().toArray().toArray()) {
-                Cons<BulletType> c = applier.get(Vars.content.item(id));
+                Cons<BulletType> c = applier.get(Vars.content.item(id), b -> {
+                });
                 int num = items.get(id);
                 for (int i = 0; i < num; i++) {
                     c.get(type);
+                }
+            }
+        }
+
+        public void readShoot(IntIntMap items) {
+            shootType = shoot.copy();
+            for (int id : items.keys().toArray().toArray()) {
+                Cons<ShootPattern> c = shootApplier.get(Vars.content.item(id), s -> {
+                });
+                int num = items.get(id);
+                for (int i = 0; i < num; i++) {
+                    c.get(shootType);
+                }
+            }
+        }
+
+        public void readSpecial() {
+            for (var bool : specialApplier.keys()) {
+                if (bool.get(this)) {
+                    specialApplier.get(bool).get(type);
+                }
+            }
+
+            for (var bool : specialShootApplier.keys()) {
+                if (bool.get(this)) {
+                    specialShootApplier.get(bool).get(shootType);
                 }
             }
         }
