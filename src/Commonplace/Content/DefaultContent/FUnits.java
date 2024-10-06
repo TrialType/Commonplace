@@ -12,13 +12,12 @@ import Commonplace.Entities.FUnitType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
-import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.ai.UnitCommand;
+import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.GroundAI;
-import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
@@ -40,7 +39,6 @@ import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.BuildWeapon;
 import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
-import mindustry.world.blocks.defense.turrets.ContinuousTurret;
 
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
@@ -1190,6 +1188,7 @@ public class FUnits {
             constructor = TileMiner::create;
             defaultCommand = new UnitCommand("TileMine", "TileMine", TileMineAI::new);
             aiController = TileMineAI::new;
+            controller = u -> u.team.isAI() && !u.team.rules().rtsAi ? aiController.get() : new CommandAI();
             commands = new UnitCommand[]{
                     defaultCommand,
                     new UnitCommand("TilePut", "TilePut", TilePutAI::new)

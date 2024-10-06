@@ -46,7 +46,7 @@ public class CBlocks {
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton;
+    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
             phaseAmplifier;
@@ -1101,6 +1101,30 @@ public class CBlocks {
 
             requirements(Category.turret, ItemStack.with(Items.titanium, 4999,
                     Items.copper, 4999, Items.thorium, 4999, Items.silicon, 4999, Items.phaseFabric, 4999));
+        }};
+        scale = new DrillTurret("scale") {{
+            requirements(Category.turret, ItemStack.with(copper, 1));
+
+            size = 2;
+            reload = 45;
+
+            baseType = new BasicBulletType(7, 10) {{
+                lifetime = 45;
+                width = height = 24;
+                shrinkX = shrinkY = 0;
+            }};
+
+            applier.put(copper, b -> b.damage += 5);
+            applier.put(lead, b -> b.lifetime += 10);
+            applier.put(titanium, b -> {
+                if (b.status == null) {
+                    b.status = StatusEffects.electrified;
+                    b.statusDuration = 15;
+                } else {
+                    b.statusDuration += 15;
+                }
+            });
+            applier.put(thorium, b -> b.damage += 15);
         }};
 //======================================================================================================================
         eleFenceII = new ElectricFence("ele_fenceII") {{

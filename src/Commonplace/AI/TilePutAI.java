@@ -24,6 +24,7 @@ public class TilePutAI extends AIController {
     public void updateMovement() {
         pose = unit.command().targetPos;
         if (miner != null && pose != null) {
+            unit.lookAt(pose);
             moveTo(pose, unit.hitSize * 1.5f);
             if (unit.within(pose, unit.hitSize * 3)) {
                 Floor floor = null;
