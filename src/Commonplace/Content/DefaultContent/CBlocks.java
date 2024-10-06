@@ -1103,7 +1103,7 @@ public class CBlocks {
                     Items.copper, 4999, Items.thorium, 4999, Items.silicon, 4999, Items.phaseFabric, 4999));
         }};
         scale = new DrillTurret("scale") {{
-            requirements(Category.turret, ItemStack.with(copper, 60));
+            requirements(Category.turret, ItemStack.with(copper, 60, lead, 45));
 
             health = 350;
             size = 1;

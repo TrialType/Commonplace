@@ -18,6 +18,8 @@ import mindustry.gen.Building;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.Turret;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.world;
 
@@ -47,6 +49,12 @@ public class DrillTurret extends Turret {
             }
         }
         return check;
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        stats.add(Stat.ammo, StatValues.ammo(ObjectMap.of(this, baseType)));
     }
 
     @Override
