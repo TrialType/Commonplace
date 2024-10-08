@@ -1,7 +1,7 @@
 package Commonplace.Entities.FUnit.Override;
 
-import Commonplace.Tools.Classes.UnitPeculiarity;
-import Commonplace.Tools.Interfaces.PeculiarityC;
+import Commonplace.Utils.Classes.UnitPeculiarity;
+import Commonplace.Utils.Interfaces.PeculiarityC;
 import arc.struct.IntSeq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;

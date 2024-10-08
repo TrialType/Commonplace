@@ -1,7 +1,7 @@
 package Commonplace.AI;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
-import Commonplace.Tools.Classes.Located;
+import Commonplace.Utils.Classes.Located;
 import arc.math.geom.Vec2;
 import arc.struct.IntSeq;
 import mindustry.entities.units.AIController;

@@ -1,4 +1,4 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
 import arc.math.Mathf;

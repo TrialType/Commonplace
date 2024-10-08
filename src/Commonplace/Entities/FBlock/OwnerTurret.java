@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Tools.Interfaces.BuildUpGrade;
+import Commonplace.Utils.Interfaces.BuildUpGrade;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;

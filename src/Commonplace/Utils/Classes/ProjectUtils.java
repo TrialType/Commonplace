@@ -1,4 +1,4 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
 import mindustry.entities.bullet.BulletType;
 import mindustry.type.Weapon;

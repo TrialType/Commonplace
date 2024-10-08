@@ -1,8 +1,7 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
 import Commonplace.Content.DefaultContent.FStatusEffects;
 import Commonplace.Content.DefaultContent.FUnits;
-import Commonplace.Content.SpecialContent.Events;
 import arc.Core;
 import arc.func.Boolf;
 import arc.func.Cons;

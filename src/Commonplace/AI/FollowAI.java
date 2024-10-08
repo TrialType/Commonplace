@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Tools.Interfaces.OwnerSpawner;
+import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.math.Mathf;
 import arc.util.Time;
 import mindustry.entities.Units;

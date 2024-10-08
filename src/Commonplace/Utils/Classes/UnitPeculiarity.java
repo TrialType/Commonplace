@@ -1,6 +1,6 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
-import Commonplace.Tools.Interfaces.PeculiarityC;
+import Commonplace.Utils.Interfaces.PeculiarityC;
 import arc.func.Cons;
 import arc.math.Mathf;
 import arc.struct.Seq;
@@ -11,6 +11,7 @@ import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 
+import static Commonplace.Content.DefaultContent.FUnits.*;
 import static mindustry.content.UnitTypes.*;
 
 public abstract class UnitPeculiarity {
@@ -174,7 +175,9 @@ public abstract class UnitPeculiarity {
     }
 
     public static void init() {
-        blackList.addAll(alpha, beta, gamma, mono);
+        blackList.addAll(alpha, beta, gamma, mono, exterminate, garrison, transfer, herald, shuttle1,
+                support_a, support_h, velocity, velocity_d, velocity_s, hidden, cave, strike, bulletInterception,
+                rejuvenate, rejuvenate_a, vibrate, crane);
 
         //well
         Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.1f, 0));

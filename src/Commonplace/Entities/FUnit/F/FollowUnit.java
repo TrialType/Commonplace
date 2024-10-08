@@ -1,6 +1,6 @@
 package Commonplace.Entities.FUnit.F;
 
-import Commonplace.Tools.Interfaces.OwnerSpawner;
+import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.gen.Groups;

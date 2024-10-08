@@ -1,6 +1,6 @@
 package Commonplace.Entities.FAbility;
 
-import Commonplace.Tools.Interfaces.OwnerSpawner;
+import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.Core;
 import arc.Events;
 import arc.graphics.g2d.Draw;

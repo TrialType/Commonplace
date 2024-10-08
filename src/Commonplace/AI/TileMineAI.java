@@ -1,7 +1,7 @@
 package Commonplace.AI;
 
 import Commonplace.Entities.FUnit.F.TileMiner;
-import Commonplace.Tools.Classes.Located;
+import Commonplace.Utils.Classes.Located;
 import arc.math.geom.Vec2;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
@@ -11,7 +11,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.storage.CoreBlock;
 
-import static Commonplace.Tools.Classes.Located.miners;
+import static Commonplace.Utils.Classes.Located.miners;
 import static mindustry.Vars.world;
 
 public class TileMineAI extends AIController {

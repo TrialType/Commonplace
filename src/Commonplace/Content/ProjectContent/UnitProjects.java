@@ -1,6 +1,6 @@
 package Commonplace.Content.ProjectContent;
 
-import Commonplace.Tools.Classes.ProjectUtils;
+import Commonplace.Utils.Classes.ProjectUtils;
 import Commonplace.FType.New.BoostProject;
 import Commonplace.FType.New.UnitProject;
 import mindustry.entities.bullet.BasicBulletType;

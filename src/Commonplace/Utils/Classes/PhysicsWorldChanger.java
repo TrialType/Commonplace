@@ -1,4 +1,4 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
 import arc.math.Mathf;
 import arc.math.geom.QuadTree;

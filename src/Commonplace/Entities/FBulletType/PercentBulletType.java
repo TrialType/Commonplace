@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Tools.Classes.FDamage;
+import Commonplace.Utils.Classes.FDamage;
 import arc.Events;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;

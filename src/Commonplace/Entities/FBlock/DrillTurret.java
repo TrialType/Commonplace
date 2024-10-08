@@ -1,9 +1,12 @@
 package Commonplace.Entities.FBlock;
 
+import Commonplace.Utils.Classes.Stats;
+import arc.Core;
 import arc.func.Boolf;
 import arc.func.Cons;
 import arc.math.Angles;
 import arc.math.Mathf;
+import arc.scene.ui.Image;
 import arc.struct.IntIntMap;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
@@ -11,11 +14,13 @@ import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
+import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.pattern.ShootPattern;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.type.Item;
+import mindustry.ui.Styles;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.meta.Stat;
@@ -54,7 +59,31 @@ public class DrillTurret extends Turret {
     @Override
     public void setStats() {
         super.setStats();
+        stats.remove(Stat.targetsAir);
+        stats.remove(Stat.targetsGround);
+        Seq<Item> showed = new Seq<>();
         stats.add(Stat.ammo, StatValues.ammo(ObjectMap.of(this, baseType)));
+        stats.add(Stats.gain, t -> {
+            t.row();
+            t.table(Styles.grayPanel, tex -> {
+                for (var e : applier) {
+                    if (!showed.contains(e.key)) {
+                        showed.add(e.key);
+                        tex.row();
+                        tex.add(new Image(e.key.uiIcon)).left();
+                        tex.table(des -> des.add(Core.bundle.get(name + "-gain." + e.key.name)));
+                    }
+                }
+                for (var e : shootApplier) {
+                    if (!showed.contains(e.key)) {
+                        showed.add(e.key);
+                        tex.row();
+                        tex.add(new Image(e.key.uiIcon)).left();
+                        tex.table(des -> des.add(Core.bundle.get(name + "-gain." + e.key.name)));
+                    }
+                }
+            }).growX();
+        });
     }
 
     @Override
@@ -126,6 +155,23 @@ public class DrillTurret extends Turret {
 
             if (consumeAmmoOnce) {
                 useAmmo();
+            }
+        }
+
+        @Override
+        protected void findTarget(){
+            float range = range();
+            boolean targetAir = peekAmmo().collidesAir;
+            boolean targetGround = peekAmmo().collidesGround || peekAmmo().collidesTiles;
+
+            if(targetAir && !targetGround){
+                target = Units.bestEnemy(team, x, y, range, e -> !e.dead() && !e.isGrounded() && unitFilter.get(e), unitSort);
+            }else{
+                target = Units.bestTarget(team, x, y, range, e -> !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround), b -> targetGround && buildingFilter.get(b), unitSort);
+            }
+
+            if(target == null && canHeal()){
+                target = Units.findAllyTile(team, x, y, range, b -> b.damaged() && b != this);
             }
         }
 

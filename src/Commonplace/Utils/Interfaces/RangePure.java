@@ -1,4 +1,4 @@
-package Commonplace.Tools.Interfaces;
+package Commonplace.Utils.Interfaces;
 
 import arc.struct.IntMap;
 

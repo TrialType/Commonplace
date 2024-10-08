@@ -1572,15 +1572,14 @@ public class FUnits {
                 shoot.shots = 2;
 
                 bullet = new BulletType() {{
-                    damage = 0;
+                    damage = 1;
                     speed = 4;
                     lifetime = 180;
 
                     homingRange = 720;
                     homingPower = 0.2f;
 
-                    hittable = absorbable = false;
-                    reflectable = true;
+                    hittable = absorbable = reflectable = false;
                     keepVelocity = false;
                     despawnHit = true;
 
@@ -1594,7 +1593,6 @@ public class FUnits {
                     fragBullet = new ContinuousCircleBulletType() {{
                         reflectable = absorbable = hittable = false;
 
-                        speed = 0;
                         lifetime = 240;
                         damage = 200;
                         damageTo = 600;

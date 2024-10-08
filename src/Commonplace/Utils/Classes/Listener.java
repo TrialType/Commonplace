@@ -1,4 +1,4 @@
-package Commonplace.Tools.Classes;
+package Commonplace.Utils.Classes;
 
 import arc.Core;
 import arc.func.Boolp;

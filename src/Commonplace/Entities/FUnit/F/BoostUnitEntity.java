@@ -3,7 +3,7 @@ package Commonplace.Entities.FUnit.F;
 import Commonplace.Content.DefaultContent.FUnits;
 import Commonplace.Entities.FUnit.Override.FUnitEntity;
 import Commonplace.Entities.FUnitType.BoostUnitType;
-import Commonplace.Tools.Classes.PhysicsWorldChanger;
+import Commonplace.Utils.Classes.PhysicsWorldChanger;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Commonplace.Tools.Classes.FDamage.percentDamage;
+import static Commonplace.Utils.Classes.FDamage.percentDamage;
 import static mindustry.Vars.asyncCore;
 
 public class BoostUnitEntity extends FUnitEntity {

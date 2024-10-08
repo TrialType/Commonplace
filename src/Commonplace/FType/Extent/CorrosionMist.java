@@ -1,8 +1,8 @@
 package Commonplace.FType.Extent;
 
 import Commonplace.Content.DefaultContent.FStatusEffects;
-import Commonplace.Tools.Interfaces.Corrosion;
-import Commonplace.Tools.Interfaces.RangePure;
+import Commonplace.Utils.Interfaces.Corrosion;
+import Commonplace.Utils.Interfaces.RangePure;
 import arc.Events;
 import arc.struct.IntMap;
 import arc.struct.IntSeq;

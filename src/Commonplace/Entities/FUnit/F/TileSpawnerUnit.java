@@ -1,6 +1,6 @@
 package Commonplace.Entities.FUnit.F;
 
-import Commonplace.Tools.Interfaces.OwnerSpawner;
+import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.struct.Seq;

@@ -1,4 +1,4 @@
-package Commonplace.Tools.Interfaces;
+package Commonplace.Utils.Interfaces;
 
 public interface BuildUpGrade {
     void addExp(float exp);

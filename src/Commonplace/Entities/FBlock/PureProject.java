@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBlock;
 
 import Commonplace.Content.DefaultContent.FWeathers;
-import Commonplace.Tools.Interfaces.RangePure;
+import Commonplace.Utils.Interfaces.RangePure;
 import Commonplace.FType.Extent.CorrosionMist;
 import arc.Core;
 import arc.graphics.g2d.Draw;

@@ -4,7 +4,7 @@ import mindustry.content.Fx;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.type.Weapon;
 
-import static Commonplace.Tools.Classes.ProjectUtils.init;
+import static Commonplace.Utils.Classes.ProjectUtils.init;
 
 public class Weapons {
     public static Weapon smaleWeapon = new Weapon() {{

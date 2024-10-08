@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBulletType;
 
 import Commonplace.Content.DefaultContent.FStatusEffects;
-import Commonplace.Tools.Classes.FDamage;
+import Commonplace.Utils.Classes.FDamage;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;

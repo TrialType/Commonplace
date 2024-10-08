@@ -8,6 +8,12 @@ public class ContinuousCircleBulletType extends ContinuousBulletType {
     public float lengthTo = 0;
     public float damageTo = 0;
 
+    public ContinuousCircleBulletType(){
+        super();
+
+        pierceBuilding = true;
+    }
+
     @Override
     public void applyDamage(Bullet b) {
         Damage.damage(b.team, b.x, b.y, length * (1 - b.fin()) + b.fin() * lengthTo,

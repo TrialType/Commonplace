@@ -1,7 +1,7 @@
 package Commonplace.Entities.FUnit.F;
 
 import Commonplace.Entities.FUnit.Override.FLegsUnit;
-import Commonplace.Tools.Interfaces.OwnerSpawner;
+import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.struct.Seq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;

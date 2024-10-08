@@ -1,7 +1,6 @@
 package Commonplace.Entities.FBlock;
 
 import Commonplace.Content.DefaultContent.FUnits;
-import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

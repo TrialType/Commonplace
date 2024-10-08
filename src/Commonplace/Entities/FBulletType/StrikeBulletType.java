@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Tools.Classes.FDamage;
+import Commonplace.Utils.Classes.FDamage;
 import arc.math.Angles;
 import arc.math.Interp;
 import mindustry.content.StatusEffects;

@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Tools.Interfaces.Corrosion;
+import Commonplace.Utils.Interfaces.Corrosion;
 import mindustry.type.StatusEffect;
 import mindustry.world.blocks.environment.Floor;
 

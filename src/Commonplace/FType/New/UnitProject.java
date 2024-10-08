@@ -1,6 +1,6 @@
 package Commonplace.FType.New;
 
-import Commonplace.Tools.Classes.ProjectUtils;
+import Commonplace.Utils.Classes.ProjectUtils;
 import arc.func.Cons;
 import arc.struct.Seq;
 import mindustry.ctype.ContentType;
