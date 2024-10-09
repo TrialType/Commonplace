@@ -8,6 +8,7 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
+import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -21,6 +22,7 @@ import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.ForceProjector;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.Wall;
@@ -36,6 +38,7 @@ import mindustry.world.meta.Env;
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
+import static mindustry.Vars.world;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.with;
 
@@ -46,7 +49,7 @@ public class CBlocks {
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale;
+    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
             phaseAmplifier;
@@ -1132,17 +1135,89 @@ public class CBlocks {
             applier.put(lead, b -> {
                 b.collidesAir = true;
                 b.lifetime += 10;
+                b.rangeChange += b.speed * 10;
                 b.splashDamage += 10;
                 b.splashDamageRadius += 4;
             });
             applier.put(titanium, b -> {
-                b.damage += 20;
-                b.lifetime += 15;
-                b.splashDamage += 10;
+                b.collidesAir = true;
+                b.damage += 8;
+                b.lifetime += 10;
+                b.rangeChange += b.speed * 10;
+                b.splashDamage += 15;
                 b.splashDamageRadius += 6;
             });
 
             shootApplier.put(titanium, s -> s.shots += 1);
+
+            limitRange(baseType, 7);
+        }};
+        stack = new DrillTurret("stack") {{
+            requirements(Category.turret, ItemStack.with(copper, 200, lead, 120, silicon, 70, graphite, 100));
+
+            health = 1500;
+            size = 2;
+            reload = 90;
+            range = 240;
+            inaccuracy = 5;
+
+            baseType = new BasicBulletType(7, 40) {{
+                width = height = 20;
+                shrinkX = shrinkY = 0;
+            }};
+
+            applier.put(copper, b -> {
+                if (b.pierce) {
+                    b.pierceCap += 1;
+                } else {
+                    b.pierce = b.pierceBuilding = true;
+                    b.pierceCap = 2;
+                }
+                b.damage += 10;
+                b.reloadMultiplier *= 1.1f;
+            });
+            applier.put(lead, b -> {
+                b.lifetime += 10;
+                b.rangeChange += b.speed * 10;
+                b.splashDamage += 15;
+                b.splashDamageRadius += 6;
+            });
+            applier.put(titanium, b -> {
+                if (b.status == null) {
+                    b.status = StatusEffects.slow;
+                    b.statusDuration = 15;
+                } else {
+                    b.statusDuration += 20;
+                }
+            });
+            applier.put(thorium, b -> {
+                b.damage *= 1.1f;
+                b.lifetime += 5;
+                b.rangeChange += b.speed * 5;
+                b.splashDamage += 5;
+                b.splashDamageRadius += 4;
+                b.pierceArmor = true;
+            });
+
+            shootApplier.put(titanium, s -> s.shots += 1);
+            shootApplier.put(thorium, s -> {
+                s.shots += 2;
+                s.shotDelay += 2;
+                s.firstShotDelay += 5;
+            });
+
+            specialApplier.put(t -> {
+                Tile t1 = t.tile;
+                Tile t2 = world.tile(t1.x + 1, t1.y);
+                Tile t3 = world.tile(t1.x, t1.y + 1);
+                Tile t4 = world.tile(t1.x + 1, t1.y + 1);
+                return t1.overlay().itemDrop == copper && t4.overlay().itemDrop == copper &&
+                        t2.overlay().itemDrop == lead && t3.overlay().itemDrop == lead;
+            }, b -> {
+                b.status = FStatusEffects.gasify;
+                b.statusDuration = 10;
+                b.reloadMultiplier *= 1.5f;
+            });
 
             limitRange(baseType, 7);
         }};
