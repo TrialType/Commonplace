@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Content.DefaultContent.FWeathers;
+import Commonplace.Content.DefaultContent.Weathers2;
 import Commonplace.Utils.Interfaces.RangePure;
 import Commonplace.FType.Extent.CorrosionMist;
 import arc.Core;
@@ -46,7 +46,7 @@ public class PureProject extends Block {
         public void updateTile() {
             if (testTimer <= 0) {
                 testTimer = 900;
-                FWeathers.rockStorm.create(1, 600);
+                Weathers2.rockStorm.create(1, 600);
             } else {
                 testTimer -= Time.delta;
             }

@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
-import Commonplace.Utils.Classes.FDamage;
+import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Utils.Classes.Damage2;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -28,7 +28,7 @@ public class WindBulletType extends BulletType {
     public float bossPowerExpand = 0;
     public float windLength = 200;
     public float windWidth = 400;
-    public StatusEffect applyEffect = FStatusEffects.sublimation;
+    public StatusEffect applyEffect = StatusEffects2.sublimation;
     public float effectTime = 240;
     public Effect windEffect = Fx.none;
     public Effect everyHit = Fx.none;
@@ -39,7 +39,7 @@ public class WindBulletType extends BulletType {
     }
 
     public void applyDamage(Bullet b) {
-        FDamage.triangleDamage(b, b.team, damage, (float) (b.x - windLength / 10 * cos(toRadians(b.rotation()))),
+        Damage2.triangleDamage(b, b.team, damage, (float) (b.x - windLength / 10 * cos(toRadians(b.rotation()))),
                 (float) (b.y - windLength / 10 * sin(toRadians(b.rotation()))), b.rotation(),
                 windLength, windWidth / 2, windPower, applyEffect, effectTime, bossPowerExpand, everyHit);
     }

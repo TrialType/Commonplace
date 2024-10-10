@@ -2,9 +2,9 @@ package Commonplace.Content.DefaultContent;
 
 import mindustry.type.SectorPreset;
 
-import static Commonplace.Content.DefaultContent.FPlanets.ENGSWEIS;
+import static Commonplace.Content.DefaultContent.Planets2.ENGSWEIS;
 
-public class FSectorPresets {
+public class SectorPresets2 {
     public static SectorPreset fullWater, longestDown;
 
     public static void load() {

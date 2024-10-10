@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.Units2;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.Teamc;
@@ -12,7 +12,7 @@ public class HealthOnlyAI extends AIController {
         Teamc t;
         t = Units.closest(unit.team, x, y, range * 25, u -> u.health < u.maxHealth && u.type.isEnemy);
         if (t == null) {
-            t = Units.closest(unit.team, x, y, range * 25, u -> !(u.type == FUnits.rejuvenate || !u.type.isEnemy));
+            t = Units.closest(unit.team, x, y, range * 25, u -> !(u.type == Units2.rejuvenate || !u.type.isEnemy));
         }
         return t;
     }

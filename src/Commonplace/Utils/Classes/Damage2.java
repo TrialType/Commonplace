@@ -1,7 +1,7 @@
 package Commonplace.Utils.Classes;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Content.DefaultContent.Units2;
 import arc.Core;
 import arc.func.Boolf;
 import arc.func.Cons;
@@ -30,7 +30,7 @@ import mindustry.world.Tile;
 import static java.lang.Math.*;
 import static mindustry.Vars.*;
 
-public abstract class FDamage extends Damage {
+public abstract class Damage2 extends Damage {
     private static final IntFloatMap damages = new IntFloatMap();
     private static final IntSet collidedBlocks = new IntSet();
     private static final Seq<Collided> collided = new Seq<>();
@@ -450,7 +450,7 @@ public abstract class FDamage extends Damage {
                 }
 
                 vec.set(u.x - x, u.y - y);
-                if (FUnits.boss.contains(u.type)) {
+                if (Units2.boss.contains(u.type)) {
                     vec.setLength(power * boss);
                 } else {
                     vec.setLength(power);
@@ -475,7 +475,7 @@ public abstract class FDamage extends Damage {
                         effect.at(x, y, Angles.angle(x, y, b.x, b.y), b);
                     }
 
-                    if (FStatusEffects.burnings.indexOf(statusEffect) >= 0) {
+                    if (StatusEffects2.burnings.indexOf(statusEffect) >= 0) {
                         Fires.create(b.tile);
                     }
 

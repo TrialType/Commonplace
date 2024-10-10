@@ -11,17 +11,17 @@ public class Main extends Mod {
     public void loadContent() {
         Sign.load();
         MSettings.load();
-        FLiquids.load();
+        Liquids2.load();
         Commands.load();
         Entities.load();
-        FStatusEffects.load();
-        FWeathers.load();
-        FUnits.load();
+        StatusEffects2.load();
+        Weathers2.load();
+        Units2.load();
         UnitProjects.load();
         Events.load();
-        CBlocks.load();
-        FPlanets.load();
-        FSectorPresets.load();
+        Blocks2.load();
+        Planets2.load();
+        SectorPresets2.load();
         SectorPresetOverride.load();
         TechOverride.load();
         UnitOverride.load();

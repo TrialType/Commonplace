@@ -11,7 +11,7 @@ import mindustry.graphics.g3d.MultiMesh;
 import mindustry.type.Planet;
 
 
-public class FPlanets {
+public class Planets2 {
     public static Planet ENGSWEIS, Adventure;
 
     public static void load() {

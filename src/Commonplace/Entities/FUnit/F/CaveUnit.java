@@ -1,8 +1,8 @@
 package Commonplace.Entities.FUnit.F;
 
+import Commonplace.Content.DefaultContent.Units2;
 import Commonplace.Content.SpecialContent.Events;
-import Commonplace.Content.DefaultContent.FStatusEffects;
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.struct.Seq;
@@ -28,7 +28,7 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.flare,
             UnitTypes.retusa,
             UnitTypes.risso,
-            FUnits.barb
+            Units2.barb
     });
     private static final Seq<UnitType> u2 = new Seq<>(new UnitType[]{
             UnitTypes.mace,
@@ -38,7 +38,7 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.poly,
             UnitTypes.minke,
             UnitTypes.oxynoe,
-            FUnits.hammer
+            Units2.hammer
     });
     private static final Seq<UnitType> u3 = new Seq<>(new UnitType[]{
             UnitTypes.fortress,
@@ -49,7 +49,7 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.bryde,
             UnitTypes.cyerce,
             UnitTypes.cyerce,
-            FUnits.buying
+            Units2.buying
     });
     private static final Seq<UnitType> u4 = new Seq<>(new UnitType[]{
             UnitTypes.scepter,
@@ -59,7 +59,7 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.quad,
             UnitTypes.sei,
             UnitTypes.aegires,
-            FUnits.crazy
+            Units2.crazy
     });
     private static final Seq<UnitType> u5 = new Seq<>(new UnitType[]{
             UnitTypes.reign,
@@ -68,7 +68,7 @@ public class CaveUnit extends UnitWaterMove {
             UnitTypes.eclipse,
             UnitTypes.omura,
             UnitTypes.navanax,
-            FUnits.transition
+            Units2.transition
     });
     private float length = -1;
     private float allTimer = -1;
@@ -134,7 +134,7 @@ public class CaveUnit extends UnitWaterMove {
                 u.damage(u.maxHealth * 0.001f);
             }
             u.apply(StatusEffects.slow, 2);
-            u.apply(FStatusEffects.abyss, 2);
+            u.apply(StatusEffects2.abyss, 2);
         });
         Units.nearbyBuildings(x, y, length * boost, b -> {
             b.applySlowdown(0.8f, 3);
@@ -200,7 +200,7 @@ public class CaveUnit extends UnitWaterMove {
         unit.set(x, y);
         unit.rotation(rotate);
         unit.add();
-        unit.apply(FStatusEffects.tension);
+        unit.apply(StatusEffects2.tension);
         arc.Events.fire(new Events.GetPowerEvent(unit, time * 2, false));
         Fx.unitSpawn.at(x, y, rotate);
     }

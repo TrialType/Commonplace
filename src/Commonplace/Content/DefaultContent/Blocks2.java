@@ -8,7 +8,6 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
-import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -42,7 +41,7 @@ import static mindustry.Vars.world;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.with;
 
-public class CBlocks {
+public class Blocks2 {
     //test
     public static Block pu;
     //defense
@@ -63,13 +62,13 @@ public class CBlocks {
             liquidCapacity = 120;
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionCopper, 14),
+                    LiquidStack.with(Liquids2.fusionCopper, 14),
                     ItemStack.with(Items.copper, 5),
                     LiquidStack.empty, 120
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionLead, 14),
+                    LiquidStack.with(Liquids2.fusionLead, 14),
                     ItemStack.with(Items.lead, 5),
                     LiquidStack.empty, 120
             ));
@@ -86,19 +85,19 @@ public class CBlocks {
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionCopper, 30),
+                    LiquidStack.with(Liquids2.fusionCopper, 30),
                     ItemStack.with(Items.copper, 12),
                     LiquidStack.empty, 90
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionLead, 30),
+                    LiquidStack.with(Liquids2.fusionLead, 30),
                     ItemStack.with(Items.lead, 12),
                     LiquidStack.empty, 90
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionTitanium, 30),
+                    LiquidStack.with(Liquids2.fusionTitanium, 30),
                     ItemStack.with(Items.titanium, 10),
                     LiquidStack.empty, 90
             ));
@@ -116,25 +115,25 @@ public class CBlocks {
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionCopper, 60),
+                    LiquidStack.with(Liquids2.fusionCopper, 60),
                     ItemStack.with(Items.copper, 30),
                     LiquidStack.empty, 90
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionLead, 60),
+                    LiquidStack.with(Liquids2.fusionLead, 60),
                     ItemStack.with(Items.lead, 30),
                     LiquidStack.empty, 90
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionTitanium, 60),
+                    LiquidStack.with(Liquids2.fusionTitanium, 60),
                     ItemStack.with(Items.titanium, 24),
                     LiquidStack.empty, 90
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionThorium, 60),
+                    LiquidStack.with(Liquids2.fusionThorium, 60),
                     ItemStack.with(Items.thorium, 20),
                     LiquidStack.empty, 90
             ));
@@ -152,25 +151,25 @@ public class CBlocks {
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionCopper, 90),
+                    LiquidStack.with(Liquids2.fusionCopper, 90),
                     ItemStack.with(Items.copper, 48),
                     LiquidStack.empty, 60
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionLead, 90),
+                    LiquidStack.with(Liquids2.fusionLead, 90),
                     ItemStack.with(Items.lead, 48),
                     LiquidStack.empty, 60
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionTitanium, 90),
+                    LiquidStack.with(Liquids2.fusionTitanium, 90),
                     ItemStack.with(Items.titanium, 48),
                     LiquidStack.empty, 60
             ));
             switchStack.add(new ProductStack(
                     ItemStack.empty,
-                    LiquidStack.with(FLiquids.fusionThorium, 90),
+                    LiquidStack.with(Liquids2.fusionThorium, 90),
                     ItemStack.with(Items.thorium, 48),
                     LiquidStack.empty, 60
             ));
@@ -234,7 +233,7 @@ public class CBlocks {
                 speed = 10;
                 knockback = 1;
                 buildingDamageMultiplier = 0.1f;
-                status = FStatusEffects.loose;
+                status = StatusEffects2.loose;
                 statusDuration = 240;
 
                 splashDamage = 10;
@@ -274,7 +273,7 @@ public class CBlocks {
                 speed = 10;
                 knockback = 1;
                 buildingDamageMultiplier = 0.1f;
-                status = FStatusEffects.suppress;
+                status = StatusEffects2.suppress;
                 statusDuration = 240;
 
                 baseForce = 1.5f;
@@ -322,7 +321,7 @@ public class CBlocks {
                 trailWidth = 3;
                 trailColor = Pal.heal;
 
-                status = FStatusEffects.torn;
+                status = StatusEffects2.torn;
                 statusDuration = 240;
 
                 rangeOverride = 300;
@@ -629,7 +628,7 @@ public class CBlocks {
 
                         ammoMultiplier = 4;
 
-                        status = FStatusEffects.torn;
+                        status = StatusEffects2.torn;
                         statusDuration = 120;
                     }}, metaglass,
                     new FlakBulletType() {{
@@ -678,7 +677,7 @@ public class CBlocks {
                         splashDamage = 60;
                         splashDamageRadius = 20;
 
-                        status = FStatusEffects.tardy;
+                        status = StatusEffects2.tardy;
                         statusDuration = 120;
                     }}
             );
@@ -862,7 +861,7 @@ public class CBlocks {
                     windPower = 0.45f;
                     windWidth = 500;
                     windLength = 250;
-                    applyEffect = FStatusEffects.gasify;
+                    applyEffect = StatusEffects2.gasify;
 
                     fillRange = false;
                     windEffect = new Effect(120, 80f, e -> {
@@ -981,7 +980,7 @@ public class CBlocks {
                     laserDelay = 0;
                     laserBulletType = new BulletType(0, 62) {{
                         lifetime = 1;
-                        status = FStatusEffects.suppress;
+                        status = StatusEffects2.suppress;
                         statusDuration = 360;
                         hitEffect = despawnEffect = Fx.none;
 
@@ -1067,7 +1066,7 @@ public class CBlocks {
                         circleRange = 160;
 
                         statusTime = 35;
-                        statusEffect = FStatusEffects.abyss;
+                        statusEffect = StatusEffects2.abyss;
                         frontColor = backColor = lightColor = trailColor = Color.valueOf("01066FAA");
                         applyEffect = new WaveEffect() {{
                             colorFrom = colorTo = Color.valueOf("01066FAA");
@@ -1096,7 +1095,7 @@ public class CBlocks {
                             splashDamage = 700;
                             splashDamageRadius = 300;
 
-                            status = FStatusEffects.gasify;
+                            status = StatusEffects2.gasify;
                             statusDuration = 300;
                             lightColor = Pal.darkFlame;
                         }};
@@ -1214,7 +1213,7 @@ public class CBlocks {
                 return t1.overlay().itemDrop == copper && t4.overlay().itemDrop == copper &&
                         t2.overlay().itemDrop == lead && t3.overlay().itemDrop == lead;
             }, b -> {
-                b.status = FStatusEffects.gasify;
+                b.status = StatusEffects2.gasify;
                 b.statusDuration = 10;
                 b.reloadMultiplier *= 1.5f;
             });
@@ -1233,7 +1232,7 @@ public class CBlocks {
             maxFenceSize = 150;
             eleDamage = 1.2f;
             air = true;
-            statusEffect = FStatusEffects.gasify;
+            statusEffect = StatusEffects2.gasify;
             statusTime = 300;
 
             consume(new ConsumePower(25, 5000, false));
@@ -1255,7 +1254,7 @@ public class CBlocks {
             maxFenceSize = 300;
             eleDamage = 2.5f;
             air = true;
-            statusEffect = FStatusEffects.sublimation;
+            statusEffect = StatusEffects2.sublimation;
             statusTime = 420;
 
             consume(new ConsumePower(75, 15000, false));

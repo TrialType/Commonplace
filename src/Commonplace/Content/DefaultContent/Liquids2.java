@@ -4,7 +4,7 @@ import arc.graphics.Color;
 import mindustry.content.StatusEffects;
 import mindustry.type.Liquid;
 
-public class FLiquids {
+public class Liquids2 {
     public static Liquid fusionCopper, fusionLead, fusionTitanium, fusionThorium;
 
     public static void load() {

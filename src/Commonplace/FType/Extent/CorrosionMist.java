@@ -1,6 +1,6 @@
 package Commonplace.FType.Extent;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import Commonplace.Utils.Interfaces.Corrosion;
 import Commonplace.Utils.Interfaces.RangePure;
 import arc.Events;
@@ -151,7 +151,7 @@ public class CorrosionMist {
                         u.apply(f.status, 60);
                         if (po != null && po > 0) {
                             for (int i = 0; i < c.corrosionLevel() * (boost + 1) - po; i++) {
-                                u.apply(FStatusEffects.catalyzeI, 1);
+                                u.apply(StatusEffects2.catalyzeI, 1);
                             }
                         }
                     }

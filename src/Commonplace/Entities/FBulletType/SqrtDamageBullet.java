@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Utils.Classes.FDamage;
+import Commonplace.Utils.Classes.Damage2;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -23,7 +23,7 @@ public class SqrtDamageBullet extends ContinuousBulletType {
         bulletsReload.replaceAll((bu, f) -> f + Time.delta);
         float timer = bulletsReload.computeIfAbsent(b, f -> 0f);
         if (timer >= 6) {
-            FDamage.SqrtDamage(b, b.team, damage, b.x, b.y, b.rotation(), sqrtLength, halfWidth);
+            Damage2.SqrtDamage(b, b.team, damage, b.x, b.y, b.rotation(), sqrtLength, halfWidth);
             bulletsReload.put(b, 0f);
         }
     }

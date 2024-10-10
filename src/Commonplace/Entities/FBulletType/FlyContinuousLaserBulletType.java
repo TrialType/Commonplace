@@ -25,7 +25,7 @@ public class FlyContinuousLaserBulletType extends ContinuousLaserBulletType {
         super.update(b);
         if (flyTime > 0 && !b.timer.check(3, flyTime)) {
             b.keepAlive = true;
-        } else if (flyTime > 0 && b.time + delta >= lifetime && b.timer.get(3, flyTime + lifetime + 1)) {
+        } else if (flyTime > 0 && b.time + delta >= lifetime && b.timer.get(3, flyTime + lifetime + delta * 2)) {
             if (b.owner instanceof Unit u) {
                 for (WeaponMount mount : u.mounts) {
                     if (mount.bullet == b) {

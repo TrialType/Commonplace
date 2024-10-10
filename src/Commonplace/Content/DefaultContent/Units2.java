@@ -43,7 +43,7 @@ import mindustry.type.weapons.RepairBeamWeapon;
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
 
-public class FUnits {
+public class Units2 {
     public static Seq<UnitType> boss = new Seq<>();
     //tool
     public static UnitType transfer, shuttle1, bulletInterception_a, rejuvenate_a;
@@ -191,7 +191,7 @@ public class FUnits {
             hitSize = 14;
             buildRange = 180;
             buildSpeed = 3;
-            abilities.add(new StatusFieldAbility(FStatusEffects.back, 90, 60, 120) {{
+            abilities.add(new StatusFieldAbility(StatusEffects2.back, 90, 60, 120) {{
                 activeEffect = Fx.healWave;
             }});
 
@@ -437,7 +437,7 @@ public class FUnits {
             lifetime = 300;
             trailLength = 15;
             trailColor = Color.valueOf("00DDaAFF");
-            immunities.addAll(StatusEffects.slow, FStatusEffects.tardy, FStatusEffects.StrongStop);
+            immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.StrongStop);
 
             abilities.add(new ShieldArcAbility() {{
                 radius = 20;
@@ -451,7 +451,7 @@ public class FUnits {
             weapons.add(new Weapon() {{
                 bullet = new ExplosionBulletType(15, 120) {{
                     rangeOverride = 120;
-                    status = FStatusEffects.suppress;
+                    status = StatusEffects2.suppress;
                     statusDuration = 300;
                 }};
             }});
@@ -491,7 +491,7 @@ public class FUnits {
             stepShake = 0;
             isEnemy = false;
 
-            abilities.add(new StatusFieldAbility(FStatusEffects.grow, 3600, 300, 160));
+            abilities.add(new StatusFieldAbility(StatusEffects2.grow, 3600, 300, 160));
             abilities.add(new ShieldRegenFieldAbility(5000, 100000, 600, 160));
 
             weapons.add(new RepairBeamWeapon() {{
@@ -619,7 +619,7 @@ public class FUnits {
                     shootEffect = Fx.artilleryTrailSmoke;
                     trailEffect = Fx.artilleryTrailSmoke;
                     trailChance = 0.5f;
-                    status = FStatusEffects.seethe;
+                    status = StatusEffects2.seethe;
                     statusDuration = 600;
                     splashDamageRadius = 158;
                     speed = 6;
@@ -964,7 +964,7 @@ public class FUnits {
                     splashDamagePierce = true;
                     statusDuration = 300;
                     keepVelocity = false;
-                    status = FStatusEffects.sublimation;
+                    status = StatusEffects2.sublimation;
                     incendSpread = 360;
                     incendChance = 1;
                     incendAmount = 15;
@@ -991,7 +991,7 @@ public class FUnits {
                             incendChance = 1;
                             incendAmount = 6;
 
-                            status = FStatusEffects.torn;
+                            status = StatusEffects2.torn;
                             statusDuration = 240;
                         }};
                     }};
@@ -1048,7 +1048,7 @@ public class FUnits {
                         splashDamage = 80;
                         splashDamageRadius = 156;
 
-                        status = FStatusEffects.torn;
+                        status = StatusEffects2.torn;
                         statusDuration = 180;
                         keepVelocity = false;
                         despawnEffect = new WaveEffect() {{
@@ -1416,13 +1416,13 @@ public class FUnits {
             faceTarget = false;
 
             immunities.addAll(
-                    FStatusEffects.swift,
+                    StatusEffects2.swift,
                     StatusEffects.slow, StatusEffects.wet,
-                    StatusEffects.unmoving, FStatusEffects.StrongStop,
+                    StatusEffects.unmoving, StatusEffects2.StrongStop,
                     StatusEffects.fast, StatusEffects.freezing
             );
 
-            abilities.add(new StatusFieldAbility(FStatusEffects.swift, 600, 610, 100));
+            abilities.add(new StatusFieldAbility(StatusEffects2.swift, 600, 610, 100));
             abilities.add(new ShieldRegenFieldAbility(10000, 100000, 610, 100));
             abilities.add(new UnitSpawnAbility(hammer, 600, 1, 1));
             abilities.add(new UnitSpawnAbility(hammer, 600, -1, 1));
@@ -1531,7 +1531,7 @@ public class FUnits {
                 reload = 600;
                 mirror = false;
                 x = y = 0;
-                shootStatus = FStatusEffects.deploy;
+                shootStatus = StatusEffects2.deploy;
                 shootStatusDuration = 5;
                 bullet = new BasicBulletType() {{
                     damage = 10000;
@@ -1667,7 +1667,7 @@ public class FUnits {
                 mirror = false;
                 x = y = 0;
                 reload = 150;
-                shootStatus = FStatusEffects.back;
+                shootStatus = StatusEffects2.back;
                 shootStatusDuration = 10;
 
                 shoot = new ShootBarrel() {{

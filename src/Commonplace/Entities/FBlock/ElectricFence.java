@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.Units2;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -208,7 +208,7 @@ public class ElectricFence extends Block {
         }
 
         public boolean inRange(float len, Unit u) {
-            if (!FUnits.boss.contains(u.type)) {
+            if (!Units2.boss.contains(u.type)) {
                 float ux = u.x;
                 float uy = u.y;
                 float angle1 = Angles.angleDist(rotate, Angles.angle(x, y, ux, uy));

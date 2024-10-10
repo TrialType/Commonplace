@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBullet;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
@@ -205,7 +205,7 @@ public class EMPBullet extends Bullet {
                 Damage.damage(team, x, y, downRange, downDamage, false, true, true, true, this);
             }
             Units.nearbyEnemies(team, x, y, downRange, u -> {
-                u.apply(FStatusEffects.StrongStop, downDuration);
+                u.apply(StatusEffects2.StrongStop, downDuration);
 
             });
             Units.nearbyBuildings(x, y, downRange, b -> {

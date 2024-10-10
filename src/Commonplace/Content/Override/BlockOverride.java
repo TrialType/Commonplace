@@ -1,6 +1,6 @@
 package Commonplace.Content.Override;
 
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.Units2;
 import Commonplace.Entities.FBulletType.ProtectKillerBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
@@ -52,15 +52,15 @@ public class BlockOverride {
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
 
         UnitFactory uf = (UnitFactory) Blocks.airFactory;
-        uf.plans.add(new UnitFactory.UnitPlan(FUnits.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
+        uf.plans.add(new UnitFactory.UnitPlan(Units2.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
         Reconstructor rt = (Reconstructor) Blocks.additiveReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.barb, FUnits.hammer});
+        rt.upgrades.add(new UnitType[]{Units2.barb, Units2.hammer});
         rt = (Reconstructor) Blocks.multiplicativeReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.hammer, FUnits.buying});
+        rt.upgrades.add(new UnitType[]{Units2.hammer, Units2.buying});
         rt = (Reconstructor) Blocks.exponentialReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.buying, FUnits.crazy});
+        rt.upgrades.add(new UnitType[]{Units2.buying, Units2.crazy});
         rt = (Reconstructor) Blocks.tetrativeReconstructor;
-        rt.upgrades.add(new UnitType[]{FUnits.crazy, FUnits.transition});
+        rt.upgrades.add(new UnitType[]{Units2.crazy, Units2.transition});
 
         ItemTurret turret = (ItemTurret) Blocks.salvo;
         turret.ammoTypes.each((i, b) -> b.damage += 4);

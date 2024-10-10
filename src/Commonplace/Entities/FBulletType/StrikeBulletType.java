@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Utils.Classes.FDamage;
+import Commonplace.Utils.Classes.Damage2;
 import arc.math.Angles;
 import arc.math.Interp;
 import mindustry.content.StatusEffects;
@@ -36,7 +36,7 @@ public class StrikeBulletType extends BasicBulletType {
     @Override
     public void createSplashDamage(Bullet b, float x, float y) {
         if (splashDamageRadius > 0 && !b.absorbed) {
-            FDamage.damageInterp(hitTeam ? Team.derelict : b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), damageInterp, splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
+            Damage2.damageInterp(hitTeam ? Team.derelict : b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), damageInterp, splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
 
             if (status != StatusEffects.none) {
                 Damage.status(hitTeam ? Team.derelict : b.team, x, y, splashDamageRadius, status, statusDuration, collidesAir, collidesGround);

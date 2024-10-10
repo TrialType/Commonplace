@@ -342,6 +342,19 @@ public class Effects {
         }
     }
 
+    public static void findLineLightningPoints(float x, float y, float rotation, float rotationDes, float length, int points, Seq<Vec2> lines) {
+        if (lines != null) {
+            lines.clear();
+            lines.add(new Vec2(x, y));
+            for (int i = 1; i < points; i++) {
+                lines.add(new Vec2(x + rand.range(length / 2f), y + rand.range(length / 2f)));
+                rotation += rand.range(rotationDes);
+                x += Angles.trnsx(rotation, length);
+                y += Angles.trnsy(rotation, length);
+            }
+        }
+    }
+
     static class EffectMultipleTimes {
         int time;
         float[] values;

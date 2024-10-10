@@ -1,16 +1,16 @@
 package Commonplace.Content.SpecialContent;
 
-import Commonplace.Content.DefaultContent.CBlocks;
+import Commonplace.Content.DefaultContent.Blocks2;
 import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
-import static Commonplace.Content.DefaultContent.CBlocks.*;
+import static Commonplace.Content.DefaultContent.Blocks2.*;
 import static Commonplace.Content.ProjectContent.Sign.*;
-import static Commonplace.Content.DefaultContent.FSectorPresets.fullWater;
-import static Commonplace.Content.DefaultContent.FSectorPresets.longestDown;
-import static Commonplace.Content.DefaultContent.FUnits.*;
+import static Commonplace.Content.DefaultContent.SectorPresets2.fullWater;
+import static Commonplace.Content.DefaultContent.SectorPresets2.longestDown;
+import static Commonplace.Content.DefaultContent.Units2.*;
 import static Commonplace.Content.ProjectContent.UnitProjects.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.content.Items.*;
@@ -54,10 +54,10 @@ public class Techs {
                 node(decoyLarge, ItemStack.with(silicon, 2500, phaseFabric, 750, blastCompound, 2000, titanium, 2000, thorium, 1500), () -> {
                 });
             });
-            node(CBlocks.primarySolidification, ItemStack.with(Items.metaglass, 350, Items.copper, 400, Items.lead, 250), Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
-                node(CBlocks.intermediateSolidification, ItemStack.with(Items.metaglass, 1250, Items.copper, 1500, Items.lead, 1000, Items.graphite, 1400), () -> {
-                    node(CBlocks.advancedSolidification, ItemStack.with(Items.metaglass, 5000, Items.copper, 4500, Items.lead, 4000, Items.graphite, 3500, Items.titanium, 3000), () -> {
-                        node(CBlocks.ultimateSolidification, ItemStack.with(Items.metaglass, 15000, Items.copper, 14500, Items.lead, 14000, Items.graphite, 13500, Items.titanium, 14000, Items.thorium, 14500, Items.surgeAlloy, 5000), () -> {
+            node(Blocks2.primarySolidification, ItemStack.with(Items.metaglass, 350, Items.copper, 400, Items.lead, 250), Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
+                node(Blocks2.intermediateSolidification, ItemStack.with(Items.metaglass, 1250, Items.copper, 1500, Items.lead, 1000, Items.graphite, 1400), () -> {
+                    node(Blocks2.advancedSolidification, ItemStack.with(Items.metaglass, 5000, Items.copper, 4500, Items.lead, 4000, Items.graphite, 3500, Items.titanium, 3000), () -> {
+                        node(Blocks2.ultimateSolidification, ItemStack.with(Items.metaglass, 15000, Items.copper, 14500, Items.lead, 14000, Items.graphite, 13500, Items.titanium, 14000, Items.thorium, 14500, Items.surgeAlloy, 5000), () -> {
                         });
                     });
                 });

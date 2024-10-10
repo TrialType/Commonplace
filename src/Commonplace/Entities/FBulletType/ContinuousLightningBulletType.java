@@ -1,7 +1,7 @@
 package Commonplace.Entities.FBulletType;
 
 import Commonplace.Content.SpecialContent.Effects;
-import Commonplace.Utils.Classes.FDamage;
+import Commonplace.Utils.Classes.Damage2;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -93,7 +93,7 @@ public class ContinuousLightningBulletType extends ContinuousBulletType {
             Vec2 before = null;
             for (Vec2 v : vs) {
                 if (before != null) {
-                    FDamage.collideLineInterval(b, b.team, hitEffect, before.x, before.y, before.angleTo(v), before.dst(v), false, false, -1,
+                    Damage2.collideLineInterval(b, b.team, hitEffect, before.x, before.y, before.angleTo(v), before.dst(v), false, false, -1,
                             i -> hits.get(b).add(new HitTimer(i, damageInterval)),
                             i -> !hits.get(b).contains(h -> h.entity == i),
                             i -> hits.get(b).contains(h -> h.entity == i && h.get(damageInterval)));

@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBlock;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import arc.Core;
 import arc.scene.ui.layout.Table;
 import arc.struct.IntIntMap;
@@ -107,7 +107,7 @@ public class UnitProjectBlock extends Block {
                 } else if (lastId == -1) {
                     project.setMap(map, boostMap);
                     project.applyProject(player.unit());
-                    player.unit().apply(FStatusEffects.StrongStop, 180);
+                    player.unit().apply(StatusEffects2.StrongStop, 180);
                     applyEffect.at(player.unit().x, player.unit().y, 0, player.unit());
                     lastId = player.unit().id;
                 }

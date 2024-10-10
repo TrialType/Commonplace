@@ -1,9 +1,8 @@
 package Commonplace.Content.Override;
 
 import Commonplace.AI.MissileAI_II;
-import Commonplace.Content.DefaultContent.FUnits;
 import Commonplace.Content.SpecialContent.Effects;
-import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import Commonplace.Entities.FAbility.SprintingAbility2;
 import Commonplace.Entities.FAbility.TimeLargeDamageAbility;
 import Commonplace.Entities.FBulletType.*;
@@ -17,6 +16,7 @@ import arc.graphics.g2d.Lines;
 import arc.math.Interp;
 import arc.math.Rand;
 import mindustry.content.Fx;
+import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
@@ -27,7 +27,6 @@ import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.effect.MultiEffect;
-import mindustry.entities.part.RegionPart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
@@ -131,13 +130,15 @@ public class UnitOverride {
             shots = 3;
             shotDelay = 10;
         }};
-        weapon.bullet = new BasicBulletType() {{
-            damage = 8;
+        weapon.bullet = new ProtectKillerBulletType() {{
+            damage = 16;
             speed = 4;
             lifetime = 90;
             width = height = 8;
-            splashDamage = 8;
-            splashDamageRadius = 13;
+
+            minArmor = 7;
+            damageArmorMultiplier = 1.25f;
+            maxArmorDamageAdder = 20;
             keepVelocity = false;
         }};
 
@@ -186,24 +187,33 @@ public class UnitOverride {
 
         UnitTypes.fortress.health = 1800;
         weapon = UnitTypes.fortress.weapons.get(0);
-        weapon.bullet.lightning = 6;
-        weapon.bullet.lightColor = Pal.bulletYellow;
-        weapon.bullet.lightningDamage = 13;
-        weapon.bullet.lightningLength = 6;
-        weapon.bullet.lightningCone = 360;
-        weapon.bullet.incendChance = 0.3f;
-        weapon.bullet.incendAmount = 3;
+        weapon.shoot.shots = 5;
+        weapon.inaccuracy = 10;
+        weapon.bullet.createChance = 0.75f;
+        weapon.bullet.damage = 40;
+        weapon.bullet.splashDamage = 120;
+        weapon.bullet.incendChance = 0.7f;
+        weapon.bullet.incendAmount = 5;
         UnitTypes.fortress.weapons.add(new Weapon() {{
             reload = 18;
-            rotate = true;
-            rotateSpeed = 10;
+            rotate = false;
+            shootCone = 20;
 
-            bullet = new BasicBulletType() {{
-                width = height = 7;
+            shoot = new ShootAlternate();
+
+            bullet = new LiquidBulletType() {{
+                liquid = Liquids.oil;
                 damage = 8;
-                speed = 2;
-                lifetime = 120;
-                collidesTiles = false;
+                speed = 3;
+                lifetime = 80;
+                puddleSize = 40;
+                orbSize = 12;
+
+                status = StatusEffects.tarred;
+                statusDuration = 15;
+
+                despawnHit = true;
+                scaleLife = true;
             }};
         }});
 
@@ -221,7 +231,7 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
         UnitTypes.crawler.health = 350;
         UnitTypes.crawler.speed = 2.5f;
-        UnitTypes.crawler.abilities.add(new StatusFieldAbility(FStatusEffects.swift, 900, 900, 1));
+        UnitTypes.crawler.abilities.add(new StatusFieldAbility(StatusEffects2.swift, 900, 900, 1));
         weapon = UnitTypes.crawler.weapons.get(0);
         weapon.reload = 30;
         weapon.bullet.killShooter = false;
@@ -317,7 +327,7 @@ public class UnitOverride {
         UnitTypes.horizon.armor = 5;
         UnitTypes.horizon.speed = 2.15f;
         weapon = UnitTypes.horizon.weapons.get(0);
-        weapon.shootStatus = FStatusEffects.frenzy;
+        weapon.shootStatus = StatusEffects2.frenzy;
         weapon.shootStatusDuration = 60;
         weapon.shoot.shots = 4;
         weapon.shoot.shotDelay = 4;
@@ -703,7 +713,7 @@ public class UnitOverride {
         statusFieldAbility.duration = 420;
         weapon = UnitTypes.oxynoe.weapons.get(0);
         weapon.reload = 3;
-        weapon.shootStatus = FStatusEffects.deploy;
+        weapon.shootStatus = StatusEffects2.deploy;
         weapon.shootStatusDuration = 10;
         weapon.bullet.lifetime = 27;
         weapon.bullet.damage = 34.5f;
@@ -757,11 +767,21 @@ public class UnitOverride {
 
         UnitTypes.obviate.health = 8050;
         weapon = UnitTypes.obviate.weapons.first();
-        weapon.bullet.despawnEffect = Effects.LightningCircle;
-        weapon.bullet.hitEffect = Effects.LightningCircle;
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
         weapon.bullet.statusDuration = 90;
+        weapon.bullet.fragBullets = 7;
+        weapon.bullet.fragBullet = new MoveLightningBulletType() {{
+            damage = 20;
+            buildingDamageMultiplier = 0.1f;
+            lifetime = 60;
+            lightningLength = 3;
+            damagePoints = 12;
+            points = 40;
+            lightningColor = Pal.sap;
+
+            hitEffect = despawnEffect = Fx.none;
+        }};
 
         UnitTypes.quell.health = 22000;
         UnitTypes.quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
@@ -769,106 +789,6 @@ public class UnitOverride {
         UnitTypes.disrupt.health = 42000;
         UnitTypes.disrupt.uiIcon = UnitTypes.disrupt.fullIcon = Core.atlas.find("disrupt");
         UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
-        UnitTypes.disrupt.weapons.add(new Weapon() {{
-            mirror = false;
-            x = 0;
-            y = 0;
-            shootX = 0;
-            shootY = 30;
-            reload = 480;
-            inaccuracy = 0;
-            shootCone = 60;
-            rotate = false;
-            parentizeEffects = true;
-
-            parts.add(new RegionPart("commonplace-disrupt-blade") {{
-                progress = PartProgress.warmup.blend(PartProgress.reload, 0.13f);
-                heatColor = Color.valueOf("9c50ff");
-                x = 0;
-                y = 0;
-                moveRot = 0;
-                moveY = -3f;
-                moveX = 0;
-                mirror = true;
-                outline = false;
-            }});
-
-            shoot.firstShotDelay = 150;
-            bullet = new EffectBulletType() {{
-                lifetime = 360;
-                speed = 0.8f;
-                damage = 600;
-                splashDamage = 300;
-                splashDamageRadius = 80;
-                status = StatusEffects.electrified;
-                statusDuration = 210;
-                inaccuracy = 0;
-                homingPower = 0.05f;
-                homingRange = 800;
-                keepVelocity = false;
-
-                hittable = reflectable = absorbable = false;
-
-                parts.addAll(new ShapePart() {{
-                    circle = true;
-                    color = colorTo = Pal.suppress;
-                    radius = 5 * 0.33f;
-                    radiusTo = 6 * 0.33f;
-                }}, new ShapePart() {{
-                    circle = true;
-                    hollow = true;
-                    color = colorTo = Pal.suppress;
-                    radius = 5;
-                    radiusTo = 6;
-                    stroke = strokeTo = 2;
-                }});
-
-                hitColor = Pal.sap;
-                trailColor = Pal.suppress;
-                despawnEffect = hitEffect = Fx.none;
-                trailEffect = Effects.lightningSmallOut;
-                trailInterval = 1;
-                trailWidth = 0;
-                trailLength = 0;
-
-                shootEffect = Fx.none;
-                chargeEffect = new MultiEffect(
-                        Effects.ball,
-                        new PackEffect(
-                                Effects.lightningSmallIn, Pal.suppress.cpy().mul(1.3f), 0, 0,
-                                0, 3, 26, 27, 35, 53, 66, 88, 85, 86, 94, 103, 105,
-                                26, 35, 50, 53, 75, 88, 94, 102, 105
-                        )
-                );
-
-                fragBullets = 1;
-                fragBullet = new BulletType() {{
-                    absorbable = reflectable = hittable = collides = false;
-
-                    parts.addAll(new ShapePart() {{
-                        circle = true;
-                        color = colorTo = Pal.suppress;
-                        radius = radiusTo = 6 * 0.33f;
-                    }}, new ShapePart() {{
-                        circle = true;
-                        hollow = true;
-                        color = colorTo = Pal.suppress;
-                        radius = radiusTo = 6;
-                        stroke = strokeTo = 2;
-                    }});
-
-                    damage = speed = 0;
-                    lifetime = 240;
-                    intervalBullets = 5;
-                    bulletInterval = 3;
-                    intervalBullet = new LightningBulletType() {{
-                        damage = 60;
-                        lightningLength = 6;
-                        lightningColor = Pal.sap;
-                    }};
-                }};
-            }};
-        }});
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.anthicus.health = 10150;
@@ -901,7 +821,6 @@ public class UnitOverride {
         weapon.bullet.fragBullet.damage = 100;
         weapon.bullet.fragBullet.splashDamage = 92f;
         weapon.bullet.fragBullet.splashDamageRadius = 20;
-
         /*-----------------------------------------------------------------------------*/
         UnitTypes.nova.speed = 2f;
         UnitTypes.nova.armor = 21f;
@@ -911,7 +830,7 @@ public class UnitOverride {
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
         weapon.reload = 4;
-        weapon.bullet.lifetime = 75;
+        weapon.bullet.lifetime = 35;
         weapon.bullet.speed = 8;
         weapon.bullet.damage = 18;
         weapon.bullet.healAmount = 0;
@@ -933,39 +852,24 @@ public class UnitOverride {
 
         UnitTypes.pulsar.health = 560;
         UnitTypes.pulsar.speed = 1.1f;
-        UnitTypes.pulsar.range = 220;
         weapon = UnitTypes.pulsar.weapons.get(0);
-        weapon.shoot.shots = 3;
-        weapon.shoot.shotDelay = 6;
-        weapon.reload = 360;
         weapon.inaccuracy = 12;
-        weapon.bullet = new BasicBulletType() {{
-            absorbable = false;
-            collidesTeam = true;
-            rangeOverride = 200;
-            speed = 5;
-            damage = 1;
-            lifetime = 40;
+        weapon.bullet = new ConnectLightningBulletType() {{
+            lightningColor = hitColor = Pal.heal;
+            damage = 28f;
+            lightningLength = 9;
+            lightningLengthRand = 10;
+            shootEffect = Fx.shootHeal;
             healPercent = 2f;
-            width = height = 25;
-            homingDelay = 0;
-            homingPower = 0.03f;
-            homingRange = 600;
-            frontColor = backColor = Pal.heal;
-            hitEffect = despawnEffect = Fx.none;
 
-            fragOnHit = false;
-            fragOnAbsorb = false;
-            fragBullets = 1;
-            fragBullet = new ContinuousLightningBulletType() {{
-                damage = 13;
-                lifetime = 260;
-                length = 20;
-
-                damageInterval = 15;
-                rotateSpeed = 4;
-
-                healPercent = 1f;
+            lightningType = new BulletType(0.0001f, 0f) {{
+                lifetime = Fx.lightning.lifetime;
+                hitEffect = Fx.hitLancer;
+                despawnEffect = Fx.none;
+                status = StatusEffects.shocked;
+                statusDuration = 10f;
+                hittable = false;
+                healPercent = 1.6f;
                 collidesTeam = true;
             }};
         }};
@@ -989,7 +893,7 @@ public class UnitOverride {
                 collides = absorbable = reflectable = hittable = false;
                 rangeOverride = 135;
                 keepVelocity = false;
-                status = FStatusEffects.tardy;
+                status = StatusEffects2.tardy;
                 statusDuration = 180;
                 splashDamageRadius = 135;
                 shootEffect = new Effect(45, e -> {

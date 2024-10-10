@@ -1,6 +1,6 @@
 package Commonplace.Entities.FUnit.F;
 
-import Commonplace.Content.DefaultContent.FUnits;
+import Commonplace.Content.DefaultContent.Units2;
 import Commonplace.Entities.FUnit.Override.FUnitEntity;
 import Commonplace.Entities.FUnitType.BoostUnitType;
 import Commonplace.Utils.Classes.PhysicsWorldChanger;
@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Commonplace.Utils.Classes.FDamage.percentDamage;
+import static Commonplace.Utils.Classes.Damage2.percentDamage;
 import static mindustry.Vars.asyncCore;
 
 public class BoostUnitEntity extends FUnitEntity {
@@ -84,11 +84,11 @@ public class BoostUnitEntity extends FUnitEntity {
 
     @Override
     public void update() {
-        if (crazy.indexOf(this) < 0 && type == FUnits.crazy) {
+        if (crazy.indexOf(this) < 0 && type == Units2.crazy) {
             crazy.add(this);
             change();
         }
-        if (!team.isAI() || FUnits.boss.contains(type)) {
+        if (!team.isAI() || Units2.boss.contains(type)) {
             first = false;
         }
         if (changing && type instanceof BoostUnitType t) {
@@ -165,7 +165,7 @@ public class BoostUnitEntity extends FUnitEntity {
                 y += vel.y;
                 t.boostEffect.at(lastX, lastY, rotation, Pal.accent, new Vec2(x, y));
             }
-        } else if (type == FUnits.crazy && type instanceof BoostUnitType t) {
+        } else if (type == Units2.crazy && type instanceof BoostUnitType t) {
             Units.nearbyEnemies(team, x, y, hitSize, u -> {
                 float timer = unitMap.computeIfAbsent(u, f -> t.hitReload);
                 if (timer >= t.hitReload) {

@@ -8,7 +8,7 @@ import mindustry.gen.Sounds;
 import mindustry.type.Weather;
 import mindustry.world.meta.Attribute;
 
-public class FWeathers {
+public class Weathers2 {
     public static Weather rockStorm, rockStormLarge;
 
     public static void load() {

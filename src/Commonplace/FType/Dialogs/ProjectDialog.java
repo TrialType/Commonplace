@@ -1,6 +1,6 @@
 package Commonplace.FType.Dialogs;
 
-import Commonplace.Content.DefaultContent.FStatusEffects;
+import Commonplace.Content.DefaultContent.StatusEffects2;
 import Commonplace.Content.ProjectContent.Sign;
 import Commonplace.FType.New.BoostProject;
 import Commonplace.FType.New.UnitProject;
@@ -52,7 +52,7 @@ public class ProjectDialog extends BaseDialog {
             if (u != null && u.health > 0 && !u.dead && u.spawnedByCore && state.isGame()) {
                 if (heavyPass() && numPass()) {
                     applyProject(u);
-                    player.unit().apply(FStatusEffects.StrongStop, 180);
+                    player.unit().apply(StatusEffects2.StrongStop, 180);
                     hide();
                 } else if (!heavyPass()) {
                     ui.showInfo(Core.bundle.get("@tooHeavy"));

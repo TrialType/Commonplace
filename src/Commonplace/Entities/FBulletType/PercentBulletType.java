@@ -1,6 +1,6 @@
 package Commonplace.Entities.FBulletType;
 
-import Commonplace.Utils.Classes.FDamage;
+import Commonplace.Utils.Classes.Damage2;
 import arc.Events;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
@@ -72,7 +72,7 @@ public class PercentBulletType extends BasicBulletType {
     public void createSplashDamage(Bullet b, float x, float y) {
         if (splashDamageRadius > 0 && !b.absorbed) {
             if (WS) {
-                FDamage.damage(b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
+                Damage2.damage(b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
             } else {
                 Damage.damage(b.team, x, y, splashDamageRadius, splashDamage * b.damageMultiplier(), splashDamagePierce, collidesAir, collidesGround, scaledSplashDamage, b);
             }

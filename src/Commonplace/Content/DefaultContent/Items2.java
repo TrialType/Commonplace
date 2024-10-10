@@ -1,4 +1,4 @@
 package Commonplace.Content.DefaultContent;
 
-public class FItems {
+public class Items2 {
 }
