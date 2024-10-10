@@ -284,20 +284,6 @@ public class UnitOverride {
         s = (SapBulletType) weapon.bullet;
         s.length = 125;
         s.damage = 28;
-        s.fragBullets = 1;
-        s.fragBullet = new EmpBulletType() {{
-            hittable = reflectable = absorbable = false;
-            damage = 6;
-            speed = 0;
-            lifetime = 0.001f;
-            radius = 25;
-            timeIncrease = 1;
-            timeDuration = 120;
-            powerDamageScl = 1.6f;
-            powerSclDecrease = 0.3f;
-            hitUnits = false;
-            hitColor = Color.valueOf("bf92f9");
-        }};
 
         UnitTypes.arkyid.health = 28000;
 
@@ -389,98 +375,6 @@ public class UnitOverride {
         weapon.bullet.statusDuration = 60;
 
         UnitTypes.eclipse.health = 77000;
-        UnitTypes.eclipse.weapons.add(new Weapon() {{
-            reload = 480;
-            bullet = new MissileExplosionBulletType(0, 0) {{
-                rangeOverride = 300;
-
-                withHealth = true;
-
-                hittable = false;
-                absorbable = false;
-                instantDisappear = true;
-                scaledSplashDamage = true;
-                collides = false;
-                keepVelocity = false;
-
-                lifetime = 0;
-
-                spawnUnit = new UnitType("eclipse1") {{
-                    lifetime = 1260;
-
-                    range = 600;
-
-                    constructor = TimedKillUnit::create;
-                    controller = u -> new MissileAI_II();
-                    hidden = true;
-                    flying = true;
-                    shootOnDeath = false;
-                    health = 38500;
-                    speed = 0.1f;
-                    armor = 13;
-                    weapons.add(new Weapon() {{
-                        alwaysShooting = true;
-                        controllable = aiControllable = false;
-                        reload = 1202;
-
-                        shoot = new ShootPattern() {{
-                            firstShotDelay = 1200;
-                        }};
-
-                        bullet = new MissileExplosionBulletType(0, 0) {{
-                            hittable = false;
-                            lifetime = 1f;
-                            speed = 0f;
-                            rangeOverride = 20f;
-                            shootEffect = Fx.massiveExplosion;
-                            instantDisappear = true;
-                            scaledSplashDamage = true;
-                            killShooter = true;
-                            collides = false;
-                            keepVelocity = false;
-
-                            spawnUnit = new UnitType("eclipse2") {{
-                                hidden = true;
-                                flying = true;
-                                targetable = false;
-                                hittable = false;
-                                speed = 11;
-                                lifetime = 1201;
-
-                                trailLength = 12;
-                                trailWidth = 4;
-                                trailChance = 1;
-
-                                constructor = TimedKillUnit::create;
-                                controller = u -> new MissileAI_II();
-
-                                weapons.add(new Weapon() {{
-                                    bullet = new ExplosionBulletType(10000, 500) {{
-                                        range = rangeOverride = 24;
-                                    }};
-                                }});
-                            }};
-                        }};
-                    }});
-                    weapons.add(new Weapon() {{
-                        reload = 20;
-                        shoot = new ShootAlternate() {{
-                            shots = 3;
-                            barrels = 3;
-                            shotDelay = 5f;
-                        }};
-                        bullet = new BasicBulletType() {{
-                            homingRange = 600;
-                            homingDelay = 80;
-                            homingPower = 0.07f;
-                            lifetime = 120;
-                            speed = 5;
-                            damage = 120;
-                        }};
-                    }});
-                }};
-            }};
-        }});
         /*-----------------------------------------------------------------------------*/
 
         UnitTypes.poly.health = 700;
