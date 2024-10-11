@@ -14,6 +14,7 @@ public class SapAbility extends Ability {
     public float minHealPercent = 0.05f;
     public float heal = 4f / 60;
     public float healPercent = 0.001f;
+    public boolean targetSame = false;
     public Boolf<Unit> canAdd = u -> true;
 
     @Override
@@ -22,7 +23,7 @@ public class SapAbility extends Ability {
             float def = heal + u.maxHealth * healPercent;
             final float[] value = new float[1];
             Units.nearby(u.team, u.x, u.y, range, unit -> {
-                if (u.health < u.maxHealth) {
+                if (u.health < u.maxHealth && (targetSame || unit.type != u.type)) {
                     value[0] = Math.min(u.maxHealth - u.health, def);
                     float val;
                     float min = unit.maxHealth * minHealPercent;

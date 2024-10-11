@@ -32,22 +32,22 @@ import static arc.math.Angles.randLenVectors;
 
 public class BlockOverride {
     public static void load() {
-        Blocks.copperWall.health = 80 * 6;
-        Blocks.copperWallLarge.health = 80 * 24;
-        Blocks.titaniumWall.health = 110 * 6;
-        Blocks.titaniumWallLarge.health = 110 * 24;
-        Blocks.plastaniumWall.health = 125 * 6;
-        Blocks.plastaniumWallLarge.health = 125 * 24;
-        Blocks.thoriumWall.health = 200 * 6;
-        Blocks.thoriumWallLarge.health = 200 * 24;
-        Blocks.phaseWall.health = 150 * 6;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 14;
-        Blocks.phaseWallLarge.health = 150 * 24;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 21;
-        Blocks.surgeWall.health = 250 * 6;
-        ((Wall) Blocks.surgeWall).lightningChance = 0.3f;
-        ((Wall) Blocks.surgeWall).lightningDamage = 30;
-        Blocks.surgeWallLarge.health = 250 * 24;
+        Blocks.copperWall.health = 80 * 10;
+        Blocks.copperWallLarge.health = 80 * 40;
+        Blocks.titaniumWall.health = 110 * 10;
+        Blocks.titaniumWallLarge.health = 110 * 40;
+        Blocks.plastaniumWall.health = 125 * 10;
+        Blocks.plastaniumWallLarge.health = 125 * 40;
+        Blocks.thoriumWall.health = 200 * 10;
+        Blocks.thoriumWallLarge.health = 200 * 40;
+        Blocks.phaseWall.health = 150 * 10;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 15;
+        Blocks.phaseWallLarge.health = 150 * 40;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 15;
+        Blocks.surgeWall.health = 250 * 10;
+        ((Wall) Blocks.surgeWall).lightningChance = 0.4f;
+        ((Wall) Blocks.surgeWall).lightningDamage = 40;
+        Blocks.surgeWallLarge.health = 250 * 40;
         ((Wall) Blocks.surgeWallLarge).lightningChance = 0.4f;
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
 

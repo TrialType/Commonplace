@@ -25,11 +25,16 @@ import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.entities.effect.MultiEffect;
+import mindustry.entities.effect.WaveEffect;
+import mindustry.entities.effect.WrapEffect;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
+import mindustry.gen.Unit;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 
 import static arc.graphics.g2d.Draw.color;
@@ -373,7 +378,6 @@ public class UnitOverride {
 
         UnitTypes.eclipse.health = 77000;
         /*-----------------------------------------------------------------------------*/
-
         UnitTypes.poly.health = 700;
         UnitTypes.poly.buildSpeed = 1;
         UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
@@ -428,7 +432,6 @@ public class UnitOverride {
 
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
-
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;
         UnitTypes.risso.armor = 7;
@@ -555,7 +558,6 @@ public class UnitOverride {
         UnitTypes.sei.health = 22000;
 
         UnitTypes.omura.health = 77000;
-
         /*-----------------------------------------------------------------------------*/
         UnitTypes.retusa.health = 550;
         UnitTypes.retusa.speed = 0.7f;
@@ -645,17 +647,13 @@ public class UnitOverride {
         }});
 
         UnitTypes.navanax.health = 70000;
-
         /*-----------------------------------------------------------------------------*/
-
         UnitTypes.precept.health = 17500;
 
         UnitTypes.vanquish.health = 38500;
 
         UnitTypes.conquer.health = 77000;
-
         /*-----------------------------------------------------------------------------*/
-
         UnitTypes.obviate.health = 8050;
         weapon = UnitTypes.obviate.weapons.first();
         weapon.bullet.splashDamageRadius = 12;
@@ -681,9 +679,36 @@ public class UnitOverride {
         UnitTypes.disrupt.uiIcon = UnitTypes.disrupt.fullIcon = Core.atlas.find("disrupt");
         UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
         /*-----------------------------------------------------------------------------*/
-
         UnitTypes.anthicus.health = 10150;
-        UnitTypes.anthicus.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
+        UnitType u = UnitTypes.anthicus.weapons.get(0).bullet.spawnUnit;
+        u.weapons.get(0).bullet.splashDamage = 280f;
+        u.weapons.add(new Weapon() {{
+            reload = 15;
+            x = y = 0;
+            mirror = false;
+            alwaysShooting = true;
+
+            shoot = new ShootBarrel() {{
+                shots = 2;
+                barrels = new float[]{0f, 0f, 45, 0f, 0f, 135};
+            }};
+
+            bullet = new BasicBulletType(5, 1) {{
+                drag = 0.08f;
+                lifetime = 45;
+                splashDamage = 50;
+                splashDamageRadius = 12;
+                keepVelocity = false;
+                backColor = frontColor = Pal.techBlue;
+                despawnEffect = hitEffect = new MultiEffect(Fx.massiveExplosion, new WrapEffect(Fx.dynamicSpikes, Pal.techBlue, 12f), new WaveEffect(){{
+                    colorFrom = colorTo = Pal.techBlue;
+                    sizeTo = 26f;
+                    lifetime = 13f;
+                    strokeFrom = 2f;
+                }});
+                shootEffect = Fx.none;
+            }};
+        }});
 
         UnitTypes.tecta.health = 26550;
 
@@ -721,7 +746,7 @@ public class UnitOverride {
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
         weapon.reload = 4;
-        weapon.bullet.lifetime = 35;
+        weapon.bullet.lifetime = 55;
         weapon.bullet.speed = 8;
         weapon.bullet.damage = 18;
         weapon.bullet.healAmount = 0;

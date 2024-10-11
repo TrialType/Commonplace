@@ -1293,9 +1293,10 @@ public class Blocks2 {
                     ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
         decoy = new Decoy("decoy") {{
-            requirements(Category.defense, ItemStack.with(silicon, 25, blastCompound, 15, titanium, 25));
+            requirements(Category.defense, ItemStack.with(silicon, 25, blastCompound, 5, titanium, 25));
 
             size = 1;
+            clipSize = 1;
             health = 1000;
 
             farDeflect = 0.75f;
@@ -1313,7 +1314,7 @@ public class Blocks2 {
                 speed = 0;
                 damage = 0;
                 splashDamageRadius = 75;
-                splashDamage = 175;
+                splashDamage = 150;
 
                 lightning = 4;
                 lightningDamage = 25;
@@ -1327,7 +1328,7 @@ public class Blocks2 {
             }};
         }};
         decoyLarge = new Decoy("decoy-large") {{
-            requirements(Category.defense, ItemStack.with(silicon, 200, phaseFabric, 75, blastCompound, 200,
+            requirements(Category.defense, ItemStack.with(silicon, 200, phaseFabric, 35, blastCompound, 25,
                     titanium, 200, thorium, 150));
 
             size = 2;
@@ -1347,12 +1348,12 @@ public class Blocks2 {
                 lifetime = 0;
                 speed = 0;
                 damage = 0;
-                splashDamageRadius = 300;
-                splashDamage = 700;
+                splashDamageRadius = 150;
+                splashDamage = 300;
 
                 lightning = 18;
-                lightningDamage = 100;
-                lightningLength = 60;
+                lightningDamage = 40;
+                lightningLength = 35;
                 lightningLengthRand = 15;
                 lightningCone = 360;
                 lightningColor = Color.valueOf("DD88DD");
@@ -1364,35 +1365,35 @@ public class Blocks2 {
         polymerizationWall = new Wall("polymerization-wall") {{
             requirements(Category.defense, ItemStack.with(thorium, 8, phaseFabric, 8, surgeAlloy, 8));
             size = 1;
-            health = 500 * 6;
+            health = 500 * 8;
             absorbLasers = true;
-            chanceDeflect = 15;
+            chanceDeflect = 12;
             lightningDamage = 30;
-            lightningLength = 20;
-            lightningChance = 0.65f;
+            lightningLength = 15;
+            lightningChance = 0.3f;
             envDisabled |= Env.scorching;
         }};
         polymerizationWallLarge = new Wall("polymerization-wall-large") {{
             requirements(Category.defense, ItemStack.with(thorium, 32, phaseFabric, 32, surgeAlloy, 32));
             size = 2;
-            health = 500 * 24;
+            health = 500 * 32;
             absorbLasers = true;
-            chanceDeflect = 20;
-            lightningDamage = 60;
-            lightningLength = 35;
-            lightningChance = 0.8f;
+            chanceDeflect = 12;
+            lightningDamage = 30;
+            lightningLength = 15;
+            lightningChance = 0.3f;
             envDisabled |= Env.scorching;
         }};
         weakPowerWall = new PowerWall("weak-power-wall") {{
             requirements(Category.defense, ItemStack.with(copper, 6, titanium, 6, silicon, 3));
 
-            health = 100 * 6;
+            health = 100 * 8;
             size = 1;
 
-            lightningChance = 0.25f;
-            lightningLength = 12;
-            lightningDamage = 20;
-            chanceDeflect = 8;
+            lightningChance = 0.1f;
+            lightningLength = 6;
+            lightningDamage = 15;
+            chanceDeflect = 5;
             healChance = 0.25f;
             healPercent = 0.024f;
             powerHit = 10f;
@@ -1402,13 +1403,13 @@ public class Blocks2 {
         weakPowerWallLarge = new PowerWall("weak-power-wall-large") {{
             requirements(Category.defense, ItemStack.with(copper, 24, titanium, 24, silicon, 12));
 
-            health = 100 * 24;
+            health = 100 * 32;
             size = 2;
 
-            lightningChance = 0.25f;
-            lightningLength = 12;
-            lightningDamage = 20;
-            chanceDeflect = 8;
+            lightningChance = 0.1f;
+            lightningLength = 6;
+            lightningDamage = 15;
+            chanceDeflect = 5;
             healChance = 0.25f;
             healPercent = 0.024f;
             powerHit = 10f;
@@ -1418,32 +1419,32 @@ public class Blocks2 {
         superPowerWall = new PowerWall("super-power-wall") {{
             requirements(Category.defense, ItemStack.with(thorium, 6, surgeAlloy, 6, silicon, 3));
 
-            health = 220 * 6;
+            health = 220 * 8;
             size = 1;
 
-            lightningChance = 0.5f;
-            lightningLength = 15;
-            lightningDamage = 40;
-            chanceDeflect = 12;
+            lightningChance = 0.2f;
+            lightningLength = 10;
+            lightningDamage = 25;
+            chanceDeflect = 9;
             healChance = 0.25f;
             healPercent = 0.03f;
-            powerHit = 25;
+            powerHit = 12;
 
             consumePower(0.5f);
         }};
         superPowerWallLarge = new PowerWall("super-power-wall-large") {{
             requirements(Category.defense, ItemStack.with(thorium, 24, surgeAlloy, 24, silicon, 12));
 
-            health = 220 * 24;
+            health = 220 * 32;
             size = 2;
 
-            lightningChance = 0.5f;
-            lightningLength = 15;
-            lightningDamage = 40;
-            chanceDeflect = 12;
+            lightningChance = 0.2f;
+            lightningLength = 10;
+            lightningDamage = 25;
+            chanceDeflect = 9;
             healChance = 0.25f;
             healPercent = 0.03f;
-            powerHit = 25;
+            powerHit = 12;
 
             consumePower(0.5f);
         }};
