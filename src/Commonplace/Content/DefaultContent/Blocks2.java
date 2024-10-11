@@ -1,8 +1,8 @@
 package Commonplace.Content.DefaultContent;
 
 import Commonplace.Content.SpecialContent.Effects;
-import Commonplace.Entities.FBlock.*;
-import Commonplace.Entities.FBulletType.*;
+import Commonplace.Entities.Block.*;
+import Commonplace.Entities.BulletType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;

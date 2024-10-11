@@ -1,7 +1,7 @@
 package Commonplace.Content.Override;
 
 import Commonplace.Content.DefaultContent.Units2;
-import Commonplace.Entities.FBulletType.ProtectKillerBulletType;
+import Commonplace.Entities.BulletType.ProtectKillerBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
 import mindustry.content.*;

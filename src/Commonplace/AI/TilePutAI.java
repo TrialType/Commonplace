@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Entities.FUnit.F.TileMiner;
+import Commonplace.Entities.Unit.F.TileMiner;
 import Commonplace.Utils.Classes.Located;
 import arc.math.geom.Vec2;
 import arc.struct.IntSeq;

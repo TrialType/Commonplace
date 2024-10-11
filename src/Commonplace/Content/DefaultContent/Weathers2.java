@@ -1,7 +1,7 @@
 package Commonplace.Content.DefaultContent;
 
 import Commonplace.Content.SpecialContent.Effects;
-import Commonplace.Entities.FWeather.StormDamageWeather;
+import Commonplace.Entities.Weather.StormDamageWeather;
 import arc.graphics.Color;
 import arc.util.Time;
 import mindustry.gen.Sounds;

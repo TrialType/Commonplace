@@ -1,14 +1,13 @@
 package Commonplace.Content.Override;
 
-import Commonplace.AI.MissileAI_II;
 import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Content.DefaultContent.StatusEffects2;
-import Commonplace.Entities.FAbility.SprintingAbility2;
-import Commonplace.Entities.FAbility.TimeLargeDamageAbility;
-import Commonplace.Entities.FBulletType.*;
-import Commonplace.Entities.FUnit.F.LongLifeUnitEntity;
-import Commonplace.Entities.FUnit.Override.*;
-import Commonplace.FType.EffectTypes.PackEffect;
+import Commonplace.Entities.Ability.SapAbility;
+import Commonplace.Entities.Ability.SprintingAbility2;
+import Commonplace.Entities.Ability.TimeLargeDamageAbility;
+import Commonplace.Entities.BulletType.*;
+import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
+import Commonplace.Entities.Unit.Override.*;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
@@ -26,15 +25,11 @@ import mindustry.entities.abilities.ShieldRegenFieldAbility;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
-import mindustry.entities.effect.MultiEffect;
-import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
-import mindustry.gen.TimedKillUnit;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 
 import static arc.graphics.g2d.Draw.color;
@@ -197,23 +192,24 @@ public class UnitOverride {
         UnitTypes.fortress.weapons.add(new Weapon() {{
             reload = 18;
             rotate = false;
-            shootCone = 20;
+            shootCone = 30;
+            inaccuracy = 12;
 
             shoot = new ShootAlternate();
+            shoot.shots = 8;
 
             bullet = new LiquidBulletType() {{
                 liquid = Liquids.oil;
                 damage = 8;
                 speed = 3;
                 lifetime = 80;
-                puddleSize = 40;
-                orbSize = 12;
+                puddleSize = 10;
 
-                status = StatusEffects.tarred;
                 statusDuration = 15;
 
                 despawnHit = true;
                 scaleLife = true;
+                collidesAir = false;
             }};
         }});
 
@@ -284,6 +280,7 @@ public class UnitOverride {
         s = (SapBulletType) weapon.bullet;
         s.length = 125;
         s.damage = 28;
+        UnitTypes.spiroct.abilities.add(new SapAbility());
 
         UnitTypes.arkyid.health = 28000;
 

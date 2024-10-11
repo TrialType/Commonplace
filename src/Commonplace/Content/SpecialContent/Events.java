@@ -2,12 +2,12 @@ package Commonplace.Content.SpecialContent;
 
 import Commonplace.Content.ProjectContent.Bullets;
 import Commonplace.Content.ProjectContent.Weapons;
-import Commonplace.Entities.FUnit.Override.*;
+import Commonplace.Entities.Unit.Override.*;
 import Commonplace.Utils.Classes.Listener;
 import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Interfaces.BuildUpGrade;
-import Commonplace.FType.Dialogs.ProjectDialog;
-import Commonplace.FType.Dialogs.MoreResearchDialog;
+import Commonplace.Type.Dialogs.ProjectDialog;
+import Commonplace.Type.Dialogs.MoreResearchDialog;
 import arc.Core;
 import arc.func.Prov;
 import arc.graphics.Color;

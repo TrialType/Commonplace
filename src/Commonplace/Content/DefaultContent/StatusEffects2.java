@@ -1,6 +1,6 @@
 package Commonplace.Content.DefaultContent;
 
-import Commonplace.FType.StatusEffectType.WithMoreStatus;
+import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.content.Fx;

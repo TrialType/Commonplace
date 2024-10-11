@@ -1,7 +1,7 @@
 package Commonplace.Content.SpecialContent;
 
-import Commonplace.Entities.FUnit.F.*;
-import Commonplace.Entities.FUnit.Override.*;
+import Commonplace.Entities.Unit.F.*;
+import Commonplace.Entities.Unit.Override.*;
 import mindustry.gen.EntityMapping;
 
 public class Entities {
