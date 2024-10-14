@@ -29,6 +29,7 @@ public abstract class Lightning2 {
     private static final Rect rect = new Rect();
     private static final Seq<Unitc> entities = new Seq<>();
     private static final Seq<Buildingc> entitiesB = new Seq<>();
+    private static final Seq<Unitc> entitiesU = new Seq<>();
     private static final IntSet hit = new IntSet();
     private static final int maxChain = 8;
     private static final float hitRange = 30f;
@@ -55,6 +56,7 @@ public abstract class Lightning2 {
         };
 
         entitiesB.clear();
+        entitiesU.clear();
         for (int i = 0; i < size[0]; i++) {
             hitCreate.create(null, team, x, y, rotation, damage * (hitter == null ? 1f : hitter.damageMultiplier()), 1f, 1f, hitter);
             lines.add(new Vec2(x + Mathf.range(3f), y + Mathf.range(3f)));
@@ -86,7 +88,10 @@ public abstract class Lightning2 {
                 Units.nearbyEnemies(team, rect, u -> {
                     if (!hit.contains(u.id()) && (hitter == null || u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround))) {
                         entities.add(u);
-                        size[0] += connectLength;
+                        if (!entitiesU.contains(u)) {
+                            entitiesU.add(u);
+                            size[0] += connectLength;
+                        }
                     }
                 });
             }
