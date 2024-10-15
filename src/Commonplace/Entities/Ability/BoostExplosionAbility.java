@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import mindustry.content.Fx;
 import mindustry.entities.Damage;
 import mindustry.entities.abilities.Ability;
@@ -22,5 +23,10 @@ public class BoostExplosionAbility extends Ability {
         } else if (unit.vel.len() > minSpeed) {
             get = true;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.boost-explosion.name");
     }
 }

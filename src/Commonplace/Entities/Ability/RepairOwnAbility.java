@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.util.Time;
 import mindustry.entities.abilities.RepairFieldAbility;
 import mindustry.gen.Unit;
@@ -22,5 +23,10 @@ public class RepairOwnAbility extends RepairFieldAbility {
 
             timer = 0f;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.repair-own.name");
     }
 }

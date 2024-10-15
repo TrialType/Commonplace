@@ -4,6 +4,7 @@ import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Content.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
+import Commonplace.Entities.Unit.F.BoostShootUnitWaterMove;
 import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
 import Commonplace.Entities.Unit.Override.*;
 import arc.Core;
@@ -85,7 +86,7 @@ public class UnitOverride {
         UnitTypes.oct.constructor = FPayloadUnit::create;
 
         UnitTypes.risso.constructor = FUnitWaterMove::create;
-        UnitTypes.minke.constructor = FUnitWaterMove::create;
+        UnitTypes.minke.constructor = BoostShootUnitWaterMove::create;
         UnitTypes.bryde.constructor = FUnitWaterMove::create;
         UnitTypes.sei.constructor = FUnitWaterMove::create;
         UnitTypes.omura.constructor = FUnitWaterMove::create;
@@ -423,18 +424,16 @@ public class UnitOverride {
             despawnEffect = Fx.blastExplosion;
         }};
 
-        UnitTypes.minke.health = 800;
         UnitTypes.minke.armor = 14;
-        UnitTypes.minke.speed = 5;
+        UnitTypes.minke.health = 800;
+        UnitTypes.minke.boostMultiplier = 3;
+        UnitTypes.minke.canBoost = true;
         weapon = UnitTypes.minke.weapons.get(0);
-        weapon.reload = 5;
         weapon.bullet.damage = 15f;
         weapon.bullet.splashDamage = 27;
         weapon = UnitTypes.minke.weapons.get(1);
-        weapon.reload = 15;
         weapon.bullet.damage = 30;
         weapon.bullet.splashDamage = 60;
-        weapon.bullet.lifetime = 45;
 
         UnitTypes.bryde.health = 1410;
         UnitTypes.bryde.armor = 20;
@@ -730,7 +729,6 @@ public class UnitOverride {
                 collidesTeam = true;
             }};
         }};
-        weapon.bullet.init();
 
         UnitTypes.quasar.health = 2200;
         ForceFieldAbility fAbility = (ForceFieldAbility) UnitTypes.quasar.abilities.get(0);

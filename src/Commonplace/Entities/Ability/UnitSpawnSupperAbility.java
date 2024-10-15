@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.math.Angles;
 import arc.struct.ObjectMap;
 import arc.util.Time;
@@ -41,5 +42,10 @@ public class UnitSpawnSupperAbility extends UnitSpawnAbility {
 
             timer = 0f;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.unit-spawn-super.name");
     }
 }

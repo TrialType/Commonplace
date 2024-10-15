@@ -6,6 +6,7 @@ import mindustry.gen.EntityMapping;
 
 public class Entities {
     public static void load() {
+        EntityMapping.idMap[101] = BoostShootUnitWaterMove::create;
         EntityMapping.idMap[102] = Garrison::create;
         EntityMapping.idMap[103] = FLegsUnit::create;
         EntityMapping.idMap[104] = FMechUnit::create;

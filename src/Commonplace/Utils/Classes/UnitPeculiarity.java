@@ -349,14 +349,6 @@ public abstract class UnitPeculiarity {
         return type;
     }
 
-    public static BulletType test(BulletType bullet) {
-        BulletType type = bullet.copy();
-        if (type.fragBullet != null && type.fragBullets >= 1) {
-            type.fragBullet = test(type.fragBullet);
-        }
-        return type;
-    }
-
     public static void resetHealth(Unit u, float des, float min) {
         if (des >= 1) {
             u.maxHealth = (int) (u.maxHealth * des);

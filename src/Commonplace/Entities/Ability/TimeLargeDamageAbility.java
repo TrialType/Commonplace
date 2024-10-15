@@ -90,6 +90,6 @@ public class TimeLargeDamageAbility extends Ability {
 
     @Override
     public String localized() {
-        return Core.bundle.format("ability.time_large_damage.name");
+        return Core.bundle.format("ability.time-large-damage.name");
     }
 }

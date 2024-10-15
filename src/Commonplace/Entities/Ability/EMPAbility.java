@@ -83,10 +83,6 @@ public class EMPAbility extends Ability {
         }
     }
 
-    public String localized() {
-        return Core.bundle.get("ability." + "emp_ability" + ".name");
-    }
-
     @Override
     public void addStats(Table t) {
         t.add("[lightgray]" + Stat.range.localized() + ": [white]" + range + " " + StatUnit.seconds.localized());
@@ -100,5 +96,10 @@ public class EMPAbility extends Ability {
     @Override
     public void displayBars(Unit unit, Table bars) {
         bars.add(new Bar(Stat.cooldownTime.localized(), Pal.accent, () -> Math.max(timer / reload, 1))).row();
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.emp.name");
     }
 }

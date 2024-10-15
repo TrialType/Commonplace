@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.func.Boolf;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
@@ -53,5 +54,10 @@ public class SapAbility extends Ability {
         Draw.alpha(0.2f + fut * 0.8f);
         Lines.stroke(5 * fin);
         Lines.circle(u.x, u.y, 10 + range * fut);
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.sap.name");
     }
 }

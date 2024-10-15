@@ -82,6 +82,6 @@ public class OwnerUnitSpawnAbility extends Ability {
 
     @Override
     public String localized() {
-        return Core.bundle.format("ability.unit_spawn.name", unit.localizedName);
+        return Core.bundle.get("ability.unit_spawn.name");
     }
 }

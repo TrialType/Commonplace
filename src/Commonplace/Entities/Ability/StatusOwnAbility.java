@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.math.Angles;
 import arc.util.Time;
 import mindustry.entities.abilities.StatusFieldAbility;
@@ -24,5 +25,10 @@ public class StatusOwnAbility extends StatusFieldAbility {
 
             timer = 0f;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get("ability.status-own.name");
     }
 }
