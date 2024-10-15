@@ -492,7 +492,6 @@ public class UnitOverride {
             healAmount = 32;
             healPercent = 1;
         }};
-        weapon.bullet.init();
 
         UnitTypes.oxynoe.health = 1060;
         UnitTypes.oxynoe.armor = 10;
@@ -514,28 +513,60 @@ public class UnitOverride {
                 Drawf.light(e.x + x, e.y + y, 16f * e.fout(), Pal.heal, 0.6f);
             });
         });
-        weapon.bullet.init();
 
         UnitTypes.cyerce.health = 1870;
         UnitTypes.cyerce.armor = 16;
         weapon = UnitTypes.cyerce.weapons.get(1);
         BulletType bullet = weapon.bullet.fragBullet;
         bullet.speed = 3.8f;
-        weapon.bullet.lifetime = 120;
-        weapon.bullet.damage = 37.5f;
-        weapon.bullet.splashDamage = 37.5f;
-        weapon.bullet.fragBullets = 1;
-        weapon.bullet.fragBullet = new SummonBulletType() {{
-            lifetime = 0;
-            speed = 0;
-            damage = 0;
+        weapon.bullet = new SummonBulletType() {{
+            damage = 40;
+            speed = 2.5f;
+            sprite = "missile-large";
+            collidesGround = collidesAir = true;
             keepVelocity = false;
+            width = height = 12f;
+            shrinkY = 0f;
+            drag = -0.003f;
+            homingRange = 60f;
+            lightRadius = 60f;
+            lightOpacity = 0.7f;
+            lightColor = Pal.heal;
+
+            splashDamageRadius = 30f;
+            splashDamage = 40;
+
+            lifetime = 80f;
+            backColor = Pal.heal;
+            frontColor = Color.white;
+
+            hitEffect = new ExplosionEffect(){{
+                lifetime = 28f;
+                waveStroke = 6f;
+                waveLife = 10f;
+                waveRadBase = 7f;
+                waveColor = Pal.heal;
+                waveRad = 30f;
+                smokes = 6;
+                smokeColor = Color.white;
+                sparkColor = Pal.heal;
+                sparks = 6;
+                sparkRad = 35f;
+                sparkStroke = 1.5f;
+                sparkLen = 4f;
+            }};
+
+            weaveScale = 8f;
+            weaveMag = 1f;
+
+            trailColor = Pal.heal;
+            trailWidth = 4.5f;
+            trailLength = 29;
+
             summonRange = 220;
-            summonNumber = 10;
-            summonDespawned = true;
+            summonBullets = 10;
             summonBullet = bullet;
         }};
-        weapon.bullet.init();
 
         UnitTypes.aegires.health = 42000;
         UnitTypes.aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{

@@ -1,5 +1,6 @@
 package Commonplace.Utils.Classes;
 
+import Commonplace.Entities.BulletType.SummonBulletType;
 import Commonplace.Utils.Interfaces.PeculiarityC;
 import arc.func.Cons;
 import arc.math.Mathf;
@@ -170,7 +171,7 @@ public abstract class UnitPeculiarity {
         }
         applier.sort(p -> p.value);
         for (var p : applier) {
-            p.get(u);
+            p.read(u);
         }
     }
 
@@ -180,21 +181,24 @@ public abstract class UnitPeculiarity {
                 rejuvenate, rejuvenate_a, vibrate, crane);
 
         //well
-        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.1f, 0));
-        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.3f, 0));
-        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.6f, 0));
+        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.1f, 0), u -> readHealth(u, 1.1f, 0));
+        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.3f, 0), u -> readHealth(u, 1.3f, 0));
+        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.6f, 0), u -> readHealth(u, 1.6f, 0));
         Peculiarity DamageGrow = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f)));
         Peculiarity DamageGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.3f, f -> w.reload *= f)));
         Peculiarity DamageGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.6f, f -> w.reload *= f)));
         Peculiarity ReloadGrow = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.95f));
         Peculiarity ReloadGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.85f));
         Peculiarity ReloadGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.7f));
-        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 5f, 0));
+        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 5f, 0), u -> readHealth(u, 5f, 0));
 
         //midden
         Peculiarity HealToDamage = new Peculiarity(u -> {
             applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f));
             resetHealth(u, 0.9f, 1);
+        }, u -> {
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f));
+            readHealth(u, 0.9f, 1);
         });
         Peculiarity DamageToReload = new Peculiarity(u -> applyWeapon(u, w -> {
             w.reload *= 1.1f;
@@ -210,31 +214,46 @@ public abstract class UnitPeculiarity {
                 w.bullet = resetDamage(w.bullet, 1.35f, f -> w.reload *= f);
             });
             resetHealth(u, 0.75f, 1);
+        }, u -> {
+            applyWeapon(u, w -> {
+                w.reload *= 1.1f;
+                w.bullet = resetDamage(w.bullet, 1.35f, f -> w.reload *= f);
+            });
+            readHealth(u, 0.75f, 1);
         });
         Peculiarity Glass = new Peculiarity(u -> {
             applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 6.5f, f -> w.reload *= f));
             resetHealth(u, 0.01f, 35);
+        }, u -> {
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 6.5f, f -> w.reload *= f));
+            readHealth(u, 0.01f, 35);
         }, LimitAll);
         Peculiarity Stone = new Peculiarity(u -> {
             applyWeapon(u, w -> w.reload *= 5);
             resetHealth(u, 15, 0);
+        }, u -> {
+            applyWeapon(u, w -> w.reload *= 5);
+            readHealth(u, 15, 0);
         });
         Peculiarity Hill = new Peculiarity(u -> {
             applyWeapon(u, w -> w.reload *= 15);
             resetHealth(u, 25, 0);
+        }, u -> {
+            applyWeapon(u, w -> w.reload *= 15);
+            readHealth(u, 25, 0);
         });
 
         //bad
-        Peculiarity HealBreak = new Peculiarity(u -> resetHealth(u, 0.95f, 1));
-        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.85f, 1));
-        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.7f, 1));
+        Peculiarity HealBreak = new Peculiarity(u -> resetHealth(u, 0.95f, 1), u -> readHealth(u, 0.95f, 1));
+        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.85f, 1), u -> readHealth(u, 0.85f, 1));
+        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.7f, 1), u -> readHealth(u, 0.7f, 1));
         Peculiarity DamageBreak = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.95f, f -> w.reload *= f)));
         Peculiarity DamageBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.85f, f -> w.reload *= f)));
         Peculiarity DamageBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.7f, f -> w.reload *= f)));
         Peculiarity ReloadBreak = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.1f));
         Peculiarity ReloadBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.3f));
         Peculiarity ReloadBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.6f));
-        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.45f, 1));
+        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.45f, 1), u -> readHealth(u, 0.45f, 1));
 
         wellPeculiarity.addAll(
                 HealGrow, HealGrow, HealGrow, HealGrow, HealGrow, HealGrow,
@@ -304,11 +323,14 @@ public abstract class UnitPeculiarity {
         type.damage *= des;
         type.splashDamage *= des;
         type.lightningDamage *= des;
-        if (type.fragBullet != null && type.fragBullets >= 1) {
-            type.fragBullet = resetDamage(type.fragBullet, des, weapon);
+        if (bullet.fragBullet != null && bullet.fragBullets >= 1) {
+            type.fragBullet = resetDamage(bullet.fragBullet, des, weapon);
         }
-        if (type.intervalBullet != null && type.intervalBullets >= 1) {
-            type.intervalBullet = resetDamage(type.intervalBullet, des, weapon);
+        if (bullet.intervalBullet != null && bullet.intervalBullets >= 1) {
+            type.intervalBullet = resetDamage(bullet.intervalBullet, des, weapon);
+        }
+        if (type instanceof SummonBulletType s && s.summonBullet != null && s.summonBullets >= 1) {
+            ((SummonBulletType) type).summonBullet = resetDamage(s.summonBullet, des, weapon);
         }
         if (type.spawnUnit != null) {
             if (des == 0) {
@@ -327,6 +349,14 @@ public abstract class UnitPeculiarity {
         return type;
     }
 
+    public static BulletType test(BulletType bullet) {
+        BulletType type = bullet.copy();
+        if (type.fragBullet != null && type.fragBullets >= 1) {
+            type.fragBullet = test(type.fragBullet);
+        }
+        return type;
+    }
+
     public static void resetHealth(Unit u, float des, float min) {
         if (des >= 1) {
             u.maxHealth = (int) (u.maxHealth * des);
@@ -337,26 +367,56 @@ public abstract class UnitPeculiarity {
         }
     }
 
-    public static class Peculiarity implements Cons<Unit> {
+    public static void readHealth(Unit u, float des, float min) {
+        if (des >= 1) {
+            u.maxHealth = (int) (u.maxHealth * des);
+//            u.health = Math.min(u.maxHealth, u.health * des);
+        } else {
+            u.maxHealth = Math.max((int) (u.maxHealth * des), min);
+//            u.health = Math.min(u.maxHealth, u.health);
+        }
+    }
+
+    public static class Peculiarity {
         final Cons<Unit> apply;
+        final Cons<Unit> read;
         final int id;
         final int value;
 
         public Peculiarity(Cons<Unit> apply) {
             id = all.size;
             all.add(this);
+            this.apply = this.read = apply;
+            this.value = Default;
+        }
+
+        public Peculiarity(Cons<Unit> apply, Cons<Unit> read) {
+            id = all.size;
+            all.add(this);
             this.apply = apply;
+            this.read = read;
             this.value = Default;
         }
 
         public Peculiarity(Cons<Unit> apply, int value) {
             id = all.size;
             all.add(this);
-            this.apply = apply;
+            this.apply = this.read = apply;
             this.value = value;
         }
 
-        @Override
+        public Peculiarity(Cons<Unit> apply, Cons<Unit> read, int value) {
+            id = all.size;
+            all.add(this);
+            this.apply = apply;
+            this.read = read;
+            this.value = value;
+        }
+
+        public void read(Unit u) {
+            read.get(u);
+        }
+
         public void get(Unit u) {
             apply.get(u);
         }

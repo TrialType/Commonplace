@@ -151,7 +151,7 @@ public class Units2 {
                         statusDuration = 35;
 
                         summonRange = 150;
-                        summonNumber = 7;
+                        summonBullets = 7;
                         summonInterval = 0;
                         summonDelay = 40;
                         summonBullet = new LaserBulletType(256) {{
@@ -384,7 +384,7 @@ public class Units2 {
                         lightningColor = Pal.redDust;
                     }};
                     summonRange = 80;
-                    summonNumber = 10;
+                    summonBullets = 10;
                 }};
             }});
             weapons.add(new Weapon() {{
@@ -422,7 +422,7 @@ public class Units2 {
                         frontColor = backColor = trailColor = Pal.techBlue;
                     }};
                     summonRange = 120;
-                    summonNumber = 14;
+                    summonBullets = 14;
                     summonInterval = 9;
                 }};
             }});
