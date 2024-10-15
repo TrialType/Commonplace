@@ -82,6 +82,10 @@ public class DrillTurret extends Turret {
                         tex.table(des -> des.add(Core.bundle.get(name + "-gain." + e.key.name)));
                     }
                 }
+                if (!(specialApplier.isEmpty() && specialShootApplier.isEmpty())) {
+                    tex.row();
+                    tex.add(Core.bundle.get(name + "-special-gain"));
+                }
             }).growX();
         });
     }
@@ -159,18 +163,18 @@ public class DrillTurret extends Turret {
         }
 
         @Override
-        protected void findTarget(){
+        protected void findTarget() {
             float range = range();
             boolean targetAir = peekAmmo().collidesAir;
             boolean targetGround = peekAmmo().collidesGround || peekAmmo().collidesTiles;
 
-            if(targetAir && !targetGround){
+            if (targetAir && !targetGround) {
                 target = Units.bestEnemy(team, x, y, range, e -> !e.dead() && !e.isGrounded() && unitFilter.get(e), unitSort);
-            }else{
+            } else {
                 target = Units.bestTarget(team, x, y, range, e -> !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround), b -> targetGround && buildingFilter.get(b), unitSort);
             }
 
-            if(target == null && canHeal()){
+            if (target == null && canHeal()) {
                 target = Units.findAllyTile(team, x, y, range, b -> b.damaged() && b != this);
             }
         }
