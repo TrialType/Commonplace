@@ -64,29 +64,33 @@ public class DrillTurret extends Turret {
         Seq<Item> showed = new Seq<>();
         stats.add(Stat.ammo, StatValues.ammo(ObjectMap.of(this, baseType)));
         stats.add(Stats.gain, t -> {
+            showed.clear();
             t.row();
             t.table(Styles.grayPanel, tex -> {
                 for (var e : applier) {
                     if (!showed.contains(e.key)) {
                         showed.add(e.key);
                         tex.row();
+                        tex.row();
                         tex.add(new Image(e.key.uiIcon)).left();
-                        tex.table(des -> des.add(Core.bundle.get(name + "-gain." + e.key.name)));
+                        tex.add(Core.bundle.get(name + "-gain." + e.key.name));
                     }
                 }
                 for (var e : shootApplier) {
                     if (!showed.contains(e.key)) {
                         showed.add(e.key);
                         tex.row();
+                        tex.row();
                         tex.add(new Image(e.key.uiIcon)).left();
-                        tex.table(des -> des.add(Core.bundle.get(name + "-gain." + e.key.name)));
+                        tex.add(Core.bundle.get(name + "-gain." + e.key.name));
                     }
                 }
-                if (!(specialApplier.isEmpty() && specialShootApplier.isEmpty())) {
-                    tex.row();
-                    tex.add(Core.bundle.get(name + "-special-gain"));
-                }
             }).growX();
+            if (!(specialApplier.isEmpty() && specialShootApplier.isEmpty())) {
+                t.row();
+                t.row();
+                t.table(Styles.grayPanel, tex -> tex.add(Core.bundle.get(name + "-special-gain")).growX()).growX();
+            }
         });
     }
 
