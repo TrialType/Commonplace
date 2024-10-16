@@ -4,7 +4,6 @@ import Commonplace.Content.SpecialContent.Effects;
 import Commonplace.Content.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
-import Commonplace.Entities.Unit.F.BoostShootUnitWaterMove;
 import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
 import Commonplace.Entities.Unit.Override.*;
 import arc.Core;
@@ -31,6 +30,7 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
+import mindustry.type.weapons.RepairBeamWeapon;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
@@ -86,7 +86,7 @@ public class UnitOverride {
         UnitTypes.oct.constructor = FPayloadUnit::create;
 
         UnitTypes.risso.constructor = FUnitWaterMove::create;
-        UnitTypes.minke.constructor = BoostShootUnitWaterMove::create;
+        UnitTypes.minke.constructor = FUnitWaterMove::create;
         UnitTypes.bryde.constructor = FUnitWaterMove::create;
         UnitTypes.sei.constructor = FUnitWaterMove::create;
         UnitTypes.omura.constructor = FUnitWaterMove::create;
@@ -242,24 +242,38 @@ public class UnitOverride {
             smokeRad = 70;
             smokeSize = 4;
             smokeSizeBase = 0;
-            smokeColor = Color.valueOf("EEAA88ff");
+            smokeColor = Color.valueOf("EEaA88ff");
 
             sparks = 36;
             sparkRad = 70;
             sparkLen = 4;
-            sparkColor = Color.valueOf("EEAA88ff");
+            sparkColor = Color.valueOf("EEaA88ff");
 
             waveLife = 25;
             waveStroke = 2;
             waveRad = 80;
             waveRadBase = 0;
-            waveColor = Color.valueOf("EEAA88ff");
+            waveColor = Color.valueOf("EEaA88ff");
         }};
 
         UnitTypes.atrax.speed = 0.3f;
         UnitTypes.atrax.health = 1200;
         UnitTypes.atrax.armor = 8f;
+        UnitTypes.atrax.legSplashDamage = 70f;
+        UnitTypes.atrax.legSplashRange = 16f;
         UnitTypes.atrax.targetAir = true;
+        weapon = UnitTypes.atrax.weapons.first();
+        weapon.shoot = new ShootMulti(new ShootPattern() {{
+            shots = 4;
+            shotDelay = 9f;
+        }}, new ShootPattern() {{
+            shots = 5;
+        }});
+        weapon.inaccuracy = 7;
+        weapon.reload = 60;
+        weapon.bullet.collidesAir = true;
+        weapon.bullet.homingPower = 0.1f;
+        weapon.bullet.homingRange = 140f;
 
         UnitTypes.spiroct.health = 1500;
         UnitTypes.spiroct.armor = 21;
@@ -345,16 +359,17 @@ public class UnitOverride {
 
         UnitTypes.eclipse.health = 77000;
         /*-----------------------------------------------------------------------------*/
+        UnitTypes.mono.health = 2000;
+        UnitTypes.mono.mineSpeed = 4f;
+
         UnitTypes.poly.health = 700;
         UnitTypes.poly.buildSpeed = 1;
         UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
-
 
         UnitTypes.mega.health = 10000;
         UnitTypes.mega.armor = 35;
         UnitTypes.poly.buildSpeed = 3.5f;
         UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
-
 
         UnitTypes.quad.health = 22000;
         UnitTypes.quad.speed = 2;
@@ -397,7 +412,6 @@ public class UnitOverride {
             splashDamageRadius = 800f;
         }};
 
-
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         /*-----------------------------------------------------------------------------*/
@@ -407,14 +421,16 @@ public class UnitOverride {
         weapon.reload = 6;
         weapon.bullet.damage = 14f;
         weapon = UnitTypes.risso.weapons.get(1);
+        weapon.shoot.shots = 2;
         weapon.bullet = new BasicBulletType(11, 18, "missile") {{
             keepVelocity = true;
+            weaveRandom = true;
             width = 8f;
             height = 8f;
             shrinkY = 0f;
             splashDamageRadius = 25f;
             splashDamage = 15;
-            lifetime = 30;
+            lifetime = 25;
             status = StatusEffects.slow;
             statusDuration = 60;
             trailColor = Color.gray;
@@ -424,14 +440,18 @@ public class UnitOverride {
             despawnEffect = Fx.blastExplosion;
         }};
 
-        UnitTypes.minke.armor = 14;
         UnitTypes.minke.health = 800;
-        UnitTypes.minke.boostMultiplier = 3;
-        UnitTypes.minke.canBoost = true;
+        UnitTypes.minke.armor = 14;
+        UnitTypes.minke.speed = 4;
         weapon = UnitTypes.minke.weapons.get(0);
         weapon.bullet.damage = 15f;
         weapon.bullet.splashDamage = 27;
+        weapon.bullet.homingDelay = 0;
+        weapon.bullet.homingRange = 252;
+        weapon.bullet.homingPower = 0.1f;
         weapon = UnitTypes.minke.weapons.get(1);
+        weapon.reload = 5;
+        weapon.inaccuracy = 45;
         weapon.bullet.damage = 30;
         weapon.bullet.splashDamage = 60;
 
@@ -441,56 +461,45 @@ public class UnitOverride {
         ability.amount = 200;
         ability.max = 600;
         weapon = UnitTypes.bryde.weapons.get(0);
-        weapon.bullet.speed = 6f;
+        weapon.reload = 150;
+        weapon.velocityRnd = 0.5f;
+        weapon.inaccuracy = 15;
+        weapon.shoot = new ShootMulti(new ShootSpread(5, 7f) {{
+            shotDelay = 8;
+        }}, new ShootPattern() {{
+            shots = 8;
+        }});
+        weapon.bullet.speed = 6;
         weapon.bullet.lifetime = 120;
-        weapon.bullet.damage = 20;
-        weapon.bullet.splashDamage = 90;
+        weapon.bullet.damage = 35;
+        weapon.bullet.splashDamage = 50;
         weapon = UnitTypes.bryde.weapons.get(1);
+        weapon.reload = 15;
         weapon.bullet.damage = 18;
         weapon.bullet.splashDamage = 15;
         weapon.bullet.lifetime = 105;
+        weapon.bullet.collidesTiles = false;
+        weapon.bullet.collidesGround = false;
 
         UnitTypes.sei.health = 22000;
 
         UnitTypes.omura.health = 77000;
         /*-----------------------------------------------------------------------------*/
         UnitTypes.retusa.health = 550;
-        UnitTypes.retusa.speed = 0.7f;
+        UnitTypes.retusa.speed = 1;
         UnitTypes.retusa.armor = 8;
+        UnitTypes.retusa.abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 120, 60));
+        RepairBeamWeapon repair = (RepairBeamWeapon) UnitTypes.retusa.weapons.get(0);
+        repair.repairSpeed = 1.5f;
         weapon = UnitTypes.retusa.weapons.get(1);
-        weapon.shoot = new ShootBarrel() {{
-            shots = 3;
-            barrels = new float[]{
-                    0, 0, 0,
-                    0, 0, 120,
-                    0, 0, 240,
-            };
-        }};
+        weapon.shoot.shots = 3;
+        weapon.inaccuracy = 5;
         weapon.bullet.pierce = true;
         weapon.bullet.pierceBuilding = true;
+        weapon.bullet.collideFloor = false;
         weapon.bullet.pierceCap = 3;
-        weapon.bullet.lifetime = 120.5f;
-        weapon.bullet.homingDelay = 60.5f;
-        weapon.bullet.intervalBullets = 1;
-        weapon.bullet.intervalDelay = 30.5f;
-        weapon.bullet.bulletInterval = 18f;
-        weapon.bullet.intervalBullet = new BasicBulletType() {{
-            reflectable = absorbable = collidesAir = false;
-            keepVelocity = false;
-
-            speed = 0;
-            lifetime = 180;
-            damage = 180;
-            buildingDamageMultiplier = 0.1f;
-            width = 12;
-            height = 4.8f;
-            shrinkX = shrinkY = 0;
-            frontColor = backColor = color = hitColor = Pal.heal;
-
-            collidesTeam = true;
-            healAmount = 32;
-            healPercent = 1;
-        }};
+        weapon.bullet.lifetime = 120f;
+        weapon.bullet.buildingDamageMultiplier = 3f;
 
         UnitTypes.oxynoe.health = 1060;
         UnitTypes.oxynoe.armor = 10;
@@ -539,7 +548,7 @@ public class UnitOverride {
             backColor = Pal.heal;
             frontColor = Color.white;
 
-            hitEffect = new ExplosionEffect(){{
+            hitEffect = new ExplosionEffect() {{
                 lifetime = 28f;
                 waveStroke = 6f;
                 waveLife = 10f;
@@ -563,7 +572,7 @@ public class UnitOverride {
             trailLength = 29;
 
             summonRange = 220;
-            summonBullets = 10;
+            summonBullets = 20;
             summonBullet = bullet;
         }};
 
@@ -633,7 +642,7 @@ public class UnitOverride {
         sab.max = 3500;
         sab.regen = 1.2f;
         sab.cooldown = 6 * 60f;
-        UnitTypes.tecta.abilities.add(new ShieldArcAbility(){{
+        UnitTypes.tecta.abilities.add(new ShieldArcAbility() {{
             region = "tecta-shield";
             radius = 54f;
             angle = 100f;
