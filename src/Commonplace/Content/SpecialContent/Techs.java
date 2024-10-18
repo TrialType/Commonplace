@@ -8,7 +8,6 @@ import mindustry.type.ItemStack;
 
 import static Commonplace.Content.DefaultContent.Blocks2.*;
 import static Commonplace.Content.ProjectContent.Sign.*;
-import static Commonplace.Content.DefaultContent.SectorPresets2.fullWater;
 import static Commonplace.Content.DefaultContent.SectorPresets2.longestDown;
 import static Commonplace.Content.DefaultContent.Units2.*;
 import static Commonplace.Content.ProjectContent.UnitProjects.*;
@@ -75,15 +74,13 @@ public class Techs {
                 });
             });
             node(longestDown, Seq.with(new Objectives.SectorComplete(impact0078)), () -> {
-                node(fullWater, Seq.with(new Objectives.SectorComplete(longestDown)), () -> {
-                });
             });
         });
         head = Planets.serpulo.techTree;
         //blocks
         head.each(t -> {
             if (t.content == tsunami) {
-                tf = node(fourNet, ItemStack.with(Items.titanium, 49990, Items.copper, 49990, Items.thorium, 49990, Items.silicon, 49990, Items.phaseFabric, 49990), Seq.with(new Objectives.SectorComplete(fullWater)), () -> {
+                tf = node(fourNet, ItemStack.with(Items.titanium, 49990, Items.copper, 49990, Items.thorium, 49990, Items.silicon, 49990, Items.phaseFabric, 49990), () -> {
                 });
                 tf.parent = t;
                 t.children.add(tf);

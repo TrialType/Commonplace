@@ -5,13 +5,9 @@ import mindustry.type.SectorPreset;
 import static Commonplace.Content.DefaultContent.Planets2.ENGSWEIS;
 
 public class SectorPresets2 {
-    public static SectorPreset fullWater, longestDown;
+    public static SectorPreset longestDown;
 
     public static void load() {
-        fullWater = new SectorPreset("szc", ENGSWEIS, 96) {{
-            difficulty = 10;
-        }};
-
         longestDown = new SectorPreset("long-down", ENGSWEIS, 64) {{
             alwaysUnlocked = true;
 

@@ -181,14 +181,14 @@ public class Blocks2 {
         }};
         phaseAmplifier = new GenericCrafter("phase-amplifier") {{
             requirements(Category.crafting, ItemStack.with(phaseFabric, 25, thorium, 80, copper, 100));
-            outputItem = new ItemStack(phaseFabric, 5);
-            consumeItems(ItemStack.with(phaseFabric, 1, graphite, 5));
+            outputItem = new ItemStack(phaseFabric, 3);
+            consumeItems(ItemStack.with(thorium, 4, graphite, 5));
             consumePower(15);
             envEnabled |= Env.space;
             craftEffect = Fx.smeltsmoke;
             researchCostMultiplier = 10;
             hasPower = true;
-            craftTime = 60;
+            craftTime = 120;
             size = 3;
             itemCapacity = 20;
         }};

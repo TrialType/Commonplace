@@ -325,10 +325,10 @@ public class UnitOverride {
         UnitTypes.zenith.health = 1500;
         UnitTypes.zenith.armor = 8;
         UnitTypes.zenith.speed = 2;
-        UnitTypes.zenith.range = 400;
+        UnitTypes.zenith.range = 2000f / 7;
         weapon = UnitTypes.zenith.weapons.get(0);
         weapon.reload = 120;
-        weapon.inaccuracy = 0;
+        weapon.inaccuracy = 30;
         weapon.shoot.shots = 25;
         weapon.shoot.shotDelay = 1;
         MissileBulletType m = (MissileBulletType) weapon.bullet;
@@ -337,10 +337,14 @@ public class UnitOverride {
         m.lifetime = 80;
         m.height = 14;
         m.width = 7;
+        m.weaveMag = 5;
+        m.weaveScale = 15;
         m.splashDamageRadius = 16;
         m.splashDamage = 25;
+        m.homingDelay = 64;
         m.homingRange = 400;
-        m.homingPower = 0.1f;
+        m.homingPower = 0.02f;
+        m.rangeOverride = m.maxRange = 2000f / 7;
 
         UnitTypes.antumbra.health = 25200;
         UnitTypes.antumbra.armor = 12;
