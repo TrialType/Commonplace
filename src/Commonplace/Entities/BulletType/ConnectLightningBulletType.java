@@ -7,7 +7,7 @@ import mindustry.gen.Bullet;
 import mindustry.gen.Healthc;
 
 public class ConnectLightningBulletType extends LightningBulletType {
-    public int connectAdd = 2;
+    public int hitAdd = 2;
 
     @Override
     public void init(Bullet b) {
@@ -25,6 +25,6 @@ public class ConnectLightningBulletType extends LightningBulletType {
             }
         }
 
-        Lightning2.createConnect(b, lightningColor, damage, b.x, b.y, b.rotation(), lightningLength + Mathf.random(lightningLengthRand), connectAdd);
+        Lightning2.createConnect(b, lightningColor, damage, b.x, b.y, b.rotation(), lightningLength + Mathf.random(lightningLengthRand), hitAdd);
     }
 }

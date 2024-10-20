@@ -12,6 +12,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.type.UnitType;
+import mindustry.world.blocks.defense.ShockMine;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.PointDefenseTurret;
@@ -50,6 +51,9 @@ public class BlockOverride {
         Blocks.surgeWallLarge.health = 250 * 40;
         ((Wall) Blocks.surgeWallLarge).lightningChance = 0.4f;
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
+
+        Blocks.shockMine.health = 150;
+        ((ShockMine) Blocks.shockMine).tileDamage = 30;
 
         UnitFactory uf = (UnitFactory) Blocks.airFactory;
         uf.plans.add(new UnitFactory.UnitPlan(Units2.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));

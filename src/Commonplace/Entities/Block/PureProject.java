@@ -1,6 +1,5 @@
 package Commonplace.Entities.Block;
 
-import Commonplace.Content.DefaultContent.Weathers2;
 import Commonplace.Utils.Interfaces.RangePure;
 import Commonplace.Type.Extent.CorrosionMist;
 import arc.Core;
@@ -9,7 +8,6 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.struct.IntMap;
 import arc.struct.IntSeq;
-import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
@@ -40,17 +38,8 @@ public class PureProject extends Block {
 
     public class PureBuild extends Building implements RangePure {
         private final IntMap<Integer> protects = new IntMap<>();
-        public float testTimer = 0;
-
         @Override
         public void updateTile() {
-            if (testTimer <= 0) {
-                testTimer = 900;
-                Weathers2.rockStorm.create(1, 600);
-            } else {
-                testTimer -= Time.delta;
-            }
-
             if (protects.isEmpty()) {
                 CorrosionMist.changer.add(this);
                 IntSeq ps = new IntSeq();
@@ -65,8 +54,7 @@ public class PureProject extends Block {
                 for (int i : ps.toArray()) {
                     protects.put(i, protectLevel);
                 }
-            }
-            if (!protects.isEmpty()) {
+            } else {
                 IntSeq ins = protects.keys().toArray();
                 for (int i : ins.toArray()) {
                     protects.put(i, (int) Math.max(0, efficiency * protectLevel));

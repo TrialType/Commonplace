@@ -278,13 +278,29 @@ public class UnitOverride {
         UnitTypes.spiroct.health = 1500;
         UnitTypes.spiroct.armor = 21;
         weapon = UnitTypes.spiroct.weapons.get(0);
-        SapBulletType s = (SapBulletType) weapon.bullet;
-        s.length = 100;
-        s.damage = 33;
+        weapon.bullet = new SapRadiusBulletType(){{
+            sapStrength = 0.5f;
+            length = 100f;
+            damage = 33;
+            shootEffect = Fx.shootSmall;
+            hitColor = color = Color.valueOf("bf92f9");
+            despawnEffect = Fx.none;
+            width = 0.54f;
+            lifetime = 35f;
+            knockback = -1.24f;
+        }};
         weapon = UnitTypes.spiroct.weapons.get(1);
-        s = (SapBulletType) weapon.bullet;
-        s.length = 125;
-        s.damage = 28;
+        weapon.bullet = new SapRadiusBulletType(){{
+            sapStrength = 0.8f;
+            length = 125;
+            damage = 28;
+            shootEffect = Fx.shootSmall;
+            hitColor = color = Color.valueOf("bf92f9");
+            despawnEffect = Fx.none;
+            width = 0.4f;
+            lifetime = 25f;
+            knockback = -0.65f;
+        }};
         UnitTypes.spiroct.abilities.add(new SapAbility());
 
         UnitTypes.arkyid.health = 28000;
@@ -725,19 +741,19 @@ public class UnitOverride {
         weapon.inaccuracy = 12;
         weapon.bullet = new ConnectLightningBulletType() {{
             lightningColor = hitColor = Pal.heal;
-            damage = 28f;
+            damage = 28;
             lightningLength = 9;
             lightningLengthRand = 10;
             shootEffect = Fx.shootHeal;
-            healPercent = 2f;
+            healPercent = 1f;
 
-            lightningType = new BulletType(0.0001f, 0f) {{
+            lightningType = new BulletType(0.0001f, 1f) {{
                 lifetime = Fx.lightning.lifetime;
                 hitEffect = Fx.hitLancer;
                 despawnEffect = Fx.none;
                 status = StatusEffects.shocked;
                 statusDuration = 10f;
-                hittable = false;
+                hittable = absorbable = reflectable = false;
                 healPercent = 1.6f;
                 collidesTeam = true;
             }};
