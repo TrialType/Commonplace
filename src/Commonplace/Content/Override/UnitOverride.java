@@ -333,6 +333,29 @@ public class UnitOverride {
         UnitTypes.spiroct.abilities.add(new SapAbility());
 
         UnitTypes.arkyid.health = 28000;
+        for (Weapon w : UnitTypes.arkyid.weapons) {
+            if (w.bullet instanceof SapBulletType s) {
+                s.damage = 60;
+                s.length = 70;
+            } else {
+                w.shootSound = Sounds.lasershoot;
+                w.bullet = new LaserBulletType() {{
+                    colors[0] = Color.valueOf("bf92f9").mul(1,1,1,0.4f);
+                    colors[1] = Color.valueOf("bf92f9");
+                    pierceBuilding = true;
+                    pierceCap = 5;
+
+                    length = 100;
+                    width = 22;
+                    sideWidth = 5;
+                    sideLength = 8;
+                    damage = 80;
+
+                    status = StatusEffects.sapped;
+                    statusDuration = 60f * 10;
+                }};
+            }
+        }
 
         UnitTypes.toxopid.health = 77000;
         /*-----------------------------------------------------------------------------*/
