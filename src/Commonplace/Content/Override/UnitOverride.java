@@ -8,6 +8,7 @@ import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
 import Commonplace.Entities.Unit.Override.*;
 import arc.Core;
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import mindustry.content.Fx;
@@ -263,22 +264,50 @@ public class UnitOverride {
         UnitTypes.atrax.legSplashRange = 16f;
         UnitTypes.atrax.targetAir = true;
         weapon = UnitTypes.atrax.weapons.first();
-        weapon.shoot = new ShootMulti(new ShootPattern() {{
-            shots = 4;
-            shotDelay = 9f;
-        }}, new ShootPattern() {{
-            shots = 5;
-        }});
-        weapon.inaccuracy = 7;
-        weapon.reload = 60;
+        weapon.shoot.firstShotDelay = 30;
+        weapon.reload = 90;
         weapon.bullet.collidesAir = true;
+        ((LiquidBulletType) weapon.bullet).orbSize = 6;
+        ((LiquidBulletType) weapon.bullet).puddleSize = 25;
+        weapon.bullet.lifetime = 100;
+        weapon.bullet.speed = 4;
+        weapon.bullet.drag = 0.04f;
+        weapon.bullet.homingDelay = 10;
         weapon.bullet.homingPower = 0.1f;
-        weapon.bullet.homingRange = 140f;
+        weapon.bullet.homingRange = 100;
+        weapon.bullet.pierceBuilding = weapon.bullet.pierce = true;
+        weapon.bullet.pierceCap = 4;
+        weapon.bullet.intervalBullets = 2;
+        weapon.bullet.intervalDelay = 5;
+        weapon.bullet.intervalAngle = 90;
+        weapon.bullet.intervalSpread = 180;
+        weapon.bullet.bulletInterval = 3;
+        weapon.bullet.intervalBullet = new LiquidBulletType(Liquids.slag) {{
+            reflectable = absorbable = hittable = false;
+            despawnHit = true;
+
+            hitEffect = despawnEffect = Fx.none;
+
+            damage = 6;
+            lifetime = 1;
+            speed = 2;
+
+            puddleSize = 15;
+        }};
+        weapon.bullet.chargeEffect = new Effect(31, 20, c -> {
+            Draw.color(Liquids.slag.color);
+            Fill.circle(c.x, c.y, 6 * c.fin());
+        });
+        weapon.bullet.hitEffect = weapon.bullet.despawnEffect = new Effect(16, e -> {
+            color(e.color);
+
+            randLenVectors(e.id, 14, 2f + e.fin() * 25f, e.rotation, 120, (x, y) -> Fill.circle(e.x + x, e.y + y, e.fout() * 4f));
+        });
 
         UnitTypes.spiroct.health = 1500;
         UnitTypes.spiroct.armor = 21;
         weapon = UnitTypes.spiroct.weapons.get(0);
-        weapon.bullet = new SapRadiusBulletType(){{
+        weapon.bullet = new SapRadiusBulletType() {{
             sapStrength = 0.5f;
             length = 100f;
             damage = 33;
@@ -290,7 +319,7 @@ public class UnitOverride {
             knockback = -1.24f;
         }};
         weapon = UnitTypes.spiroct.weapons.get(1);
-        weapon.bullet = new SapRadiusBulletType(){{
+        weapon.bullet = new SapRadiusBulletType() {{
             sapStrength = 0.8f;
             length = 125;
             damage = 28;
@@ -372,7 +401,7 @@ public class UnitOverride {
         }});
         weapon = UnitTypes.antumbra.weapons.first();
         weapon.bullet.damage *= 1.2f;
-        weapon.bullet.status = StatusEffects.slow;
+        weapon.bullet.status = StatusEffects.blasted;
         weapon.bullet.statusDuration = 60;
 
         UnitTypes.eclipse.health = 77000;

@@ -605,12 +605,13 @@ public class Blocks2 {
             size = 2;
             health = 700;
             recoil = 3;
-            reload = 30;
+            reload = 90;
             range = 400;
             targetGround = false;
 
             shoot.shots = 8;
-            inaccuracy = 3;
+            shoot.shotDelay = 4;
+            inaccuracy = 15;
 
             ammo(
                     titanium,
