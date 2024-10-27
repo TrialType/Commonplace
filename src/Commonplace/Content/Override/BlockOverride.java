@@ -33,6 +33,13 @@ import static arc.math.Angles.randLenVectors;
 
 public class BlockOverride {
     public static void load() {
+        Blocks.coreShard.health = 3900;
+        Blocks.coreFoundation.health = 12500;
+        Blocks.coreNucleus.health = 21000;
+        Blocks.coreBastion.health = 16000;
+        Blocks.coreCitadel.health = 56000;
+        Blocks.coreAcropolis.health = 140000;
+
         Blocks.copperWall.health = 80 * 10;
         Blocks.copperWallLarge.health = 80 * 40;
         Blocks.titaniumWall.health = 110 * 10;

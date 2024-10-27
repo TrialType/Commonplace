@@ -271,10 +271,10 @@ public class UnitOverride {
         ((LiquidBulletType) weapon.bullet).puddleSize = 25;
         weapon.bullet.lifetime = 100;
         weapon.bullet.speed = 4;
-        weapon.bullet.drag = 0.04f;
+        weapon.bullet.drag = 0.02f;
         weapon.bullet.homingDelay = 10;
         weapon.bullet.homingPower = 0.1f;
-        weapon.bullet.homingRange = 100;
+        weapon.bullet.homingRange = 200;
         weapon.bullet.pierceBuilding = weapon.bullet.pierce = true;
         weapon.bullet.pierceCap = 4;
         weapon.bullet.intervalBullets = 2;
@@ -340,7 +340,7 @@ public class UnitOverride {
             } else {
                 w.shootSound = Sounds.lasershoot;
                 w.bullet = new LaserBulletType() {{
-                    colors[0] = Color.valueOf("bf92f9").mul(1,1,1,0.4f);
+                    colors[0] = Color.valueOf("bf92f9").mul(1, 1, 1, 0.4f);
                     colors[1] = Color.valueOf("bf92f9");
                     pierceBuilding = true;
                     pierceCap = 5;
@@ -484,6 +484,9 @@ public class UnitOverride {
 
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
+        UnitTypes.oct.abilities.clear();
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 4, 45));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 4, 0));
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;
         UnitTypes.risso.armor = 7;
