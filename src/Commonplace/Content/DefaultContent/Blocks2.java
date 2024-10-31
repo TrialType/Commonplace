@@ -43,7 +43,7 @@ import static mindustry.type.ItemStack.with;
 
 public class Blocks2 {
     //test
-    public static Block pu;
+    public static Block pu, massTest, sorterTest, unSorterTest;
     //defense
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
@@ -199,6 +199,27 @@ public class Blocks2 {
             consumePower(50f);
 
             requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
+        }};
+
+        sorterTest = new SorterOverflowGate("sorter") {{
+            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
+            buildCostMultiplier = 3f;
+            invert = true;
+        }};
+
+        unSorterTest = new SorterOverflowGate("un-sorter") {{
+            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
+            buildCostMultiplier = 3f;
+            invert = false;
+        }};
+
+        massTest = new MultiMassDriver("mass-drive") {{
+            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
+            size = 3;
+            itemCapacity = 360;
+            reload = 200f;
+            range = 440f;
+            consumePower(1.75f);
         }};
 //======================================================================================================================
         butte = new PowerTurret("butte") {{

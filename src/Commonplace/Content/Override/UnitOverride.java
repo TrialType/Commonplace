@@ -190,30 +190,12 @@ public class UnitOverride {
         weapon.bullet.createChance = 0.75f;
         weapon.bullet.damage = 40;
         weapon.bullet.splashDamage = 120;
-        weapon.bullet.incendChance = 0.7f;
+        weapon.bullet.incendChance = 1;
         weapon.bullet.incendAmount = 5;
-        UnitTypes.fortress.weapons.add(new Weapon() {{
-            reload = 18;
-            rotate = false;
-            shootCone = 30;
-            inaccuracy = 12;
-
-            shoot = new ShootAlternate();
-            shoot.shots = 8;
-
-            bullet = new LiquidBulletType(Liquids.oil) {{
-                damage = 8;
-                speed = 3;
-                lifetime = 80;
-                puddleSize = 10;
-
-                statusDuration = 15;
-
-                despawnHit = true;
-                scaleLife = true;
-                collidesAir = false;
-            }};
-        }});
+        weapon.bullet.puddleLiquid = Liquids.oil;
+        weapon.bullet.puddles = 5;
+        weapon.bullet.puddleRange = 16;
+        weapon.bullet.puddleAmount = 20;
 
         UnitTypes.scepter.health = 31500;
         UnitTypes.scepter.weapons.get(0).bullet.damage = 150;

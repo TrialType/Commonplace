@@ -108,7 +108,7 @@ public class StatusEffects2 {
         seethe = new StatusEffect("seethe") {{
             damageMultiplier = 2.7f;
             speedMultiplier = 1.9f;
-            reloadMultiplier = 0.33f;
+            reloadMultiplier = 3f;
             healthMultiplier = 0.56f;
             damage = 4f;
         }};
@@ -124,18 +124,18 @@ public class StatusEffects2 {
         frenzy = new StatusEffect("frenzy") {{
             healthMultiplier = 2f;
             speedMultiplier = 1.75f;
-            reloadMultiplier = 0.5f;
+            reloadMultiplier = 2f;
         }};
         deploy = new StatusEffect("deploy") {{
             healthMultiplier = 2f;
             damageMultiplier = 2.5f;
-            reloadMultiplier = 0.6f;
+            reloadMultiplier = 1.4f;
             speedMultiplier = 0.1f;
         }};
         impatience = new StatusEffect("impatience") {{
             healthMultiplier = 0.7f;
             damageMultiplier = 0.6f;
-            reloadMultiplier = 1.3f;
+            reloadMultiplier = 1.33f;
             speedMultiplier = 1.5f;
         }};
 
