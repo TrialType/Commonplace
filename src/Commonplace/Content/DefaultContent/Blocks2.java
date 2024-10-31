@@ -1529,12 +1529,12 @@ public class Blocks2 {
             consumePower(6f);
         }};
 //======================================================================================================================
-        sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{
+        unSorterOverflowGate = new SorterOverflowGate("un-sorter-overflow-gate") {{
             requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
             buildCostMultiplier = 3f;
             invert = true;
         }};
-        unSorterOverflowGate = new SorterOverflowGate("un-sorter-overflow-gate") {{
+        sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{
             requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
             buildCostMultiplier = 3f;
             invert = false;
