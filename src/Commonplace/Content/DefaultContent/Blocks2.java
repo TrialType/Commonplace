@@ -43,7 +43,7 @@ import static mindustry.type.ItemStack.with;
 
 public class Blocks2 {
     //test
-    public static Block pu, massTest, sorterTest, unSorterTest;
+    public static Block pu;
     //defense
     public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
@@ -55,6 +55,8 @@ public class Blocks2 {
     //effect
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
             forceProjectorLarge;
+    //distribution
+    public static Block multiMassDriver, sorterOverflowGate, unSorterOverflowGate;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -199,27 +201,6 @@ public class Blocks2 {
             consumePower(50f);
 
             requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
-        }};
-
-        sorterTest = new SorterOverflowGate("sorter") {{
-            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
-            buildCostMultiplier = 3f;
-            invert = true;
-        }};
-
-        unSorterTest = new SorterOverflowGate("un-sorter") {{
-            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
-            buildCostMultiplier = 3f;
-            invert = false;
-        }};
-
-        massTest = new MultiMassDriver("mass-drive") {{
-            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
-            size = 3;
-            itemCapacity = 360;
-            reload = 200f;
-            range = 440f;
-            consumePower(1.75f);
         }};
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
@@ -1546,6 +1527,25 @@ public class Blocks2 {
 
             itemConsumer = consumeItem(Items.phaseFabric).boost();
             consumePower(6f);
+        }};
+//======================================================================================================================
+        sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{
+            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
+            buildCostMultiplier = 3f;
+            invert = true;
+        }};
+        unSorterOverflowGate = new SorterOverflowGate("un-sorter-overflow-gate") {{
+            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
+            buildCostMultiplier = 3f;
+            invert = false;
+        }};
+        multiMassDriver = new MultiMassDriver("multi-mass-drive") {{
+            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
+            size = 3;
+            itemCapacity = 360;
+            reload = 200f;
+            range = 440f;
+            consumePower(1.75f);
         }};
     }
 }
