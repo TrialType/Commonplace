@@ -56,7 +56,7 @@ public class Blocks2 {
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
             forceProjectorLarge;
     //distribution
-    public static Block multiMassDriver, sorterOverflowGate, unSorterOverflowGate;
+    public static Block multiMassDriver, sorterOverflowGate, sorterUnderflowGate;
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
@@ -1529,15 +1529,15 @@ public class Blocks2 {
             consumePower(6f);
         }};
 //======================================================================================================================
-        unSorterOverflowGate = new SorterOverflowGate("un-sorter-overflow-gate") {{
-            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
-            buildCostMultiplier = 3f;
-            invert = true;
-        }};
         sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{
             requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
             buildCostMultiplier = 3f;
             invert = false;
+        }};
+        sorterUnderflowGate = new SorterOverflowGate("sorter-underflow-gate") {{
+            requirements(Category.distribution, with(Items.lead, 2, Items.copper, 2));
+            buildCostMultiplier = 3f;
+            invert = true;
         }};
         multiMassDriver = new MultiMassDriver("multi-mass-drive") {{
             requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
