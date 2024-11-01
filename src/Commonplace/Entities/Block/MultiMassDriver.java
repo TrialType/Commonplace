@@ -57,8 +57,8 @@ public class MultiMassDriver extends MassDriver {
             boolean hasLink = linkValid();
 
             if (hasLink) {
-                for (int pos : links) {
-                    buildings.add(world.build(pos));
+                for (int i = 0; i < links.size; i++) {
+                    buildings.add(world.build(links.get(i)));
                 }
             }
 
@@ -114,12 +114,10 @@ public class MultiMassDriver extends MassDriver {
                     return;
                 }
 
-                float targetRotation = angleTo(buildings.first());
-
-                for (var build : buildings) {
-                    targetRotation += angleTo(build);
-                    targetRotation /= 2;
-                }
+                float targetRotation = buildings.sumf(b -> {
+                    float angle = angleTo(b) % 360;
+                    return angle > 180 ? angle - 360 : angle;
+                }) / buildings.size;
 
                 //must shoot minimum amount of items
                 //must have minimum amount of space
@@ -131,8 +129,8 @@ public class MultiMassDriver extends MassDriver {
                         rotation = Angles.moveToward(rotation, targetRotation, rotateSpeed * efficiency);
                     }
 
-                    for (var build : buildings) {
-                        MassDriverBuild other = (MassDriverBuild) build;
+                    for (int i = 0; i < buildings.size; i++) {
+                        MassDriverBuild other = (MassDriverBuild) buildings.get(i);
                         other.waitingShooters.add(this);
 
                         if (reloadCounter <= 0.0001f) {
@@ -280,8 +278,18 @@ public class MultiMassDriver extends MassDriver {
                 configure(-1);
                 return false;
             } else if (other.block == block && other.dst(tile) <= range && other.team == team && links.size < maxLinks) {
-                configure(other.pos());
-                return false;
+                if (links.isEmpty()) {
+                    configure(other.pos());
+                    return false;
+                } else {
+                    float min = links.min(pos -> angleTo(world.build(pos))) % 360;
+                    float max = links.min(pos -> angleTo(world.build(pos))) % 360;
+                    float angle = angleTo(other) % 360;
+                    if ((angle > min && Angles.angleDist(min, angle) <= 120) || (angle < max && Angles.angleDist(max, angle) <= 120)) {
+                        configure(other.pos());
+                        return false;
+                    }
+                }
             }
 
             return true;

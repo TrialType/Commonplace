@@ -240,9 +240,11 @@ public class StackCrafter extends GenericCrafter {
         }
 
         public void dumpOutputs() {
-            if (chance > -1 && timer(timerDump, dumpTime / timeScale / 15)) {
+            if (chance > -1 && timer(timerDump, dumpTime / timeScale)) {
                 for (ItemStack output : switchStack.get(chance).itemsOut) {
-                    dump(output.item);
+                    for (int i = 0; i < timeScale; i++) {
+                        dump(output.item);
+                    }
                 }
             }
 

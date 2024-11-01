@@ -1543,8 +1543,8 @@ public class Blocks2 {
             requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
             size = 3;
             itemCapacity = 360;
-            reload = 200f;
-            range = 440f;
+            reload = 300f;
+            range = 600f;
             consumePower(1.75f);
         }};
     }
