@@ -181,16 +181,16 @@ public abstract class UnitPeculiarity {
                 rejuvenate, rejuvenate_a, vibrate, crane);
 
         //well
-        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.1f, 0), u -> readHealth(u, 1.1f, 0));
-        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.3f, 0), u -> readHealth(u, 1.3f, 0));
-        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.6f, 0), u -> readHealth(u, 1.6f, 0));
-        Peculiarity DamageGrow = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f)));
-        Peculiarity DamageGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.3f, f -> w.reload *= f)));
-        Peculiarity DamageGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.6f, f -> w.reload *= f)));
+        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.05f, 0), u -> readHealth(u, 1.05f, 0));
+        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.1f, 0), u -> readHealth(u, 1.1f, 0));
+        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.15f, 0), u -> readHealth(u, 1.15f, 0));
+        Peculiarity DamageGrow = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.05f, f -> w.reload *= f)));
+        Peculiarity DamageGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f)));
+        Peculiarity DamageGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.15f, f -> w.reload *= f)));
         Peculiarity ReloadGrow = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.95f));
-        Peculiarity ReloadGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.85f));
-        Peculiarity ReloadGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.7f));
-        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 5f, 0), u -> readHealth(u, 5f, 0));
+        Peculiarity ReloadGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.9f));
+        Peculiarity ReloadGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.85f));
+        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 2f, 0), u -> readHealth(u, 2f, 0));
 
         //midden
         Peculiarity HealToDamage = new Peculiarity(u -> {
@@ -210,50 +210,50 @@ public abstract class UnitPeculiarity {
         }), ChangeNumberOrAddProject);
         Peculiarity Heal2ReloadToDamage = new Peculiarity(u -> {
             applyWeapon(u, w -> {
-                w.reload *= 1.1f;
-                w.bullet = resetDamage(w.bullet, 1.35f, f -> w.reload *= f);
+                w.reload *= 1.05f;
+                w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
             });
-            resetHealth(u, 0.75f, 1);
+            resetHealth(u, 0.95f, 1);
         }, u -> {
             applyWeapon(u, w -> {
-                w.reload *= 1.1f;
-                w.bullet = resetDamage(w.bullet, 1.35f, f -> w.reload *= f);
+                w.reload *= 1.05f;
+                w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
             });
-            readHealth(u, 0.75f, 1);
+            readHealth(u, 0.95f, 1);
         });
         Peculiarity Glass = new Peculiarity(u -> {
-            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 6.5f, f -> w.reload *= f));
-            resetHealth(u, 0.01f, 35);
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 2.5f, f -> w.reload *= f));
+            resetHealth(u, 0.1f, 35);
         }, u -> {
-            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 6.5f, f -> w.reload *= f));
-            readHealth(u, 0.01f, 35);
+            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 2.5f, f -> w.reload *= f));
+            readHealth(u, 0.1f, 35);
         }, LimitAll);
         Peculiarity Stone = new Peculiarity(u -> {
-            applyWeapon(u, w -> w.reload *= 5);
-            resetHealth(u, 15, 0);
+            applyWeapon(u, w -> w.reload *= 3);
+            resetHealth(u, 3, 0);
         }, u -> {
-            applyWeapon(u, w -> w.reload *= 5);
-            readHealth(u, 15, 0);
+            applyWeapon(u, w -> w.reload *= 3);
+            readHealth(u, 3, 0);
         });
         Peculiarity Hill = new Peculiarity(u -> {
-            applyWeapon(u, w -> w.reload *= 15);
-            resetHealth(u, 25, 0);
+            applyWeapon(u, w -> w.reload *= 5);
+            resetHealth(u, 5, 0);
         }, u -> {
-            applyWeapon(u, w -> w.reload *= 15);
-            readHealth(u, 25, 0);
+            applyWeapon(u, w -> w.reload *= 5);
+            readHealth(u, 5, 0);
         });
 
         //bad
         Peculiarity HealBreak = new Peculiarity(u -> resetHealth(u, 0.95f, 1), u -> readHealth(u, 0.95f, 1));
-        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.85f, 1), u -> readHealth(u, 0.85f, 1));
-        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.7f, 1), u -> readHealth(u, 0.7f, 1));
+        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.9f, 1), u -> readHealth(u, 0.9f, 1));
+        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.85f, 1), u -> readHealth(u, 0.85f, 1));
         Peculiarity DamageBreak = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.95f, f -> w.reload *= f)));
-        Peculiarity DamageBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.85f, f -> w.reload *= f)));
-        Peculiarity DamageBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.7f, f -> w.reload *= f)));
-        Peculiarity ReloadBreak = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.1f));
-        Peculiarity ReloadBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.3f));
-        Peculiarity ReloadBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.6f));
-        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.45f, 1), u -> readHealth(u, 0.45f, 1));
+        Peculiarity DamageBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.9f, f -> w.reload *= f)));
+        Peculiarity DamageBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.85f, f -> w.reload *= f)));
+        Peculiarity ReloadBreak = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.05f));
+        Peculiarity ReloadBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.1f));
+        Peculiarity ReloadBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.15f));
+        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.8f, 1), u -> readHealth(u, 0.8f, 1));
 
         wellPeculiarity.addAll(
                 HealGrow, HealGrow, HealGrow, HealGrow, HealGrow, HealGrow,

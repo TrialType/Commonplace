@@ -16,10 +16,7 @@ import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
-import mindustry.entities.abilities.ForceFieldAbility;
-import mindustry.entities.abilities.ShieldArcAbility;
-import mindustry.entities.abilities.ShieldRegenFieldAbility;
-import mindustry.entities.abilities.StatusFieldAbility;
+import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
 import mindustry.entities.effect.MultiEffect;
@@ -133,7 +130,7 @@ public class UnitOverride {
             width = height = 8;
 
             minArmor = 7;
-            damageArmorMultiplier = 1.25f;
+            damageArmorMultiplier = 0.4f;
             maxArmorDamageAdder = 20;
             keepVelocity = false;
         }};
@@ -387,9 +384,9 @@ public class UnitOverride {
         m.width = 7;
         m.weaveMag = 2;
         m.weaveScale = 20;
-        m.splashDamageRadius = 16;
+        m.splashDamageRadius = 28;
         m.splashDamage = 25;
-        m.homingDelay = 40;
+        m.homingDelay = 25;
         m.homingRange = 400;
         m.homingPower = 0.02f;
         m.rangeOverride = m.maxRange = 2000f / 7;
@@ -402,7 +399,9 @@ public class UnitOverride {
             sprintingDuration = 10;
             sprintingLength = 10;
             sprintingRadius = 150;
-            rotate = false;
+
+            status = StatusEffects2.frenzy;
+            statusDuration = 240;
         }});
         weapon = UnitTypes.antumbra.weapons.first();
         weapon.bullet.damage *= 1.2f;
@@ -467,8 +466,8 @@ public class UnitOverride {
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         UnitTypes.oct.abilities.clear();
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 4, 45));
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 4, 0));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 5, 180));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 5, 0));
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;
         UnitTypes.risso.armor = 7;
@@ -632,6 +631,13 @@ public class UnitOverride {
         }};
 
         UnitTypes.aegires.health = 42000;
+        UnitTypes.aegires.abilities.clear();
+        UnitTypes.aegires.abilities.add(new EnergyFieldAbility(30,25,180){{
+            statusDuration = 60f * 6f;
+            maxTargets = 15;
+            healPercent = 0.4f;
+            sameTypeHealMult = 0.6f;
+        }});
         UnitTypes.aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
             buildingExpand = 0.5f;
         }});

@@ -20,6 +20,7 @@ import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.defense.turrets.TractorBeamTurret;
 import mindustry.world.blocks.distribution.ArmoredConveyor;
 import mindustry.world.blocks.distribution.Conveyor;
+import mindustry.world.blocks.distribution.MassDriver;
 import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.blocks.heat.HeatProducer;
 import mindustry.world.blocks.production.*;
@@ -61,6 +62,8 @@ public class BlockOverride {
 
         Blocks.shockMine.health = 150;
         ((ShockMine) Blocks.shockMine).tileDamage = 30;
+
+        ((MassDriver) Blocks.massDriver).range = 600f;
 
         UnitFactory uf = (UnitFactory) Blocks.airFactory;
         uf.plans.add(new UnitFactory.UnitPlan(Units2.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
@@ -145,7 +148,6 @@ public class BlockOverride {
 
                 randLenVectors(e.id, 10, e.finpow() * 120f, e.rotation, 10f, (x, y) -> Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.6f));
             });
-            b.init();
         });
 
         ((ItemTurret) Blocks.fuse).range = 160;

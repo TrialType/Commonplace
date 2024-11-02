@@ -1108,7 +1108,7 @@ public class Blocks2 {
                     Items.copper, 4999, Items.thorium, 4999, Items.silicon, 4999, Items.phaseFabric, 4999));
         }};
         scale = new DrillTurret("scale") {{
-            requirements(Category.turret, ItemStack.with(copper, 60, lead, 45));
+            requirements(Category.turret, ItemStack.with(copper, 100, lead, 150));
 
             health = 350;
             size = 1;
@@ -1117,7 +1117,7 @@ public class Blocks2 {
             range = 150;
             inaccuracy = 5;
 
-            baseType = new BasicBulletType(7, 20) {{
+            baseType = new BasicBulletType(7, 25) {{
                 width = height = 10;
                 shrinkX = shrinkY = 0;
 
@@ -1155,7 +1155,7 @@ public class Blocks2 {
             limitRange(baseType, 7);
         }};
         stack = new DrillTurret("stack") {{
-            requirements(Category.turret, ItemStack.with(copper, 200, lead, 120, silicon, 70, graphite, 100));
+            requirements(Category.turret, ItemStack.with(copper, 250, lead, 170, silicon, 120, graphite, 150));
 
             health = 1500;
             size = 2;
@@ -1175,28 +1175,28 @@ public class Blocks2 {
                     b.pierce = b.pierceBuilding = true;
                     b.pierceCap = 2;
                 }
-                b.damage += 10;
-                b.reloadMultiplier *= 1.1f;
+                b.damage += 12;
+                b.reloadMultiplier *= 1.15f;
             });
             applier.put(lead, b -> {
-                b.lifetime += 10;
-                b.rangeChange += b.speed * 10;
-                b.splashDamage += 15;
+                b.lifetime += 12;
+                b.rangeChange += b.speed * 12;
+                b.splashDamage += 17;
                 b.splashDamageRadius += 6;
             });
             applier.put(titanium, b -> {
                 if (b.status == null) {
                     b.status = StatusEffects.slow;
-                    b.statusDuration = 15;
+                    b.statusDuration = 17;
                 } else {
-                    b.statusDuration += 20;
+                    b.statusDuration += 22;
                 }
             });
             applier.put(thorium, b -> {
-                b.damage *= 1.1f;
-                b.lifetime += 5;
-                b.rangeChange += b.speed * 5;
-                b.splashDamage += 5;
+                b.damage *= 1.15f;
+                b.lifetime += 7;
+                b.rangeChange += b.speed * 7;
+                b.splashDamage += 7;
                 b.splashDamageRadius += 4;
                 b.pierceArmor = true;
             });
@@ -1217,8 +1217,8 @@ public class Blocks2 {
                         t2.overlay().itemDrop == lead && t3.overlay().itemDrop == lead;
             }, b -> {
                 b.status = StatusEffects2.gasify;
-                b.statusDuration = 10;
-                b.reloadMultiplier *= 1.5f;
+                b.statusDuration = 12;
+                b.reloadMultiplier *= 1.55f;
             });
 
             limitRange(baseType, 7);
@@ -1518,9 +1518,9 @@ public class Blocks2 {
             requirements(Category.effect, with(Items.titanium, 200, thorium, 150, Items.silicon, 125, phaseFabric, 25));
             size = 4;
             phaseRadiusBoost = 150;
-            radius = 251.7f;
-            shieldHealth = 4000f;
-            cooldownNormal = 3f;
+            radius = 252f;
+            shieldHealth = 10000f;
+            cooldownNormal = 3.5f;
             cooldownLiquid = 1.5f;
             cooldownBrokenBase = 0.25f;
             researchCostMultiplier = 10;
@@ -1540,12 +1540,12 @@ public class Blocks2 {
             invert = true;
         }};
         multiMassDriver = new MultiMassDriver("multi-mass-drive") {{
-            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
+            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 50, Items.lead, 125, Items.thorium, 50));
             size = 3;
             itemCapacity = 360;
             reload = 300f;
             range = 600f;
-            consumePower(1.75f);
+            consumePower(3f);
         }};
     }
 }

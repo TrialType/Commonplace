@@ -11,6 +11,7 @@ import mindustry.entities.Units;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.Teamc;
 import mindustry.gen.Unit;
+import mindustry.type.StatusEffect;
 import mindustry.world.Tile;
 
 public class SprintingAbility2 extends Ability {
@@ -27,6 +28,8 @@ public class SprintingAbility2 extends Ability {
     public float sprintingDamage = 100;
     public float sprintingRadius = 300;
     public Effect sprintingDelayEffect = Fx.none;
+    public StatusEffect status = null;
+    public float statusDuration = 180;
 
     public void update(Unit unit) {
         if (reloadTimer >= sprintingReload) {
@@ -35,10 +38,15 @@ public class SprintingAbility2 extends Ability {
                 reloadTimer = 0;
                 timer = 0;
                 face = -1;
+
+                if (status != null) {
+                    unit.apply(status, statusDuration);
+                }
             } else if (timer > sprintingDelay) {
                 Teamc t = Units.closestTarget(unit.team, unit.x, unit.y, sprintingRadius,
                         u -> Angles.angleDist(unit.angleTo(u), unit.rotation) < 15,
                         b -> Angles.angleDist(unit.angleTo(b), unit.rotation) < 15);
+
                 if (t != null) {
                     if (rotate || face < 0) {
                         face = unit.angleTo(t);
@@ -46,6 +54,7 @@ public class SprintingAbility2 extends Ability {
                 } else if (rotate) {
                     face = -1;
                 }
+
                 if (face >= 0) {
                     Units.nearbyEnemies(unit.team, unit.x, unit.y, sprintingLength, u -> {
                         float angle = Angles.angleDist(face, unit.angleTo(u));
