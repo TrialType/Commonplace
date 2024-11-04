@@ -30,7 +30,9 @@ public class MultiMassDriver extends MassDriver {
         config(Point2.class, (MultiMassDriverBuild tile, Point2 point) -> {
             int pos = Point2.pack(point.x + tile.tileX(), point.y + tile.tileY());
 
-            if (world.build(pos) instanceof MultiMassDriverBuild) {
+            if (tile.links.contains(pos)) {
+                tile.links.remove((Integer) pos);
+            } else if (world.build(pos) instanceof MultiMassDriverBuild) {
                 tile.links.add(pos);
             }
         });
@@ -53,7 +55,7 @@ public class MultiMassDriver extends MassDriver {
         public void updateTile() {
             Seq<Building> buildings = new Seq<>(maxLinks);
 
-            links.remove(pos -> !(world.build(pos) instanceof MultiMassDriverBuild build) || !build.isValid() || build.team != team || build.block != block);
+            updateLinks();
             boolean hasLink = linkValid();
 
             if (hasLink) {
@@ -273,6 +275,8 @@ public class MultiMassDriver extends MassDriver {
                 return false;
             }
 
+            updateLinks();
+
             if (links.contains(other.pos())) {
                 link = other.pos();
                 configure(-1);
@@ -293,6 +297,10 @@ public class MultiMassDriver extends MassDriver {
             }
 
             return true;
+        }
+
+        public void updateLinks() {
+            links.remove(pos -> !(world.build(pos) instanceof MultiMassDriverBuild build) || !build.isValid() || build.team != team || build.block != block);
         }
 
         @Override

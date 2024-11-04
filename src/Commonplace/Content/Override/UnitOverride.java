@@ -414,12 +414,10 @@ public class UnitOverride {
         UnitTypes.mono.mineSpeed = 4f;
 
         UnitTypes.poly.health = 700;
-        UnitTypes.poly.buildSpeed = 1;
         UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
 
         UnitTypes.mega.health = 10000;
         UnitTypes.mega.armor = 35;
-        UnitTypes.poly.buildSpeed = 3.5f;
         UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
 
         UnitTypes.quad.health = 22000;
