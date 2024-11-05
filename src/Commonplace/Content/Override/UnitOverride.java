@@ -285,6 +285,7 @@ public class UnitOverride {
 
         UnitTypes.spiroct.health = 1500;
         UnitTypes.spiroct.armor = 21;
+        UnitTypes.spiroct.speed = 0.45f;
         weapon = UnitTypes.spiroct.weapons.get(0);
         weapon.bullet = new SapRadiusBulletType() {{
             sapStrength = 0.5f;
@@ -376,20 +377,29 @@ public class UnitOverride {
         weapon = UnitTypes.zenith.weapons.get(0);
         weapon.reload = 5;
         weapon.inaccuracy = 30;
-        MissileBulletType m = (MissileBulletType) weapon.bullet;
-        m.speed = 5;
-        m.damage = 20;
-        m.lifetime = 100;
-        m.height = 14;
-        m.width = 7;
-        m.weaveMag = 2;
-        m.weaveScale = 20;
-        m.splashDamageRadius = 28;
-        m.splashDamage = 25;
-        m.homingDelay = 25;
-        m.homingRange = 400;
-        m.homingPower = 0.02f;
-        m.rangeOverride = m.maxRange = 2000f / 7;
+        weapon.bullet = new TimeAddBulletType(5, 15){{
+            hitSound = Sounds.explosion;
+            trailChance = 0.2f;
+            width = 7;
+            height = 14;
+            shrinkY = 0f;
+            drag = -0.003f;
+            homingPower = 0.02f;
+            homingDelay = 25;
+            homingRange = 400;
+            weaveMag = 2;
+            weaveScale = 20;
+            keepVelocity = false;
+            splashDamageRadius = 28;
+            splashDamage = 25;
+            lifetime = 100;
+            trailColor = Pal.unitBack;
+            backColor = Pal.unitBack;
+            frontColor = Pal.unitFront;
+            hitEffect = Fx.blastExplosion;
+            despawnEffect = Fx.blastExplosion;
+            rangeOverride = maxRange = 2000f / 7;
+        }};
 
         UnitTypes.antumbra.health = 25200;
         UnitTypes.antumbra.armor = 12;
