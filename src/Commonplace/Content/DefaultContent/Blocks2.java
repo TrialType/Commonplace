@@ -215,14 +215,14 @@ public class Blocks2 {
 
             recoil = 6f;
             range = 500;
-            reload = 45;
+            reload = 1;
             consumesPower = true;
             hasPower = true;
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shoot.shots = 35;
-            shoot.shotDelay = 4;
+            shoot.shots = 3;
+            shoot.shotDelay = 1;
             inaccuracy = 30;
             shootType = new BasicBulletType() {{
                 hitSize = 25;
