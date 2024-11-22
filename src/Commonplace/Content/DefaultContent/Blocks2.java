@@ -54,7 +54,7 @@ public class Blocks2 {
             phaseAmplifier;
     //effect
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
-            forceProjectorLarge;
+            forceProjectorLarge, bulletSlower;
     //distribution
     public static Block multiMassDriver, sorterOverflowGate, sorterUnderflowGate;
 
@@ -195,6 +195,9 @@ public class Blocks2 {
             itemCapacity = 20;
         }};
 //======================================================================================================================
+        //debug
+
+
         pu = new PureProject("pu") {{
             health = 650;
 
@@ -260,7 +263,7 @@ public class Blocks2 {
             shoot.shots = 2;
             shoot.shotDelay = 10;
             shoot.firstShotDelay = 80;
-            shootType = new StrikeBulletType() {{
+            shootType = new BasicBulletType() {{
                 absorbable = false;
 
                 sprite = "circle";
@@ -278,7 +281,6 @@ public class Blocks2 {
                 status = StatusEffects2.suppress;
                 statusDuration = 240;
 
-                baseForce = 1.5f;
                 splashDamage = 10;
                 splashDamageRadius = 160;
                 chargeEffect = Fx.greenLaserCharge;
@@ -1484,7 +1486,7 @@ public class Blocks2 {
             size = 2;
 
             consumePower(5);
-            requirements(Category.effect, ItemStack.with(Items.silicon, 400, Items.titanium, 400, Items.phaseFabric, 200));
+            requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.silicon, 400, Items.titanium, 400, Items.phaseFabric, 200));
         }};
         coreLaunch = new CoreLaunchBlock("core-launch") {{
             size = 2;
@@ -1527,6 +1529,14 @@ public class Blocks2 {
 
             itemConsumer = consumeItem(Items.phaseFabric).boost();
             consumePower(6f);
+        }};
+        bulletSlower = new BulletSlowProject("bullet-slower") {{
+            requirements(Category.effect, ItemStack.with(copper, 1));
+
+            health = 1500;
+            size = 3;
+
+            consume(new ConsumePower(3, 0, false));
         }};
 //======================================================================================================================
         sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{

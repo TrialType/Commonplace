@@ -28,6 +28,7 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
+import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 
 import static arc.graphics.g2d.Draw.color;
@@ -373,17 +374,17 @@ public class UnitOverride {
         UnitTypes.zenith.health = 1500;
         UnitTypes.zenith.armor = 8;
         UnitTypes.zenith.speed = 2;
-        UnitTypes.zenith.range = 2000f / 7;
+        UnitTypes.zenith.range = 1000f / 3;
         weapon = UnitTypes.zenith.weapons.get(0);
         weapon.reload = 5;
         weapon.inaccuracy = 30;
-        weapon.bullet = new TimeAddBulletType(5, 15){{
+        weapon.bullet = new TimeAddBulletType(5, 15) {{
             hitSound = Sounds.explosion;
             trailChance = 0.2f;
             width = 7;
             height = 14;
             shrinkY = 0f;
-            drag = -0.003f;
+            drag = -0.005f;
             homingPower = 0.02f;
             homingDelay = 25;
             homingRange = 400;
@@ -398,7 +399,7 @@ public class UnitOverride {
             frontColor = Pal.unitFront;
             hitEffect = Fx.blastExplosion;
             despawnEffect = Fx.blastExplosion;
-            rangeOverride = maxRange = 2000f / 7;
+            rangeOverride = maxRange = 1000f / 3;
         }};
 
         UnitTypes.antumbra.health = 25200;
@@ -426,9 +427,21 @@ public class UnitOverride {
         UnitTypes.poly.health = 700;
         UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
 
-        UnitTypes.mega.health = 10000;
-        UnitTypes.mega.armor = 35;
+        UnitTypes.mega.health = 6000;
+        UnitTypes.mega.armor = 15;
         UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
+        UnitTypes.mega.weapons.add(new PointDefenseWeapon() {{
+            y = -6;
+            rotate = true;
+            rotateSpeed = 4;
+            reload = 10;
+            targetInterval = 10;
+            targetSwitchInterval = 10;
+
+            bullet = new BulletType() {{
+                damage = 5;
+            }};
+        }});
 
         UnitTypes.quad.health = 22000;
         UnitTypes.quad.speed = 2;
@@ -468,7 +481,7 @@ public class UnitOverride {
 
             healPercent = 15f;
             splashDamage = 400f;
-            splashDamageRadius = 800f;
+            splashDamageRadius = 550f;
         }};
 
         UnitTypes.oct.health = 77000;
@@ -640,7 +653,7 @@ public class UnitOverride {
 
         UnitTypes.aegires.health = 42000;
         UnitTypes.aegires.abilities.clear();
-        UnitTypes.aegires.abilities.add(new EnergyFieldAbility(30,25,180){{
+        UnitTypes.aegires.abilities.add(new EnergyFieldAbility(30, 25, 180) {{
             statusDuration = 60f * 6f;
             maxTargets = 15;
             healPercent = 0.4f;
@@ -871,16 +884,29 @@ public class UnitOverride {
         weapon.bullet.fragLifeMin = 0.2f;
         weapon.bullet.fragVelocityMax = weapon.bullet.fragVelocityMin = 1f;
         weapon.bullet.fragBullet = new BulletType() {{
-            collides = hittable = absorbable = false;
+            collides = hittable = reflectable = false;
             lifetime = 20;
             speed = 23;
-            damage = 0;
+            damage = 1;
 
-            splashDamageRadius = 120;
-            splashDamage = 110f;
+            fragOnAbsorb = false;
+            despawnHit = true;
+            fragBullets = 1;
+            fragBullet = new BulletType() {{
+                collides = hittable = reflectable = false;
 
-            despawnEffect = Effects.lightningDown;
-            hitColor = Pal.heal;
+                lifetime = 1;
+                speed = 0;
+
+                splashDamageRadius = 120;
+                splashDamage = 110f;
+
+                hitEffect = Fx.none;
+                despawnEffect = Effects.lightningDown;
+                hitColor = Pal.heal;
+            }};
+
+            hitEffect = despawnEffect = Fx.none;
         }};
 
         /*-----------------------------------------------------------------------------*/
