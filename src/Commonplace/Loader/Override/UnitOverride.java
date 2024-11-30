@@ -1,7 +1,7 @@
-package Commonplace.Content.Override;
+package Commonplace.Loader.Override;
 
-import Commonplace.Content.SpecialContent.Effects;
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.Special.Effects;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
@@ -487,8 +487,8 @@ public class UnitOverride {
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         UnitTypes.oct.abilities.clear();
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 5, 180));
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 5, 12250, 600, 5, 0));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 4, 0));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 4, 0));
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;
         UnitTypes.risso.armor = 7;

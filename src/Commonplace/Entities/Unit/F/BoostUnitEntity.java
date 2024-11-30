@@ -1,6 +1,6 @@
 package Commonplace.Entities.Unit.F;
 
-import Commonplace.Content.DefaultContent.Units2;
+import Commonplace.Loader.DefaultContent.Units2;
 import Commonplace.Entities.Unit.Override.FUnitEntity;
 import Commonplace.Entities.UnitType.BoostUnitType;
 import Commonplace.Utils.Classes.PhysicsWorldChanger;

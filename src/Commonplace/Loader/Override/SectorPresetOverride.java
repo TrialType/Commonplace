@@ -1,7 +1,4 @@
-package Commonplace.Content.Override;
-
-import mindustry.content.SectorPresets;
-import mindustry.maps.generators.FileMapGenerator;
+package Commonplace.Loader.Override;
 
 public class SectorPresetOverride {
     public static void load() {

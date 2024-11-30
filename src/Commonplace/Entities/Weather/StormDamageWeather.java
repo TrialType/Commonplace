@@ -1,6 +1,6 @@
 package Commonplace.Entities.Weather;
 
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Effects;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.Time;

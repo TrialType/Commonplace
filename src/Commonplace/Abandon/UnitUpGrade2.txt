@@ -5,7 +5,7 @@ import mindustry.type.UnitType;
 
 import java.util.Random;
 
-import static Commonplace.Content.DefaultContent.FUnits.*;
+import static Commonplace.Loader.DefaultContent.FUnits.*;
 import static mindustry.content.UnitTypes.*;
 
 public class UnitUpGrade {

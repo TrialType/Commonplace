@@ -1,4 +1,4 @@
-package Commonplace.Content.ProjectContent;
+package Commonplace.Loader.ProjectContent;
 
 import Commonplace.Utils.Classes.ProjectUtils;
 import Commonplace.Type.New.BoostProject;

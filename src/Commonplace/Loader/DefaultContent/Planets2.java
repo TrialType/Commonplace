@@ -1,4 +1,4 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
 import Commonplace.Type.PlanetGenerators.ENGSWEISPlanetGenerator;
 import arc.graphics.Color;

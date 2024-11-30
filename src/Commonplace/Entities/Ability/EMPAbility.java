@@ -1,6 +1,6 @@
 package Commonplace.Entities.Ability;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Unit.F.BoostUnitEntity;
 import arc.Core;
 import arc.math.geom.Position;

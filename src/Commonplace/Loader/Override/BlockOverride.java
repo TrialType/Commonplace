@@ -1,6 +1,6 @@
-package Commonplace.Content.Override;
+package Commonplace.Loader.Override;
 
-import Commonplace.Content.DefaultContent.Units2;
+import Commonplace.Loader.DefaultContent.Units2;
 import Commonplace.Entities.BulletType.ProtectKillerBulletType;
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;

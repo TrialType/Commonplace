@@ -1,6 +1,6 @@
 package Commonplace.Entities.Bullet;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;

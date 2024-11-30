@@ -12,7 +12,7 @@ import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 
-import static Commonplace.Content.DefaultContent.Units2.*;
+import static Commonplace.Loader.DefaultContent.Units2.*;
 import static mindustry.content.UnitTypes.*;
 
 public abstract class UnitPeculiarity {

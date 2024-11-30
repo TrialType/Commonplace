@@ -1,6 +1,6 @@
 package Commonplace.Entities.Block;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import arc.Core;
 import arc.scene.ui.layout.Table;
 import arc.struct.IntIntMap;

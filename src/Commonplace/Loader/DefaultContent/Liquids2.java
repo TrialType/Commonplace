@@ -1,4 +1,4 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
 import arc.graphics.Color;
 import mindustry.content.StatusEffects;

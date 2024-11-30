@@ -1,6 +1,6 @@
 package Commonplace.Entities.BulletType;
 
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Effects;
 import Commonplace.Utils.Classes.Damage2;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

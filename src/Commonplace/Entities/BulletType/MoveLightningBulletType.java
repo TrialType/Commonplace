@@ -1,6 +1,6 @@
 package Commonplace.Entities.BulletType;
 
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Effects;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import mindustry.content.Fx;

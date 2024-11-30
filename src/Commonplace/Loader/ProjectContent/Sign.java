@@ -1,4 +1,4 @@
-package Commonplace.Content.ProjectContent;
+package Commonplace.Loader.ProjectContent;
 
 public class Sign {
     public static Commonplace.Type.New.Sign sizeProject1, sizeProject2, sizeProject3, sizeProject4, sizeProject5;

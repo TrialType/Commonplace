@@ -1,8 +1,8 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
 import mindustry.type.SectorPreset;
 
-import static Commonplace.Content.DefaultContent.Planets2.ENGSWEIS;
+import static Commonplace.Loader.DefaultContent.Planets2.ENGSWEIS;
 
 public class SectorPresets2 {
     public static SectorPreset longestDown;

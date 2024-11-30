@@ -1,4 +1,4 @@
-package Commonplace.Content.SpecialContent;
+package Commonplace.Loader.Special;
 
 import arc.func.Cons;
 import arc.graphics.Color;

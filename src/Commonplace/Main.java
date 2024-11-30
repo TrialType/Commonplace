@@ -1,9 +1,9 @@
 package Commonplace;
 
-import Commonplace.Content.DefaultContent.*;
-import Commonplace.Content.Override.*;
-import Commonplace.Content.ProjectContent.*;
-import Commonplace.Content.SpecialContent.*;
+import Commonplace.Loader.DefaultContent.*;
+import Commonplace.Loader.Override.*;
+import Commonplace.Loader.ProjectContent.*;
+import Commonplace.Loader.Special.*;
 import mindustry.mod.Mod;
 
 public class Main extends Mod {

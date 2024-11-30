@@ -1,7 +1,7 @@
-package Commonplace.Content.SpecialContent;
+package Commonplace.Loader.Special;
 
-import Commonplace.Content.ProjectContent.Bullets;
-import Commonplace.Content.ProjectContent.Weapons;
+import Commonplace.Loader.ProjectContent.Bullets;
+import Commonplace.Loader.ProjectContent.Weapons;
 import Commonplace.Entities.Unit.Override.*;
 import Commonplace.Utils.Classes.Listener;
 import Commonplace.Utils.Classes.UnitPeculiarity;
@@ -26,6 +26,9 @@ import java.util.Random;
 public class Events {
     private static final ObjectMap<Class<?>, Prov<? extends Unit>> classes = new ObjectMap<>();
     private static final Random r = new Random();
+    public static int p_num;
+    public static float p_well;
+    public static float p_midden;
 
     static {
         classes.put(MechUnit.class, FMechUnit::create);
@@ -35,6 +38,9 @@ public class Events {
         classes.put(ElevationMoveUnit.class, FElevationMoveUnit::create);
         classes.put(TankUnit.class, FTankUnit::create);
         classes.put(PayloadUnit.class, FPayloadUnit::create);
+        p_num = Core.settings.getInt("commonplace-p-num",5);
+        p_well = Core.settings.getFloat("commonplace-p-well",0.5f);
+        p_midden = Core.settings.getFloat("commonplace-p-midden",0.2f);
     }
 
     public static void load() {
@@ -69,7 +75,7 @@ public class Events {
             }
         });
 
-        arc.Events.on(EventType.UnitCreateEvent.class, e -> UnitPeculiarity.apply(e.unit, 5, 0.5f, 0.2f));
+        arc.Events.on(EventType.UnitCreateEvent.class, e -> UnitPeculiarity.apply(e.unit, p_num, p_well, p_midden));
         arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
             int wave = Vars.state.wave;
             int extra = e.unit.isBoss() ? wave / 20 : 0;

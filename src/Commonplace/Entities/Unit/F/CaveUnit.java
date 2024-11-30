@@ -1,8 +1,8 @@
 package Commonplace.Entities.Unit.F;
 
-import Commonplace.Content.DefaultContent.Units2;
-import Commonplace.Content.SpecialContent.Events;
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.Units2;
+import Commonplace.Loader.Special.Events;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.struct.Seq;

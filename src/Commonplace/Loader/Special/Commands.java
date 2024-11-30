@@ -1,4 +1,4 @@
-package Commonplace.Content.SpecialContent;
+package Commonplace.Loader.Special;
 
 import Commonplace.AI.BoostFlyingAI;
 import mindustry.ai.UnitCommand;

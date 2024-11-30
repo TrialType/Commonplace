@@ -1,4 +1,4 @@
-package Commonplace.Content.ProjectContent;
+package Commonplace.Loader.ProjectContent;
 
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.abilities.ShieldRegenFieldAbility;

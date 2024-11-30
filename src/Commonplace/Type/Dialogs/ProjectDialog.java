@@ -1,7 +1,7 @@
 package Commonplace.Type.Dialogs;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
-import Commonplace.Content.ProjectContent.Sign;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
+import Commonplace.Loader.ProjectContent.Sign;
 import Commonplace.Type.New.BoostProject;
 import Commonplace.Type.New.UnitProject;
 import arc.Core;

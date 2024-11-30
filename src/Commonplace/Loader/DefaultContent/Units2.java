@@ -1,8 +1,8 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
 import Commonplace.AI.*;
-import Commonplace.Content.SpecialContent.Commands;
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Commands;
+import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.Unit.F.*;

@@ -1,6 +1,6 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Weather.StormDamageWeather;
 import arc.graphics.Color;
 import arc.util.Time;

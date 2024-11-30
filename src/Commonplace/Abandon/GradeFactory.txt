@@ -1,6 +1,6 @@
 package Commonplace.Entities.Block;
 
-import Commonplace.Content.DefaultContent.FItems;
+import Commonplace.Loader.DefaultContent.FItems;
 import Commonplace.Tools.Interfaces.PeculiarityC;
 import arc.Core;
 import arc.graphics.g2d.Draw;

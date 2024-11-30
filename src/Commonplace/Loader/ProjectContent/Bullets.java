@@ -1,4 +1,4 @@
-package Commonplace.Content.ProjectContent;
+package Commonplace.Loader.ProjectContent;
 
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BulletType;

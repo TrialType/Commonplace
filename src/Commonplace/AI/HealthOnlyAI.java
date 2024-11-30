@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Content.DefaultContent.Units2;
+import Commonplace.Loader.DefaultContent.Units2;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.Teamc;

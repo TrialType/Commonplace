@@ -1,6 +1,6 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
-import Commonplace.Content.SpecialContent.Effects;
+import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Block.*;
 import Commonplace.Entities.BulletType.*;
 import arc.graphics.Color;

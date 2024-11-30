@@ -1,4 +1,4 @@
-package Commonplace.Content.DefaultContent;
+package Commonplace.Loader.DefaultContent;
 
 import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.math.Mathf;
@@ -7,11 +7,15 @@ import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.type.StatusEffect;
 
+import static mindustry.content.StatusEffects.*;
+
 public class StatusEffects2 {
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose;
+
+    public static StatusEffect fireKiller;
 
     public static StatusEffect pureA, pureT,
             catalyzeI, catalyzeII, catalyzeIII, catalyzeIV, catalyzeV,
@@ -80,15 +84,16 @@ public class StatusEffects2 {
             healthMultiplier = 0.7f;
             damage = 54;
         }};
-        StatusEffects.burning.transitionDamage = 54;
-        StatusEffects.burning.damage = 1.2f;
+        burning.transitionDamage = 54;
+        burning.damage = 0.9f;
+
         gasify = new StatusEffect("gasify") {{
-            damage = 5.6f;
-            transitionDamage = 480;
+            damage = 1.6f;
+            transitionDamage = 85;
             effect = Fx.burning;
 
             init(() -> {
-                opposite(StatusEffects.wet, StatusEffects.freezing);
+                opposite(wet, StatusEffects.freezing, fireKiller);
                 affinity(StatusEffects.tarred, (unit, result, time) -> {
                     unit.damagePierce(transitionDamage);
                     Fx.burning.at(unit.x + Mathf.range(unit.bounds() / 2f), unit.y + Mathf.range(unit.bounds() / 2f));
@@ -97,13 +102,22 @@ public class StatusEffects2 {
             });
         }};
         sublimation = new StatusEffect("sublimation") {{
-            damage = 8f;
-            transitionDamage = 650;
+            damage = 4;
+            transitionDamage = 137;
             effect = Fx.burning;
+
+            init(() -> {
+                opposite(wet, StatusEffects.freezing, fireKiller);
+                affinity(StatusEffects.tarred, (unit, result, time) -> {
+                    unit.damagePierce(transitionDamage);
+                    Fx.burning.at(unit.x + Mathf.range(unit.bounds() / 2f), unit.y + Mathf.range(unit.bounds() / 2f));
+                    result.set(sublimation, Math.min(time + result.time, 300f));
+                });
+            });
         }};
         grow = new StatusEffect("grow") {{
-            healthMultiplier = 20;
-            damage = -4;
+            healthMultiplier = 7;
+            damage = -3;
         }};
         seethe = new StatusEffect("seethe") {{
             damageMultiplier = 2.7f;
@@ -115,7 +129,7 @@ public class StatusEffects2 {
         friability = new StatusEffect("friability") {{
             healthMultiplier = 0.001f;
             damageMultiplier = 25;
-            speedMultiplier = 4.2f;
+            speedMultiplier = 3.8f;
         }};
         back = new StatusEffect("back") {{
             healthMultiplier = 2.4f;
@@ -125,18 +139,42 @@ public class StatusEffects2 {
             healthMultiplier = 2f;
             speedMultiplier = 1.75f;
             reloadMultiplier = 2f;
+
+            init(() -> {
+                opposite(wet, freezing);
+                affinity(burning, (unit, result, time) -> {
+                    unit.apply(overdrive, Math.min(unit.getDuration(overdrive) + 300f, 36000));
+                    result.set(corroded, 600);
+                });
+            });
         }};
         deploy = new StatusEffect("deploy") {{
             healthMultiplier = 2f;
             damageMultiplier = 2.5f;
             reloadMultiplier = 1.4f;
             speedMultiplier = 0.1f;
+
+            init(() -> {
+                opposite(burning, gasify, sublimation);
+                affinity(burning, (unit, result, time) -> {
+                    unit.damagePierce(20);
+                    result.set(impatience, time + result.time);
+                });
+            });
         }};
         impatience = new StatusEffect("impatience") {{
             healthMultiplier = 0.7f;
             damageMultiplier = 0.6f;
             reloadMultiplier = 1.33f;
             speedMultiplier = 1.5f;
+        }};
+
+
+        fireKiller = new StatusEffect("fire-killer") {{
+            opposite(burning);
+            affinity(burning, (unit, result, time) -> unit.unapply(burning));
+            affinity(gasify, (unit, result, time) -> unit.unapply(gasify));
+            affinity(sublimation, (unit, result, time) -> unit.unapply(sublimation));
         }};
 
 
@@ -480,7 +518,7 @@ public class StatusEffects2 {
         pWet = new WithMoreStatus("p-wet") {{
             show = false;
             sign = true;
-            with.addAll(StatusEffects.wet, corrosionI);
+            with.addAll(wet, corrosionI);
         }};
         pTarred = new WithMoreStatus("p-tarred") {{
             show = false;
@@ -502,6 +540,6 @@ public class StatusEffects2 {
             sign = true;
             with.addAll(StatusEffects.muddy, corrosionI);
         }};
-        burnings.addAll(StatusEffects.burning, gasify);
+        burnings.addAll(burning, gasify);
     }
 }

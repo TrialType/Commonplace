@@ -1,4 +1,4 @@
-package Commonplace.Content.Override;
+package Commonplace.Loader.Override;
 
 import mindustry.content.SectorPresets;
 import mindustry.content.TechTree;

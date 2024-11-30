@@ -1,7 +1,7 @@
 package Commonplace.Utils.Classes;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
-import Commonplace.Content.DefaultContent.Units2;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.Units2;
 import arc.Core;
 import arc.func.Boolf;
 import arc.func.Cons;

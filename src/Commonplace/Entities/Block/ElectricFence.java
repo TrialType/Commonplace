@@ -1,6 +1,6 @@
 package Commonplace.Entities.Block;
 
-import Commonplace.Content.DefaultContent.Units2;
+import Commonplace.Loader.DefaultContent.Units2;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

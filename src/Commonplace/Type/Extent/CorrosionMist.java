@@ -1,6 +1,6 @@
 package Commonplace.Type.Extent;
 
-import Commonplace.Content.DefaultContent.StatusEffects2;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Utils.Interfaces.Corrosion;
 import Commonplace.Utils.Interfaces.RangePure;
 import arc.Events;

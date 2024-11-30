@@ -1,16 +1,16 @@
-package Commonplace.Content.SpecialContent;
+package Commonplace.Loader.Special;
 
-import Commonplace.Content.DefaultContent.Blocks2;
+import Commonplace.Loader.DefaultContent.Blocks2;
 import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
-import static Commonplace.Content.DefaultContent.Blocks2.*;
-import static Commonplace.Content.ProjectContent.Sign.*;
-import static Commonplace.Content.DefaultContent.SectorPresets2.longestDown;
-import static Commonplace.Content.DefaultContent.Units2.*;
-import static Commonplace.Content.ProjectContent.UnitProjects.*;
+import static Commonplace.Loader.DefaultContent.Blocks2.*;
+import static Commonplace.Loader.ProjectContent.Sign.*;
+import static Commonplace.Loader.DefaultContent.SectorPresets2.longestDown;
+import static Commonplace.Loader.DefaultContent.Units2.*;
+import static Commonplace.Loader.ProjectContent.UnitProjects.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.SectorPresets.*;

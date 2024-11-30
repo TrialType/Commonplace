@@ -1,4 +1,4 @@
-package Commonplace.Content.SpecialContent;
+package Commonplace.Loader.Special;
 
 import Commonplace.Entities.Unit.F.*;
 import Commonplace.Entities.Unit.Override.*;
