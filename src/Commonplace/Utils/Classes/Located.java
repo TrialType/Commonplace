@@ -1,6 +1,6 @@
 package Commonplace.Utils.Classes;
 
-import Commonplace.Entities.Unit.F.TileMiner;
+import Commonplace.Entities.Unit.TileMiner;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
 import arc.struct.ObjectIntMap;

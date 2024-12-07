@@ -1,9 +1,7 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
-import Commonplace.Entities.Unit.Override.FMechUnit;
 import Commonplace.Entities.UnitType.WUGENANSMechUnitType;
 import Commonplace.Utils.Classes.PhysicsWorldChanger;
-import Commonplace.Utils.Classes.UnitPeculiarity;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
@@ -26,10 +24,7 @@ import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.StatusEntry;
 import mindustry.entities.units.WeaponMount;
 import mindustry.game.Team;
-import mindustry.gen.Building;
-import mindustry.gen.Call;
-import mindustry.gen.Hitboxc;
-import mindustry.gen.Sounds;
+import mindustry.gen.*;
 import mindustry.input.InputHandler;
 import mindustry.type.Item;
 import mindustry.world.Tile;
@@ -41,7 +36,7 @@ import java.lang.reflect.Field;
 import static mindustry.Vars.asyncCore;
 import static mindustry.Vars.world;
 
-public class UnderLandMechUnit extends FMechUnit {
+public class UnderLandMechUnit extends MechUnit {
     private static final Seq<UnderLandMechUnit> mec = new Seq<>();
     public boolean under = false;
     public float power;
@@ -91,10 +86,10 @@ public class UnderLandMechUnit extends FMechUnit {
 
     @Override
     public void update() {
-        if (!uploaded) {
-            UnitPeculiarity.load(this, pes.items);
-            uploaded = true;
-        }
+//        if (!uploaded) {
+//            UnitPeculiarity.load(this, pes.items);
+//            uploaded = true;
+//        }
 
         if (mec.indexOf(this) < 0) {
             change();

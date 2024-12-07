@@ -1,8 +1,10 @@
 package Commonplace.Entities.Block;
 
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Mathf;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -15,6 +17,8 @@ import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.*;
+
+import static mindustry.Vars.*;
 
 public class BulletSlowProject extends Block {
     public float range = 100;
@@ -42,6 +46,19 @@ public class BulletSlowProject extends Block {
     }
 
     @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid){
+        super.drawPlace(x, y, rotation, valid);
+
+        Draw.color(Pal.muddy);
+        Lines.stroke(3f);
+        Lines.circle(x * tilesize + offset, y * tilesize + offset, range);
+        Draw.color(player.team().color);
+        Lines.stroke(1f);
+        Lines.circle(x * tilesize + offset, y * tilesize + offset, range);
+        Draw.color();
+    }
+
+    @Override
     public void setBars() {
         super.setBars();
 
@@ -57,10 +74,19 @@ public class BulletSlowProject extends Block {
             super.draw();
 
             Draw.color(Pal.muddy);
-            Draw.alpha(0.3f);
-            Draw.z(Layer.shields + 0.1f);
-            Lines.stroke(0.5f);
-            Fill.circle(x, y, range);
+
+            if(renderer.animateShields){
+                Draw.z(Layer.shields + 0.1f);
+                Fill.circle(x, y, range);
+            }else{
+                Draw.z(Layer.shields + 0.1f);
+                Lines.stroke(0.5f);
+                Draw.alpha(0.17f);
+                Fill.circle(x, y, range);
+                Draw.alpha(0.3f);
+                Lines.circle(x, y, range);
+                Draw.reset();
+            }
         }
 
         @Override

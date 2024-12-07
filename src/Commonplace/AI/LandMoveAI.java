@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Entities.Unit.F.UnderLandMechUnit;
+import Commonplace.Entities.Unit.UnderLandMechUnit;
 import Commonplace.Entities.UnitType.WUGENANSMechUnitType;
 import arc.util.Time;
 import mindustry.ai.types.GroundAI;

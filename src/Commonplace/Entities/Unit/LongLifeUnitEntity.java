@@ -1,8 +1,8 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
-import Commonplace.Entities.Unit.Override.FUnitEntity;
+import mindustry.gen.UnitEntity;
 
-public class LongLifeUnitEntity extends FUnitEntity {
+public class LongLifeUnitEntity extends UnitEntity {
     protected LongLifeUnitEntity() {
     }
 

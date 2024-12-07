@@ -1,7 +1,7 @@
 package Commonplace.Entities.BulletType;
 
 import Commonplace.Entities.Bullet.LargeNumberBullet;
-import Commonplace.Entities.Unit.F.HiddenUnit;
+import Commonplace.Entities.Unit.HiddenUnit;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.util.Nullable;

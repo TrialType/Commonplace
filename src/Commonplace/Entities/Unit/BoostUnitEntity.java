@@ -1,7 +1,6 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
 import Commonplace.Loader.DefaultContent.Units2;
-import Commonplace.Entities.Unit.Override.FUnitEntity;
 import Commonplace.Entities.UnitType.BoostUnitType;
 import Commonplace.Utils.Classes.PhysicsWorldChanger;
 import arc.math.Angles;
@@ -30,7 +29,7 @@ import java.util.Map;
 import static Commonplace.Utils.Classes.Damage2.percentDamage;
 import static mindustry.Vars.asyncCore;
 
-public class BoostUnitEntity extends FUnitEntity {
+public class BoostUnitEntity extends UnitEntity {
     public static final int Change = 0, Boost = 1, BoostReload = 2;
 
     public final static Seq<BoostUnitEntity> crazy = new Seq<>();

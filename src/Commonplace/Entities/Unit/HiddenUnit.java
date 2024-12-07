@@ -1,4 +1,4 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
 import Commonplace.Entities.Bullet.LargeNumberBullet;
 import Commonplace.Entities.BulletType.HiddenBulletType;

@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Entities.Unit.F.HiddenUnit;
+import Commonplace.Entities.Unit.HiddenUnit;
 import arc.math.Angles;
 import arc.math.geom.Vec2;
 import arc.util.Time;

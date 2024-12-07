@@ -1,6 +1,7 @@
 package Commonplace.Loader.DefaultContent;
 
 import Commonplace.Type.StatusEffectType.WithMoreStatus;
+import arc.func.Cons;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.content.Fx;
@@ -10,12 +11,32 @@ import mindustry.type.StatusEffect;
 import static mindustry.content.StatusEffects.*;
 
 public class StatusEffects2 {
+    public final static Cons<StatusEffect> none = s -> {
+    };
+
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose;
 
     public static StatusEffect fireKiller;
+
+    //well
+    public static StatusEffect peculiarity__heal1, peculiarity__heal2, peculiarity__heal3,
+            peculiarity__damage1, peculiarity__damage2, peculiarity__damage3,
+            peculiarity__reload1, peculiarity__reload2, peculiarity__reload3,
+            peculiarity__grow;
+
+    //midden
+    public static StatusEffect peculiarity_heal__damage, peculiarity_damage__reload,
+            peculiarity_heal_reload__damage,
+            peculiarity_glass, peculiarity_stone, peculiarity_hill;
+
+    //bad
+    public static StatusEffect peculiarity_heal1, peculiarity_heal2, peculiarity_heal3,
+            peculiarity_damage1, peculiarity_damage2, peculiarity_damage3,
+            peculiarity_reload1, peculiarity_reload2, peculiarity_reload3,
+            peculiarity_incomplete;
 
     public static StatusEffect pureA, pureT,
             catalyzeI, catalyzeII, catalyzeIII, catalyzeIV, catalyzeV,
@@ -149,10 +170,10 @@ public class StatusEffects2 {
             });
         }};
         deploy = new StatusEffect("deploy") {{
-            healthMultiplier = 2f;
+            healthMultiplier = 3.5f;
             damageMultiplier = 2.5f;
-            reloadMultiplier = 1.4f;
-            speedMultiplier = 0.1f;
+            reloadMultiplier = 2.4f;
+            speedMultiplier = 0.15f;
 
             init(() -> {
                 opposite(burning, gasify, sublimation);
@@ -541,5 +562,62 @@ public class StatusEffects2 {
             with.addAll(StatusEffects.muddy, corrosionI);
         }};
         burnings.addAll(burning, gasify);
+
+        load_peculiarity();
+    }
+
+    public static void load_peculiarity() {
+        peculiarity__heal1 = peculiarity_heal("__h1", 1.05f, none);
+        peculiarity__heal2 = peculiarity_heal("__h2", 1.1f, none);
+        peculiarity__heal3 = peculiarity_heal("__h3", 1.15f, none);
+        peculiarity__damage1 = peculiarity_damage("__d1", 1.05f, none);
+        peculiarity__damage2 = peculiarity_damage("__d2", 1.1f, none);
+        peculiarity__damage3 = peculiarity_damage("__d3", 1.15f, none);
+        peculiarity__reload1 = peculiarity_reload("__r1", 1.05f, none);
+        peculiarity__reload2 = peculiarity_reload("__r2", 1.1f, none);
+        peculiarity__reload3 = peculiarity_reload("__r3", 1.15f, none);
+        peculiarity__grow = peculiarity_heal("___grow", 2f, none);
+
+        peculiarity_heal__damage = peculiarity("_h__d", 1.1f, 1, 0.9f, 1, none);
+        peculiarity_damage__reload = peculiarity("_d__r", 0.9f, 1, 1, 1.1f, none);
+        peculiarity_heal_reload__damage = peculiarity("_h_r__d", 1.1f, 1, 0.95f, 0.95f, none);
+        peculiarity_glass = peculiarity("__glass", 2.5f, 1, 0.1f, 1f, none);
+        peculiarity_hill = peculiarity("___hill", 1, 1, 5f, 0.2f, none);
+
+        peculiarity_heal1 = peculiarity_heal("_h1", 0.95f, none);
+        peculiarity_heal2 = peculiarity_heal("_h2", 0.9f, none);
+        peculiarity_heal3 = peculiarity_heal("_h3", 0.85f, none);
+        peculiarity_damage1 = peculiarity_damage("_d1", 0.95f, none);
+        peculiarity_damage2 = peculiarity_damage("_d2", 0.9f, none);
+        peculiarity_damage3 = peculiarity_damage("_d3", 0.85f, none);
+        peculiarity_reload1 = peculiarity_reload("_r1", 0.95f, none);
+        peculiarity_reload2 = peculiarity_reload("_r2", 0.9f, none);
+        peculiarity_reload3 = peculiarity_reload("_r3", 0.85f, none);
+        peculiarity_incomplete = peculiarity_heal("___incomplete", 0.5f, none);
+    }
+
+    public static StatusEffect peculiarity_heal(String name, float mul, Cons<StatusEffect> change) {
+        return peculiarity(name, 1, 1, mul, 1, change);
+    }
+
+    public static StatusEffect peculiarity_damage(String name, float mul, Cons<StatusEffect> change) {
+        return peculiarity(name, mul, 1, 1, 1, change);
+    }
+
+    public static StatusEffect peculiarity_reload(String name, float mul, Cons<StatusEffect> change) {
+        return peculiarity(name, 1, 1, 1, mul, change);
+    }
+
+    public static StatusEffect peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, Cons<StatusEffect> change) {
+        StatusEffect result = new StatusEffect(name) {{
+            show = false;
+            permanent = true;
+            damageMultiplier = damageMul;
+            speedMultiplier = speedMul;
+            healthMultiplier = healMul;
+            reloadMultiplier = reloadMul;
+        }};
+        change.get(result);
+        return result;
     }
 }

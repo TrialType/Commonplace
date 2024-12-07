@@ -1,6 +1,6 @@
 package Commonplace.Entities.UnitType;
 
-import Commonplace.Entities.Unit.F.TileMiner;
+import Commonplace.Entities.Unit.TileMiner;
 import mindustry.game.Team;
 import mindustry.gen.TimedKillc;
 import mindustry.type.UnitType;

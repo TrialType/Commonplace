@@ -1,4 +1,4 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
 import arc.math.Angles;
 import arc.math.Mathf;

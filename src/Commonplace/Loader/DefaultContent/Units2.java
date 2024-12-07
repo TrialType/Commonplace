@@ -1,13 +1,14 @@
 package Commonplace.Loader.DefaultContent;
 
 import Commonplace.AI.*;
+import Commonplace.Entities.Unit.*;
 import Commonplace.Loader.Special.Commands;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.Unit.F.*;
-import Commonplace.Entities.Unit.Override.FLegsUnit;
-import Commonplace.Entities.Unit.Override.FUnitEntity;
+import Commonplace.Abandon.Override.FLegsUnit;
+import Commonplace.Abandon.Override.FUnitEntity;
 import Commonplace.Entities.UnitType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

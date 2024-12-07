@@ -4,8 +4,6 @@ import Commonplace.Loader.Special.Effects;
 import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
-import Commonplace.Entities.Unit.F.LongLifeUnitEntity;
-import Commonplace.Entities.Unit.Override.*;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -55,64 +53,64 @@ public class UnitOverride {
         UnitTypes.emanate.buildSpeed = 2.3f;
         UnitTypes.emanate.mineSpeed = 13.5f;
 
-        UnitTypes.dagger.constructor = FMechUnit::create;
-        UnitTypes.mace.constructor = FMechUnit::create;
-        UnitTypes.fortress.constructor = FMechUnit::create;
-        UnitTypes.scepter.constructor = FMechUnit::create;
-        UnitTypes.reign.constructor = FMechUnit::create;
-
-        UnitTypes.nova.constructor = FMechUnitLegacyNova::create;
-        UnitTypes.pulsar.constructor = FMechUnitLegacyNova::create;
-        UnitTypes.quasar.constructor = FMechUnitLegacyNova::create;
-        UnitTypes.vela.constructor = FMechUnitLegacyNova::create;
-        UnitTypes.corvus.constructor = FMechUnitLegacyNova::create;
-
-        UnitTypes.crawler.constructor = FMechUnit::create;
-        UnitTypes.atrax.constructor = FLegsUnit::create;
-        UnitTypes.spiroct.constructor = FLegsUnit::create;
-        UnitTypes.arkyid.constructor = FLegsUnit::create;
-        UnitTypes.toxopid.constructor = FLegsUnit::create;
-
-        UnitTypes.flare.constructor = FUnitEntity::create;
-        UnitTypes.horizon.constructor = FUnitEntity::create;
-        UnitTypes.zenith.constructor = FUnitEntity::create;
-        UnitTypes.antumbra.constructor = FUnitEntity::create;
-        UnitTypes.eclipse.constructor = FUnitEntity::create;
-
-        UnitTypes.poly.constructor = LongLifeUnitEntity::create;
-        UnitTypes.mega.constructor = FPayloadUnit::create;
-        UnitTypes.quad.constructor = FPayloadUnit::create;
-        UnitTypes.oct.constructor = FPayloadUnit::create;
-
-        UnitTypes.risso.constructor = FUnitWaterMove::create;
-        UnitTypes.minke.constructor = FUnitWaterMove::create;
-        UnitTypes.bryde.constructor = FUnitWaterMove::create;
-        UnitTypes.sei.constructor = FUnitWaterMove::create;
-        UnitTypes.omura.constructor = FUnitWaterMove::create;
-
-        UnitTypes.retusa.constructor = FUnitWaterMove::create;
-        UnitTypes.oxynoe.constructor = FUnitWaterMove::create;
-        UnitTypes.cyerce.constructor = FUnitWaterMove::create;
-        UnitTypes.aegires.constructor = FUnitWaterMove::create;
-        UnitTypes.navanax.constructor = FUnitWaterMove::create;
-
-        UnitTypes.stell.constructor = FTankUnit::create;
-        UnitTypes.locus.constructor = FTankUnit::create;
-        UnitTypes.precept.constructor = FTankUnit::create;
-        UnitTypes.vanquish.constructor = FTankUnit::create;
-        UnitTypes.conquer.constructor = FTankUnit::create;
-
-        UnitTypes.merui.constructor = FLegsUnit::create;
-        UnitTypes.cleroi.constructor = FLegsUnit::create;
-        UnitTypes.anthicus.constructor = FLegsUnit::create;
-        UnitTypes.tecta.constructor = FLegsUnit::create;
-        UnitTypes.collaris.constructor = FLegsUnit::create;
-
-        UnitTypes.elude.constructor = FElevationMoveUnit::create;
-        UnitTypes.avert.constructor = FUnitEntity::create;
-        UnitTypes.obviate.constructor = FUnitEntity::create;
-        UnitTypes.quell.constructor = FPayloadUnit::create;
-        UnitTypes.disrupt.constructor = FPayloadUnit::create;
+//        UnitTypes.dagger.constructor = FMechUnit::create;
+//        UnitTypes.mace.constructor = FMechUnit::create;
+//        UnitTypes.fortress.constructor = FMechUnit::create;
+//        UnitTypes.scepter.constructor = FMechUnit::create;
+//        UnitTypes.reign.constructor = FMechUnit::create;
+//
+//        UnitTypes.nova.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.pulsar.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.quasar.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.vela.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.corvus.constructor = FMechUnitLegacyNova::create;
+//
+//        UnitTypes.crawler.constructor = FMechUnit::create;
+//        UnitTypes.atrax.constructor = FLegsUnit::create;
+//        UnitTypes.spiroct.constructor = FLegsUnit::create;
+//        UnitTypes.arkyid.constructor = FLegsUnit::create;
+//        UnitTypes.toxopid.constructor = FLegsUnit::create;
+//
+//        UnitTypes.flare.constructor = FUnitEntity::create;
+//        UnitTypes.horizon.constructor = FUnitEntity::create;
+//        UnitTypes.zenith.constructor = FUnitEntity::create;
+//        UnitTypes.antumbra.constructor = FUnitEntity::create;
+//        UnitTypes.eclipse.constructor = FUnitEntity::create;
+//
+//        UnitTypes.poly.constructor = LongLifeUnitEntity::create;
+//        UnitTypes.mega.constructor = FPayloadUnit::create;
+//        UnitTypes.quad.constructor = FPayloadUnit::create;
+//        UnitTypes.oct.constructor = FPayloadUnit::create;
+//
+//        UnitTypes.risso.constructor = FUnitWaterMove::create;
+//        UnitTypes.minke.constructor = FUnitWaterMove::create;
+//        UnitTypes.bryde.constructor = FUnitWaterMove::create;
+//        UnitTypes.sei.constructor = FUnitWaterMove::create;
+//        UnitTypes.omura.constructor = FUnitWaterMove::create;
+//
+//        UnitTypes.retusa.constructor = FUnitWaterMove::create;
+//        UnitTypes.oxynoe.constructor = FUnitWaterMove::create;
+//        UnitTypes.cyerce.constructor = FUnitWaterMove::create;
+//        UnitTypes.aegires.constructor = FUnitWaterMove::create;
+//        UnitTypes.navanax.constructor = FUnitWaterMove::create;
+//
+//        UnitTypes.stell.constructor = FTankUnit::create;
+//        UnitTypes.locus.constructor = FTankUnit::create;
+//        UnitTypes.precept.constructor = FTankUnit::create;
+//        UnitTypes.vanquish.constructor = FTankUnit::create;
+//        UnitTypes.conquer.constructor = FTankUnit::create;
+//
+//        UnitTypes.merui.constructor = FLegsUnit::create;
+//        UnitTypes.cleroi.constructor = FLegsUnit::create;
+//        UnitTypes.anthicus.constructor = FLegsUnit::create;
+//        UnitTypes.tecta.constructor = FLegsUnit::create;
+//        UnitTypes.collaris.constructor = FLegsUnit::create;
+//
+//        UnitTypes.elude.constructor = FElevationMoveUnit::create;
+//        UnitTypes.avert.constructor = FUnitEntity::create;
+//        UnitTypes.obviate.constructor = FUnitEntity::create;
+//        UnitTypes.quell.constructor = FPayloadUnit::create;
+//        UnitTypes.disrupt.constructor = FPayloadUnit::create;
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
@@ -127,7 +125,7 @@ public class UnitOverride {
         weapon.bullet = new ProtectKillerBulletType() {{
             damage = 16;
             speed = 4;
-            lifetime = 90;
+            lifetime = 45;
             width = height = 8;
 
             minArmor = 7;
@@ -363,44 +361,43 @@ public class UnitOverride {
 
         UnitTypes.horizon.health = 500;
         UnitTypes.horizon.armor = 5;
-        UnitTypes.horizon.speed = 2.15f;
+        UnitTypes.horizon.range = 24;
+        UnitTypes.horizon.speed = 2.5f;
         weapon = UnitTypes.horizon.weapons.get(0);
-        weapon.shootStatus = StatusEffects2.frenzy;
-        weapon.shootStatusDuration = 60;
-        weapon.shoot.shots = 4;
-        weapon.shoot.shotDelay = 4;
+        weapon.minShootVelocity = 0.1f;
+        weapon.shootStatus = StatusEffects2.deploy;
+        weapon.shootStatusDuration = 20;
+        weapon.shoot.shots = 3;
         weapon.bullet.buildingDamageMultiplier = 1.65f;
 
         UnitTypes.zenith.health = 1500;
         UnitTypes.zenith.armor = 8;
         UnitTypes.zenith.speed = 2;
-        UnitTypes.zenith.range = 1000f / 3;
         weapon = UnitTypes.zenith.weapons.get(0);
-        weapon.reload = 5;
-        weapon.inaccuracy = 30;
-        weapon.bullet = new TimeAddBulletType(5, 15) {{
-            hitSound = Sounds.explosion;
-            trailChance = 0.2f;
-            width = 7;
-            height = 14;
-            shrinkY = 0f;
-            drag = -0.005f;
-            homingPower = 0.02f;
-            homingDelay = 25;
-            homingRange = 400;
-            weaveMag = 2;
-            weaveScale = 20;
-            keepVelocity = false;
-            splashDamageRadius = 28;
-            splashDamage = 25;
-            lifetime = 100;
-            trailColor = Pal.unitBack;
-            backColor = Pal.unitBack;
-            frontColor = Pal.unitFront;
-            hitEffect = Fx.blastExplosion;
-            despawnEffect = Fx.blastExplosion;
-            rangeOverride = maxRange = 1000f / 3;
-        }};
+        weapon.bullet.damage = 35;
+        weapon.bullet.splashDamage = 32;
+        UnitTypes.zenith.weapons.add(new Weapon() {{
+            reload = 150;
+            x = 7f;
+            rotate = true;
+            shoot = new ShootMulti(new ShootPattern() {{
+                shots = 10;
+                shotDelay = 3;
+            }}, new ShootPattern() {{
+                shots = 3;
+            }});
+            inaccuracy = 5f;
+            shootSound = Sounds.missile;
+
+            bullet = new BulletType(30, 0) {{
+                keepVelocity = false;
+                splashDamageRadius = 25;
+                splashDamage = 35;
+                lifetime = 4;
+                hitEffect = Fx.blastExplosion;
+                despawnEffect = Fx.blastExplosion;
+            }};
+        }});
 
         UnitTypes.antumbra.health = 25200;
         UnitTypes.antumbra.armor = 12;
@@ -487,8 +484,8 @@ public class UnitOverride {
         UnitTypes.oct.health = 77000;
         UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         UnitTypes.oct.abilities.clear();
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 4, 0));
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 4, 0));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 6, 0));
+        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 6, 0));
         /*-----------------------------------------------------------------------------*/
         UnitTypes.risso.health = 430;
         UnitTypes.risso.armor = 7;
@@ -537,22 +534,16 @@ public class UnitOverride {
         ability.max = 600;
         weapon = UnitTypes.bryde.weapons.get(0);
         weapon.reload = 150;
-        weapon.velocityRnd = 0.5f;
-        weapon.inaccuracy = 15;
-        weapon.shoot = new ShootMulti(new ShootSpread(5, 7f) {{
-            shotDelay = 8;
-        }}, new ShootPattern() {{
-            shots = 8;
-        }});
+        weapon.shoot.shots = 12;
+        weapon.shoot.shotDelay = 3;
         weapon.bullet.speed = 6;
-        weapon.bullet.lifetime = 120;
-        weapon.bullet.damage = 35;
-        weapon.bullet.splashDamage = 50;
+        weapon.bullet.lifetime = 35;
+        weapon.bullet.splashDamage = 70;
         weapon = UnitTypes.bryde.weapons.get(1);
         weapon.reload = 15;
         weapon.bullet.damage = 18;
         weapon.bullet.splashDamage = 15;
-        weapon.bullet.lifetime = 105;
+        weapon.bullet.lifetime = 90;
         weapon.bullet.collidesTiles = false;
         weapon.bullet.collidesGround = false;
 
@@ -584,7 +575,7 @@ public class UnitOverride {
         statusFieldAbility.duration = 420;
         weapon = UnitTypes.oxynoe.weapons.get(0);
         weapon.reload = 3;
-        weapon.shootStatus = StatusEffects2.deploy;
+        weapon.shootStatus = StatusEffects2.frenzy;
         weapon.shootStatusDuration = 10;
         weapon.bullet.lifetime = 27;
         weapon.bullet.damage = 34.5f;
@@ -664,6 +655,86 @@ public class UnitOverride {
         }});
 
         UnitTypes.navanax.health = 70000;
+        UnitTypes.navanax.armor = 20;
+        weapon = UnitTypes.navanax.weapons.first();
+        weapon.bullet = new ContinuousFlameBulletType(){{
+            maxRange = 90f;
+            damage = 35;
+            length = 95f;
+            hitEffect = Fx.hitMeltHeal;
+            drawSize = 200f;
+            lifetime = 155f;
+            shake = 1f;
+
+            shootEffect = Fx.shootHeal;
+            smokeEffect = Fx.none;
+            width = 4f;
+            largeHit = false;
+
+            incendChance = 0.03f;
+            incendSpread = 5f;
+            incendAmount = 1;
+
+            healPercent = 0.4f;
+            collidesTeam = true;
+
+            lengthInterp = f -> (float) (1 - Math.pow(Math.abs(f - 0.5),5) * 32);
+
+            colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
+            flareColor = Pal.heal.cpy().a(.2f);
+        }};
+        UnitTypes.navanax.weapons.get(1).bullet.damage = 35;
+        weapon = UnitTypes.navanax.weapons.get(2);
+        weapon.continuous = false;
+        weapon.reload = 60;
+        weapon.bullet = new LaserBulletType(){{
+            maxRange = 90f;
+            damage = 280;
+            length = 95f;
+            hitEffect = Fx.hitMeltHeal;
+            drawSize = 200f;
+            lifetime = 45;
+
+            shootEffect = Fx.shootHeal;
+            smokeEffect = Fx.none;
+            width = 45;
+            sideWidth = 0;
+            sideLength = 0;
+            largeHit = false;
+
+            incendChance = 0.03f;
+            incendSpread = 5f;
+            incendAmount = 1;
+
+            healPercent = 0.4f;
+            collidesTeam = true;
+
+            colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
+        }};
+        weapon = UnitTypes.navanax.weapons.get(3);
+        weapon.continuous = false;
+        weapon.reload = 10;
+        weapon.bullet = new LightningBulletType(){{
+            maxRange = 90f;
+            lightningLength = 22;
+            damage = 70;
+            hitEffect = Fx.hitMeltHeal;
+            drawSize = 200f;
+            lifetime = 155f;
+
+            shootEffect = Fx.shootHeal;
+            smokeEffect = Fx.none;
+
+            incendChance = 0.03f;
+            incendSpread = 5f;
+            incendAmount = 1;
+
+            healPercent = 0.4f;
+            collidesTeam = true;
+
+            lightningColor = Pal.heal.cpy().a(.2f);
+        }};
+
         /*-----------------------------------------------------------------------------*/
         UnitTypes.precept.health = 17500;
 
@@ -773,11 +844,11 @@ public class UnitOverride {
         UnitTypes.nova.armor = 21f;
         UnitTypes.nova.health = 220;
         UnitTypes.nova.buildSpeed = 0;
-        UnitTypes.nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 0));
+        UnitTypes.nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
         weapon.reload = 4;
-        weapon.bullet.lifetime = 55;
+        weapon.bullet.lifetime = 37.5f;
         weapon.bullet.speed = 8;
         weapon.bullet.damage = 18;
         weapon.bullet.healAmount = 0;

@@ -1,32 +1,31 @@
-package Commonplace.Entities.Unit.Override;
+package Commonplace.Abandon.Override;
 
-import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Interfaces.PeculiarityC;
 import arc.struct.IntSeq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.gen.CrawlUnit;
+import mindustry.gen.*;
 import mindustry.io.TypeIO;
 
-public class FCrawlUnit extends CrawlUnit implements PeculiarityC {
+public class FPayloadUnit extends PayloadUnit implements PeculiarityC {
     protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
-    public static FCrawlUnit create() {
-        return new FCrawlUnit();
+    public static FPayloadUnit create() {
+        return new FPayloadUnit();
     }
 
     @Override
     public int classId() {
-        return 110;
+        return 108;
     }
 
     @Override
     public void update() {
-        if (!uploaded) {
-            UnitPeculiarity.load(this, pes.items);
-            uploaded = true;
-        }
+//        if (!uploaded) {
+//            UnitPeculiarity.load(this, pes.items);
+//            uploaded = true;
+//        }
         super.update();
     }
 

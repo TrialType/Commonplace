@@ -1,6 +1,6 @@
 package Commonplace.AI;
 
-import Commonplace.Entities.Unit.F.BoostUnitEntity;
+import Commonplace.Entities.Unit.BoostUnitEntity;
 import Commonplace.Entities.UnitType.BoostUnitType;
 import arc.math.Angles;
 import arc.math.Mathf;
@@ -15,7 +15,7 @@ import mindustry.gen.Teamc;
 import mindustry.type.Weapon;
 import mindustry.world.blocks.storage.CoreBlock;
 
-import static Commonplace.Entities.Unit.F.BoostUnitEntity.*;
+import static Commonplace.Entities.Unit.BoostUnitEntity.*;
 import static java.lang.Math.*;
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;

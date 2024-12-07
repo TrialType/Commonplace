@@ -2,7 +2,6 @@ package Commonplace.Loader.Special;
 
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
-import Commonplace.Entities.Unit.Override.*;
 import Commonplace.Utils.Classes.Listener;
 import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Interfaces.BuildUpGrade;
@@ -17,27 +16,18 @@ import arc.util.Time;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.*;
-import mindustry.type.UnitType;
 import mindustry.ui.dialogs.BaseDialog;
 
 import java.util.Random;
 
 
 public class Events {
-    private static final ObjectMap<Class<?>, Prov<? extends Unit>> classes = new ObjectMap<>();
     private static final Random r = new Random();
     public static int p_num;
     public static float p_well;
     public static float p_midden;
 
     static {
-        classes.put(MechUnit.class, FMechUnit::create);
-        classes.put(LegsUnit.class, FLegsUnit::create);
-        classes.put(UnitEntity.class, FUnitEntity::create);
-        classes.put(UnitWaterMove.class, FUnitWaterMove::create);
-        classes.put(ElevationMoveUnit.class, FElevationMoveUnit::create);
-        classes.put(TankUnit.class, FTankUnit::create);
-        classes.put(PayloadUnit.class, FPayloadUnit::create);
         p_num = Core.settings.getInt("commonplace-p-num",5);
         p_well = Core.settings.getFloat("commonplace-p-well",0.5f);
         p_midden = Core.settings.getFloat("commonplace-p-midden",0.2f);
@@ -66,13 +56,6 @@ public class Events {
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
             Bullets.load();
             Weapons.load();
-        });
-        arc.Events.on(EventType.ContentInitEvent.class, e -> {
-            for (UnitType u : Vars.content.units()) {
-                if (classes.get(u.constructor.get().getClass()) != null) {
-                    u.constructor = classes.get(u.constructor.get().getClass());
-                }
-            }
         });
 
         arc.Events.on(EventType.UnitCreateEvent.class, e -> UnitPeculiarity.apply(e.unit, p_num, p_well, p_midden));
@@ -106,12 +89,12 @@ public class Events {
 
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof BuildUpGrade fug) {
-                fug.addExp(e.unit.maxHealth);
+                fug.addExp(e.unit.maxHealth * e.unit.healthMultiplier * e.unit.team.rules().blockHealthMultiplier);
             }
         });
         arc.Events.on(EventType.BuildingBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof BuildUpGrade fug) {
-                fug.addExp(e.build.maxHealth);
+                fug.addExp(e.build.maxHealth * e.build.team.rules().blockHealthMultiplier);
             }
         });
     }

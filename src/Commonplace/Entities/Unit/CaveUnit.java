@@ -1,4 +1,4 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
 import Commonplace.Loader.DefaultContent.Units2;
 import Commonplace.Loader.Special.Events;

@@ -1531,10 +1531,14 @@ public class Blocks2 {
             consumePower(6f);
         }};
         bulletSlower = new BulletSlowProject("bullet-slower") {{
-            requirements(Category.effect, ItemStack.with(copper, 1));
+            requirements(Category.effect, ItemStack.with(silicon, 35, titanium, 25, lead, 45));
 
             health = 1500;
+            slow = 0;
             size = 3;
+            range = 250;
+            reload = 75;
+            slowPercent = 0.35f;
 
             consume(new ConsumePower(3, 0, false));
         }};

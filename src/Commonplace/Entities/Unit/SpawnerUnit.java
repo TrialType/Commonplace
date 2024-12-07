@@ -1,14 +1,14 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
-import Commonplace.Entities.Unit.Override.FLegsUnit;
 import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.struct.Seq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.gen.Groups;
+import mindustry.gen.LegsUnit;
 import mindustry.gen.Unit;
 
-public class SpawnerUnit extends FLegsUnit implements OwnerSpawner {
+public class SpawnerUnit extends LegsUnit implements OwnerSpawner {
     Seq<Integer> childId = new Seq<>();
     Seq<Unit> child = new Seq<>();
 

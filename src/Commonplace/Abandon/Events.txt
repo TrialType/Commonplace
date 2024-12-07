@@ -1,3 +1,24 @@
+    private static final ObjectMap<Class<?>, Prov<? extends Unit>> classes = new ObjectMap<>();
+
+    static {
+//        classes.put(MechUnit.class, FMechUnit::create);
+//        classes.put(LegsUnit.class, FLegsUnit::create);
+//        classes.put(UnitEntity.class, FUnitEntity::create);
+//        classes.put(UnitWaterMove.class, FUnitWaterMove::create);
+//        classes.put(ElevationMoveUnit.class, FElevationMoveUnit::create);
+//        classes.put(TankUnit.class, FTankUnit::create);
+//        classes.put(PayloadUnit.class, FPayloadUnit::create);
+}
+
+
+//        arc.Events.on(EventType.ContentInitEvent.class, e -> {
+//            for (UnitType u : Vars.content.units()) {
+//                if (classes.get(u.constructor.get().getClass()) != null) {
+//                    u.constructor = classes.get(u.constructor.get().getClass());
+//                }
+//            }
+//        });
+
 arc.Events.on(EventType.UnitCreateEvent.class, e -> {
     if (e.unit instanceof UnitUpGrade uug) {
         int n = r.nextInt(6);

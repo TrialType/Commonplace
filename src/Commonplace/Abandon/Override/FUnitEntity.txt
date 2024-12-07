@@ -1,32 +1,31 @@
-package Commonplace.Entities.Unit.Override;
+package Commonplace.Abandon.Override;
 
-import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Interfaces.PeculiarityC;
 import arc.struct.IntSeq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.gen.MechUnit;
+import mindustry.gen.*;
 import mindustry.io.TypeIO;
 
-public class FMechUnit extends MechUnit implements PeculiarityC {
+public class FUnitEntity extends UnitEntity implements PeculiarityC {
     protected boolean uploaded = true;
     protected IntSeq pes = new IntSeq();
 
-    public static FMechUnit create() {
-        return new FMechUnit();
+    public static FUnitEntity create() {
+        return new FUnitEntity();
     }
 
     @Override
     public int classId() {
-        return 104;
+        return 106;
     }
 
     @Override
     public void update() {
-        if (!uploaded) {
-            UnitPeculiarity.load(this, pes.items);
-            uploaded = true;
-        }
+//        if (!uploaded) {
+//            UnitPeculiarity.load(this, pes.items);
+//            uploaded = true;
+//        }
         super.update();
     }
 

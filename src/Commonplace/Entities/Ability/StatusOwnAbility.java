@@ -3,6 +3,7 @@ package Commonplace.Entities.Ability;
 import arc.Core;
 import arc.math.Angles;
 import arc.util.Time;
+import mindustry.content.Fx;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
@@ -10,6 +11,8 @@ import mindustry.type.StatusEffect;
 public class StatusOwnAbility extends StatusFieldAbility {
     public StatusOwnAbility(StatusEffect effect, float duration, float reload, float range) {
         super(effect, duration, reload, range);
+        activeEffect = Fx.none;
+        applyEffect = Fx.none;
     }
 
     @Override

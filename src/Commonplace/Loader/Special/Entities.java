@@ -1,21 +1,21 @@
 package Commonplace.Loader.Special;
 
+import Commonplace.Entities.Unit.*;
 import Commonplace.Entities.Unit.F.*;
-import Commonplace.Entities.Unit.Override.*;
 import mindustry.gen.EntityMapping;
 
 public class Entities {
     public static void load() {
         EntityMapping.idMap[102] = Garrison::create;
-        EntityMapping.idMap[103] = FLegsUnit::create;
-        EntityMapping.idMap[104] = FMechUnit::create;
-        EntityMapping.idMap[105] = FTankUnit::create;
-        EntityMapping.idMap[106] = FUnitEntity::create;
-        EntityMapping.idMap[107] = FUnitWaterMove::create;
-        EntityMapping.idMap[108] = FPayloadUnit::create;
-        EntityMapping.idMap[109] = FElevationMoveUnit::create;
-        EntityMapping.idMap[110] = FCrawlUnit::create;
-        EntityMapping.idMap[111] = FMechUnitLegacyNova::create;
+//        EntityMapping.idMap[103] = FLegsUnit::create;
+//        EntityMapping.idMap[104] = FMechUnit::create;
+//        EntityMapping.idMap[105] = FTankUnit::create;
+//        EntityMapping.idMap[106] = FUnitEntity::create;
+//        EntityMapping.idMap[107] = FUnitWaterMove::create;
+//        EntityMapping.idMap[108] = FPayloadUnit::create;
+//        EntityMapping.idMap[109] = FElevationMoveUnit::create;
+//        EntityMapping.idMap[110] = FCrawlUnit::create;
+//        EntityMapping.idMap[111] = FMechUnitLegacyNova::create;
         EntityMapping.idMap[112] = LongLifeUnitEntity::create;
         EntityMapping.idMap[113] = BoostUnitEntity::create;
         EntityMapping.idMap[114] = TileMiner::create;

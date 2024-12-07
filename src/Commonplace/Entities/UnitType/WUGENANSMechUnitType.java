@@ -1,6 +1,6 @@
 package Commonplace.Entities.UnitType;
 
-import Commonplace.Entities.Unit.F.UnderLandMechUnit;
+import Commonplace.Entities.Unit.UnderLandMechUnit;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.math.Scaled;

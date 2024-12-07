@@ -1,4 +1,4 @@
-package Commonplace.Entities.Unit.F;
+package Commonplace.Entities.Unit;
 
 
 import Commonplace.Utils.Classes.Located;
