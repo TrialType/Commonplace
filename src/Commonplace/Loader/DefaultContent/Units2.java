@@ -6,9 +6,6 @@ import Commonplace.Loader.Special.Commands;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
-import Commonplace.Entities.Unit.F.*;
-import Commonplace.Abandon.Override.FLegsUnit;
-import Commonplace.Abandon.Override.FUnitEntity;
 import Commonplace.Entities.UnitType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -78,7 +75,7 @@ public class Units2 {
 
     public static void load() {
         support_a = new UnitType("support-a") {{
-            constructor = FLegsUnit::create;
+            constructor = LegsUnit::create;
 
             health = 12000;
             armor = 13;
@@ -251,7 +248,7 @@ public class Units2 {
             }});
         }};
         crane = new UnitType("crane") {{
-            constructor = FUnitEntity::create;
+            constructor = UnitEntity::create;
 
             flying = true;
             health = 100000;
@@ -304,7 +301,7 @@ public class Units2 {
             }});
         }};
         vibrate = new UnitType("vibrate") {{
-            constructor = FLegsUnit::create;
+            constructor = LegsUnit::create;
 
             speed = 1;
             health = 20000;
@@ -805,7 +802,7 @@ public class Units2 {
             }});
         }};
         dive = new UnitType("dive") {{
-            constructor = FLegsUnit::create;
+            constructor = LegsUnit::create;
 
             speed = 0.4F;
             health = 6000;
@@ -840,7 +837,7 @@ public class Units2 {
             }});
         }};
         befall = new UnitType("befall") {{
-            constructor = FLegsUnit::create;
+            constructor = LegsUnit::create;
 
             health = 10000;
             armor = 60;
