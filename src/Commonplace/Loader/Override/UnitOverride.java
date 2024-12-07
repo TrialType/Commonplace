@@ -53,64 +53,65 @@ public class UnitOverride {
         UnitTypes.emanate.buildSpeed = 2.3f;
         UnitTypes.emanate.mineSpeed = 13.5f;
 
-//        UnitTypes.dagger.constructor = FMechUnit::create;
-//        UnitTypes.mace.constructor = FMechUnit::create;
-//        UnitTypes.fortress.constructor = FMechUnit::create;
-//        UnitTypes.scepter.constructor = FMechUnit::create;
-//        UnitTypes.reign.constructor = FMechUnit::create;
-//
-//        UnitTypes.nova.constructor = FMechUnitLegacyNova::create;
-//        UnitTypes.pulsar.constructor = FMechUnitLegacyNova::create;
-//        UnitTypes.quasar.constructor = FMechUnitLegacyNova::create;
-//        UnitTypes.vela.constructor = FMechUnitLegacyNova::create;
-//        UnitTypes.corvus.constructor = FMechUnitLegacyNova::create;
-//
-//        UnitTypes.crawler.constructor = FMechUnit::create;
-//        UnitTypes.atrax.constructor = FLegsUnit::create;
-//        UnitTypes.spiroct.constructor = FLegsUnit::create;
-//        UnitTypes.arkyid.constructor = FLegsUnit::create;
-//        UnitTypes.toxopid.constructor = FLegsUnit::create;
-//
-//        UnitTypes.flare.constructor = FUnitEntity::create;
-//        UnitTypes.horizon.constructor = FUnitEntity::create;
-//        UnitTypes.zenith.constructor = FUnitEntity::create;
-//        UnitTypes.antumbra.constructor = FUnitEntity::create;
-//        UnitTypes.eclipse.constructor = FUnitEntity::create;
-//
-//        UnitTypes.poly.constructor = LongLifeUnitEntity::create;
-//        UnitTypes.mega.constructor = FPayloadUnit::create;
-//        UnitTypes.quad.constructor = FPayloadUnit::create;
-//        UnitTypes.oct.constructor = FPayloadUnit::create;
-//
-//        UnitTypes.risso.constructor = FUnitWaterMove::create;
-//        UnitTypes.minke.constructor = FUnitWaterMove::create;
-//        UnitTypes.bryde.constructor = FUnitWaterMove::create;
-//        UnitTypes.sei.constructor = FUnitWaterMove::create;
-//        UnitTypes.omura.constructor = FUnitWaterMove::create;
-//
-//        UnitTypes.retusa.constructor = FUnitWaterMove::create;
-//        UnitTypes.oxynoe.constructor = FUnitWaterMove::create;
-//        UnitTypes.cyerce.constructor = FUnitWaterMove::create;
-//        UnitTypes.aegires.constructor = FUnitWaterMove::create;
-//        UnitTypes.navanax.constructor = FUnitWaterMove::create;
-//
-//        UnitTypes.stell.constructor = FTankUnit::create;
-//        UnitTypes.locus.constructor = FTankUnit::create;
-//        UnitTypes.precept.constructor = FTankUnit::create;
-//        UnitTypes.vanquish.constructor = FTankUnit::create;
-//        UnitTypes.conquer.constructor = FTankUnit::create;
-//
-//        UnitTypes.merui.constructor = FLegsUnit::create;
-//        UnitTypes.cleroi.constructor = FLegsUnit::create;
-//        UnitTypes.anthicus.constructor = FLegsUnit::create;
-//        UnitTypes.tecta.constructor = FLegsUnit::create;
-//        UnitTypes.collaris.constructor = FLegsUnit::create;
-//
-//        UnitTypes.elude.constructor = FElevationMoveUnit::create;
-//        UnitTypes.avert.constructor = FUnitEntity::create;
-//        UnitTypes.obviate.constructor = FUnitEntity::create;
-//        UnitTypes.quell.constructor = FPayloadUnit::create;
-//        UnitTypes.disrupt.constructor = FPayloadUnit::create;
+        UnitTypes.dagger.health = 150;
+        UnitTypes.mace.health = 1000;
+        UnitTypes.fortress.health = 1800;
+        UnitTypes.scepter.health = 31500;
+        UnitTypes.reign.health = 84000;
+
+        UnitTypes.nova.health = 220;
+        UnitTypes.pulsar.health = 560;
+        UnitTypes.quasar.health = 2200;
+        UnitTypes.vela.health = 22000;
+        UnitTypes.corvus.health = 77000;
+
+        UnitTypes.crawler.health = 350;
+        UnitTypes.atrax.health = 1200;
+        UnitTypes.spiroct.health = 1500;
+        UnitTypes.arkyid.health = 28000;
+        UnitTypes.toxopid.health = 77000;
+
+        UnitTypes.flare.health = 200;
+        UnitTypes.horizon.health = 500;
+        UnitTypes.zenith.health = 1500;
+        UnitTypes.antumbra.health = 25200;
+        UnitTypes.eclipse.health = 77000;
+
+        UnitTypes.mono.health = 2000;
+        UnitTypes.poly.health = 700;
+        UnitTypes.mega.health = 6000;
+        UnitTypes.quad.health = 22000;
+        UnitTypes.oct.health = 77000;
+
+        UnitTypes.risso.health = 430;
+        UnitTypes.minke.health = 800;
+        UnitTypes.bryde.health = 1410;
+        UnitTypes.sei.health = 22000;
+        UnitTypes.omura.health = 77000;
+
+        UnitTypes.retusa.health = 550;
+        UnitTypes.oxynoe.health = 1060;
+        UnitTypes.cyerce.health = 1870;
+        UnitTypes.aegires.health = 42000;
+        UnitTypes.navanax.health = 70000;
+
+        UnitTypes.stell.health = 850;
+        UnitTypes.locus.health = 2100;
+        UnitTypes.precept.health = 17500;
+        UnitTypes.vanquish.health = 38500;
+        UnitTypes.conquer.health = 77000;
+
+        UnitTypes.merui.health = 680;
+        UnitTypes.cleroi.health = 1100;
+        UnitTypes.anthicus.health = 10150;
+        UnitTypes.tecta.health = 26550;
+        UnitTypes.collaris.health = 63000;
+
+        UnitTypes.elude.health = 600;
+        UnitTypes.avert.health = 1100;
+        UnitTypes.obviate.health = 8050;
+        UnitTypes.quell.health = 22000;
+        UnitTypes.disrupt.health = 42000;
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
@@ -134,7 +135,6 @@ public class UnitOverride {
             keepVelocity = false;
         }};
 
-        UnitTypes.mace.health = 1000;
         UnitTypes.mace.armor = 8;
         UnitTypes.mace.weapons.get(0).shootCone = 200;
         UnitTypes.mace.weapons.get(0).bullet.incendChance = 1;
@@ -749,7 +749,7 @@ public class UnitOverride {
         weapon.bullet.statusDuration = 90;
         weapon.bullet.fragBullets = 7;
         weapon.bullet.fragBullet = new MoveLightningBulletType() {{
-            damage = 20;
+            damage = 13;
             buildingDamageMultiplier = 0.1f;
             lifetime = 60;
             lightningLength = 3;

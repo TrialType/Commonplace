@@ -8,6 +8,7 @@ import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.type.StatusEffect;
 
+import static Commonplace.Utils.Classes.UnitPeculiarity.*;
 import static mindustry.content.StatusEffects.*;
 
 public class StatusEffects2 {
@@ -594,6 +595,19 @@ public class StatusEffects2 {
         peculiarity_reload2 = peculiarity_reload("_r2", 0.9f, none);
         peculiarity_reload3 = peculiarity_reload("_r3", 0.85f, none);
         peculiarity_incomplete = peculiarity_heal("___incomplete", 0.5f, none);
+
+        wellPeculiarity.addAll(peculiarity__heal1, peculiarity__heal2, peculiarity__heal3,
+                peculiarity__damage1, peculiarity__damage2, peculiarity__damage3,
+                peculiarity__reload1, peculiarity__reload2, peculiarity__reload3,
+                peculiarity__grow);
+
+        middenPeculiarity.addAll(peculiarity_heal__damage, peculiarity_damage__reload,
+                peculiarity_heal_reload__damage, peculiarity_glass, peculiarity_stone, peculiarity_hill);
+
+        badPeculiarity.addAll(peculiarity_heal1, peculiarity_heal2, peculiarity_heal3,
+                peculiarity_damage1, peculiarity_damage2, peculiarity_damage3,
+                peculiarity_reload1, peculiarity_reload2, peculiarity_reload3,
+                peculiarity_incomplete);
     }
 
     public static StatusEffect peculiarity_heal(String name, float mul, Cons<StatusEffect> change) {

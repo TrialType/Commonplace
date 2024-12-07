@@ -17,6 +17,8 @@ public class MoveLightningBulletType extends LightningBulletType {
         super();
 
         collides = reflectable = absorbable = false;
+        pierce = pierceBuilding = true;
+        pierceCap = -1;
     }
 
     @Override

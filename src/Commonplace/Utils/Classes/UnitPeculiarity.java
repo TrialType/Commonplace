@@ -6,7 +6,6 @@ import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 import mindustry.type.UnitType;
 
-import static Commonplace.Loader.DefaultContent.StatusEffects2.*;
 import static Commonplace.Loader.DefaultContent.Units2.*;
 import static mindustry.content.UnitTypes.*;
 
@@ -116,18 +115,5 @@ public abstract class UnitPeculiarity {
         blackList.addAll(alpha, beta, gamma, mono, exterminate, garrison, transfer, herald, shuttle1,
                 support_a, support_h, velocity, velocity_d, velocity_s, hidden, cave, strike, bulletInterception,
                 rejuvenate, rejuvenate_a, vibrate, crane);
-
-        wellPeculiarity.addAll(peculiarity__heal1, peculiarity__heal2, peculiarity__heal3,
-                peculiarity__damage1, peculiarity__damage2, peculiarity__damage3,
-                peculiarity__reload1, peculiarity__reload2, peculiarity__reload3,
-                peculiarity__grow);
-
-        middenPeculiarity.addAll(peculiarity_heal__damage, peculiarity_damage__reload,
-                peculiarity_heal_reload__damage, peculiarity_glass, peculiarity_stone, peculiarity_hill);
-
-        badPeculiarity.addAll(peculiarity_heal1, peculiarity_heal2, peculiarity_heal3,
-                peculiarity_damage1, peculiarity_damage2, peculiarity_damage3,
-                peculiarity_reload1, peculiarity_reload2, peculiarity_reload3,
-                peculiarity_incomplete);
     }
 }
