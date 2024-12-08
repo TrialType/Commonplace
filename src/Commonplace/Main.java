@@ -10,7 +10,6 @@ public class Main extends Mod {
     @Override
     public void loadContent() {
         Sign.load();
-        MSettings.load();
         Liquids2.load();
         Commands.load();
         Entities.load();

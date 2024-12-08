@@ -16,10 +16,7 @@ import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.ExplosionEffect;
-import mindustry.entities.effect.MultiEffect;
-import mindustry.entities.effect.WaveEffect;
-import mindustry.entities.effect.WrapEffect;
+import mindustry.entities.effect.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
@@ -180,6 +177,9 @@ public class UnitOverride {
         UnitTypes.mace.weapons.add(weapon);
 
         UnitTypes.fortress.health = 1800;
+        UnitTypes.fortress.abilities.add(new StatusFieldAbility(StatusEffects2.fireKiller, 300, 120, 60) {{
+            activeEffect = new WrapEffect(Fx.overdriveWave, Pal.techBlue);
+        }});
         weapon = UnitTypes.fortress.weapons.get(0);
         weapon.shoot.shots = 5;
         weapon.inaccuracy = 10;
@@ -338,7 +338,7 @@ public class UnitOverride {
 
         UnitTypes.toxopid.health = 77000;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.flare.armor = 15;
+        UnitTypes.flare.armor = 9;
         UnitTypes.flare.speed = 4;
         UnitTypes.flare.health = 200;
         UnitTypes.flare.circleTarget = true;
@@ -657,7 +657,7 @@ public class UnitOverride {
         UnitTypes.navanax.health = 70000;
         UnitTypes.navanax.armor = 20;
         weapon = UnitTypes.navanax.weapons.first();
-        weapon.bullet = new ContinuousFlameBulletType(){{
+        weapon.bullet = new ContinuousFlameBulletType() {{
             maxRange = 90f;
             damage = 35;
             length = 95f;
@@ -678,7 +678,7 @@ public class UnitOverride {
             healPercent = 0.4f;
             collidesTeam = true;
 
-            lengthInterp = f -> (float) (1 - Math.pow(Math.abs(f - 0.5),5) * 32);
+            lengthInterp = f -> (float) (1 - Math.pow(Math.abs(f - 0.5), 5) * 32);
 
             colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
             flareColor = Pal.heal.cpy().a(.2f);
@@ -687,7 +687,7 @@ public class UnitOverride {
         weapon = UnitTypes.navanax.weapons.get(2);
         weapon.continuous = false;
         weapon.reload = 60;
-        weapon.bullet = new LaserBulletType(){{
+        weapon.bullet = new LaserBulletType() {{
             maxRange = 90f;
             damage = 280;
             length = 95f;
@@ -714,23 +714,17 @@ public class UnitOverride {
         weapon = UnitTypes.navanax.weapons.get(3);
         weapon.continuous = false;
         weapon.reload = 10;
-        weapon.bullet = new LightningBulletType(){{
+        weapon.shoot.shots = 5;
+        weapon.bullet = new LightningBulletType() {{
             maxRange = 90f;
-            lightningLength = 22;
-            damage = 70;
+            lightningLength = 25;
+            damage = 14;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 200f;
             lifetime = 155f;
 
             shootEffect = Fx.shootHeal;
             smokeEffect = Fx.none;
-
-            incendChance = 0.03f;
-            incendSpread = 5f;
-            incendAmount = 1;
-
-            healPercent = 0.4f;
-            collidesTeam = true;
 
             lightningColor = Pal.heal.cpy().a(.2f);
         }};
@@ -841,16 +835,16 @@ public class UnitOverride {
         weapon.bullet.fragBullet.splashDamageRadius = 20;
         /*-----------------------------------------------------------------------------*/
         UnitTypes.nova.speed = 2f;
-        UnitTypes.nova.armor = 21f;
+        UnitTypes.nova.armor = 12;
         UnitTypes.nova.health = 220;
         UnitTypes.nova.buildSpeed = 0;
         UnitTypes.nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
         color = Color.valueOf("ffa998");
         weapon = UnitTypes.nova.weapons.get(0);
-        weapon.reload = 4;
-        weapon.bullet.lifetime = 37.5f;
-        weapon.bullet.speed = 8;
-        weapon.bullet.damage = 18;
+        weapon.reload = 3;
+        weapon.bullet.lifetime = 33.4f;
+        weapon.bullet.speed = 9;
+        weapon.bullet.damage = 16;
         weapon.bullet.healAmount = 0;
         weapon.bullet.healPercent = 0;
         weapon.bullet.reflectable = true;
