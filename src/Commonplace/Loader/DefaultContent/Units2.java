@@ -270,6 +270,8 @@ public class Units2 {
                                 status = StatusEffects2.tardy;
                                 statusDuration = 600;
 
+                                hitPowerEffect = chainEffect = applyEffect = Fx.none;
+
                                 powerSclDecrease = 0.1f;
                                 powerDamageScl = 2.5f;
                                 timeIncrease = 1;
@@ -318,13 +320,13 @@ public class Units2 {
 
                             trailChance = 1;
                             trailRotation = true;
-                            trailEffect = new Effect(2, 20, c -> {
+                            trailEffect = new Effect(1, 20, c -> {
                                 Draw.color(new Color(
                                         (230f + Mathf.range(9)) / 255,
                                         (173f + Mathf.range(9)) / 255,
                                         (98f + Mathf.random(9)) / 255,
                                         1));
-                                float len = Mathf.random(3);
+                                float len = Mathf.random(4);
                                 float rotation = c.rotation + Mathf.range(60);
                                 Fill.circle(c.x + Angles.trnsx(rotation, len), c.y + Angles.trnsy(rotation, len), 9);
                             });
@@ -379,7 +381,7 @@ public class Units2 {
             mechLandShake = 0;
             faceTarget = false;
 
-            abilities.add(new ShockAbility(StatusEffects.electrified, 120, 90, 160));
+            abilities.add(new ShockAbility(StatusEffects2.shocked, 120, 90, 160));
 
             weapons.add(new Weapon() {{
                 shootCone = 360;

@@ -55,7 +55,7 @@ public class StatusEffects2 {
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, suppress, tardy, swift, tension, abyss, gasify, sublimation,
-            grow, seethe, friability, back, frenzy, deploy, impatience, loose;
+            grow, seethe, friability, back, frenzy, deploy, impatience, loose, shocked;
 
     public static StatusEffect fireKiller;
 
@@ -209,6 +209,11 @@ public class StatusEffects2 {
             damageMultiplier = 0.6f;
             reloadMultiplier = 1.33f;
             speedMultiplier = 1.5f;
+        }};
+        shocked = new StatusEffect("shocked") {{
+            speedMultiplier = 0.75f;
+            reloadMultiplier = 0.65f;
+            damageMultiplier = 0.55f;
         }};
 
 
