@@ -1,5 +1,6 @@
 package Commonplace.Loader.Special;
 
+import Commonplace.Type.Renders.WaveRenderer;
 import arc.func.Cons;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -7,6 +8,7 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
+import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
@@ -290,6 +292,11 @@ public class Effects {
         drawLightningMove(point, points, 0.55f, c.fin());
     }) {{
         rotWithParent = true;
+    }}, lockShake = new Effect(60, 180, c -> {
+        float fin4 = Interp.pow4.apply(c.fin());
+        WaveRenderer.addPlace(c.x, c.y, 160 * fin4, 25 + 15 * c.fin(), Color.valueOf("879BA3").a(1 - fin4));
+    }) {{
+        followParent = true;
     }};
 
     public static void drawLightningMove(int num, Seq<Vec2> points, float grow, float fin) {

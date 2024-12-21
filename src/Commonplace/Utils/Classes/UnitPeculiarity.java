@@ -181,7 +181,7 @@ public abstract class UnitPeculiarity {
 
     public static void init() {
         blackList.addAll(alpha, beta, gamma, exterminate, garrison, transfer, herald, shuttle1,
-                support_a, support_h, velocity, velocity_d, velocity_s, hidden, cave, strike, bulletInterception,
+                support_a, support_h, velocity, velocity_d, velocity_s, hidden, cave, bulletInterception,
                 rejuvenate, rejuvenate_a, vibrate, crane);
     }
 }

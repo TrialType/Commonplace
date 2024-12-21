@@ -169,7 +169,7 @@ public class StatusEffects2 {
             damage = 4f;
         }};
         friability = new StatusEffect("friability") {{
-            healthMultiplier = 0.001f;
+            healthMultiplier = 0.01f;
             damageMultiplier = 25;
             speedMultiplier = 3.8f;
         }};

@@ -9,7 +9,9 @@ import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.UnitType.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
@@ -43,11 +45,8 @@ import static arc.math.Angles.randLenVectors;
 
 public class Units2 {
     public static Seq<UnitType> boss = new Seq<>();
-    //tool
+    //util
     public static UnitType transfer, shuttle1, bulletInterception_a, rejuvenate_a;
-
-    //command
-    public static UnitType strike;
 
     //support
     public static UnitType support_h, support_a;
@@ -68,7 +67,7 @@ public class Units2 {
     public static UnitType bulletInterception, rejuvenate, vibrate, crane;
 
     //attack
-    public static UnitType garrison, herald, exterminate, execute, hello;
+    public static UnitType garrison, herald, exterminate, execute;
 
     //Test
     public static UnitType e;
@@ -107,7 +106,7 @@ public class Units2 {
             }});
 
             weapons.add(new Weapon() {{
-                reload = 90;
+                reload = 120;
                 inaccuracy = 0;
 
                 bullet = new BasicBulletType() {{
@@ -115,9 +114,9 @@ public class Units2 {
                     pierceBuilding = true;
                     width = 10;
                     height = 30;
-                    damage = 1300;
-                    speed = 11;
-                    lifetime = 80;
+                    damage = 600;
+                    speed = 6;
+                    lifetime = 40;
                     splashDamage = 100;
                     splashDamageRadius = 40;
                     status = StatusEffects.blasted;
@@ -136,10 +135,10 @@ public class Units2 {
                         buildingDamageMultiplier = 0.22f;
                     }};
 
-                    bulletInterval = 20;
-                    intervalDelay = 30;
+                    bulletInterval = 10;
+                    intervalDelay = 20;
                     intervalSpread = 5;
-                    intervalBullets = 3;
+                    intervalBullets = 2;
                     intervalBullet = new SummonBulletType() {{
                         speed = 16;
                         lifetime = 120;
@@ -152,7 +151,7 @@ public class Units2 {
                         summonBullets = 7;
                         summonInterval = 0;
                         summonDelay = 40;
-                        summonBullet = new LaserBulletType(256) {{
+                        summonBullet = new LaserBulletType(45) {{
                             length = 260;
                             width = 5;
                             laserEffect = Fx.none;
@@ -221,32 +220,6 @@ public class Units2 {
                 }};
             }});
         }};
-        strike = new MissileUnitType("strike") {{
-            constructor = TimedKillUnit::create;
-            controller = u -> new FlyingFinderAI();
-
-            flying = true;
-            faceTarget = true;
-            circleTarget = true;
-            health = 12000;
-            armor = 15;
-            speed = 6;
-            hitSize = 9;
-            lifetime = 167;
-
-            range = maxRange = 300;
-
-            weapons.add(new Weapon() {{
-                x = y = 0;
-                shootCone = 360;
-                mirror = false;
-                shootOnDeath = true;
-
-                bullet = new ExplosionBulletType(180, 32) {{
-                    rangeOverride = 4;
-                }};
-            }});
-        }};
         crane = new UnitType("crane") {{
             constructor = UnitEntity::create;
 
@@ -255,50 +228,139 @@ public class Units2 {
             armor = 20;
             speed = 0.5f;
 
-            weapons.add(new Weapon() {{
-                reload = 60;
-                mirror = false;
-                continuous = alwaysContinuous = true;
-                x = y = 0;
-                bullet = new PointLaserBulletType() {{
-                    hitEffect = Fx.massiveExplosion;
-                    shootEffect = Fx.railShoot;
-                    lifetime = 2;
-                    speed = 0;
-                    damage = 200;
-                    splashDamage = 200;
-                    splashDamageRadius = 40;
+            weapons.add(
+                    new Weapon() {{
+                        reload = 60;
+                        x = 0;
+                        y = -12;
+                        mirror = false;
 
-                    rangeOverride = 300;
-                }};
-            }});
+                        bullet = new BasicBulletType() {{
+                            width = 8;
+                            height = 12;
 
-            weapons.add(new Weapon() {{
-                reload = 90;
-                x = y = 0;
-                mirror = false;
+                            shrinkX = shrinkY = 0;
 
-                shoot = new ShootAlternate() {{
-                    barrels = 5;
-                    spread = 12;
-                    shots = 5;
-                }};
+                            frontColor = backColor = Pal.health;
 
-                bullet = new BulletType() {{
-                    collides = reflectable = absorbable = hittable = false;
-                    shootEffect = despawnEffect = hitEffect = Fx.none;
+                            lifetime = 20;
+                            speed = 10;
+                            damage = 15;
+                            splashDamage = 10;
+                            splashDamageRadius = 8;
 
-                    spawnUnit = strike;
+                            homingPower = 0.12f;
+                            homingRange = 750;
 
-                    lifetime = 0;
-                    speed = 0;
-                    damage = 0;
-                    splashDamage = 0;
-                    splashDamageRadius = 0;
+                            despawnHit = true;
+                            fragBullet = new EmpBulletType() {{
+                                lifetime = 1;
 
-                    rangeOverride = 1000;
-                }};
-            }});
+                                healPercent = healAmount = 0;
+
+                                status = StatusEffects.electrified;
+                                statusDuration = 600;
+
+                                powerSclDecrease = 0.1f;
+                                powerDamageScl = 2.5f;
+                                timeIncrease = 1;
+                                timeDuration = 600;
+                            }};
+                        }};
+                    }}, new Weapon() {{
+                        reload = 10;
+                        x = y = 0;
+                        mirror = false;
+                        shoot = new ShootSummon(0, 0, 15, 360);
+
+                        bullet = new BasicBulletType() {{
+                            width = 15;
+                            height = 9;
+
+                            frontColor = backColor = Pal.redDust;
+
+                            lifetime = 90;
+                            speed = 4;
+                            damage = 15;
+                            splashDamage = 10;
+                            splashDamageRadius = 8;
+
+                            homingPower = 0.12f;
+                            homingRange = 750;
+
+                            despawnHit = true;
+
+                            incendChance = 1;
+                            incendAmount = 30;
+                            incendSpread = 15;
+                        }};
+                    }}, new Weapon() {{
+                        reload = 90;
+                        x = 0;
+                        mirror = false;
+                        shoot = new ShootMulti(new ShootPattern() {{
+                            shots = 3;
+                            shotDelay = 20;
+                        }}, new ShootSpread(2, 9));
+
+                        bullet = new BasicBulletType() {{
+                            sprite = "circle";
+                            width = height = 18;
+                            shrinkX = shrinkY = 0;
+                            frontColor = backColor = Pal.bulletYellowBack;
+                            hittable = false;
+
+                            trailChance = 1;
+                            trailRotation = true;
+                            trailEffect = new Effect(2, 20, c -> {
+                                Draw.color(new Color(
+                                        (230f + Mathf.range(9)) / 255,
+                                        (173f + Mathf.range(9)) / 255,
+                                        (98f + Mathf.random(9)) / 255,
+                                        1));
+                                float len = Mathf.random(2);
+                                float rotation = c.rotation + Mathf.range(60);
+                                Fill.circle(c.x + Angles.trnsx(rotation, len), c.y + Angles.trnsy(rotation, len), 9);
+                            });
+                            hitEffect = despawnEffect = Fx.flakExplosionBig;
+
+                            lifetime = 90;
+                            speed = 3;
+                            damage = 55;
+                            splashDamage = 750;
+                            splashDamageRadius = 40;
+
+                            homingPower = 0.12f;
+                            homingRange = 750;
+
+                            despawnHit = true;
+
+                            hitShake = 5;
+                        }};
+                    }}, new Weapon() {{
+                        reload = 25;
+                        x = 0;
+                        mirror = false;
+
+                        bullet = new BasicBulletType() {{
+                            width = 7;
+                            height = 16;
+
+                            pierce = pierceBuilding = pierceArmor = true;
+                            pierceCap = 10;
+
+                            hittable = false;
+
+                            lifetime = 60;
+                            speed = 8;
+                            damage = 180;
+                            splashDamageRadius = 0;
+
+                            homingPower = 0.12f;
+                            homingRange = 750;
+                        }};
+                    }}
+            );
         }};
         vibrate = new UnitType("vibrate") {{
             constructor = LegsUnit::create;
@@ -311,8 +373,7 @@ public class Units2 {
             mechLandShake = 0;
             faceTarget = false;
 
-            abilities.add(new StatusFieldAbility(StatusEffects.overclock, 180, 90, 80));
-            abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 420, 40));
+            abilities.add(new ShockAbility(StatusEffects.electrified, 120, 90, 160));
 
             weapons.add(new Weapon() {{
                 shootCone = 360;
@@ -329,7 +390,7 @@ public class Units2 {
                     reflectable = false;
                     damage = 140;
                     speed = 8;
-                    lifetime = 60;
+                    lifetime = 40;
                     trailColor = Pal.lightishGray;
                     trailLength = 8;
                     trailWidth = 3;
@@ -340,88 +401,6 @@ public class Units2 {
                     maxLife = 300;
                     downRange = 275;
                     downDamage = 120;
-                }};
-            }});
-            weapons.add(new Weapon() {{
-                shootCone = 360;
-                reload = 120;
-                mirror = true;
-                rotate = false;
-                y = 0;
-                x = 5;
-                shootX = 0;
-                shootY = -4;
-                shoot = new ShootBarrel() {{
-                    shots = 4;
-                    shotDelay = 6;
-                    barrels = new float[]{
-                            0, 0, 95,
-                            0, 0, 100,
-                            0, 0, 105,
-                            0, 0, 110
-                    };
-                }};
-                bullet = new SummonBulletType() {{
-                    width = height = 12;
-                    damage = 60;
-                    speed = 8;
-                    lifetime = 120;
-                    homingDelay = 0.1f;
-                    homingRange = 1000;
-                    homingPower = 0.1f;
-                    trailColor = Pal.redDust;
-                    trailLength = 16;
-                    trailWidth = 2;
-                    hittable = false;
-
-                    summonBullet = new LightningBulletType() {{
-                        lightningLength = 25;
-                        damage = 130;
-                        speed = 80;
-
-                        lightningColor = Pal.redDust;
-                    }};
-                    summonRange = 80;
-                    summonBullets = 10;
-                }};
-            }});
-            weapons.add(new Weapon() {{
-                shootCone = 360;
-                reload = 120;
-                mirror = true;
-                rotate = false;
-                y = 0;
-                x = 15;
-                shootX = 0;
-                shootY = -4;
-                shoot = new ShootBarrel() {{
-                    shots = 2;
-                    shotDelay = 6;
-                    barrels = new float[]{
-                            0, 0, -5,
-                            0, 0, 5
-                    };
-                }};
-                bullet = new SummonBulletType() {{
-                    width = height = 12;
-                    damage = 100;
-                    speed = 8;
-                    lifetime = 60;
-                    homingDelay = 0.1f;
-                    homingRange = 1000;
-                    homingPower = 0.1f;
-                    trailColor = Pal.techBlue;
-                    trailLength = 16;
-                    trailWidth = 2;
-                    absorbable = false;
-
-                    summonBullet = new MissileBulletType(5, 320) {{
-                        lifetime = 60;
-                        frontColor = backColor = trailColor = Pal.techBlue;
-                    }};
-                    summonRange = 120;
-                    summonBullets = 14;
-                    summonInterval = 9;
                 }};
             }});
         }};
@@ -437,43 +416,7 @@ public class Units2 {
             trailColor = Color.valueOf("00DDaAFF");
             immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.StrongStop);
 
-            abilities.add(new ShieldArcAbility() {{
-                radius = 20;
-                regen = 1;
-                max = 7000;
-                cooldown = 1200;
-                angle = 115;
-                whenShooting = false;
-            }});
-
-            weapons.add(new Weapon() {{
-                bullet = new ExplosionBulletType(15, 120) {{
-                    rangeOverride = 120;
-                    status = StatusEffects2.suppress;
-                    statusDuration = 300;
-                }};
-            }});
-
-            weapons.add(new Weapon() {{
-                reload = 30;
-                x = 6;
-                y = 13;
-                xRand = 25;
-                alwaysShooting = true;
-
-                shoot = new ShootPattern() {{
-                    shots = 5;
-                }};
-                bullet = new LightningBulletType() {{
-                    damage = 30;
-                    collidesTeam = true;
-                    status = StatusEffects.sapped;
-                    statusDuration = 150;
-                    healAmount = 250;
-                    lightningLength = 35;
-                    lightningColor = Color.valueOf("00DDAAFF");
-                }};
-            }});
+            abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 240, 90));
         }};
         rejuvenate = new UnitType("rejuvenate") {{
             constructor = LegsUnit::create;
@@ -489,8 +432,8 @@ public class Units2 {
             stepShake = 0;
             isEnemy = false;
 
-            abilities.add(new StatusFieldAbility(StatusEffects2.grow, 3600, 300, 160));
-            abilities.add(new ShieldRegenFieldAbility(5000, 100000, 600, 160));
+            abilities.add(new StatusFieldAbility(StatusEffects2.back, 480, 300, 160));
+            abilities.add(new ShieldRegenFieldAbility(5000, 10000, 600, 160));
 
             weapons.add(new RepairBeamWeapon() {{
                 rotateSpeed = 12;
@@ -528,7 +471,7 @@ public class Units2 {
             controller = u -> new FollowAI();
 
             health = 3000;
-            speed = 2.5f;
+            speed = 4f;
             armor = 20;
             rotateSpeed = 5;
             drag = 0.2f;
@@ -549,83 +492,96 @@ public class Units2 {
             alwaysUnlocked = true;
             weapons.add(new PointDefenseWeapon() {{
                 mirror = false;
-                reload = 0.1F;
+                reload = 15;
                 rotateSpeed = 360;
                 recoil = 0;
                 x = 0;
                 shootOnDeath = true;
-                targetInterval = 0;
-                targetSwitchInterval = 0;
+                targetInterval = 2;
+                targetSwitchInterval = 2;
                 bullet = new BasicBulletType() {{
-                    damage = 500;
+                    damage = 80;
                     rangeOverride = 100;
                 }};
+            }});
+            abilities.add(new StopShieldArcAbility() {{
+                rotateSpeed = 2;
+                maxVel = 0.7f;
+                angle = 150;
+                radius = 65;
+                max = 4000;
+                regen = 3;
+                cooldown = 5 * 60;
+                whenShooting = false;
             }});
         }};
         bulletInterception = new UnitType("bulletInterception") {{
             constructor = SpawnerUnit::create;
 
             hitSize = 45;
-            range = 1000;
+            range = 100;
             health = 10000;
             armor = 24;
-            speed = 1;
+            speed = 0.7f;
             legCount = 6;
             legGroupSize = 2;
             legLength = 14;
             legContinuousMove = false;
             stepShake = 0;
-            abilities.add(new ShieldArcAbility() {{
-                regen = 2.5F;
-                max = 50000;
+            abilities.add(new StopShieldArcAbility() {{
+                maxVel = 0.9f;
+                radius = 60;
+                regen = 2.5f;
+                max = 12500;
                 cooldown = 300;
-                angle = 360;
+                angle = 120;
                 whenShooting = false;
+                rotateSpeed = 1;
+            }}, new StopShieldArcAbility() {{
+                angleOffset = 90;
+                maxVel = 0.7f;
+                radius = 90;
+                regen = 2.5f;
+                max = 15000;
+                cooldown = 300;
+                angle = 150;
+                whenShooting = false;
+                rotateSpeed = -2;
+            }}, new StopShieldArcAbility() {{
+                angleOffset = 180;
+                maxVel = 0.5f;
+                radius = 120;
+                regen = 2.5f;
+                max = 20000;
+                cooldown = 300;
+                angle = 180;
+                whenShooting = false;
+                rotateSpeed = 3;
+            }}, new StopShieldArcAbility() {{
+                angleOffset = 270;
+                maxVel = 0.3f;
+                radius = 150;
+                regen = 2.5f;
+                max = 30000;
+                cooldown = 300;
+                angle = 210;
+                whenShooting = false;
+                rotateSpeed = -4;
             }});
             abilities.add(new OwnerUnitSpawnAbility(bulletInterception_a, 600, 0, 0) {{
                 maxNum = 4;
             }});
 
-
             weapons.add(new PointDefenseWeapon() {{
                 mirror = false;
                 rotateSpeed = 360;
-                reload = 0.1F;
-                targetInterval = 0;
-                targetSwitchInterval = 0;
+                reload = 6;
+                targetInterval = 2;
+                targetSwitchInterval = 2;
                 bullet = new BasicBulletType() {{
-                    damage = 300;
+                    damage = 80;
                     maxRange = 100;
                     hitEffect = Fx.none;
-                }};
-            }});
-            weapons.add(new Weapon() {{
-                reload = 120;
-                mirror = false;
-                x = 0;
-                y = -10;
-                shoot = new ShootBarrel() {{
-                    shots = 2;
-                    barrels = new float[]{
-                            0, 0, -60,
-                            0, 0, 60
-                    };
-                }};
-                shootSound = Sounds.artillery;
-                bullet = new BulletType() {{
-                    intervalSpread = 30;
-                    shootEffect = Fx.artilleryTrailSmoke;
-                    trailEffect = Fx.artilleryTrailSmoke;
-                    trailChance = 0.5f;
-                    status = StatusEffects2.seethe;
-                    statusDuration = 600;
-                    splashDamageRadius = 158;
-                    speed = 6;
-                    lifetime = 280;
-                    homingPower = 0.9F;
-                    homingRange = 1000;
-                    homingDelay = 120;
-                    hitEffect = despawnEffect = Fx.none;
                 }};
             }});
         }};
@@ -634,8 +590,8 @@ public class Units2 {
             controller = u -> new FlyingFinderAI();
 
             flying = true;
-            health = 6000;
-            armor = 30;
+            health = 4000;
+            armor = 8;
             speed = 3;
             lifetime = 1200;
             logicControllable = false;
@@ -665,10 +621,10 @@ public class Units2 {
                     drag = -0.1f;
                     width = 12;
                     height = 36;
-                    damage = 70;
+                    damage = 40;
                     lifetime = 16;
-                    splashDamage = 45;
-                    splashDamageRadius = 32;
+                    splashDamage = 25;
+                    splashDamageRadius = 20;
                     rangeOverride = 160;
                     hitEffect = despawnEffect = Fx.shockwave;
                 }};

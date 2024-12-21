@@ -9,10 +9,10 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.struct.ObjectMap;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
-import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
@@ -30,91 +30,92 @@ import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilePayload;
+import static mindustry.content.UnitTypes.*;
 
 public class UnitOverride {
     static Weapon weapon;
     static Color color;
 
     public static void load() {
-        UnitTypes.alpha.buildSpeed = 1f;
-        UnitTypes.alpha.mineSpeed = 8f;
-        UnitTypes.beta.buildSpeed = 1.5f;
-        UnitTypes.beta.mineSpeed = 9f;
-        UnitTypes.gamma.buildSpeed = 2f;
-        UnitTypes.gamma.mineSpeed = 12f;
+        alpha.buildSpeed = 1f;
+        alpha.mineSpeed = 8f;
+        beta.buildSpeed = 1.5f;
+        beta.mineSpeed = 9f;
+        gamma.buildSpeed = 2f;
+        gamma.mineSpeed = 12f;
 
-        UnitTypes.evoke.buildSpeed = 1.7f;
-        UnitTypes.evoke.mineSpeed = 9f;
-        UnitTypes.incite.buildSpeed = 2f;
-        UnitTypes.incite.mineSpeed = 12f;
-        UnitTypes.emanate.buildSpeed = 2.3f;
-        UnitTypes.emanate.mineSpeed = 13.5f;
+        evoke.buildSpeed = 1.7f;
+        evoke.mineSpeed = 9f;
+        incite.buildSpeed = 2f;
+        incite.mineSpeed = 12f;
+        emanate.buildSpeed = 2.3f;
+        emanate.mineSpeed = 13.5f;
 
-        UnitTypes.dagger.health = 150;
-        UnitTypes.mace.health = 1000;
-        UnitTypes.fortress.health = 1800;
-        UnitTypes.scepter.health = 31500;
-        UnitTypes.reign.health = 84000;
+        dagger.health = 150;
+        mace.health = 1000;
+        fortress.health = 1800;
+        scepter.health = 31500;
+        reign.health = 84000;
 
-        UnitTypes.nova.health = 220;
-        UnitTypes.pulsar.health = 560;
-        UnitTypes.quasar.health = 2200;
-        UnitTypes.vela.health = 22000;
-        UnitTypes.corvus.health = 77000;
+        nova.health = 220;
+        pulsar.health = 560;
+        quasar.health = 2200;
+        vela.health = 22000;
+        corvus.health = 77000;
 
-        UnitTypes.crawler.health = 350;
-        UnitTypes.atrax.health = 1200;
-        UnitTypes.spiroct.health = 1500;
-        UnitTypes.arkyid.health = 28000;
-        UnitTypes.toxopid.health = 77000;
+        crawler.health = 350;
+        atrax.health = 1200;
+        spiroct.health = 1500;
+        arkyid.health = 28000;
+        toxopid.health = 77000;
 
-        UnitTypes.flare.health = 200;
-        UnitTypes.horizon.health = 500;
-        UnitTypes.zenith.health = 1500;
-        UnitTypes.antumbra.health = 25200;
-        UnitTypes.eclipse.health = 77000;
+        flare.health = 200;
+        horizon.health = 500;
+        zenith.health = 1500;
+        antumbra.health = 25200;
+        eclipse.health = 77000;
 
-        UnitTypes.mono.health = 2000;
-        UnitTypes.poly.health = 700;
-        UnitTypes.mega.health = 6000;
-        UnitTypes.quad.health = 22000;
-        UnitTypes.oct.health = 77000;
+        mono.health = 2000;
+        poly.health = 700;
+        mega.health = 6000;
+        quad.health = 22000;
+        oct.health = 77000;
 
-        UnitTypes.risso.health = 430;
-        UnitTypes.minke.health = 800;
-        UnitTypes.bryde.health = 1410;
-        UnitTypes.sei.health = 22000;
-        UnitTypes.omura.health = 77000;
+        risso.health = 430;
+        minke.health = 800;
+        bryde.health = 1410;
+        sei.health = 22000;
+        omura.health = 77000;
 
-        UnitTypes.retusa.health = 550;
-        UnitTypes.oxynoe.health = 1060;
-        UnitTypes.cyerce.health = 1870;
-        UnitTypes.aegires.health = 42000;
-        UnitTypes.navanax.health = 70000;
+        retusa.health = 550;
+        oxynoe.health = 1060;
+        cyerce.health = 1870;
+        aegires.health = 42000;
+        navanax.health = 70000;
 
-        UnitTypes.stell.health = 850;
-        UnitTypes.locus.health = 2100;
-        UnitTypes.precept.health = 17500;
-        UnitTypes.vanquish.health = 38500;
-        UnitTypes.conquer.health = 77000;
+        stell.health = 850;
+        locus.health = 2100;
+        precept.health = 17500;
+        vanquish.health = 38500;
+        conquer.health = 77000;
 
-        UnitTypes.merui.health = 680;
-        UnitTypes.cleroi.health = 1100;
-        UnitTypes.anthicus.health = 10150;
-        UnitTypes.tecta.health = 26550;
-        UnitTypes.collaris.health = 63000;
+        merui.health = 680;
+        cleroi.health = 1100;
+        anthicus.health = 10150;
+        tecta.health = 26550;
+        collaris.health = 63000;
 
-        UnitTypes.elude.health = 600;
-        UnitTypes.avert.health = 1100;
-        UnitTypes.obviate.health = 8050;
-        UnitTypes.quell.health = 22000;
-        UnitTypes.disrupt.health = 42000;
+        elude.health = 600;
+        avert.health = 1100;
+        obviate.health = 8050;
+        quell.health = 22000;
+        disrupt.health = 42000;
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
-        UnitTypes.dagger.speed = 0.2f;
-        weapon = UnitTypes.dagger.weapons.get(0);
+        dagger.speed = 0.2f;
+        weapon = dagger.weapons.get(0);
         weapon.reload = 45;
         weapon.shoot = new ShootPattern() {{
             shots = 3;
@@ -132,10 +133,10 @@ public class UnitOverride {
             keepVelocity = false;
         }};
 
-        UnitTypes.mace.armor = 8;
-        UnitTypes.mace.weapons.get(0).shootCone = 200;
-        UnitTypes.mace.weapons.get(0).bullet.incendChance = 1;
-        UnitTypes.mace.weapons.get(0).bullet.incendAmount = 2;
+        mace.armor = 8;
+        mace.weapons.get(0).shootCone = 200;
+        mace.weapons.get(0).bullet.incendChance = 1;
+        mace.weapons.get(0).bullet.incendAmount = 2;
         weapon = new Weapon() {{
             reload = 600;
             inaccuracy = 15;
@@ -174,13 +175,13 @@ public class UnitOverride {
                 });
             }};
         }};
-        UnitTypes.mace.weapons.add(weapon);
+        mace.weapons.add(weapon);
 
-        UnitTypes.fortress.health = 1800;
-        UnitTypes.fortress.abilities.add(new StatusFieldAbility(StatusEffects2.fireKiller, 300, 120, 60) {{
+        fortress.health = 1800;
+        fortress.abilities.add(new StatusFieldAbility(StatusEffects2.fireKiller, 300, 120, 60) {{
             activeEffect = new WrapEffect(Fx.overdriveWave, Pal.techBlue);
         }});
-        weapon = UnitTypes.fortress.weapons.get(0);
+        weapon = fortress.weapons.get(0);
         weapon.shoot.shots = 5;
         weapon.inaccuracy = 10;
         weapon.bullet.createChance = 0.75f;
@@ -193,22 +194,22 @@ public class UnitOverride {
         weapon.bullet.puddleRange = 16;
         weapon.bullet.puddleAmount = 20;
 
-        UnitTypes.scepter.health = 31500;
-        UnitTypes.scepter.weapons.get(0).bullet.damage = 150;
-        UnitTypes.scepter.weapons.get(0).bullet.lightningDamage = 60;
-        UnitTypes.scepter.weapons.get(1).bullet.damage = 30;
+        scepter.health = 31500;
+        scepter.weapons.get(0).bullet.damage = 150;
+        scepter.weapons.get(0).bullet.lightningDamage = 60;
+        scepter.weapons.get(1).bullet.damage = 30;
 
-        UnitTypes.reign.health = 84000;
-        UnitTypes.reign.weapons.get(0).bullet.damage = 240;
-        UnitTypes.reign.weapons.get(0).bullet.splashDamage = 54;
-        UnitTypes.reign.weapons.get(0).bullet.fragBullet.damage = 60;
-        UnitTypes.reign.weapons.get(0).bullet.fragBullet.splashDamage = 45;
-        UnitTypes.reign.weapons.get(0).bullet.fragBullets = 6;
+        reign.health = 84000;
+        reign.weapons.get(0).bullet.damage = 240;
+        reign.weapons.get(0).bullet.splashDamage = 54;
+        reign.weapons.get(0).bullet.fragBullet.damage = 60;
+        reign.weapons.get(0).bullet.fragBullet.splashDamage = 45;
+        reign.weapons.get(0).bullet.fragBullets = 6;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.crawler.health = 350;
-        UnitTypes.crawler.speed = 2.5f;
-        UnitTypes.crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 900, 1));
-        weapon = UnitTypes.crawler.weapons.get(0);
+        crawler.health = 350;
+        crawler.speed = 2.5f;
+        crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 900, 1));
+        weapon = crawler.weapons.get(0);
         weapon.reload = 30;
         weapon.bullet.killShooter = false;
         weapon.bullet.splashDamageRadius = 60;
@@ -235,13 +236,13 @@ public class UnitOverride {
             waveColor = Color.valueOf("EEaA88ff");
         }};
 
-        UnitTypes.atrax.speed = 0.3f;
-        UnitTypes.atrax.health = 1200;
-        UnitTypes.atrax.armor = 8f;
-        UnitTypes.atrax.legSplashDamage = 70f;
-        UnitTypes.atrax.legSplashRange = 16f;
-        UnitTypes.atrax.targetAir = true;
-        weapon = UnitTypes.atrax.weapons.first();
+        atrax.speed = 0.3f;
+        atrax.health = 1200;
+        atrax.armor = 8f;
+        atrax.legSplashDamage = 70f;
+        atrax.legSplashRange = 16f;
+        atrax.targetAir = true;
+        weapon = atrax.weapons.first();
         weapon.shoot.firstShotDelay = 30;
         weapon.reload = 90;
         weapon.bullet.collidesAir = true;
@@ -282,10 +283,10 @@ public class UnitOverride {
             randLenVectors(e.id, 14, 2f + e.fin() * 25f, e.rotation, 120, (x, y) -> Fill.circle(e.x + x, e.y + y, e.fout() * 4f));
         });
 
-        UnitTypes.spiroct.health = 1500;
-        UnitTypes.spiroct.armor = 21;
-        UnitTypes.spiroct.speed = 0.45f;
-        weapon = UnitTypes.spiroct.weapons.get(0);
+        spiroct.health = 1500;
+        spiroct.armor = 21;
+        spiroct.speed = 0.45f;
+        weapon = spiroct.weapons.get(0);
         weapon.bullet = new SapRadiusBulletType() {{
             sapStrength = 0.5f;
             length = 100f;
@@ -297,7 +298,7 @@ public class UnitOverride {
             lifetime = 35f;
             knockback = -1.24f;
         }};
-        weapon = UnitTypes.spiroct.weapons.get(1);
+        weapon = spiroct.weapons.get(1);
         weapon.bullet = new SapRadiusBulletType() {{
             sapStrength = 0.8f;
             length = 125;
@@ -309,10 +310,10 @@ public class UnitOverride {
             lifetime = 25f;
             knockback = -0.65f;
         }};
-        UnitTypes.spiroct.abilities.add(new SapAbility());
+        spiroct.abilities.add(new SapAbility());
 
-        UnitTypes.arkyid.health = 28000;
-        for (Weapon w : UnitTypes.arkyid.weapons) {
+        arkyid.health = 28000;
+        for (Weapon w : arkyid.weapons) {
             if (w.bullet instanceof SapBulletType s) {
                 s.damage = 60;
                 s.length = 70;
@@ -336,13 +337,12 @@ public class UnitOverride {
             }
         }
 
-        UnitTypes.toxopid.health = 77000;
+        toxopid.health = 77000;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.flare.armor = 9;
-        UnitTypes.flare.speed = 4;
-        UnitTypes.flare.health = 200;
-        UnitTypes.flare.circleTarget = true;
-        weapon = UnitTypes.flare.weapons.first();
+        flare.armor = 9;
+        flare.speed = 4;
+        flare.circleTarget = true;
+        weapon = flare.weapons.first();
         weapon.shoot.shots = 2;
         weapon.shoot.shotDelay = 6;
         weapon.bullet = new FireBulletType(4, 9) {{
@@ -359,24 +359,22 @@ public class UnitOverride {
             velMin = velMax = speed;
         }};
 
-        UnitTypes.horizon.health = 500;
-        UnitTypes.horizon.armor = 5;
-        UnitTypes.horizon.range = 24;
-        UnitTypes.horizon.speed = 2.5f;
-        weapon = UnitTypes.horizon.weapons.get(0);
+        horizon.armor = 5;
+        horizon.range = 24;
+        horizon.speed = 2.5f;
+        weapon = horizon.weapons.get(0);
         weapon.minShootVelocity = 0.1f;
         weapon.shootStatus = StatusEffects2.deploy;
         weapon.shootStatusDuration = 20;
         weapon.shoot.shots = 3;
         weapon.bullet.buildingDamageMultiplier = 1.65f;
 
-        UnitTypes.zenith.health = 1500;
-        UnitTypes.zenith.armor = 8;
-        UnitTypes.zenith.speed = 2;
-        weapon = UnitTypes.zenith.weapons.get(0);
+        zenith.armor = 8;
+        zenith.speed = 2;
+        weapon = zenith.weapons.get(0);
         weapon.bullet.damage = 35;
         weapon.bullet.splashDamage = 32;
-        UnitTypes.zenith.weapons.add(new Weapon() {{
+        zenith.weapons.add(new Weapon() {{
             reload = 150;
             x = 7f;
             rotate = true;
@@ -399,9 +397,8 @@ public class UnitOverride {
             }};
         }});
 
-        UnitTypes.antumbra.health = 25200;
-        UnitTypes.antumbra.armor = 12;
-        UnitTypes.antumbra.abilities.add(new SprintingAbility2() {{
+        antumbra.armor = 12;
+        antumbra.abilities.add(new SprintingAbility2() {{
             sprintingReload = 240;
             sprintingDamage = 100;
             sprintingDuration = 10;
@@ -411,23 +408,20 @@ public class UnitOverride {
             status = StatusEffects2.frenzy;
             statusDuration = 240;
         }});
-        weapon = UnitTypes.antumbra.weapons.first();
+        weapon = antumbra.weapons.first();
         weapon.bullet.damage *= 1.2f;
         weapon.bullet.status = StatusEffects.blasted;
         weapon.bullet.statusDuration = 60;
 
-        UnitTypes.eclipse.health = 77000;
+        eclipse.health = 77000;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.mono.health = 2000;
-        UnitTypes.mono.mineSpeed = 4f;
+        mono.mineSpeed = 4f;
 
-        UnitTypes.poly.health = 700;
-        UnitTypes.poly.weapons.get(0).bullet.splashDamageRadius = 20;
+        poly.weapons.get(0).bullet.splashDamageRadius = 20;
 
-        UnitTypes.mega.health = 6000;
-        UnitTypes.mega.armor = 15;
-        UnitTypes.mega.payloadCapacity = 3 * 3 * tilePayload;
-        UnitTypes.mega.weapons.add(new PointDefenseWeapon() {{
+        mega.armor = 15;
+        mega.payloadCapacity = 3 * 3 * tilePayload;
+        mega.weapons.add(new PointDefenseWeapon() {{
             y = -6;
             rotate = true;
             rotateSpeed = 4;
@@ -440,11 +434,10 @@ public class UnitOverride {
             }};
         }});
 
-        UnitTypes.quad.health = 22000;
-        UnitTypes.quad.speed = 2;
-        UnitTypes.quad.range = 270;
-        UnitTypes.quad.payloadCapacity = 4 * 4 * tilePayload;
-        weapon = UnitTypes.quad.weapons.get(0);
+        quad.speed = 2;
+        quad.range = 270;
+        quad.payloadCapacity = 4 * 4 * tilePayload;
+        weapon = quad.weapons.get(0);
         weapon.ignoreRotation = true;
         weapon.shootCone = 180f;
         weapon.reload = 300;
@@ -481,18 +474,16 @@ public class UnitOverride {
             splashDamageRadius = 550f;
         }};
 
-        UnitTypes.oct.health = 77000;
-        UnitTypes.oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
-        UnitTypes.oct.abilities.clear();
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 6, 0));
-        UnitTypes.oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 6, 0));
+        oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
+        oct.abilities.clear();
+        oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 6, 0));
+        oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 6, 0));
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.risso.health = 430;
-        UnitTypes.risso.armor = 7;
-        weapon = UnitTypes.risso.weapons.get(0);
+        risso.armor = 7;
+        weapon = risso.weapons.get(0);
         weapon.reload = 6;
         weapon.bullet.damage = 14f;
-        weapon = UnitTypes.risso.weapons.get(1);
+        weapon = risso.weapons.get(1);
         weapon.shoot.shots = 2;
         weapon.bullet = new BasicBulletType(11, 18, "missile") {{
             keepVelocity = true;
@@ -512,52 +503,57 @@ public class UnitOverride {
             despawnEffect = Fx.blastExplosion;
         }};
 
-        UnitTypes.minke.health = 800;
-        UnitTypes.minke.armor = 14;
-        UnitTypes.minke.speed = 4;
-        weapon = UnitTypes.minke.weapons.get(0);
+        minke.armor = 14;
+        minke.speed = 4;
+        weapon = minke.weapons.get(0);
         weapon.bullet.damage = 15f;
         weapon.bullet.splashDamage = 27;
         weapon.bullet.homingDelay = 0;
         weapon.bullet.homingRange = 252;
         weapon.bullet.homingPower = 0.1f;
-        weapon = UnitTypes.minke.weapons.get(1);
+        weapon = minke.weapons.get(1);
         weapon.reload = 5;
         weapon.inaccuracy = 45;
         weapon.bullet.damage = 30;
         weapon.bullet.splashDamage = 60;
 
-        UnitTypes.bryde.health = 1410;
-        UnitTypes.bryde.armor = 20;
-        ShieldRegenFieldAbility ability = (ShieldRegenFieldAbility) UnitTypes.bryde.abilities.first();
-        ability.amount = 200;
-        ability.max = 600;
-        weapon = UnitTypes.bryde.weapons.get(0);
+        bryde.armor = 20;
+        ShieldRegenFieldAbility ability = (ShieldRegenFieldAbility) bryde.abilities.first();
+        ability.amount = 100;
+        ability.max = 400;
+        weapon = bryde.weapons.get(0);
         weapon.reload = 150;
         weapon.shoot.shots = 12;
         weapon.shoot.shotDelay = 3;
         weapon.bullet.speed = 6;
         weapon.bullet.lifetime = 35;
         weapon.bullet.splashDamage = 70;
-        weapon = UnitTypes.bryde.weapons.get(1);
-        weapon.reload = 15;
+        weapon = bryde.weapons.get(1);
         weapon.bullet.damage = 18;
         weapon.bullet.splashDamage = 15;
         weapon.bullet.lifetime = 90;
-        weapon.bullet.collidesTiles = false;
-        weapon.bullet.collidesGround = false;
 
-        UnitTypes.sei.health = 22000;
+        weapon = sei.weapons.first();
 
-        UnitTypes.omura.health = 77000;
+        omura.abilities.clear();
+        omura.abilities.add(new UnitSpawnSupperAbility(flare, 12 * 60f, 19.25f, -31.75f) {{
+            status = ObjectMap.of(
+                    StatusEffects2.friability, 60f * 60 * 60
+            );
+        }}, new UnitSpawnSupperAbility(flare, 12 * 60f, -19.25f, -31.75f) {{
+            status = ObjectMap.of(
+                    StatusEffects2.frenzy, 60f * 60 * 60,
+                    StatusEffects2.back, 60f * 60 * 60,
+                    StatusEffects.overclock, 60f * 60 * 60
+            );
+        }});
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.retusa.health = 550;
-        UnitTypes.retusa.speed = 1;
-        UnitTypes.retusa.armor = 8;
-        UnitTypes.retusa.abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 120, 60));
-        RepairBeamWeapon repair = (RepairBeamWeapon) UnitTypes.retusa.weapons.get(0);
+        retusa.speed = 1;
+        retusa.armor = 8;
+        retusa.abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 120, 60));
+        RepairBeamWeapon repair = (RepairBeamWeapon) retusa.weapons.get(0);
         repair.repairSpeed = 1.5f;
-        weapon = UnitTypes.retusa.weapons.get(1);
+        weapon = retusa.weapons.get(1);
         weapon.shoot.shots = 3;
         weapon.inaccuracy = 5;
         weapon.bullet.pierce = true;
@@ -567,13 +563,12 @@ public class UnitOverride {
         weapon.bullet.lifetime = 120f;
         weapon.bullet.buildingDamageMultiplier = 3f;
 
-        UnitTypes.oxynoe.health = 1060;
-        UnitTypes.oxynoe.armor = 10;
-        UnitTypes.oxynoe.speed = 1.66f;
-        StatusFieldAbility statusFieldAbility = (StatusFieldAbility) UnitTypes.oxynoe.abilities.get(0);
+        oxynoe.armor = 10;
+        oxynoe.speed = 1.66f;
+        StatusFieldAbility statusFieldAbility = (StatusFieldAbility) oxynoe.abilities.get(0);
         statusFieldAbility.range = 90;
         statusFieldAbility.duration = 420;
-        weapon = UnitTypes.oxynoe.weapons.get(0);
+        weapon = oxynoe.weapons.get(0);
         weapon.reload = 3;
         weapon.shootStatus = StatusEffects2.frenzy;
         weapon.shootStatusDuration = 10;
@@ -588,9 +583,8 @@ public class UnitOverride {
             });
         });
 
-        UnitTypes.cyerce.health = 1870;
-        UnitTypes.cyerce.armor = 16;
-        weapon = UnitTypes.cyerce.weapons.get(1);
+        cyerce.armor = 16;
+        weapon = cyerce.weapons.get(1);
         BulletType bullet = weapon.bullet.fragBullet;
         bullet.speed = 3.8f;
         weapon.bullet = new SummonBulletType() {{
@@ -642,25 +636,23 @@ public class UnitOverride {
             summonBullet = bullet;
         }};
 
-        UnitTypes.aegires.health = 42000;
-        UnitTypes.aegires.abilities.clear();
-        UnitTypes.aegires.abilities.add(new EnergyFieldAbility(30, 25, 180) {{
+        aegires.abilities.clear();
+        aegires.abilities.add(new EnergyFieldAbility(17, 10, 180) {{
             statusDuration = 60f * 6f;
             maxTargets = 15;
             healPercent = 0.4f;
             sameTypeHealMult = 0.6f;
         }});
-        UnitTypes.aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
+        aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
             buildingExpand = 0.5f;
         }});
 
-        UnitTypes.navanax.health = 70000;
-        UnitTypes.navanax.armor = 20;
-        weapon = UnitTypes.navanax.weapons.first();
+        navanax.armor = 20;
+        weapon = navanax.weapons.first();
         weapon.bullet = new ContinuousFlameBulletType() {{
-            maxRange = 90f;
+            maxRange = 110f;
             damage = 35;
-            length = 95f;
+            length = 115f;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 200f;
             lifetime = 155f;
@@ -668,7 +660,7 @@ public class UnitOverride {
 
             shootEffect = Fx.shootHeal;
             smokeEffect = Fx.none;
-            width = 4f;
+            width = 5f;
             largeHit = false;
 
             incendChance = 0.03f;
@@ -683,21 +675,25 @@ public class UnitOverride {
             colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
             flareColor = Pal.heal.cpy().a(.2f);
         }};
-        UnitTypes.navanax.weapons.get(1).bullet.damage = 35;
-        weapon = UnitTypes.navanax.weapons.get(2);
+        ContinuousLaserBulletType clb = (ContinuousLaserBulletType) navanax.weapons.get(1).bullet;
+        clb.damage = 35;
+        clb.maxRange = 110f;
+        clb.length = 115f;
+        clb.width = 6f;
+        weapon = navanax.weapons.get(2);
         weapon.continuous = false;
         weapon.reload = 60;
         weapon.bullet = new LaserBulletType() {{
-            maxRange = 90f;
+            maxRange = 110f;
             damage = 280;
-            length = 95f;
+            length = 115f;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 200f;
             lifetime = 45;
 
             shootEffect = Fx.shootHeal;
             smokeEffect = Fx.none;
-            width = 45;
+            width = 55;
             sideWidth = 0;
             sideLength = 0;
             largeHit = false;
@@ -711,13 +707,13 @@ public class UnitOverride {
 
             colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
         }};
-        weapon = UnitTypes.navanax.weapons.get(3);
+        weapon = navanax.weapons.get(3);
         weapon.continuous = false;
         weapon.reload = 10;
         weapon.shoot.shots = 5;
         weapon.bullet = new LightningBulletType() {{
-            maxRange = 90f;
-            lightningLength = 25;
+            maxRange = 110f;
+            lightningLength = 30;
             damage = 14;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 200f;
@@ -730,14 +726,14 @@ public class UnitOverride {
         }};
 
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.precept.health = 17500;
+        precept.health = 17500;
 
-        UnitTypes.vanquish.health = 38500;
+        vanquish.health = 38500;
 
-        UnitTypes.conquer.health = 77000;
+        conquer.health = 77000;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.obviate.health = 8050;
-        weapon = UnitTypes.obviate.weapons.first();
+        obviate.health = 8050;
+        weapon = obviate.weapons.first();
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
         weapon.bullet.statusDuration = 90;
@@ -754,15 +750,15 @@ public class UnitOverride {
             hitEffect = despawnEffect = Fx.none;
         }};
 
-        UnitTypes.quell.health = 22000;
-        UnitTypes.quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
+        quell.health = 22000;
+        quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
 
-        UnitTypes.disrupt.health = 42000;
-        UnitTypes.disrupt.uiIcon = UnitTypes.disrupt.fullIcon = Core.atlas.find("disrupt");
-        UnitTypes.disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
+        disrupt.health = 42000;
+        disrupt.uiIcon = disrupt.fullIcon = Core.atlas.find("disrupt");
+        disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.anthicus.health = 10150;
-        UnitType u = UnitTypes.anthicus.weapons.get(0).bullet.spawnUnit;
+        anthicus.health = 10150;
+        UnitType u = anthicus.weapons.get(0).bullet.spawnUnit;
         u.weapons.get(0).bullet.despawnHit = true;
         u.weapons.get(0).bullet.splashDamage = 280f;
         u.weapons.get(0).bullet.fragLifeMin = 0.4f;
@@ -784,12 +780,12 @@ public class UnitOverride {
             shootEffect = Fx.none;
         }};
 
-        UnitTypes.tecta.health = 26550;
-        ShieldArcAbility sab = (ShieldArcAbility) UnitTypes.tecta.abilities.first();
+        tecta.health = 26550;
+        ShieldArcAbility sab = (ShieldArcAbility) tecta.abilities.first();
         sab.max = 3500;
         sab.regen = 1.2f;
         sab.cooldown = 6 * 60f;
-        UnitTypes.tecta.abilities.add(new ShieldArcAbility() {{
+        tecta.abilities.add(new ShieldArcAbility() {{
             region = "tecta-shield";
             radius = 54f;
             angle = 100f;
@@ -800,7 +796,7 @@ public class UnitOverride {
             width = 6f;
             whenShooting = true;
         }});
-        weapon = UnitTypes.tecta.weapons.first();
+        weapon = tecta.weapons.first();
         weapon.shoot.shots = 15;
         weapon.shoot.shotDelay = 3;
         weapon.shootStatus = StatusEffects.slow;
@@ -808,9 +804,9 @@ public class UnitOverride {
         weapon.bullet.damage = 90;
         weapon.bullet.splashDamage = 85;
 
-        UnitTypes.collaris.health = 63000;
-        weapon = UnitTypes.collaris.weapons.get(0);
-        UnitTypes.collaris.targetAir = true;
+        collaris.health = 63000;
+        weapon = collaris.weapons.get(0);
+        collaris.targetAir = true;
         weapon.bullet.damage = 520;
         weapon.bullet.splashDamage = 85f;
         weapon.bullet.splashDamageRadius = 20f;
@@ -834,13 +830,13 @@ public class UnitOverride {
         weapon.bullet.fragBullet.splashDamage = 92f;
         weapon.bullet.fragBullet.splashDamageRadius = 20;
         /*-----------------------------------------------------------------------------*/
-        UnitTypes.nova.speed = 2f;
-        UnitTypes.nova.armor = 12;
-        UnitTypes.nova.health = 220;
-        UnitTypes.nova.buildSpeed = 0;
-        UnitTypes.nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
+        nova.speed = 2f;
+        nova.armor = 12;
+        nova.health = 220;
+        nova.buildSpeed = 0;
+        nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
         color = Color.valueOf("ffa998");
-        weapon = UnitTypes.nova.weapons.get(0);
+        weapon = nova.weapons.get(0);
         weapon.reload = 3;
         weapon.bullet.lifetime = 33.4f;
         weapon.bullet.speed = 9;
@@ -862,9 +858,9 @@ public class UnitOverride {
         ((LaserBoltBulletType) weapon.bullet).frontColor = color;
         ((LaserBoltBulletType) weapon.bullet).backColor = color;
 
-        UnitTypes.pulsar.health = 560;
-        UnitTypes.pulsar.speed = 1.1f;
-        weapon = UnitTypes.pulsar.weapons.get(0);
+        pulsar.health = 560;
+        pulsar.speed = 1.1f;
+        weapon = pulsar.weapons.get(0);
         weapon.inaccuracy = 12;
         weapon.bullet = new ConnectLightningBulletType() {{
             lightningColor = hitColor = Pal.heal;
@@ -886,17 +882,17 @@ public class UnitOverride {
             }};
         }};
 
-        UnitTypes.quasar.health = 2200;
-        ForceFieldAbility fAbility = (ForceFieldAbility) UnitTypes.quasar.abilities.get(0);
+        quasar.health = 2200;
+        ForceFieldAbility fAbility = (ForceFieldAbility) quasar.abilities.get(0);
         fAbility.regen = 1f;
         fAbility.max = 1800;
-        weapon = UnitTypes.quasar.weapons.get(0);
+        weapon = quasar.weapons.get(0);
         weapon.reload = 35;
         weapon.bullet.damage = 85;
         weapon.bullet.status = StatusEffects.slow;
         weapon.bullet.statusDuration = 210;
         weapon.bullet.knockback = -3f;
-        UnitTypes.quasar.weapons.add(new Weapon() {{
+        quasar.weapons.add(new Weapon() {{
             x = y = 0;
             mirror = false;
             reload = 120;
@@ -916,8 +912,8 @@ public class UnitOverride {
             }};
         }});
 
-        UnitTypes.vela.health = 22000;
-        UnitTypes.vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{
+        vela.health = 22000;
+        vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{
             damage = 35f;
             length = 180f;
             hitEffect = Fx.hitMeltHeal;
@@ -938,10 +934,10 @@ public class UnitOverride {
 
             colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
         }};
-        UnitTypes.vela.rotateSpeed = 5.4F;
+        vela.rotateSpeed = 5.4F;
 
-        UnitTypes.corvus.health = 77000;
-        weapon = UnitTypes.corvus.weapons.get(0);
+        corvus.health = 77000;
+        weapon = corvus.weapons.get(0);
         weapon.bullet.fragOnHit = false;
         weapon.bullet.fragBullets = 16;
         weapon.bullet.fragRandomSpread = 75;
