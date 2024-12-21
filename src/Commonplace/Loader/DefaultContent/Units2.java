@@ -235,6 +235,18 @@ public class Units2 {
                         y = -12;
                         mirror = false;
 
+                        shoot = new ShootBarrel() {{
+                            shots = 9;
+                            shotDelay = 5;
+                            barrels = new float[]{
+                                    0, 0, 30, 0, 0, -30,
+                                    0, 0, 22.5f, 0, 0, -22.5f,
+                                    0, 0, 15, 0, 0, -15,
+                                    0, 0, 7.5f, 0, 0, -7.5f,
+                                    0, 0, 0
+                            };
+                        }};
+
                         bullet = new BasicBulletType() {{
                             width = 8;
                             height = 12;
@@ -243,14 +255,11 @@ public class Units2 {
 
                             frontColor = backColor = Pal.health;
 
-                            lifetime = 20;
+                            lifetime = 48;
                             speed = 10;
                             damage = 15;
                             splashDamage = 10;
                             splashDamageRadius = 8;
-
-                            homingPower = 0.12f;
-                            homingRange = 750;
 
                             despawnHit = true;
                             fragBullet = new EmpBulletType() {{
@@ -258,7 +267,7 @@ public class Units2 {
 
                                 healPercent = healAmount = 0;
 
-                                status = StatusEffects.electrified;
+                                status = StatusEffects2.tardy;
                                 statusDuration = 600;
 
                                 powerSclDecrease = 0.1f;
@@ -284,9 +293,6 @@ public class Units2 {
                             damage = 15;
                             splashDamage = 10;
                             splashDamageRadius = 8;
-
-                            homingPower = 0.12f;
-                            homingRange = 750;
 
                             despawnHit = true;
 
@@ -318,7 +324,7 @@ public class Units2 {
                                         (173f + Mathf.range(9)) / 255,
                                         (98f + Mathf.random(9)) / 255,
                                         1));
-                                float len = Mathf.random(2);
+                                float len = Mathf.random(3);
                                 float rotation = c.rotation + Mathf.range(60);
                                 Fill.circle(c.x + Angles.trnsx(rotation, len), c.y + Angles.trnsy(rotation, len), 9);
                             });
