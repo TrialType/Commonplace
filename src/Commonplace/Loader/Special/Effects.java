@@ -292,7 +292,7 @@ public class Effects {
         drawLightningMove(point, points, 0.55f, c.fin());
     }) {{
         rotWithParent = true;
-    }}, lockShake = new Effect(60, 180, c -> {
+    }}, lockShake = new Effect(60, 300, c -> {
         float fin4 = Interp.pow4.apply(c.fin());
         WaveRenderer.addPlace(c.x, c.y, 160 * fin4, 25 + 15 * c.fin(), Color.valueOf("879BA3").a(1 - fin4));
     }) {{

@@ -12,7 +12,7 @@ public class HealthOnlyAI extends AIController {
         Teamc t;
         t = Units.closest(unit.team, x, y, range * 25, u -> u.health < u.maxHealth && u.type.isEnemy);
         if (t == null) {
-            t = Units.closest(unit.team, x, y, range * 25, u -> !(u.type == Units2.rejuvenate || !u.type.isEnemy));
+            t = Units.closest(unit.team, x, y, range * 25, u -> !(u.type == unit.type || !u.type.isEnemy));
         }
         return t;
     }

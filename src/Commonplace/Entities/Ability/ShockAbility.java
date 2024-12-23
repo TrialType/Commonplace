@@ -32,7 +32,7 @@ public class ShockAbility extends StatusFieldAbility {
 
             Units.nearby(unit.x - range, unit.y - range, 2 * range, 2 * range, other -> {
                 if (other.within(unit, range) && other.team != unit.team) {
-                    unit.damage(unit.isFlying() ? airDamage : damage);
+                    other.damage(other.isFlying() ? airDamage : damage);
                     other.apply(effect, duration);
                     applyEffect.at(other, parentizeEffects);
                     act[0] = true;

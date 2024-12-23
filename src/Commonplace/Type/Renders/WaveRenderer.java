@@ -16,6 +16,7 @@ import static mindustry.Vars.renderer;
 
 public class WaveRenderer {
     public static boolean init = false;
+    public static int num = 1;
     public static WaveShader shader;
     public final static Seq<WavePlace> places = new Seq<>();
     public static FrameBuffer buffer = new FrameBuffer();
@@ -51,30 +52,26 @@ public class WaveRenderer {
                 color[i * 4 + 3] = place.color.a;
             }
 
-//            if (places.size >= num || shader == null) {
-//                if (shader != null) {
-//                    shader.dispose();
-//                }
-//                if (places.size >= num) {
-//                    num *= num;
-//                }
-//                Shader.prependFragmentCode = "#define MAX_NUM " + num + "\n";
-//                shader = new WaveShader();
-//                Shader.prependFragmentCode = "";
-//            }
             if (shader == null) {
-                Shader.prependFragmentCode = "#define MAX_NUM " + places.size + "\n";
+                Shader.prependFragmentCode = "#define NUM " + places.size + "\n";
+                shader = new WaveShader();
+            }
+            if (places.size > num) {
+                num *= 2;
+                Shader.prependFragmentCode = "#define NUM " + places.size + "\n";
                 shader = new WaveShader();
             }
 
             shader.waves = waves;
             shader.color = color;
-            buffer.blit(shader);
 
             Bloom bloom = renderer.bloom;
             if (bloom != null) {
                 bloom.capture();
+                buffer.blit(shader);
                 bloom.render();
+            } else {
+                buffer.blit(shader);
             }
 
             places.clear();

@@ -9,7 +9,7 @@ import mindustry.gen.Unit;
 public class BoostExplosionAbility extends Ability {
     public float minSpeed = 5;
     public float splashDamage = 1400;
-    public float splashDamageRadius = 80;
+    public float splashDamageRadius = 40;
 
     private boolean get = false;
 

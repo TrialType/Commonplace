@@ -3,6 +3,7 @@ package Commonplace.AI;
 import Commonplace.Utils.Interfaces.OwnerSpawner;
 import arc.math.Mathf;
 import arc.util.Time;
+import mindustry.ai.types.MissileAI;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.entities.units.WeaponMount;
@@ -13,16 +14,16 @@ import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.storage.CoreBlock;
 
-public class FollowAI extends AIController {
-    public Unit shooter;
+public class FollowAI extends MissileAI {
     public Teamc defendTarget;
 
     @Override
     public void updateUnit() {
         if (shooter == null) {
             init();
+        } else {
+            super.updateUnit();
         }
-        super.updateUnit();
     }
 
     @Override

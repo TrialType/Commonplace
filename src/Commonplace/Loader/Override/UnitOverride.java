@@ -114,7 +114,7 @@ public class UnitOverride {
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
-        dagger.speed = 0.2f;
+        dagger.speed = 0.18f;
         weapon = dagger.weapons.get(0);
         weapon.reload = 45;
         weapon.shoot = new ShootPattern() {{
@@ -124,11 +124,11 @@ public class UnitOverride {
         weapon.bullet = new ProtectKillerBulletType() {{
             damage = 16;
             speed = 4;
-            lifetime = 45;
+            lifetime = 75;
             width = height = 8;
 
             minArmor = 7;
-            damageArmorMultiplier = 0.4f;
+            damageArmorMultiplier = 1.5f;
             maxArmorDamageAdder = 20;
             keepVelocity = false;
         }};
@@ -416,6 +416,7 @@ public class UnitOverride {
         eclipse.health = 77000;
         /*-----------------------------------------------------------------------------*/
         mono.mineSpeed = 4f;
+        mono.abilities.add(new RepairOwnAbility(100, 15, 0));
 
         poly.weapons.get(0).bullet.splashDamageRadius = 20;
 

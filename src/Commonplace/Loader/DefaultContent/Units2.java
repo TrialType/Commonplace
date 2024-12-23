@@ -224,8 +224,8 @@ public class Units2 {
             constructor = UnitEntity::create;
 
             flying = true;
-            health = 100000;
-            armor = 20;
+            health = 10000;
+            armor = 14;
             speed = 0.5f;
 
             weapons.add(
@@ -279,7 +279,7 @@ public class Units2 {
                             }};
                         }};
                     }}, new Weapon() {{
-                        reload = 10;
+                        reload = 5;
                         x = y = 0;
                         mirror = false;
                         shoot = new ShootSummon(0, 0, 15, 360);
@@ -431,7 +431,7 @@ public class Units2 {
             aiController = HealthOnlyAI::new;
 
             health = 50000;
-            armor = 180;
+            armor = 18;
             speed = 1.3f;
             accel = 0.9f;
             drag = 0.9f;
@@ -476,7 +476,7 @@ public class Units2 {
         }};
         bulletInterception_a = new UnitType("bulletInterception_a") {{
             constructor = FollowUnit::create;
-            controller = u -> new FollowAI();
+            controller = u -> new HealthOnlyAI();
 
             health = 3000;
             speed = 4f;
@@ -1180,8 +1180,8 @@ public class Units2 {
             aiController = BoostFlyingAI::new;
             commands = new UnitCommand[]{UnitCommand.moveCommand, Commands.boostFlying};
 
-            boostReload = 1800;
-            hitReload = 600;
+            boostReload = 600;
+            hitReload = 90;
             hitPercent = 30;
             hitFirstPercent = true;
             boostDuration = 25;
@@ -1244,7 +1244,7 @@ public class Units2 {
             hitFirstPercent = true;
             health2 = 350;
             speed1 = 1.0F;
-            hitReload = 600;
+            hitReload = 90;
             boostReload = 1800;
             boostDuration = 45;
 
@@ -1520,8 +1520,8 @@ public class Units2 {
             constructor = ElevationMoveUnit::create;
 
             hovering = true;
-            health = 100000;
-            armor = 70;
+            health = 70000;
+            armor = 21;
             speed = 2;
 
             weapons.add(new Weapon() {{
@@ -1619,8 +1619,8 @@ public class Units2 {
             aiController = GroundAI::new;
 
             health = 40000;
-            armor = 300;
-            speed = 2;
+            armor = 13;
+            speed = 3;
             maxRange = 200;
 
             abilities.add(new BoostExplosionAbility());
@@ -1628,7 +1628,7 @@ public class Units2 {
             weapons.add(new Weapon() {{
                 mirror = false;
                 x = y = 0;
-                reload = 150;
+                reload = 30;
                 shootStatus = StatusEffects2.back;
                 shootStatusDuration = 10;
 
