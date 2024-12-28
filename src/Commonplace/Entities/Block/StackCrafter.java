@@ -174,7 +174,6 @@ public class StackCrafter extends GenericCrafter {
 
         @Override
         public void updateTile() {
-
             if (chance < 0 || !shouldConsume() || !couldProduct()) {
                 efficiency = 0;
             }

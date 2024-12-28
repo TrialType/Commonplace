@@ -1,7 +1,7 @@
 package Commonplace.Entities.Block;
 
 import Commonplace.Utils.Interfaces.RangePure;
-import Commonplace.Type.Extent.CorrosionMist;
+import Commonplace.Type.Control.CorrosionMist;
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;

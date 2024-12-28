@@ -23,10 +23,10 @@ public class ProtectKillerBulletType extends BasicBulletType {
         float damage = b.damage;
         if (entity instanceof Unit u) {
             if (u.armor > minArmor) {
-                damage += Math.min(maxArmorDamageAdder, u.armor * damageArmorMultiplier);
+                damage += Math.min(maxArmorDamageAdder < 0 ? Float.MAX_VALUE : maxArmorDamageAdder, u.armor * damageArmorMultiplier);
             }
             if (u.shield > minShield) {
-                damage += Math.min(maxShieldDamageAdder, u.shield * damageShieldMultiplier);
+                damage += Math.min(maxShieldDamageAdder < 0 ? Float.MAX_VALUE : maxShieldDamageAdder, u.shield * damageShieldMultiplier);
             }
         }
 

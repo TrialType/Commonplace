@@ -2,7 +2,6 @@ package Commonplace.Entities.BulletType;
 
 import arc.Events;
 import arc.graphics.Color;
-import arc.math.Angles;
 import arc.math.Mathf;
 import arc.util.Time;
 import mindustry.content.Fx;
@@ -45,11 +44,39 @@ public class AroundBulletType extends BasicBulletType {
 
         updateMaps(b);
 
-        if (b.data instanceof Unit u && b.within(u, circleRange + 5)) {
-            b.fdata += Time.delta;
+        if (b.data instanceof Unit u) {
+            if (b.within(u, circleRange * 1.1f)) {
+                b.fdata += Time.delta;
+            } else {
+                b.fdata = 0;
+            }
+
             float bx = b.x, by = b.y, ux = u.x, uy = u.y;
-            float angle = Angles.angle(ux, uy, bx, by) + 5;
-            b.initVel(Angles.angle(ux + Angles.trnsx(angle, circleRange) - bx, uy + Angles.trnsy(angle, circleRange) - by), b.vel.len());
+            float len = b.dst(u);
+            if (len >= circleRange) {
+                float angle = b.angleTo(u) - (float) (Mathf.radDeg * Math.asin(circleRange / len) + 360) % 360;
+                float angleDst = Math.abs(b.rotation() - angle);
+                float step = (b.rotation() > angle ? -1 : 1) * Math.min(angleDst, 5f);
+                if (angleDst <= 30 && angleDst >= 0) {
+                    b.initVel(b.rotation() + step, b.vel.len() * 1.05f);
+                } else if (angleDst <= 90) {
+                    b.initVel(b.rotation() + step, b.vel.len());
+                } else if (angleDst <= 180) {
+                    b.initVel(b.rotation() + step, Math.max(b.vel.len() * 0.85f, 2f));
+                } else if (angleDst <= 270) {
+                    b.initVel(b.rotation() - step, Math.max(b.vel.len() * 0.85f, 2f));
+                } else if (angleDst <= 330) {
+                    b.initVel(b.rotation() - step, b.vel.len());
+                } else {
+                    b.initVel(b.rotation() - step, b.vel.len() * 1.05f);
+                }
+            } else {
+                b.initVel(b.rotation(), b.vel.len() * 1.05f);
+            }
+
+            if(b.fdata > 0 && b.fdata % 60 == 0){
+                b.collided.clear();
+            }
 
             if (roundIntervalBullet != null && b.fdata > roundIntervalDelay && b.timer(3, roundBulletInterval)) {
                 Entityc owner = b.owner;
@@ -90,7 +117,7 @@ public class AroundBulletType extends BasicBulletType {
                 }
             }
 
-            if (!u.hasEffect(statusEffect) && !lastStatus.get(u)) {
+            if (b.within(u, circleRange * 1.1f) && !u.hasEffect(statusEffect) && !lastStatus.get(u)) {
                 Units.nearbyEnemies(b.team, ux, uy, circleRange, unit -> {
                     applyEffect.at(unit.x, unit.y, 0, applyColor, unit);
 
@@ -113,9 +140,6 @@ public class AroundBulletType extends BasicBulletType {
                 });
                 b.time = b.lifetime;
             }
-        } else if (b.data instanceof Unit u) {
-            b.fdata = 0;
-            b.initVel(Angles.angle(u.x - b.x, u.y - b.y), b.vel.len());
         } else {
             updateTarget(b);
         }
@@ -173,5 +197,12 @@ public class AroundBulletType extends BasicBulletType {
             units.remove(b);
             b.data = null;
         }
+    }
+
+    @Override
+    public void init() {
+        super.init();
+
+        homingDelay = homingPower = 0;
     }
 }

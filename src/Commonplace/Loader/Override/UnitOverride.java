@@ -37,12 +37,9 @@ public class UnitOverride {
     static Color color;
 
     public static void load() {
-        alpha.buildSpeed = 1f;
-        alpha.mineSpeed = 8f;
-        beta.buildSpeed = 1.5f;
-        beta.mineSpeed = 9f;
-        gamma.buildSpeed = 2f;
-        gamma.mineSpeed = 12f;
+        alpha.health = 200;
+        beta.health = 250;
+        gamma.health = 300;
 
         evoke.buildSpeed = 1.7f;
         evoke.mineSpeed = 9f;
@@ -114,6 +111,61 @@ public class UnitOverride {
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
+        alpha.buildSpeed = 1f;
+        alpha.mineSpeed = 8f;
+        alpha.weapons.first().bullet = new ProtectKillerBulletType(){{
+            damage = 11;
+            speed = 2.5f;
+            width = 7f;
+            height = 9f;
+            lifetime = 60f;
+            shootEffect = Fx.shootSmall;
+            smokeEffect = Fx.shootSmallSmoke;
+            buildingDamageMultiplier = 0.01f;
+
+            damageArmorMultiplier = 1;
+            maxArmorDamageAdder = 15;
+            damageShieldMultiplier = 1.25f;
+            maxShieldDamageAdder = 1000;
+        }};
+
+        beta.buildSpeed = 1.5f;
+        beta.mineSpeed = 9f;
+        beta.weapons.first().bullet = new ProtectKillerBulletType(){{
+            damage = 11;
+            speed = 3;
+            width = 7f;
+            height = 9f;
+            lifetime = 60f;
+            shootEffect = Fx.shootSmall;
+            smokeEffect = Fx.shootSmallSmoke;
+            buildingDamageMultiplier = 0.01f;
+
+            damageArmorMultiplier = 1.1f;
+            maxArmorDamageAdder = 25;
+            damageShieldMultiplier = 1.5f;
+            maxShieldDamageAdder = 1250;
+        }};
+
+        gamma.buildSpeed = 2f;
+        gamma.mineSpeed = 12f;
+        gamma.weapons.first().bullet = new ProtectKillerBulletType(){{
+            damage = 11;
+            speed = 3.5f;
+            width = 6.5f;
+            height = 11f;
+            lifetime = 70f;
+            shootEffect = Fx.shootSmall;
+            smokeEffect = Fx.shootSmallSmoke;
+            buildingDamageMultiplier = 0.01f;
+            homingPower = 0.04f;
+
+            damageArmorMultiplier = 1.2f;
+            maxArmorDamageAdder = 35;
+            damageShieldMultiplier = 1.75f;
+            maxShieldDamageAdder = 1500;
+        }};
+        /*-----------------------------------------------------------------------------*/
         dagger.speed = 0.18f;
         weapon = dagger.weapons.get(0);
         weapon.reload = 45;

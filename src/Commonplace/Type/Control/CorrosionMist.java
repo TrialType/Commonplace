@@ -1,4 +1,4 @@
-package Commonplace.Type.Extent;
+package Commonplace.Type.Control;
 
 import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Utils.Interfaces.Corrosion;

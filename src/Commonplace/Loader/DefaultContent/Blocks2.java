@@ -14,7 +14,9 @@ import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.entities.part.ShapePart;
+import mindustry.entities.pattern.ShootAlternate;
 import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootHelix;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Building;
 import mindustry.gen.Unit;
@@ -51,7 +53,7 @@ public class Blocks2 {
     public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
-            phaseAmplifier;
+            phaseAmplifier, meltingFurnace;
     //effect
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
             forceProjectorLarge, bulletSlower;
@@ -60,6 +62,7 @@ public class Blocks2 {
 
     public static void load() {
         primarySolidification = new StackCrafter("primary-solidification") {{
+            health = 350;
             itemCapacity = 60;
             liquidCapacity = 120;
             switchStack.add(new ProductStack(
@@ -83,7 +86,7 @@ public class Blocks2 {
             itemCapacity = 150;
             liquidCapacity = 300;
             size = 2;
-            health = 250;
+            health = 550;
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
@@ -113,7 +116,7 @@ public class Blocks2 {
             itemCapacity = 360;
             liquidCapacity = 600;
             size = 3;
-            health = 750;
+            health = 1050;
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
@@ -149,7 +152,7 @@ public class Blocks2 {
             itemCapacity = 360;
             liquidCapacity = 900;
             size = 4;
-            health = 750;
+            health = 1550;
 
             switchStack.add(new ProductStack(
                     ItemStack.empty,
@@ -183,8 +186,8 @@ public class Blocks2 {
         }};
         phaseAmplifier = new GenericCrafter("phase-amplifier") {{
             requirements(Category.crafting, ItemStack.with(phaseFabric, 25, thorium, 80, copper, 100));
-            outputItem = new ItemStack(phaseFabric, 3);
-            consumeItems(ItemStack.with(thorium, 4, graphite, 5));
+            outputItem = new ItemStack(phaseFabric, 4);
+            consumeItems(ItemStack.with(thorium, 4, graphite, 1));
             consumePower(15);
             envEnabled |= Env.space;
             craftEffect = Fx.smeltsmoke;
@@ -194,10 +197,44 @@ public class Blocks2 {
             size = 3;
             itemCapacity = 20;
         }};
+        meltingFurnace = new StackCrafter("melting-furnace") {{
+            health = 400;
+            itemCapacity = 60;
+            liquidCapacity = 120;
+            switchStack.add(new ProductStack(
+                    ItemStack.with(copper, 1),
+                    LiquidStack.with(Liquids.slag, 5),
+                    ItemStack.with(scrap, 2),
+                    LiquidStack.with(Liquids2.fusionCopper, 4), 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(lead, 1),
+                    LiquidStack.with(Liquids.slag, 5),
+                    ItemStack.with(scrap, 2),
+                    LiquidStack.with(Liquids2.fusionLead, 4), 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(titanium, 1),
+                    LiquidStack.with(Liquids.slag, 6),
+                    ItemStack.with(scrap, 3),
+                    LiquidStack.with(Liquids2.fusionTitanium, 4), 120
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(thorium, 1),
+                    LiquidStack.with(Liquids.slag, 6),
+                    ItemStack.with(scrap, 4),
+                    LiquidStack.with(Liquids2.fusionThorium, 3), 180
+            ));
+
+
+            hasPower = false;
+
+            consume(new ConsumePower(1, 0, false));
+
+            requirements(Category.crafting, ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
+        }};
 //======================================================================================================================
         //debug
-
-
         pu = new PureProject("pu") {{
             health = 650;
 
@@ -208,86 +245,114 @@ public class Blocks2 {
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
             requirements(Category.turret, ItemStack.with(phaseFabric, 75, thorium, 350, plastanium, 200, surgeAlloy, 100));
-            consume(new ConsumePower(25, 0, false));
+            consume(new ConsumePower(12, 0, false));
 
             health = 3000;
-            size = 4;
+            size = 3;
 
+            rotateSpeed = 1;
             recoil = 6f;
             range = 500;
-            reload = 1;
+            reload = 30;
             consumesPower = true;
             hasPower = true;
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shoot.shots = 3;
-            shoot.shotDelay = 1;
-            inaccuracy = 30;
+            shoot = new ShootAlternate(){{
+                shots = 30;
+                shotDelay = 1;
+                barrels = 6;
+                spread = 3;
+            }};
             shootType = new BasicBulletType() {{
-                hitSize = 25;
-                width = 12;
-                height = 12;
-                shrinkX = shrinkY = 0;
-                frontColor = backColor = trailColor = hitColor = Pal.heal;
-                trailLength = 15;
-                trailWidth = 3;
+                sprite = "circle";
 
-                damage = 15;
+                inaccuracy = 15;
+
+                weaveScale = 5.4f;
+                weaveMag = 5;
+                weaveRandom = true;
+
+                width = 3;
+                height = 3;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = hitColor = Pal.heal;
+                trailLength = 0;
+                trailWidth = 0;
+
+                damage = 1;
                 lifetime = 50;
                 speed = 10;
-                knockback = 1;
                 buildingDamageMultiplier = 0.1f;
                 status = StatusEffects2.loose;
                 statusDuration = 240;
 
-                splashDamage = 10;
-                splashDamageRadius = 8;
+                splashDamage = 25;
+                splashDamageRadius = 16;
                 hitEffect = despawnEffect = Fx.hitBulletColor;
+
+                fragBullets = 6;
+                fragRandomSpread = 360;
+                fragBullet = new BasicBulletType(){{
+                    width = height = 3;
+                    damage = 7;
+                    speed = 3;
+                    lifetime = 10;
+
+                    trailLength = 3;
+                    trailWidth = 2;
+                    frontColor = trailColor = Pal.heal;
+
+                    status = StatusEffects.muddy;
+                    statusDuration = 240;
+
+                    reflectable = false;
+
+                    despawnEffect = hitEffect = Fx.none;
+                }};
             }};
         }};
         hill = new PowerTurret("hill") {{
-            consume(new ConsumePower(15, 0, false));
+            consume(new ConsumePower(6, 0, false));
 
             health = 2000;
             size = 3;
 
             recoil = 6f;
             range = 350;
-            reload = 15;
+            reload = 65;
             consumesPower = true;
             hasPower = true;
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shoot.shots = 2;
-            shoot.shotDelay = 10;
-            shoot.firstShotDelay = 80;
+            shoot.shots = 6;
+            inaccuracy = 20;
             shootType = new BasicBulletType() {{
                 absorbable = false;
 
                 sprite = "circle";
                 hitSize = 25;
-                width = 30;
-                height = 30;
+                width = height = 30;
                 shrinkX = shrinkY = 0;
                 frontColor = backColor = Pal.heal;
 
                 damage = 15;
-                lifetime = 35;
-                speed = 10;
+                lifetime = 200;
+                speed = 4;
+                drag = 0.011f;
                 knockback = 1;
                 buildingDamageMultiplier = 0.1f;
                 status = StatusEffects2.suppress;
                 statusDuration = 240;
 
                 splashDamage = 10;
-                splashDamageRadius = 160;
-                chargeEffect = Fx.greenLaserCharge;
+                splashDamageRadius = 60;
                 hitEffect = despawnEffect = new Effect(90, e -> {
                     color(Pal.heal);
                     stroke(e.fout() * 7);
-                    Lines.circle(e.x, e.y, 4f + e.finpow() * 160);
+                    Lines.circle(e.x, e.y, 4f + e.finpow() * 60);
                 });
             }};
 
@@ -301,7 +366,7 @@ public class Blocks2 {
             requirements(Category.turret, ItemStack.with(Items.titanium, 100,
                     silicon, 70, Items.graphite, 100
             ));
-            consume(new ConsumePower(8, 480, false));
+            consume(new ConsumePower(2, 480, false));
 
             size = 2;
             recoil = 3;
@@ -315,15 +380,22 @@ public class Blocks2 {
             reload = 30;
             shootCone = 15f;
 
-            shootType = new BasicBulletType() {{
-                width = height = 20;
+            shootType = new AroundBulletType() {{
+                pierce = true;
+                pierceCap = 8;
+
+                width = height = 12;
                 damage = 15;
-                speed = 15;
-                lifetime = 21;
+                speed = 5;
+                lifetime = 70;
+
+                targetRange = 200;
+                circleRange = 25;
+                statusEffect = StatusEffects.muddy;
 
                 trailLength = 7;
                 trailWidth = 3;
-                trailColor = Pal.heal;
+                frontColor = trailColor = Pal.heal;
 
                 status = StatusEffects2.torn;
                 statusDuration = 240;
@@ -331,8 +403,6 @@ public class Blocks2 {
                 rangeOverride = 300;
                 reflectable = false;
                 collidesTiles = false;
-                pierce = true;
-                pierceCap = 5;
             }};
         }};
         life = new ItemTurret("life") {{
@@ -1068,7 +1138,7 @@ public class Blocks2 {
                         statusDuration = 240;
 
                         targetRange = 1000;
-                        circleRange = 160;
+                        circleRange = 80;
 
                         statusTime = 35;
                         statusEffect = StatusEffects2.abyss;
