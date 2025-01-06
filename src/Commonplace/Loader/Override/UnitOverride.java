@@ -1,15 +1,22 @@
 package Commonplace.Loader.Override;
 
+import Commonplace.AI.FlyingFollowFarAI;
+import Commonplace.Entities.Unit.ReplenishmentLegsEventUnit;
+import Commonplace.Entities.Unit.ReplenishmentPayloadEventUnit;
+import Commonplace.Entities.Unit.ReplenishmentTankEventUnit;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
-import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Mathf;
 import arc.struct.ObjectMap;
+import arc.struct.ObjectSet;
+import arc.struct.Seq;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
@@ -113,7 +120,7 @@ public class UnitOverride {
         /*===================================================================================================*/
         alpha.buildSpeed = 1f;
         alpha.mineSpeed = 8f;
-        alpha.weapons.first().bullet = new ProtectKillerBulletType(){{
+        alpha.weapons.first().bullet = new ProtectKillerBulletType() {{
             damage = 11;
             speed = 2.5f;
             width = 7f;
@@ -131,7 +138,7 @@ public class UnitOverride {
 
         beta.buildSpeed = 1.5f;
         beta.mineSpeed = 9f;
-        beta.weapons.first().bullet = new ProtectKillerBulletType(){{
+        beta.weapons.first().bullet = new ProtectKillerBulletType() {{
             damage = 11;
             speed = 3;
             width = 7f;
@@ -149,7 +156,7 @@ public class UnitOverride {
 
         gamma.buildSpeed = 2f;
         gamma.mineSpeed = 12f;
-        gamma.weapons.first().bullet = new ProtectKillerBulletType(){{
+        gamma.weapons.first().bullet = new ProtectKillerBulletType() {{
             damage = 11;
             speed = 3.5f;
             width = 6.5f;
@@ -697,7 +704,7 @@ public class UnitOverride {
             sameTypeHealMult = 0.6f;
         }});
         aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
-            buildingExpand = 0.5f;
+            buildingMul = 0.5f;
         }});
 
         navanax.armor = 20;
@@ -779,38 +786,247 @@ public class UnitOverride {
         }};
 
         /*-----------------------------------------------------------------------------*/
-        precept.health = 17500;
+        weapon = precept.weapons.first();
+        weapon.bullet.damage = 140;
+        weapon.bullet.splashDamage = 65f;
+        weapon.bullet.fragBullet.damage = 45f;
+        weapon.bullet.intervalBullet = weapon.bullet.fragBullet;
+        weapon.bullet.intervalBullets = 4;
+        weapon.bullet.bulletInterval = 6;
+        weapon.bullet.intervalDelay = 7;
+        weapon.bullet.fragBullets = 7;
 
-        vanquish.health = 38500;
+        vanquish.constructor = ReplenishmentTankEventUnit::create;
+        weapon = vanquish.weapons.first();
+        weapon.bullet.pierce = false;
+        weapon.bullet.pierceBuilding = false;
+        weapon.bullet.pierceCap = 1;
+        weapon.bullet.damage = 210;
+        weapon.bullet.splashDamage = 65;
+        weapon.bullet.fragBullets = 4;
+        weapon.bullet.fragOnHit = true;
+        weapon.bullet.fragBullet = new BasicBulletType(6f, 45f) {{
+            sprite = "missile-large";
+            width = 8f;
+            height = 12f;
+            lifetime = 15f;
+            hitSize = 4f;
+            hitColor = backColor = trailColor = Color.valueOf("feb380");
+            frontColor = Color.white;
+            trailWidth = 2.8f;
+            trailLength = 6;
+            hitEffect = despawnEffect = Fx.blastExplosion;
+            splashDamageRadius = 10f;
+            splashDamage = 25f;
 
-        conquer.health = 77000;
+            pierce = pierceBuilding = true;
+            pierceCap = 3;
+
+            fragAngle = 180f;
+            fragSpread = 10f;
+            fragBullets = 4;
+            fragVelocityMin = 1f;
+            fragRandomSpread = 0f;
+            despawnSound = Sounds.dullExplosion;
+            fragBullet = new BasicBulletType(8f, 30) {{
+                sprite = "missile-large";
+                width = 6.5f;
+                height = 11f;
+                lifetime = 15f;
+                hitSize = 3f;
+                hitColor = backColor = trailColor = Color.valueOf("feb380");
+                frontColor = Color.white;
+                trailWidth = 2.5f;
+                trailLength = 5;
+                hitEffect = despawnEffect = Fx.blastExplosion;
+                splashDamageRadius = 8;
+                splashDamage = 15f;
+            }};
+        }};
+        vanquish.weapons.get(1).shoot.shots = 2;
+        vanquish.weapons.get(1).shoot.shotDelay = 6;
+        vanquish.weapons.get(2).shoot.shots = 2;
+        vanquish.weapons.get(2).shoot.shotDelay = 6;
+
+        conquer.constructor = ReplenishmentTankEventUnit::create;
+        weapon = conquer.weapons.first();
+        weapon.bullet.damage = 400;
+        Seq<BulletType> bullets = weapon.bullet.spawnBullets;
+        for (int i = 0; i < bullets.size; i++) {
+            BulletType temp = bullets.get(i);
+            @SuppressWarnings("all")
+            float fin = (i / 2 + 1) * 2f / bullets.size;
+            float life = weapon.bullet.lifetime * fin * 1.35f;
+            temp.damage = 70;
+            temp.fragAngle = 0;
+            temp.fragSpread = 180;
+            temp.fragVelocityMin = 1;
+            temp.fragRandomSpread = 0;
+            temp.fragBullets = 2;
+            temp.fragOnHit = false;
+            temp.fragBullet = new BasicBulletType(weapon.bullet.speed / fin * 0.12f, 35) {{
+                drag = 0.002f;
+                width = 12f;
+                height = 11f;
+                lifetime = life;
+                hitSize = 5f;
+                pierceCap = 2;
+                pierce = true;
+                pierceBuilding = true;
+                hitColor = backColor = trailColor = Color.valueOf("feb380");
+                frontColor = Color.white;
+                trailWidth = 2.5f;
+                trailLength = 7;
+
+                splashDamage = 65f;
+                splashDamageRadius = 30f;
+                despawnEffect = new ExplosionEffect() {{
+                    lifetime = 50f;
+                    waveStroke = 4f;
+                    waveColor = sparkColor = trailColor;
+                    waveRad = 30f;
+                    smokeSize = 7f;
+                    smokes = 6;
+                    smokeSizeBase = 0f;
+                    smokeColor = trailColor;
+                    sparks = 5;
+                    sparkRad = 30f;
+                    sparkLen = 3f;
+                    sparkStroke = 1.5f;
+                }};
+
+                spawnBullets.add(new BasicBulletType(weapon.bullet.speed / fin * 0.2f, 35) {
+                    {
+                        drag = 0.002f;
+                        width = 12f;
+                        height = 11f;
+                        lifetime = life * 1.05f;
+                        hitSize = 5f;
+                        pierceCap = 2;
+                        pierce = true;
+                        pierceBuilding = true;
+                        hitColor = backColor = trailColor = Color.valueOf("feb380");
+                        frontColor = Color.white;
+                        trailWidth = 2.5f;
+                        trailLength = 7;
+
+                        splashDamage = 65f;
+                        splashDamageRadius = 30f;
+                        despawnEffect = new ExplosionEffect() {{
+                            lifetime = 50f;
+                            waveStroke = 4f;
+                            waveColor = sparkColor = trailColor;
+                            waveRad = 30f;
+                            smokeSize = 7f;
+                            smokes = 6;
+                            smokeSizeBase = 0f;
+                            smokeColor = trailColor;
+                            sparks = 5;
+                            sparkRad = 30f;
+                            sparkLen = 3f;
+                            sparkStroke = 1.5f;
+                        }};
+                    }
+                });
+            }};
+        }
         /*-----------------------------------------------------------------------------*/
-        obviate.health = 8050;
         weapon = obviate.weapons.first();
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
         weapon.bullet.statusDuration = 90;
         weapon.bullet.fragBullets = 7;
         weapon.bullet.fragBullet = new MoveLightningBulletType() {{
-            damage = 13;
+            damage = 7;
             buildingDamageMultiplier = 0.1f;
             lifetime = 60;
-            lightningLength = 3;
-            damagePoints = 12;
-            points = 40;
+            lightningLength = 5;
+            damagePoints = 6;
+            points = 30;
             lightningColor = Pal.sap;
+            pierceCap = 6;
 
             hitEffect = despawnEffect = Fx.none;
         }};
 
-        quell.health = 22000;
-        quell.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 220f;
+        quell.constructor = ReplenishmentPayloadEventUnit::create;
+        quell.aiController = FlyingFollowFarAI::create;
+        weapon = quell.weapons.first();
+        weapon.bullet.rangeOverride = 5.9f * 84;
+        weapon.bullet.spawnUnit.immunities = ObjectSet.with(StatusEffects.slow, StatusEffects2.tardy,
+                StatusEffects.wet, StatusEffects.melting, StatusEffects.sporeSlowed, StatusEffects.sapped);
+        weapon.bullet.spawnUnit.lifetime = 1.2f * 60;
+        weapon.bullet.spawnUnit.rotateSpeed = 8.8f;
+        weapon.bullet.spawnUnit.health = 75;
+        weapon.bullet.spawnUnit.weapons.first().bullet.splashDamage = 220f;
+        weapon.bullet.spawnUnit.abilities.add(new PowerChargeAbility() {{
+            lightningColor = Pal.sap.cpy().mul(1.3f, 1.1f, 1.1f, 1.1f);
 
-        disrupt.health = 42000;
-        disrupt.uiIcon = disrupt.fullIcon = Core.atlas.find("disrupt");
-        disrupt.weapons.get(0).bullet.spawnUnit.weapons.get(0).bullet.splashDamage = 280f;
+            bullet = new LightningBulletType() {{
+                damage = 7;
+                lifetime = 3;
+                lightningLength = 8;
+                lightningColor = Pal.sap.cpy().mul(1.1f);
+            }};
+        }}, new SuppressionFieldAbility() {{
+            applyParticleChance = 25;
+            reload = 45;
+            orbRadius = orbMidScl = orbSinScl = orbSinMag = 0;
+            range = 250;
+        }}, new MoveLightningAbility(10, 6, 0.6f, 0, 5, 15, Pal.sap));
+
+        disrupt.constructor = ReplenishmentPayloadEventUnit::create;
+        weapon = disrupt.weapons.first().bullet.spawnUnit.weapons.first();
+        weapon.bullet = new SupperExplosionBulletType(200f, 25f) {{
+            collidesAir = false;
+            suppressionRange = 140f;
+            shootEffect = new ExplosionEffect() {{
+                lifetime = 50f;
+                waveStroke = 5f;
+                waveLife = 8f;
+                waveColor = Color.white;
+                sparkColor = smokeColor = Pal.suppress;
+                waveRad = 40f;
+                smokeSize = 4f;
+                smokes = 7;
+                smokeSizeBase = 0f;
+                sparks = 10;
+                sparkRad = 40f;
+                sparkLen = 6f;
+                sparkStroke = 2f;
+            }};
+
+            fragBullets = 1;
+            fragBullet = new ContinuousLinkBulletType() {{
+                speed = 3;
+                damage = 45f;
+                lifetime = 120;
+                damageInterval = 30f;
+
+                splashDamage = 20;
+                splashDamageRadius = 20;
+
+                homingDelay = 0;
+                homingPower = 0.1f;
+                homingRange = 300;
+
+                hitEffect = despawnEffect = Fx.none;
+                trailLength = 0;
+                trailWidth = 0;
+                trailInterval = 10;
+                trailEffect = new Effect(30, 40, c -> {
+                    color(c.color);
+                    randLenVectors(c.id, 12, 2f + 30 * c.finpow(),
+                            (x, y) -> Fill.circle(c.x + x, c.y + y, c.fout() * 8));
+                    randLenVectors(c.id + 1, 15, 2f + 30 * c.finpow(),
+                            (x, y) -> Lines.line(c.x + x, c.y + y,
+                                    c.x + x + 6 * x / Mathf.len(x, y), c.y + y + 6 * y / Mathf.len(x, y)));
+                }).followParent(false);
+
+                lightningColor = trailColor = hitColor = Pal.sap;
+            }};
+        }};
         /*-----------------------------------------------------------------------------*/
-        anthicus.health = 10150;
         UnitType u = anthicus.weapons.get(0).bullet.spawnUnit;
         u.weapons.get(0).bullet.despawnHit = true;
         u.weapons.get(0).bullet.splashDamage = 280f;
@@ -833,7 +1049,7 @@ public class UnitOverride {
             shootEffect = Fx.none;
         }};
 
-        tecta.health = 26550;
+        tecta.constructor = ReplenishmentLegsEventUnit::create;
         ShieldArcAbility sab = (ShieldArcAbility) tecta.abilities.first();
         sab.max = 3500;
         sab.regen = 1.2f;
@@ -850,14 +1066,35 @@ public class UnitOverride {
             whenShooting = true;
         }});
         weapon = tecta.weapons.first();
-        weapon.shoot.shots = 15;
-        weapon.shoot.shotDelay = 3;
-        weapon.shootStatus = StatusEffects.slow;
-        weapon.shootStatusDuration = 60;
-        weapon.bullet.damage = 90;
-        weapon.bullet.splashDamage = 85;
+        weapon.bullet.damage = 70;
+        weapon.bullet.splashDamage = 75;
+        weapon.bullet.intervalDelay = 6;
+        weapon.bullet.intervalRandomSpread = 0;
+        weapon.bullet.intervalSpread = 15;
+        weapon.bullet.bulletInterval = 7;
+        weapon.bullet.intervalBullets = 3;
+        weapon.bullet.intervalBullet = new MissileBulletType(2.8f, 8) {{
+            weaveMag = 3;
+            weaveScale = 8;
+            lifetime = 28;
+            splashDamage = 14;
+            splashDamageRadius = 12;
+            frontColor = Color.white;
+            hitSound = Sounds.none;
+            width = height = 4f;
 
-        collaris.health = 63000;
+            lightColor = trailColor = backColor = Pal.techBlue;
+            lightRadius = 16f;
+            lightOpacity = 0.7f;
+
+            trailWidth = 1.12f;
+            trailChance = -1f;
+            trailLength = 8;
+
+            hitEffect = despawnEffect = Fx.none;
+        }};
+
+        collaris.constructor = ReplenishmentLegsEventUnit::create;
         weapon = collaris.weapons.get(0);
         collaris.targetAir = true;
         weapon.bullet.damage = 520;

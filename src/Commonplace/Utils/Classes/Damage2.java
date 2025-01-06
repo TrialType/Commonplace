@@ -16,6 +16,7 @@ import arc.util.Nullable;
 import arc.util.Tmp;
 import arc.util.pooling.Pool;
 import arc.util.pooling.Pools;
+import mindustry.Vars;
 import mindustry.core.World;
 import mindustry.entities.Damage;
 import mindustry.entities.Effect;
@@ -157,6 +158,112 @@ public abstract class Damage2 extends Damage {
 
         collidePool.freeAll(collided);
         collided.clear();
+    }
+
+    public static boolean collideLineMoveLightning(Bullet hitter, Team team, Effect effect, float x, float y, float angle, float length, boolean large, int pierceCap) {
+        collidedBlocks.clear();
+        vec.trnsExact(angle, length);
+        boolean[] absorb = {false};
+
+        if (hitter.type.collidesGround) {
+            seg1.set(x, y);
+            seg2.set(seg1).add(vec);
+            World.raycastEachWorld(x, y, seg2.x, seg2.y, (cx, cy) -> {
+                Building tile = world.build(cx, cy);
+                boolean collide = tile != null && tile.collide(hitter) && hitter.checkUnderBuild(tile, cx * tilesize, cy * tilesize)
+                        && ((tile.team != team && tile.collide(hitter)) || hitter.type.testCollision(hitter, tile)) && collidedBlocks.add(tile.pos());
+                if (collide) {
+                    collided.add(collidePool.obtain().set(cx * tilesize, cy * tilesize, tile));
+
+                    for (Point2 p : Geometry.d4) {
+                        Tile other = world.tile(p.x + cx, p.y + cy);
+                        if (other != null && (large || Intersector.intersectSegmentRectangle(seg1, seg2, other.getBounds(Tmp.r1)))) {
+                            Building build = other.build;
+                            if (build != null && hitter.checkUnderBuild(build, cx * tilesize, cy * tilesize) && collidedBlocks.add(build.pos())) {
+                                collided.add(collidePool.obtain().set((p.x + cx * tilesize), (p.y + cy) * tilesize, build));
+                            }
+                        }
+                    }
+                }
+
+                if (tile != null && tile.team != hitter.team && tile.absorbLasers()) {
+                    absorb[0] = true;
+
+                    hitter.hit = true;
+                    hitter.damage *= 12;
+                    tile.collision(hitter);
+                    hitter.type.hit(hitter, tile.getX(), tile.getY());
+
+                    if (!hitter.hasCollided(tile.id)) {
+                        hitter.collided.add(tile.id);
+                    }
+                    if (pierceCap > 0 && hitter.collided.size >= pierceCap) {
+                        hitter.remove();
+                    }
+                }
+                return false;
+            });
+        }
+
+        if (absorb[0]) {
+            collidePool.freeAll(collided);
+            collided.clear();
+            return true;
+        }
+
+        float expand = 3f;
+        rect.setPosition(x, y).setSize(vec.x, vec.y).normalize().grow(expand * 2f);
+        float x2 = vec.x + x, y2 = vec.y + y;
+
+        Units.nearbyEnemies(team, rect, u -> {
+            if (u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()) {
+                u.hitbox(hitrect);
+
+                Vec2 vec = Geometry.raycastRect(x, y, x2, y2, hitrect.grow(expand * 2));
+
+                if (vec != null) {
+                    collided.add(collidePool.obtain().set(vec.x, vec.y, u));
+                }
+            }
+        });
+
+        collided.sort(c -> hitter.dst2(c.x, c.y));
+        collided.each(c -> {
+            if (hitter.damage > 0) {
+                if (c.target instanceof Unit u) {
+                    effect.at(c.x, c.y);
+                    u.collision(hitter, c.x, c.y);
+                    if (hitter.hasCollided(u.id)) {
+                        hitter.collided.removeValue(u.id);
+                    }
+                    hitter.collision(u, c.x, c.y);
+                } else if (c.target instanceof Building tile) {
+                    float health = tile.health;
+
+                    if (tile.team != team && tile.collide(hitter)) {
+                        hitter.hit = true;
+                        tile.collision(hitter);
+                        hitter.type.hit(hitter, c.x, c.y);
+
+                        if (!hitter.hasCollided(tile.id)) {
+                            hitter.collided.add(tile.id);
+                        }
+                        if (pierceCap > 0 && hitter.collided.size >= pierceCap) {
+                            hitter.remove();
+                        }
+                    }
+
+                    //try to heal the tile
+                    if (hitter.type.testCollision(hitter, tile)) {
+                        hitter.type.hitTile(hitter, tile, c.x, c.y, health, false);
+                    }
+                }
+            }
+        });
+
+        collidePool.freeAll(collided);
+        collided.clear();
+        return false;
     }
 
     public static void damage(Team team, float x, float y, float radius, float percent, boolean complete, boolean air, boolean ground, boolean scaled, @Nullable Bullet source) {

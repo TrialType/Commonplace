@@ -2,6 +2,7 @@ package Commonplace.Loader.Special;
 
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
+import Commonplace.Type.Dialogs.PlanetDialog2;
 import Commonplace.Utils.Classes.Listener;
 import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Interfaces.BuildUpGrade;
@@ -31,23 +32,11 @@ public class Events {
     }
 
     public static void load() {
-        arc.Events.run(EventType.Trigger.update, Listener::update);
-        //arc.Events.run(EventType.Trigger.update, CorrosionMist::init);
+        //arc.Events.run(EventType.Trigger.update, Listener::update);
 
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, UnitPeculiarity::init));
-        arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.research = new MoreResearchDialog()));
-        arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.planet.shown(() -> Vars.ui.planet.buttons.button(Core.bundle.get("@story"), Icon.book, () -> {
-            BaseDialog dialog = new BaseDialog(Core.bundle.get("@story"));
-            dialog.cont.pane(t -> {
-                for (int i = 1; i <= 10; i++) {
-                    int fi = i;
-                    t.table(l -> rebuildStoryLine(l, fi)).width(250).height(100);
-                    t.row();
-                }
-            }).width(300);
-            dialog.addCloseButton();
-            dialog.show();
-        }).width(200).height(54).bottom())));
+        arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, () -> Vars.ui.research = new MoreResearchDialog()));
+        //arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, () -> Vars.ui.planet = new PlanetDialog2()));
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(10f, ProjectDialog::create));
 
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
@@ -96,19 +85,7 @@ public class Events {
         });
     }
 
-    public static void rebuildStoryLine(Table t, int index) {
-        t.clear();
-        if (Core.settings.getBool("c-message" + index + "-unlock")) {
-            t.button(Icon.redo, () -> Vars.ui.showText(Core.bundle.get("message" + index + ".name"), Core.bundle.get("message" + index)));
-            t.button(Icon.trash, () -> {
-                Core.settings.put("c-message" + index + "-unlock", false);
-                rebuildStoryLine(t, index);
-            });
-        } else {
-            t.setColor(Color.black);
-            t.image(Icon.lock).center();
-        }
-    }
+
 
     public static class GetPowerEvent {
         Unit getter;

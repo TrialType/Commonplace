@@ -9,17 +9,20 @@ import mindustry.type.StatusEffect;
 import mindustry.type.UnitType;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import static Commonplace.Loader.DefaultContent.Units2.*;
 import static mindustry.content.UnitTypes.*;
 
 public abstract class UnitPeculiarity {
-
     public static final Seq<UnitType> blackList = new Seq<>();
 
     public static final Seq<StatusEffect> wellPeculiarity = new Seq<>();
     public static final Seq<StatusEffect> middenPeculiarity = new Seq<>();
     public static final Seq<StatusEffect> badPeculiarity = new Seq<>();
+
+    public static final Map<String, String> opposites = new HashMap<>();
 
     public static void applyWell(Unit p, int num) {
         if (num == 1) {
@@ -54,6 +57,16 @@ public abstract class UnitPeculiarity {
         }
     }
 
+    public static void apply(Unit u, Seq<StatusEntry> entry, StatusEffect effect) {
+        String opp = opposites.get(effect.name);
+        if (opp != null && entry.contains(e -> opp.equals(e.effect.name))) {
+            entry.remove(e -> opp.equals(e.effect.name));
+        } else {
+            entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(effect, 1));
+            effect.applied(u, 1, false);
+        }
+    }
+
     public static void apply(Unit u, StatusEffect effect) {
         Class<? extends Unit> unit = u.getClass();
         try {
@@ -62,8 +75,7 @@ public abstract class UnitPeculiarity {
             @SuppressWarnings("unchecked")
             Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
-            entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(effect, 1));
-            effect.applied(u, 1, false);
+            apply(u, entry, effect);
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             var su = unit.getSuperclass();
             while (su != Unit.class) {
@@ -73,8 +85,7 @@ public abstract class UnitPeculiarity {
                     @SuppressWarnings("unchecked")
                     Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
-                    entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(effect, 1));
-                    effect.applied(u, 1, false);
+                    apply(u, entry, effect);
                     break;
                 } catch (NoSuchFieldException | IllegalAccessException ei) {
                     su = su.getSuperclass();
@@ -92,22 +103,13 @@ public abstract class UnitPeculiarity {
             Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
             for (int i = 0; i < well; i++) {
-                for (var peculiarity : wellPeculiarity) {
-                    entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                    peculiarity.applied(u, 1, false);
-                }
+                wellPeculiarity.each(p -> apply(u, entry, p));
             }
             for (int i = 0; i < midden; i++) {
-                for (var peculiarity : middenPeculiarity) {
-                    entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                    peculiarity.applied(u, 1, false);
-                }
+                middenPeculiarity.each(p -> apply(u, entry, p));
             }
             for (int i = 0; i < bad; i++) {
-                for (var peculiarity : badPeculiarity) {
-                    entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                    peculiarity.applied(u, 1, false);
-                }
+                badPeculiarity.each(p -> apply(u, entry, p));
             }
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             var su = unit.getSuperclass();
@@ -119,22 +121,13 @@ public abstract class UnitPeculiarity {
                     Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
                     for (int i = 0; i < well; i++) {
-                        for (var peculiarity : wellPeculiarity) {
-                            entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                            peculiarity.applied(u, 1, false);
-                        }
+                        wellPeculiarity.each(p -> apply(u, entry, p));
                     }
                     for (int i = 0; i < midden; i++) {
-                        for (var peculiarity : middenPeculiarity) {
-                            entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                            peculiarity.applied(u, 1, false);
-                        }
+                        middenPeculiarity.each(p -> apply(u, entry, p));
                     }
                     for (int i = 0; i < bad; i++) {
-                        for (var peculiarity : badPeculiarity) {
-                            entry.add(Pools.obtain(StatusEntry.class, StatusEntry::new).set(peculiarity, 1));
-                            peculiarity.applied(u, 1, false);
-                        }
+                        badPeculiarity.each(p -> apply(u, entry, p));
                     }
                     break;
                 } catch (NoSuchFieldException | IllegalAccessException ei) {

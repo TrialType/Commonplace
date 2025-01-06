@@ -16,12 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TimeLargeDamageAbility extends Ability {
-    private final Map<Unit, Float> unitTimes = new HashMap<>();
-    private final Map<Building, Float> buildingTimes = new HashMap<>();
+    protected final Map<Unit, Float> unitTimes = new HashMap<>();
+    protected final Map<Building, Float> buildingTimes = new HashMap<>();
 
     public float baseDamage = 5;
+    public float maxDamage = 35;
     public float damageRange = -1;
-    public float buildingExpand = 1;
+    public float buildingMul = 1;
 
     public TimeLargeDamageAbility(float damage, float damageRange) {
         baseDamage = damage;
@@ -40,13 +41,13 @@ public class TimeLargeDamageAbility extends Ability {
         Units.nearbyEnemies(team, x, y, radius, u -> {
             float timer = unitTimes.computeIfAbsent(u, uu -> 0F);
             float damage = (float) Math.pow(baseDamage, timer / 120) * baseDamage / 4;
-            u.damage(damage);
+            u.damagePierce(maxDamage < 0 ? damage : Math.min(damage, maxDamage));
         });
         Units.nearbyBuildings(x, y, radius, b -> {
             if (b.team != team) {
                 float timer = buildingTimes.computeIfAbsent(b, uu -> 0F);
                 float damage = (float) Math.pow(baseDamage, timer / 120) * baseDamage / 4;
-                b.damage(damage * buildingExpand);
+                b.damagePierce((maxDamage < 0 ? damage : Math.min(damage, maxDamage)) * buildingMul);
             }
         });
     }
@@ -85,7 +86,7 @@ public class TimeLargeDamageAbility extends Ability {
                 Core.bundle.get("stat.base_damage") + "^ (" + Core.bundle.get("stat.continue") + "/120 + 1) / 4" +
                 StatUnit.seconds.localized());
         t.row();
-        t.add("[lightgray]" + Core.bundle.get("stat.building_expand") + ": [white]" + buildingExpand);
+        t.add("[lightgray]" + Core.bundle.get("stat.building_expand") + ": [white]" + buildingMul);
     }
 
     @Override

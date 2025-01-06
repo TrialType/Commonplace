@@ -11,16 +11,29 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
+import arc.math.geom.Position;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
+import arc.util.Tmp;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.entities.Effect;
 import mindustry.entities.effect.ExplosionEffect;
+import mindustry.gen.Building;
+import mindustry.gen.Entityc;
+import mindustry.gen.Posc;
+import mindustry.gen.Unit;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.blocks.environment.Floor;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
 public class Effects {
     public final static Rand rand = new Rand();
@@ -263,9 +276,7 @@ public class Effects {
         Fill.circle(x, y, rad * 0.33f);
         Drawf.light(x, y, rad, color, 4);
         Draw.reset();
-    }) {{
-        rotWithParent = true;
-    }}, lightningSmallIn = new Effect(30, 20, c -> {
+    }).rotWithParent(true), lightningSmallIn = new Effect(30, 20, c -> {
         Draw.z(Layer.flyingUnit + 1);
         Draw.color(Color.white, c.color, Color.white, c.fin());
         Lines.stroke(1.2f);
@@ -277,9 +288,7 @@ public class Effects {
         points.reverse();
 
         drawLightningMove(point, points, 0.55f, c.fin());
-    }) {{
-        rotWithParent = true;
-    }}, lightningSmallOut = new Effect(30, 20, c -> {
+    }).rotWithParent(true), lightningSmallOut = new Effect(30, 20, c -> {
         Draw.z(Layer.flyingUnit + 1);
         Draw.color(Color.white, c.color, Color.white, c.fin());
         Lines.stroke(1.2f);
@@ -290,14 +299,48 @@ public class Effects {
         findLineLightningPoints(c.x, c.y, 30, 2f, point, points);
 
         drawLightningMove(point, points, 0.55f, c.fin());
-    }) {{
-        rotWithParent = true;
-    }}, lockShake = new Effect(60, 300, c -> {
+    }).rotWithParent(true), lockShake = new Effect(60, 300, c -> {
         float fin4 = Interp.pow4.apply(c.fin());
         WaveRenderer.addPlace(c.x, c.y, 160 * fin4, 25 + 15 * c.fin(), Color.valueOf("879BA3").a(1 - fin4));
-    }) {{
-        followParent = true;
-    }};
+    }).followParent(true), chainLightningFollow = new Effect(20f, 625, e -> {
+        if (!(e.data instanceof PointPack2 p)) return;
+        rand.setSeed(e.id);
+
+        float da = rand.random(360), dl = rand.random(3);
+        float tx = p.p1.getX() + Angles.trnsx(da, dl), ty = p.p1.getY() + Angles.trnsy(da, dl);
+        float x = p.p2.getX(), y = p.p2.getY();
+        float dst = Mathf.dst(x, y, tx, ty);
+        Tmp.v1.set(p.p1).sub(p.p2).nor();
+
+        float normx = Tmp.v1.x, normy = Tmp.v1.y;
+        float range = 12f;
+        int links = Mathf.ceil(dst / range);
+        float spacing = dst / links;
+
+        Lines.stroke(2.5f * e.fout());
+        Draw.color(Color.white, e.color, e.fin());
+
+        Lines.beginLine();
+
+        Lines.linePoint(x, y);
+
+        for (int i = 0; i < links; i++) {
+            float nx, ny;
+            if (i == links - 1) {
+                nx = tx;
+                ny = ty;
+            } else {
+                float len = (i + 1) * spacing;
+                Tmp.v1.setToRandomDirection(rand).scl(range / 2f);
+                nx = x + normx * len + Tmp.v1.x;
+                ny = y + normy * len + Tmp.v1.y;
+            }
+
+            Lines.linePoint(nx, ny);
+        }
+
+        Lines.endLine();
+    });
 
     public static void drawLightningMove(int num, Seq<Vec2> points, float grow, float fin) {
         int from = fin <= grow ? 0 : (int) ((num - 1) * (fin - grow) / (1 - grow));
@@ -369,6 +412,167 @@ public class Effects {
         public EffectMultipleTimes(int time, float... values) {
             this.time = time;
             this.values = values;
+        }
+    }
+
+    public static class PointPack2 implements Posc {
+        public Position p1, p2;
+
+        public PointPack2(Position p1, Position p2) {
+            this.p1 = p1;
+            this.p2 = p2;
+        }
+
+        @Override
+        public Floor floorOn() {
+            return world.floorWorld(getX(), getY());
+        }
+
+        @Override
+        public Building buildOn() {
+            return world.buildWorld(getX(), getY());
+        }
+
+        @Override
+        public boolean onSolid() {
+            return false;
+        }
+
+        @Override
+        public float getX() {
+            return p2.getX();
+        }
+
+        @Override
+        public float getY() {
+            return p2.getY();
+        }
+
+        @Override
+        public float x() {
+            return getX();
+        }
+
+        @Override
+        public float y() {
+            return getY();
+        }
+
+        @Override
+        public int tileX() {
+            return (int) (getX() / tilesize);
+        }
+
+        @Override
+        public int tileY() {
+            return (int) (getY() / tilesize);
+        }
+
+        @Override
+        public Block blockOn() {
+            return buildOn() == null ? null : buildOn().block;
+        }
+
+        @Override
+        public Tile tileOn() {
+            return world.tileWorld(getX(), getY());
+        }
+
+        @Override
+        public void set(Position position) {
+        }
+
+        @Override
+        public void set(float v, float v1) {
+        }
+
+        @Override
+        public void trns(Position position) {
+        }
+
+        @Override
+        public void trns(float v, float v1) {
+        }
+
+        @Override
+        public void x(float v) {
+        }
+
+        @Override
+        public void y(float v) {
+        }
+
+        @Override
+        public <T extends Entityc> T self() {
+            return null;
+        }
+
+        @Override
+        public <T> T as() {
+            return null;
+        }
+
+        @Override
+        public boolean isAdded() {
+            return false;
+        }
+
+        @Override
+        public boolean isLocal() {
+            return false;
+        }
+
+        @Override
+        public boolean isNull() {
+            return false;
+        }
+
+        @Override
+        public boolean isRemote() {
+            return false;
+        }
+
+        @Override
+        public boolean serialize() {
+            return false;
+        }
+
+        @Override
+        public int classId() {
+            return 0;
+        }
+
+        @Override
+        public int id() {
+            return 0;
+        }
+
+        @Override
+        public void add() {
+        }
+
+        @Override
+        public void afterRead() {
+        }
+
+        @Override
+        public void id(int i) {
+        }
+
+        @Override
+        public void read(Reads reads) {
+        }
+
+        @Override
+        public void remove() {
+        }
+
+        @Override
+        public void update() {
+        }
+
+        @Override
+        public void write(Writes writes) {
         }
     }
 }

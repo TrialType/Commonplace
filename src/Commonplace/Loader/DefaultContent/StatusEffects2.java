@@ -4,6 +4,7 @@ import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.func.Cons;
 import arc.math.Mathf;
 import arc.struct.Seq;
+import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.type.StatusEffect;
@@ -595,15 +596,15 @@ public class StatusEffects2 {
     }
 
     public static void load_peculiarity() {
-        peculiarity_heal("__h1", 1.05f, well5);
-        peculiarity_heal("__h2", 1.1f, well3);
-        peculiarity_heal("__h3", 1.15f, well);
-        peculiarity_damage("__d1", 1.05f, well5);
-        peculiarity_damage("__d2", 1.1f, well3);
-        peculiarity_damage("__d3", 1.15f, well);
-        peculiarity_reload("__r1", 1.05f, well5);
-        peculiarity_reload("__r2", 1.1f, well3);
-        peculiarity_reload("__r3", 1.15f, well);
+        peculiarity_heal("__h1", 1.05f, opposites(well5, modname("_h1")));
+        peculiarity_heal("__h2", 1.1f, opposites(well3, modname("_h2")));
+        peculiarity_heal("__h3", 1.15f, opposites(well, modname("_h3")));
+        peculiarity_damage("__d1", 1.05f, opposites(well5, modname("_d1")));
+        peculiarity_damage("__d2", 1.1f, opposites(well3, modname("_d2")));
+        peculiarity_damage("__d3", 1.15f, opposites(well, modname("_d3")));
+        peculiarity_reload("__r1", 1.05f, opposites(well5, modname("_r1")));
+        peculiarity_reload("__r2", 1.1f, opposites(well3, modname("_r2")));
+        peculiarity_reload("__r3", 1.15f, opposites(well, modname("_r3")));
         peculiarity_heal("___grow", 2f, well);
         peculiarity_reload("___oil", 2f, well);
         peculiarity("__r__h__d", 1.05f, 1f, 1.05f, 1.05f, well);
@@ -622,17 +623,28 @@ public class StatusEffects2 {
         peculiarity("___stone", 1, 1, 1.5f, 1 / 1.5f, midden);
         peculiarity("___hill", 1, 1, 2.5f, 0.4f, midden);
 
-        peculiarity_heal("_h1", 0.96f, bad5);
-        peculiarity_heal("_h2", 0.91f, bad3);
-        peculiarity_heal("_h3", 0.86f, bad);
-        peculiarity_damage("_d1", 0.96f, bad5);
-        peculiarity_damage("_d2", 0.91f, bad3);
-        peculiarity_damage("_d3", 0.86f, bad);
-        peculiarity_reload("_r1", 0.96f, bad5);
-        peculiarity_reload("_r2", 0.91f, bad3);
-        peculiarity_reload("_r3", 0.86f, bad);
+        peculiarity_heal("_h1", 0.96f,  opposites(bad5, modname("__h1")));
+        peculiarity_heal("_h2", 0.91f, opposites(bad3, modname("__h2")));
+        peculiarity_heal("_h3", 0.86f,  opposites(bad, modname("__h3")));
+        peculiarity_damage("_d1", 0.96f,  opposites(bad5, modname("__d1")));
+        peculiarity_damage("_d2", 0.91f, opposites(bad3, modname("__d2")));
+        peculiarity_damage("_d3", 0.86f,  opposites(bad, modname("__d3")));
+        peculiarity_reload("_r1", 0.96f,  opposites(bad5, modname("__r1")));
+        peculiarity_reload("_r2", 0.91f, opposites(bad3, modname("__r2")));
+        peculiarity_reload("_r3", 0.86f,  opposites(bad, modname("__r3")));
         peculiarity_heal("___incomplete", 0.5f, bad);
         peculiarity_reload("___lock", 0.5f, bad);
+    }
+
+    public static String modname(String base) {
+        return Vars.content.transformName(base);
+    }
+
+    public static Cons<StatusEffect> opposites(Cons<StatusEffect> change, String other) {
+        return s -> {
+            change.get(s);
+            opposites.put(s.name, other);
+        };
     }
 
     public static void peculiarity_heal(String name, float mul, Cons<StatusEffect> change) {
