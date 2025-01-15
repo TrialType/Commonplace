@@ -1,5 +1,7 @@
 package Commonplace.Loader.Override;
 
+import Commonplace.Entities.BulletType.StatusBulletType;
+import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Loader.DefaultContent.Units2;
 import Commonplace.Entities.BulletType.ProtectKillerBulletType;
 import arc.graphics.Color;
@@ -61,20 +63,24 @@ public class BlockOverride {
         ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
 
         Blocks.shockMine.health = 150;
-        ((ShockMine) Blocks.shockMine).tileDamage = 30;
+        ((ShockMine) Blocks.shockMine).damage = 30;
+        ((ShockMine) Blocks.shockMine).shots = 1;
+        ((ShockMine) Blocks.shockMine).length = 15;
+        ((ShockMine) Blocks.shockMine).tendrils = 7;
+        ((ShockMine) Blocks.shockMine).bullet = new StatusBulletType();
 
         ((MassDriver) Blocks.massDriver).range = 600f;
 
-        UnitFactory uf = (UnitFactory) Blocks.airFactory;
-        uf.plans.add(new UnitFactory.UnitPlan(Units2.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
-        Reconstructor rt = (Reconstructor) Blocks.additiveReconstructor;
-        rt.upgrades.add(new UnitType[]{Units2.barb, Units2.hammer});
-        rt = (Reconstructor) Blocks.multiplicativeReconstructor;
-        rt.upgrades.add(new UnitType[]{Units2.hammer, Units2.buying});
-        rt = (Reconstructor) Blocks.exponentialReconstructor;
-        rt.upgrades.add(new UnitType[]{Units2.buying, Units2.crazy});
-        rt = (Reconstructor) Blocks.tetrativeReconstructor;
-        rt.upgrades.add(new UnitType[]{Units2.crazy, Units2.transition});
+//        UnitFactory uf = (UnitFactory) Blocks.airFactory;
+//        uf.plans.add(new UnitFactory.UnitPlan(Units2.barb, 1800, ItemStack.with(Items.silicon, 20, Items.titanium, 10)));
+//        Reconstructor rt = (Reconstructor) Blocks.additiveReconstructor;
+//        rt.upgrades.add(new UnitType[]{Units2.barb, Units2.hammer});
+//        rt = (Reconstructor) Blocks.multiplicativeReconstructor;
+//        rt.upgrades.add(new UnitType[]{Units2.hammer, Units2.buying});
+//        rt = (Reconstructor) Blocks.exponentialReconstructor;
+//        rt.upgrades.add(new UnitType[]{Units2.buying, Units2.crazy});
+//        rt = (Reconstructor) Blocks.tetrativeReconstructor;
+//        rt.upgrades.add(new UnitType[]{Units2.crazy, Units2.transition});
 
         ItemTurret turret = (ItemTurret) Blocks.salvo;
         turret.ammoTypes.each((i, b) -> b.damage += 4);
@@ -170,11 +176,13 @@ public class BlockOverride {
         ((ItemTurret) Blocks.swarmer).limitRange(5);
 
         ((ItemTurret) Blocks.ripple).reload = 45;
+        ((ItemTurret) Blocks.ripple).range = 400;
         ((ItemTurret) Blocks.ripple).shoot.shots = 40;
         ((ItemTurret) Blocks.ripple).ammoTypes.each((i, b) -> {
             b.createChance = 0.2f;
             b.buildingDamageMultiplier = 1.5f;
         });
+        ((ItemTurret) Blocks.ripple).limitRange(1);
 
         ((ItemTurret) Blocks.cyclone).ammoTypes.each((i, b) -> {
             b.damage *= 1.2f;

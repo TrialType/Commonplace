@@ -1,12 +1,17 @@
 package Commonplace.Loader.DefaultContent;
 
+import Commonplace.Type.StatusEffectType.SupperStatus;
 import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.func.Cons;
+import arc.func.Floatp;
+import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
+import mindustry.entities.effect.ParticleEffect;
+import mindustry.graphics.Pal;
 import mindustry.type.StatusEffect;
 
 import static Commonplace.Utils.Classes.UnitPeculiarity.*;
@@ -52,6 +57,9 @@ public class StatusEffects2 {
         badPeculiarity.add(s);
         badPeculiarity.add(s);
     };
+    public final static Floatp zero = () -> 0f;
+    public final static Floatp wave30 = () -> Vars.state.wave / 30f;
+    public final static Floatp wave50 = () -> Vars.state.wave / 50f;
 
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
@@ -623,17 +631,62 @@ public class StatusEffects2 {
         peculiarity("___stone", 1, 1, 1.5f, 1 / 1.5f, midden);
         peculiarity("___hill", 1, 1, 2.5f, 0.4f, midden);
 
-        peculiarity_heal("_h1", 0.96f,  opposites(bad5, modname("__h1")));
+        peculiarity_heal("_h1", 0.96f, opposites(bad5, modname("__h1")));
         peculiarity_heal("_h2", 0.91f, opposites(bad3, modname("__h2")));
-        peculiarity_heal("_h3", 0.86f,  opposites(bad, modname("__h3")));
-        peculiarity_damage("_d1", 0.96f,  opposites(bad5, modname("__d1")));
+        peculiarity_heal("_h3", 0.86f, opposites(bad, modname("__h3")));
+        peculiarity_damage("_d1", 0.96f, opposites(bad5, modname("__d1")));
         peculiarity_damage("_d2", 0.91f, opposites(bad3, modname("__d2")));
-        peculiarity_damage("_d3", 0.86f,  opposites(bad, modname("__d3")));
-        peculiarity_reload("_r1", 0.96f,  opposites(bad5, modname("__r1")));
+        peculiarity_damage("_d3", 0.86f, opposites(bad, modname("__d3")));
+        peculiarity_reload("_r1", 0.96f, opposites(bad5, modname("__r1")));
         peculiarity_reload("_r2", 0.91f, opposites(bad3, modname("__r2")));
-        peculiarity_reload("_r3", 0.86f,  opposites(bad, modname("__r3")));
+        peculiarity_reload("_r3", 0.86f, opposites(bad, modname("__r3")));
         peculiarity_heal("___incomplete", 0.5f, bad);
         peculiarity_reload("___lock", 0.5f, bad);
+
+        super_damage("_sd", 3, 1.5f, wave30, wave50, e -> {
+            e.effectChance = 0.1f;
+            e.effect = new ParticleEffect() {{
+                lifetime = 30;
+                line = true;
+                lenFrom = 3;
+                lenTo = 1;
+                strokeFrom = 0.8f;
+                colorFrom = colorTo = Pal.redLight;
+            }};
+        });
+        super_heal("_sh", 3, 1.5f, wave30, wave50, e -> {
+            e.effectChance = 0.1f;
+            e.effect = new ParticleEffect() {{
+                lifetime = 30;
+                line = true;
+                lenFrom = 4;
+                lenTo = 1;
+                strokeFrom = 0.8f;
+                colorFrom = colorTo = Pal.health;
+            }};
+        });
+        super_reload("_sr", 3, 1.5f, wave30, wave50, e -> {
+            e.effectChance = 0.1f;
+            e.effect = new ParticleEffect() {{
+                lifetime = 30;
+                line = true;
+                lenFrom = 4;
+                lenTo = 1;
+                strokeFrom = 0.8f;
+                colorFrom = colorTo = Pal.techBlue;
+            }};
+        });
+        super_peculiarity("_sdr", 1.5f, 1.5f, 1, 1.5f, wave30, wave50, zero, wave30, e -> {
+            e.effectChance = 0.1f;
+            e.effect = new ParticleEffect() {{
+                lifetime = 30;
+                line = true;
+                lenFrom = 4;
+                lenTo = 1;
+                strokeFrom = 0.8f;
+                colorFrom = colorTo = Pal.redLight.cpy().mul(Pal.techBlue);
+            }};
+        });
     }
 
     public static String modname(String base) {
@@ -645,6 +698,36 @@ public class StatusEffects2 {
             change.get(s);
             opposites.put(s.name, other);
         };
+    }
+
+    public static void super_damage(String name, float damageMul, float speedMul, Floatp damageAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, damageMul, speedMul, 1, 1, damageAdd, speedAdd, zero, zero, change);
+    }
+
+    public static void super_heal(String name, float healMul, float speedMul, Floatp healAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, 1, speedMul, healMul, 1, zero, speedAdd, healAdd, zero, change);
+    }
+
+    public static void super_reload(String name, float reloadMul, float speedMul, Floatp reloadAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, 1, speedMul, 1, reloadMul, zero, speedAdd, zero, reloadAdd, change);
+    }
+
+    public static void super_peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, Floatp damageAdd, Floatp speedAdd, Floatp healAdd, Floatp reloadAdd, Cons<StatusEffect> change) {
+        StatusEffect status = new SupperStatus(name) {{
+            show = false;
+            permanent = true;
+
+            baseDamageMultiplier = damageMul;
+            baseReloadMultiplier = reloadMul;
+            baseHealthMultiplier = healMul;
+            baseSpeedMultiplier = speedMul;
+            waveDamageAdder = damageAdd;
+            waveReloadAdder = reloadAdd;
+            waveHealthAdder = healAdd;
+            waveSpeedAdder = speedAdd;
+        }};
+        superPeculiarity.add(status);
+        change.get(status);
     }
 
     public static void peculiarity_heal(String name, float mul, Cons<StatusEffect> change) {

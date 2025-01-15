@@ -12,7 +12,6 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
-import arc.math.Angles;
 import arc.math.Mathf;
 import arc.struct.ObjectMap;
 import arc.struct.ObjectSet;
@@ -118,6 +117,7 @@ public class UnitOverride {
         /*===================================================================================================*/
         /*===================================================================================================*/
         /*===================================================================================================*/
+        alpha.armor = 3f;
         alpha.buildSpeed = 1f;
         alpha.mineSpeed = 8f;
         alpha.weapons.first().bullet = new ProtectKillerBulletType() {{
@@ -136,6 +136,7 @@ public class UnitOverride {
             maxShieldDamageAdder = 1000;
         }};
 
+        beta.armor = 5f;
         beta.buildSpeed = 1.5f;
         beta.mineSpeed = 9f;
         beta.weapons.first().bullet = new ProtectKillerBulletType() {{
@@ -154,7 +155,7 @@ public class UnitOverride {
             maxShieldDamageAdder = 1250;
         }};
 
-        gamma.buildSpeed = 2f;
+        gamma.armor = 8f;
         gamma.mineSpeed = 12f;
         gamma.weapons.first().bullet = new ProtectKillerBulletType() {{
             damage = 11;
@@ -173,17 +174,19 @@ public class UnitOverride {
             maxShieldDamageAdder = 1500;
         }};
         /*-----------------------------------------------------------------------------*/
-        dagger.speed = 0.18f;
+        dagger.speed = 0.3f;
         weapon = dagger.weapons.get(0);
         weapon.reload = 45;
         weapon.shoot = new ShootPattern() {{
             shots = 3;
-            shotDelay = 10;
+            shotDelay = 2;
         }};
         weapon.bullet = new ProtectKillerBulletType() {{
+            sprite = "missile";
+
             damage = 16;
-            speed = 4;
-            lifetime = 75;
+            speed = 10;
+            lifetime = 25;
             width = height = 8;
 
             minArmor = 7;
@@ -206,8 +209,8 @@ public class UnitOverride {
             shootStatus = StatusEffects.fast;
             shootStatusDuration = 350;
             shoot = new ShootMulti(new ShootPattern() {{
-                shots = 110;
-                shotDelay = 3;
+                shots = 120;
+                shotDelay = 1;
             }}, new ShootBarrel() {{
                 barrels = new float[]{
                         5, 0, 0,
@@ -377,21 +380,33 @@ public class UnitOverride {
                 s.damage = 60;
                 s.length = 70;
             } else {
-                w.shootSound = Sounds.lasershoot;
-                w.bullet = new LaserBulletType() {{
-                    colors[0] = Color.valueOf("bf92f9").mul(1, 1, 1, 0.4f);
-                    colors[1] = Color.valueOf("bf92f9");
-                    pierceBuilding = true;
-                    pierceCap = 5;
+                w.reload = 6;
+                w.shoot.shots = 3;
+                w.shoot.shotDelay = 3;
+                w.inaccuracy = 15;
+                w.shake = 0;
+                w.bullet = new LaserBoltBulletType() {{
+                    sprite = "clear-effect";
 
-                    length = 100;
-                    width = 22;
-                    sideWidth = 5;
-                    sideLength = 8;
-                    damage = 80;
+                    damage = 30;
+                    speed = 4f;
+                    lifetime = 20f;
+
+                    hitColor = Pal.sap;
+                    smokeEffect = Fx.none;
+                    frontColor = backColor = Pal.sapBullet;
+                    hitEffect = despawnEffect = Fx.hitLaserBlast;
+
+                    width = 1;
+                    height = 7;
+                    shrinkY = shrinkX = 0;
+                    hitShake = despawnShake = 0;
 
                     status = StatusEffects.sapped;
                     statusDuration = 60f * 10;
+
+                    pierce = true;
+                    pierceCap = 4;
                 }};
             }
         }
@@ -475,7 +490,7 @@ public class UnitOverride {
         eclipse.health = 77000;
         /*-----------------------------------------------------------------------------*/
         mono.mineSpeed = 4f;
-        mono.abilities.add(new RepairOwnAbility(100, 15, 0));
+        mono.abilities.add(new RepairOwnAbility(100, 180, 0));
 
         poly.weapons.get(0).bullet.splashDamageRadius = 20;
 
@@ -968,11 +983,6 @@ public class UnitOverride {
                 lightningLength = 8;
                 lightningColor = Pal.sap.cpy().mul(1.1f);
             }};
-        }}, new SuppressionFieldAbility() {{
-            applyParticleChance = 25;
-            reload = 45;
-            orbRadius = orbMidScl = orbSinScl = orbSinMag = 0;
-            range = 250;
         }}, new MoveLightningAbility(10, 6, 0.6f, 0, 5, 15, Pal.sap));
 
         disrupt.constructor = ReplenishmentPayloadEventUnit::create;
@@ -1014,7 +1024,7 @@ public class UnitOverride {
                 trailLength = 0;
                 trailWidth = 0;
                 trailInterval = 10;
-                trailEffect = new Effect(30, 40, c -> {
+                trailEffect = new Effect(12, 40, c -> {
                     color(c.color);
                     randLenVectors(c.id, 12, 2f + 30 * c.finpow(),
                             (x, y) -> Fill.circle(c.x + x, c.y + y, c.fout() * 8));
@@ -1128,7 +1138,7 @@ public class UnitOverride {
         color = Color.valueOf("ffa998");
         weapon = nova.weapons.get(0);
         weapon.reload = 3;
-        weapon.bullet.lifetime = 33.4f;
+        weapon.bullet.lifetime = 17.33f;
         weapon.bullet.speed = 9;
         weapon.bullet.damage = 16;
         weapon.bullet.healAmount = 0;

@@ -4,7 +4,9 @@ import Commonplace.Loader.Special.Effects;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.util.Time;
+import mindustry.Vars;
 import mindustry.ai.types.MissileAI;
+import mindustry.entities.Damage;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.bullet.BulletType;
 import mindustry.gen.TimedKillUnit;
@@ -25,6 +27,7 @@ public class PowerChargeAbility extends Ability {
     public BulletType bullet = null;
 
     protected Unit shooter = null;
+    protected boolean change = false;
     protected float power = 0;
     protected float timer = 0;
     protected float velTimer = 0;
@@ -57,13 +60,25 @@ public class PowerChargeAbility extends Ability {
         if (power > 0) {
             if (unit instanceof TimedKillUnit t) {
                 if (t.fin() > missileChargeDurationMul) {
-                    unit.vel.setLength(Math.min(unit.vel.len() * velMul, unit.speed() * maxVelMul));
+                    unit.vel.scl((Vars.state.isCampaign() ? 5 : 1) * velMul);
+                    unit.vel.limit(unit.speed() * maxVelMul);
+                    if (!change) {
+                        change = true;
+                        Damage.applySuppression(unit.team, unit.x, unit.y, power * 100, t.lifetime, 0, 20, unit);
+                    }
+                } else {
+                    change = false;
                 }
             } else {
                 if (velTimer > 10 && velTimer < 19) {
                     unit.vel.scl(velMul);
+                    if (!change) {
+                        change = true;
+                        Damage.applySuppression(unit.team, unit.x, unit.y, power * 100, power * 60, 0, 20, unit);
+                    }
                 } else if (velTimer >= 19) {
                     velTimer = 0;
+                    change = false;
                 }
             }
         }

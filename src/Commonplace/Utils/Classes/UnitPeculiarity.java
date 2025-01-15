@@ -21,6 +21,7 @@ public abstract class UnitPeculiarity {
     public static final Seq<StatusEffect> wellPeculiarity = new Seq<>();
     public static final Seq<StatusEffect> middenPeculiarity = new Seq<>();
     public static final Seq<StatusEffect> badPeculiarity = new Seq<>();
+    public static final Seq<StatusEffect> superPeculiarity = new Seq<>();
 
     public static final Map<String, String> opposites = new HashMap<>();
 
@@ -169,6 +170,17 @@ public abstract class UnitPeculiarity {
                 applyBad(u, bad % badPeculiarity.size);
             }
             applyAll(u, well / wellPeculiarity.size, midden / middenPeculiarity.size, bad / badPeculiarity.size);
+        }
+    }
+
+    public static void applySuper(Unit u, int num) {
+        if (num <= 1) {
+            apply(u, superPeculiarity.random());
+        } else {
+            superPeculiarity.shuffle();
+            for (int i = 0; i < num; i++) {
+                apply(u, superPeculiarity.get(i));
+            }
         }
     }
 
