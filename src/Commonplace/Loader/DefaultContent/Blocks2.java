@@ -16,7 +16,6 @@ import mindustry.entities.effect.WaveEffect;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.ShootAlternate;
 import mindustry.entities.pattern.ShootBarrel;
-import mindustry.entities.pattern.ShootHelix;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Building;
 import mindustry.gen.Unit;
@@ -47,7 +46,7 @@ public class Blocks2 {
     //test
     public static Block pu;
     //defense
-    public static Block eleFenceII, eleFenceIII, autoWall, edge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
+    public static Block eleFenceII, eleFenceIII, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
     public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
@@ -1339,33 +1338,6 @@ public class Blocks2 {
                     Items.copper, 1000,
                     Items.silicon, 500
             ));
-        }};
-        autoWall = new AutoBlock("auto-wall") {{
-            size = 2;
-            health = 350;
-            itemCapacity = 130;
-
-            requirements(Category.defense, ItemStack.with(Items.copper, 145, Items.graphite, 35));
-
-            creates.putAll(ItemStack.with(Items.copper, 120, Items.silicon, 10), Blocks.copperWall,
-                    ItemStack.with(Items.titanium, 120, Items.silicon, 10), Blocks.titaniumWall,
-                    ItemStack.with(Items.thorium, 120, Items.silicon, 10), Blocks.thoriumWall,
-                    ItemStack.with(Items.phaseFabric, 120, Items.silicon, 10), Blocks.phaseWall,
-                    ItemStack.with(Items.surgeAlloy, 120, Items.silicon, 10), Blocks.surgeWall);
-        }};
-        edge = new AutoBlock("edge") {{
-            size = 3;
-            behind = 14;
-            health = 1000;
-            maxRange = 900;
-
-            requirements(Category.defense, ItemStack.with(Items.copper, 300, Items.graphite, 120, Items.thorium, 35));
-
-            creates.putAll(ItemStack.with(Items.copper, 480, Items.silicon, 30), Blocks.copperWallLarge,
-                    ItemStack.with(Items.titanium, 480, Items.silicon, 30), Blocks.titaniumWallLarge,
-                    ItemStack.with(Items.thorium, 480, Items.silicon, 30), Blocks.thoriumWallLarge,
-                    ItemStack.with(Items.phaseFabric, 480, Items.silicon, 30), Blocks.phaseWallLarge,
-                    ItemStack.with(Items.surgeAlloy, 480, Items.silicon, 30), Blocks.surgeWallLarge);
         }};
         decoy = new Decoy("decoy") {{
             requirements(Category.defense, ItemStack.with(silicon, 25, blastCompound, 5, titanium, 25));

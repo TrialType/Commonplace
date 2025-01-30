@@ -20,6 +20,12 @@ public class EMPLarge extends BasicBulletType {
     public float downRange = 100;
     public float downDamage = 0;
 
+    public EMPLarge(){
+        super();
+
+        hittable = reflectable = absorbable = false;
+    }
+
     @Override
     public void init(Bullet b) {
         super.init(b);

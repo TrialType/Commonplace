@@ -12,6 +12,7 @@ import arc.math.Rand;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.game.EventType;
+import mindustry.game.Team;
 import mindustry.gen.*;
 
 
@@ -41,13 +42,21 @@ public class Events {
         });
 
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (Mathf.chance(p_supper)) {
-                UnitPeculiarity.applySuper(e.unit, 1);
-                if (p_num > supper_opp) {
-                    UnitPeculiarity.apply(e.unit, p_num - supper_opp, p_well, p_midden);
+            if (e.unit.team != Team.sharded) {
+                float threat = Vars.state.isCampaign() ? Vars.state.getSector().threat : e.unit.team.cores().size * 0.25f;
+                if (threat < 0.2f) {
+                    PeculiarChance(3, 10, 0.0001f, 0.65f, 0.45f, e.unit);
+                } else if (threat < 0.4f) {
+                    PeculiarChance(6, 10, 0.0002f, 0.6f, 0.4f, e.unit);
+                } else if (threat < 0.6f) {
+                    PeculiarChance(9, 10, 0.0004f, 0.54f, 0.34f, e.unit);
+                } else if (threat < 0.8f) {
+                    PeculiarChance(15, 10, 0.0008f, 0.47f, 0.27f, e.unit);
+                } else {
+                    PeculiarChance(20, 10, 0.0016f, 0.39f, 0.19f, e.unit);
                 }
             } else {
-                UnitPeculiarity.apply(e.unit, p_num, p_well, p_midden);
+                PeculiarChance(p_num, supper_opp, p_supper, p_well, p_midden, e.unit);
             }
         });
         arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
@@ -113,6 +122,17 @@ public class Events {
                 fug.addExp(e.build.maxHealth * e.build.team.rules().blockHealthMultiplier);
             }
         });
+    }
+
+    public static void PeculiarChance(int num, int s_opp, float supper, float well, float midden, Unit unit) {
+        if (Mathf.chance(supper)) {
+            UnitPeculiarity.applySuper(unit, 1);
+            if (num > s_opp) {
+                UnitPeculiarity.apply(unit, num - s_opp, well, midden);
+            }
+        } else {
+            UnitPeculiarity.apply(unit, num, well, midden);
+        }
     }
 
     public static class GetPowerEvent {

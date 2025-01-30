@@ -54,7 +54,7 @@ public class UnitOverride {
         emanate.buildSpeed = 2.3f;
         emanate.mineSpeed = 13.5f;
 
-        dagger.health = 150;
+        dagger.health = 170;
         mace.health = 1000;
         fortress.health = 1800;
         scepter.health = 31500;
@@ -96,20 +96,20 @@ public class UnitOverride {
         aegires.health = 42000;
         navanax.health = 70000;
 
-        stell.health = 850;
-        locus.health = 2100;
+        stell.health = 2975;
+        locus.health = 8350;
         precept.health = 17500;
         vanquish.health = 38500;
         conquer.health = 77000;
 
-        merui.health = 680;
-        cleroi.health = 1100;
+        merui.health = 2380;
+        cleroi.health = 3850;
         anthicus.health = 10150;
         tecta.health = 26550;
         collaris.health = 63000;
 
-        elude.health = 600;
-        avert.health = 1100;
+        elude.health = 2100;
+        avert.health = 3850;
         obviate.health = 8050;
         quell.health = 22000;
         disrupt.health = 42000;
@@ -182,12 +182,11 @@ public class UnitOverride {
             shotDelay = 2;
         }};
         weapon.bullet = new ProtectKillerBulletType() {{
-            sprite = "missile";
-
             damage = 16;
             speed = 10;
             lifetime = 25;
             width = height = 8;
+            shrinkX = shrinkY = 0;
 
             minArmor = 7;
             damageArmorMultiplier = 1.5f;
@@ -801,6 +800,8 @@ public class UnitOverride {
         }};
 
         /*-----------------------------------------------------------------------------*/
+        locus.weapons.first().bullet.damage = 50f;
+
         weapon = precept.weapons.first();
         weapon.bullet.damage = 140;
         weapon.bullet.splashDamage = 65f;
@@ -872,6 +873,7 @@ public class UnitOverride {
             @SuppressWarnings("all")
             float fin = (i / 2 + 1) * 2f / bullets.size;
             float life = weapon.bullet.lifetime * fin * 1.35f;
+            temp.pierceCap = 5;
             temp.damage = 70;
             temp.fragAngle = 0;
             temp.fragSpread = 180;
@@ -885,7 +887,7 @@ public class UnitOverride {
                 height = 11f;
                 lifetime = life;
                 hitSize = 5f;
-                pierceCap = 2;
+                pierceCap = 5;
                 pierce = true;
                 pierceBuilding = true;
                 hitColor = backColor = trailColor = Color.valueOf("feb380");
@@ -917,7 +919,7 @@ public class UnitOverride {
                         height = 11f;
                         lifetime = life * 1.05f;
                         hitSize = 5f;
-                        pierceCap = 2;
+                        pierceCap = 5;
                         pierce = true;
                         pierceBuilding = true;
                         hitColor = backColor = trailColor = Color.valueOf("feb380");
@@ -1083,7 +1085,7 @@ public class UnitOverride {
         weapon.bullet.intervalSpread = 15;
         weapon.bullet.bulletInterval = 7;
         weapon.bullet.intervalBullets = 3;
-        weapon.bullet.intervalBullet = new MissileBulletType(2.8f, 8) {{
+        weapon.bullet.intervalBullet = new MissileBulletType(3f, 8) {{
             weaveMag = 3;
             weaveScale = 8;
             lifetime = 28;
@@ -1130,9 +1132,8 @@ public class UnitOverride {
         weapon.bullet.fragBullet.splashDamage = 92f;
         weapon.bullet.fragBullet.splashDamageRadius = 20;
         /*-----------------------------------------------------------------------------*/
-        nova.speed = 2f;
-        nova.armor = 12;
-        nova.health = 220;
+        nova.speed = 2.4f;
+        nova.armor = 8;
         nova.buildSpeed = 0;
         nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
         color = Color.valueOf("ffa998");
@@ -1158,7 +1159,6 @@ public class UnitOverride {
         ((LaserBoltBulletType) weapon.bullet).frontColor = color;
         ((LaserBoltBulletType) weapon.bullet).backColor = color;
 
-        pulsar.health = 560;
         pulsar.speed = 1.1f;
         weapon = pulsar.weapons.get(0);
         weapon.inaccuracy = 12;
@@ -1182,7 +1182,6 @@ public class UnitOverride {
             }};
         }};
 
-        quasar.health = 2200;
         ForceFieldAbility fAbility = (ForceFieldAbility) quasar.abilities.get(0);
         fAbility.regen = 1f;
         fAbility.max = 1800;
@@ -1212,7 +1211,6 @@ public class UnitOverride {
             }};
         }});
 
-        vela.health = 22000;
         vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{
             damage = 35f;
             length = 180f;
@@ -1236,7 +1234,6 @@ public class UnitOverride {
         }};
         vela.rotateSpeed = 5.4F;
 
-        corvus.health = 77000;
         weapon = corvus.weapons.get(0);
         weapon.bullet.fragOnHit = false;
         weapon.bullet.fragBullets = 16;

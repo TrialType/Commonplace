@@ -267,7 +267,7 @@ public class EMPBullet extends Bullet {
             trail.length = 0;
             trail.update(x, y, 0);
         }
-        if (this.type.collidesTiles && this.type.collides && this.type.collidesGround && on == null) {
+        if (this.type.collidesTiles && this.type.collides && on == null) {
             this.tileRaycast(World.toTile(this.lastX), World.toTile(this.lastY), this.tileX(), this.tileY());
         }
         if (this.keepAlive) {

@@ -52,15 +52,15 @@ public class BlockOverride {
         Blocks.thoriumWall.health = 200 * 10;
         Blocks.thoriumWallLarge.health = 200 * 40;
         Blocks.phaseWall.health = 150 * 10;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 15;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 12;
         Blocks.phaseWallLarge.health = 150 * 40;
-        ((Wall) Blocks.phaseWall).chanceDeflect = 15;
+        ((Wall) Blocks.phaseWall).chanceDeflect = 12;
         Blocks.surgeWall.health = 250 * 10;
-        ((Wall) Blocks.surgeWall).lightningChance = 0.4f;
-        ((Wall) Blocks.surgeWall).lightningDamage = 40;
+        ((Wall) Blocks.surgeWall).lightningChance = 0.07f;
+        ((Wall) Blocks.surgeWall).lightningDamage = 30;
         Blocks.surgeWallLarge.health = 250 * 40;
-        ((Wall) Blocks.surgeWallLarge).lightningChance = 0.4f;
-        ((Wall) Blocks.surgeWallLarge).lightningDamage = 40;
+        ((Wall) Blocks.surgeWallLarge).lightningChance = 0.07f;
+        ((Wall) Blocks.surgeWallLarge).lightningDamage = 30;
 
         Blocks.shockMine.health = 150;
         ((ShockMine) Blocks.shockMine).damage = 30;

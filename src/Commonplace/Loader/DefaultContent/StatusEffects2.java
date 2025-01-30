@@ -4,7 +4,6 @@ import Commonplace.Type.StatusEffectType.SupperStatus;
 import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.func.Cons;
 import arc.func.Floatp;
-import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.Vars;
