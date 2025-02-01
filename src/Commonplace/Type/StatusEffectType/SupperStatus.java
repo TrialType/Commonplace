@@ -23,6 +23,7 @@ public class SupperStatus extends StatusEffect {
         reloadMultiplier = baseReloadMultiplier + waveReloadAdder.get();
         healthMultiplier = baseHealthMultiplier + waveHealthAdder.get();
         speedMultiplier = baseSpeedMultiplier + waveSpeedAdder.get();
+        dragMultiplier = speedMultiplier * 0.75f;
 
         super.update(unit, time);
     }

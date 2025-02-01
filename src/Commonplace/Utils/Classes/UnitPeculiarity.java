@@ -169,6 +169,7 @@ public abstract class UnitPeculiarity {
             if (bad > 0) {
                 applyBad(u, bad % badPeculiarity.size);
             }
+
             applyAll(u, well / wellPeculiarity.size, midden / middenPeculiarity.size, bad / badPeculiarity.size);
         }
     }

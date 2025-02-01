@@ -272,29 +272,38 @@ public class UnitOverride {
         crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 900, 1));
         weapon = crawler.weapons.get(0);
         weapon.reload = 30;
-        weapon.bullet.killShooter = false;
-        weapon.bullet.splashDamageRadius = 60;
-        weapon.bullet.buildingDamageMultiplier = 2.5f;
-        weapon.bullet.shootEffect = new ExplosionEffect() {{
-            lifetime = 25;
-            clip = 70;
+        weapon.bullet = new PercentExplosionBulletType(100f, 55f) {{
+            rangeOverride = 30f;
+            buildingDamageMultiplier = 2.5f;
 
-            smokes = 24;
-            smokeRad = 70;
-            smokeSize = 4;
-            smokeSizeBase = 0;
-            smokeColor = Color.valueOf("EEaA88ff");
+            collidesTiles = false;
+            scaledSplashDamage = false;
 
-            sparks = 36;
-            sparkRad = 70;
-            sparkLen = 4;
-            sparkColor = Color.valueOf("EEaA88ff");
+            hitSound = Sounds.explosion;
+            hitEffect = Fx.pulverize;
 
-            waveLife = 25;
-            waveStroke = 2;
-            waveRad = 80;
-            waveRadBase = 0;
-            waveColor = Color.valueOf("EEaA88ff");
+
+            shootEffect = new ExplosionEffect() {{
+                lifetime = 25;
+                clip = 70;
+
+                smokes = 24;
+                smokeRad = 70;
+                smokeSize = 4;
+                smokeSizeBase = 0;
+                smokeColor = Color.valueOf("EEaA88ff");
+
+                sparks = 36;
+                sparkRad = 70;
+                sparkLen = 4;
+                sparkColor = Color.valueOf("EEaA88ff");
+
+                waveLife = 25;
+                waveStroke = 2;
+                waveRad = 80;
+                waveRadBase = 0;
+                waveColor = Color.valueOf("EEaA88ff");
+            }};
         }};
 
         atrax.speed = 0.3f;

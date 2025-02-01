@@ -4,6 +4,7 @@ import Commonplace.Type.StatusEffectType.SupperStatus;
 import Commonplace.Type.StatusEffectType.WithMoreStatus;
 import arc.func.Cons;
 import arc.func.Floatp;
+import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import mindustry.Vars;
@@ -57,8 +58,9 @@ public class StatusEffects2 {
         badPeculiarity.add(s);
     };
     public final static Floatp zero = () -> 0f;
-    public final static Floatp wave30 = () -> Vars.state.wave / 30f;
-    public final static Floatp wave50 = () -> Vars.state.wave / 50f;
+    public final static Floatp wave30l70 = () -> Math.min(70f, Vars.state.wave / 30f);
+    public final static Floatp wave50l5 = () -> Math.min(5f, Vars.state.wave / 50f);
+    public final static Floatp wave60l35 = () -> Math.min(35f, Vars.state.wave / 60f);
 
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
@@ -642,7 +644,7 @@ public class StatusEffects2 {
         peculiarity_heal("___incomplete", 0.5f, bad);
         peculiarity_reload("___lock", 0.5f, bad);
 
-        super_damage("_sd", 3, 1.5f, wave30, wave50, e -> {
+        super_damage("_sd", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -650,10 +652,10 @@ public class StatusEffects2 {
                 lenFrom = 3;
                 lenTo = 1;
                 strokeFrom = 0.8f;
-                colorFrom = colorTo = Pal.redLight;
+                colorFrom = colorTo = Color.valueOf("EE7777").mul(Pal.accent);
             }};
         });
-        super_heal("_sh", 3, 1.5f, wave30, wave50, e -> {
+        super_heal("_sh", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -661,10 +663,10 @@ public class StatusEffects2 {
                 lenFrom = 4;
                 lenTo = 1;
                 strokeFrom = 0.8f;
-                colorFrom = colorTo = Pal.health;
+                colorFrom = colorTo = Color.valueOf("77EE77").mul(Pal.accent);
             }};
         });
-        super_reload("_sr", 3, 1.5f, wave30, wave50, e -> {
+        super_reload("_sr", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -672,10 +674,10 @@ public class StatusEffects2 {
                 lenFrom = 4;
                 lenTo = 1;
                 strokeFrom = 0.8f;
-                colorFrom = colorTo = Pal.techBlue;
+                colorFrom = colorTo = Pal.techBlue.cpy();
             }};
         });
-        super_peculiarity("_sdr", 1.5f, 1.5f, 1, 1.5f, wave30, wave50, zero, wave30, e -> {
+        super_peculiarity("_sdr", 1.5f, 1.5f, 1, 1.5f, 1 / 6f, wave60l35, wave50l5, zero, wave60l35, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -699,20 +701,22 @@ public class StatusEffects2 {
         };
     }
 
-    public static void super_damage(String name, float damageMul, float speedMul, Floatp damageAdd, Floatp speedAdd, Cons<StatusEffect> change) {
-        super_peculiarity(name, damageMul, speedMul, 1, 1, damageAdd, speedAdd, zero, zero, change);
+    public static void super_damage(String name, float damageMul, float speedMul, float heal, Floatp damageAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, damageMul, speedMul, 1, 1, heal, damageAdd, speedAdd, zero, zero, change);
     }
 
-    public static void super_heal(String name, float healMul, float speedMul, Floatp healAdd, Floatp speedAdd, Cons<StatusEffect> change) {
-        super_peculiarity(name, 1, speedMul, healMul, 1, zero, speedAdd, healAdd, zero, change);
+    public static void super_heal(String name, float healMul, float speedMul, float heal, Floatp healAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, 1, speedMul, healMul, 1, heal, zero, speedAdd, healAdd, zero, change);
     }
 
-    public static void super_reload(String name, float reloadMul, float speedMul, Floatp reloadAdd, Floatp speedAdd, Cons<StatusEffect> change) {
-        super_peculiarity(name, 1, speedMul, 1, reloadMul, zero, speedAdd, zero, reloadAdd, change);
+    public static void super_reload(String name, float reloadMul, float speedMul, float heal, Floatp reloadAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+        super_peculiarity(name, 1, speedMul, 1, reloadMul, heal, zero, speedAdd, zero, reloadAdd, change);
     }
 
-    public static void super_peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, Floatp damageAdd, Floatp speedAdd, Floatp healAdd, Floatp reloadAdd, Cons<StatusEffect> change) {
+    public static void super_peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, float heal, Floatp damageAdd, Floatp speedAdd, Floatp healAdd, Floatp reloadAdd, Cons<StatusEffect> change) {
         StatusEffect status = new SupperStatus(name) {{
+            damage = -heal;
+
             show = false;
             permanent = true;
 

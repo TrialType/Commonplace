@@ -1,9 +1,12 @@
 package Commonplace.Entities.Unit;
 
+import Commonplace.Utils.Interfaces.OwnCreate;
 import mindustry.game.EventType;
 import mindustry.gen.LegsUnit;
 
-public class ReplenishmentLegsEventUnit extends LegsUnit {
+public class ReplenishmentLegsEventUnit extends LegsUnit implements OwnCreate {
+    protected boolean event = false;
+
     protected ReplenishmentLegsEventUnit() {
         super();
     }
@@ -19,5 +22,15 @@ public class ReplenishmentLegsEventUnit extends LegsUnit {
         if (!dead) {
             arc.Events.fire(new EventType.UnitCreateEvent(this, null, null));
         }
+    }
+
+    @Override
+    public void created(boolean create) {
+        event = create;
+    }
+
+    @Override
+    public boolean created() {
+        return event;
     }
 }
