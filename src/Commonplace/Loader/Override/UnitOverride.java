@@ -1255,7 +1255,7 @@ public class UnitOverride {
         }});
 
         vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{
-            damage = 55f;
+            damage = 45f;
             length = 180f;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 420f;
