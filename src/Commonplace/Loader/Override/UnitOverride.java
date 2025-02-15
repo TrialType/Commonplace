@@ -382,42 +382,76 @@ public class UnitOverride {
         }};
         spiroct.abilities.add(new SapAbility());
 
-        arkyid.health = 28000;
-        for (Weapon w : arkyid.weapons) {
-            if (w.bullet instanceof SapBulletType s) {
-                s.damage = 60;
-                s.length = 70;
-            } else {
-                w.reload = 6;
-                w.shoot.shots = 3;
-                w.shoot.shotDelay = 3;
-                w.inaccuracy = 15;
-                w.shake = 0;
-                w.bullet = new LaserBoltBulletType() {{
-                    sprite = "clear-effect";
+        weapon = arkyid.weapons.get(0);
+        weapon.alternate = false;
+        weapon.reload = 90;
+        weapon.bullet = new BasicBulletType(4, 35, "circle") {{
+            lifetime = 40;
 
-                    damage = 30;
-                    speed = 4f;
-                    lifetime = 20f;
+            width = height = 6;
+            shrinkX = shrinkY = 0;
+            backColor = frontColor = hitColor = Pal.sapBullet;
 
-                    hitColor = Pal.sap;
-                    smokeEffect = Fx.none;
-                    frontColor = backColor = Pal.sapBullet;
-                    hitEffect = despawnEffect = Fx.hitLaserBlast;
+            lightningColor = Pal.sapBullet;
+            shootEffect = smokeEffect = Fx.none;
+            hitEffect = despawnEffect = Fx.sapExplosion;
 
-                    width = 1;
-                    height = 7;
-                    shrinkY = shrinkX = 0;
-                    hitShake = despawnShake = 0;
+            knockback = 0.8f;
+            splashDamage = 65f;
+            splashDamageRadius = 70f;
+            lightning = 3;
+            lightningLength = 10;
 
-                    status = StatusEffects.sapped;
-                    statusDuration = 60f * 10;
+            status = StatusEffects.sapped;
+            statusDuration = 60f * 10;
+        }};
+        weapon = arkyid.weapons.get(1);
+        weapon.reload = 15;
+        weapon.bullet.damage = 65f;
+        weapon = arkyid.weapons.get(2);
+        weapon.reload = 45;
+        weapon.shoot.shots = 9;
+        weapon.shoot.shotDelay = 4;
+        weapon.shootSound = Sounds.none;
+        weapon.bullet = new BasicBulletType(1.8f, 35, "circle") {{
+            lifetime = 70;
+            inaccuracy = 45;
 
-                    pierce = true;
-                    pierceCap = 4;
-                }};
-            }
-        }
+            weaveMag = 7;
+            weaveScale = 2.75f;
+            weaveRandom = true;
+
+            pierce = pierceBuilding = true;
+            pierceCap = 5;
+
+            width = height = 4;
+            shrinkX = shrinkY = 0;
+            backColor = frontColor = hitColor = Pal.sapBullet;
+
+            shootEffect = smokeEffect = Fx.none;
+            hitEffect = despawnEffect = Effects.explosionSmall;
+        }};
+        weapon = arkyid.weapons.get(3);
+        weapon.shake = 0;
+        weapon.reload = 45;
+        weapon.inaccuracy = 0;
+        weapon.shoot.shots = 3;
+        weapon.shoot.shotDelay = 10;
+        weapon.shootSound = Sounds.sap;
+        weapon.bullet = new SapBulletType() {{
+            width = 1;
+            length = 75f;
+            damage = 75;
+            lifetime = 30f;
+            sapStrength = 1f;
+            hitShake = despawnShake = 0;
+
+            smokeEffect = Fx.none;
+            despawnEffect = Fx.none;
+            shootEffect = Fx.shootSmall;
+            hitEffect = Fx.hitLaserBlast;
+            hitColor = color = Color.valueOf("bf92f9");
+        }};
 
         toxopid.health = 77000;
         /*-----------------------------------------------------------------------------*/
@@ -1221,7 +1255,7 @@ public class UnitOverride {
         }});
 
         vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{
-            damage = 35f;
+            damage = 55f;
             length = 180f;
             hitEffect = Fx.hitMeltHeal;
             drawSize = 420f;

@@ -35,7 +35,7 @@ public class Events {
         supper_opp = Core.settings.getInt("commonplace-supper-opp", 10);
         p_well = Core.settings.getFloat("commonplace-p-well", 0.5f);
         p_midden = Core.settings.getFloat("commonplace-p-midden", 0.2f);
-        p_supper = Core.settings.getFloat("commonplace-p-supper", 1/*0.001f*/);
+        p_supper = Core.settings.getFloat("commonplace-p-supper", 0.001f);
     }
 
     public static void load() {

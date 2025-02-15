@@ -31,7 +31,9 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
 
 import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
@@ -340,6 +342,20 @@ public class Effects {
         }
 
         Lines.endLine();
+    }), explosionSmall = new Effect(25, e -> {
+        color(e.color);
+
+        e.scaled(6, i -> {
+            stroke(3f * i.fout());
+            Lines.circle(e.x, e.y, 1f + i.fin() * 20);
+        });
+
+        color(e.color);
+        stroke(e.fout());
+
+        randLenVectors(e.id + 1, 8, 1f + 60f * e.finpow(), (x, y) -> lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f));
+
+        Drawf.light(e.x, e.y, 90f, e.color, 0.8f * e.fout());
     });
 
     public static void drawLightningMove(int num, Seq<Vec2> points, float grow, float fin) {
