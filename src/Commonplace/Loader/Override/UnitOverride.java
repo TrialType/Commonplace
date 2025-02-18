@@ -13,9 +13,11 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
+import arc.math.Rand;
 import arc.struct.ObjectMap;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
+import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
@@ -269,7 +271,7 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
         crawler.health = 350;
         crawler.speed = 2.5f;
-        crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 900, 1));
+        crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 600, 1));
         weapon = crawler.weapons.get(0);
         weapon.reload = 30;
         weapon.bullet = new PercentExplosionBulletType(100f, 55f) {{
@@ -385,41 +387,53 @@ public class UnitOverride {
         weapon = arkyid.weapons.get(0);
         weapon.alternate = false;
         weapon.reload = 90;
-        weapon.bullet = new BasicBulletType(4, 35, "circle") {{
-            lifetime = 40;
-
-            width = height = 6;
+        weapon.bullet = new BasicBulletType(1.3f, 35, "circle") {{
+            lifetime = 120;
+            width = height = 8;
             shrinkX = shrinkY = 0;
-            backColor = frontColor = hitColor = Pal.sapBullet;
+
+            reflectable = false;
+            keepVelocity = false;
 
             lightningColor = Pal.sapBullet;
             shootEffect = smokeEffect = Fx.none;
-            hitEffect = despawnEffect = Fx.sapExplosion;
+            hitEffect = despawnEffect = Effects.explosionSmall;
+            backColor = frontColor = hitColor = Pal.sapBullet;
+            trailEffect = new Effect(75, r -> {
+                Rand rand = new Rand(r.id);
+                Draw.color(Pal.sapBullet);
+                for (int i = 0; i < 8; i++) {
+                    float range = rand.random(25);
+                    float angle = rand.random(360);
+                    Tmp.v1.trns(angle, 4 + range * r.fin());
+                    Fill.circle(Tmp.v1.x + r.x, Tmp.v1.y + r.y, 3 * r.fout() + 1);
+                }
+            });
 
+            trailInterval = 12;
             knockback = 0.8f;
-            splashDamage = 65f;
+            splashDamage = 90f;
             splashDamageRadius = 70f;
-            lightning = 3;
-            lightningLength = 10;
+            hitShake = despawnShake = 5;
 
             status = StatusEffects.sapped;
             statusDuration = 60f * 10;
         }};
         weapon = arkyid.weapons.get(1);
-        weapon.reload = 15;
-        weapon.bullet.damage = 65f;
+        weapon.reload = 4;
+        weapon.bullet.damage = 15f;
         weapon = arkyid.weapons.get(2);
         weapon.reload = 45;
         weapon.shoot.shots = 9;
         weapon.shoot.shotDelay = 4;
         weapon.shootSound = Sounds.none;
-        weapon.bullet = new BasicBulletType(1.8f, 35, "circle") {{
+        weapon.bullet = new BasicBulletType(2f, 35, "circle") {{
             lifetime = 70;
-            inaccuracy = 45;
+            inaccuracy = 60;
 
-            weaveMag = 7;
-            weaveScale = 2.75f;
-            weaveRandom = true;
+            drag = 0.015f;
+            weaveMag = 8;
+            weaveScale = 3.25f;
 
             pierce = pierceBuilding = true;
             pierceCap = 5;
@@ -429,18 +443,24 @@ public class UnitOverride {
             backColor = frontColor = hitColor = Pal.sapBullet;
 
             shootEffect = smokeEffect = Fx.none;
-            hitEffect = despawnEffect = Effects.explosionSmall;
+            hitEffect = despawnEffect = new Effect(45, r -> {
+                Rand rand = new Rand(r.id);
+                Draw.color(Pal.sapBullet);
+                for (int i = 0; i < 8; i++) {
+                    float range = rand.random(10);
+                    float angle = rand.random(360);
+                    Tmp.v1.trns(angle, 4 + range * r.fin());
+                    Fill.circle(Tmp.v1.x + r.x, Tmp.v1.y + r.y, 3 * r.fout() + 1);
+                }
+            });
         }};
         weapon = arkyid.weapons.get(3);
         weapon.shake = 0;
-        weapon.reload = 45;
-        weapon.inaccuracy = 0;
-        weapon.shoot.shots = 3;
-        weapon.shoot.shotDelay = 10;
+        weapon.reload = 30;
         weapon.shootSound = Sounds.sap;
         weapon.bullet = new SapBulletType() {{
             width = 1;
-            length = 75f;
+            length = 85f;
             damage = 75;
             lifetime = 30f;
             sapStrength = 1f;
@@ -453,7 +473,93 @@ public class UnitOverride {
             hitColor = color = Color.valueOf("bf92f9");
         }};
 
-        toxopid.health = 77000;
+        toxopid.rotateSpeed = 2.5f;
+        LightningBulletType l = new LightningBulletType() {{
+            damage = 70;
+            lightningColor = Pal.sapBullet;
+            lightningLength = 15;
+        }};
+        weapon = toxopid.weapons.get(0);
+        weapon.shoot = new ShootPattern();
+        weapon.bullet = new ShrapnelBulletType() {{
+            length = 120f;
+            damage = 130f;
+            width = 28f;
+            serrationLenScl = 7f;
+            serrationSpaceOffset = 60f;
+            serrationFadeOffset = 0f;
+            serrations = 10;
+            serrationWidth = 6f;
+            fromColor = Pal.sapBullet;
+            toColor = Pal.sapBulletBack;
+            shootEffect = smokeEffect = Fx.sparkShoot;
+
+            spawnBullets.add(l, l, l, l);
+        }};
+        weapon = toxopid.weapons.get(1);
+        weapon.shoot.shots = 3;
+        weapon.shoot.shotDelay = 5;
+        weapon.rotateSpeed = 2f;
+        weapon.bullet = new BasicBulletType(6f, 70) {{
+            hitEffect = Fx.sapExplosion;
+            knockback = 0.8f;
+            lifetime = 40f;
+            width = height = 25f;
+            shrinkX = shrinkY = 0;
+            ammoMultiplier = 4f;
+            splashDamageRadius = 80f;
+            splashDamage = 85f;
+            backColor = Pal.sapBulletBack;
+            frontColor = lightningColor = Pal.sapBullet;
+            lightning = 5;
+            lightningLength = 20;
+            smokeEffect = Fx.shootBigSmoke2;
+            hitShake = 10f;
+            lightRadius = 40f;
+            lightColor = Pal.sap;
+            lightOpacity = 0.6f;
+
+            status = StatusEffects.sapped;
+            statusDuration = 60f * 10;
+
+            fragLifeMin = 0.3f;
+            fragBullets = 9;
+
+            fragBullet = new ArtilleryBulletType(2.3f, 40) {{
+                hitEffect = Fx.sapExplosion;
+                knockback = 0.8f;
+                lifetime = 90f;
+                width = height = 20f;
+                collidesTiles = false;
+                splashDamageRadius = 70f;
+                splashDamage = 45f;
+                backColor = Pal.sapBulletBack;
+                frontColor = lightningColor = Pal.sapBullet;
+                lightning = 2;
+                lightningLength = 5;
+                smokeEffect = Fx.shootBigSmoke2;
+                hitShake = 5f;
+                lightRadius = 30f;
+                lightColor = Pal.sap;
+                lightOpacity = 0.5f;
+
+                status = StatusEffects.sapped;
+                statusDuration = 60f * 10;
+            }};
+
+            spawnBullets.add(new SapBulletType() {{
+                damage = 145;
+                length = 100;
+                width = 1.5f;
+                sapStrength = 0.95f;
+
+                smokeEffect = Fx.none;
+                despawnEffect = Fx.none;
+                shootEffect = Fx.sapped;
+                hitEffect = Fx.hitLaserBlast;
+                hitColor = color = Color.valueOf("bf92f9");
+            }});
+        }};
         /*-----------------------------------------------------------------------------*/
         flare.armor = 9;
         flare.speed = 4;
