@@ -443,7 +443,7 @@ public class UnitOverride {
             backColor = frontColor = hitColor = Pal.sapBullet;
 
             shootEffect = smokeEffect = Fx.none;
-            hitEffect = despawnEffect = new Effect(45, r -> {
+            hitEffect = despawnEffect = new Effect(60, r -> {
                 Rand rand = new Rand(r.id);
                 Draw.color(Pal.sapBullet);
                 for (int i = 0; i < 8; i++) {
