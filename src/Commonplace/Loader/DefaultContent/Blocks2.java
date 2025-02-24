@@ -18,6 +18,7 @@ import mindustry.entities.pattern.ShootAlternate;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Building;
+import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
@@ -29,9 +30,13 @@ import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
+import mindustry.world.blocks.power.ConsumeGenerator;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumePower;
+import mindustry.world.draw.DrawDefault;
+import mindustry.world.draw.DrawFlame;
+import mindustry.world.draw.DrawMulti;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
@@ -50,9 +55,11 @@ public class Blocks2 {
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
     public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
+    //power
+    public static Block sporeCombustionGenerator;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
-            phaseAmplifier, meltingFurnace;
+            phaseAmplifier, meltingFurnace, hotSiliconSmelter, pulverizerSupper;
     //effect
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
             forceProjectorLarge, bulletSlower;
@@ -196,6 +203,76 @@ public class Blocks2 {
             size = 3;
             itemCapacity = 20;
         }};
+        hotSiliconSmelter = new GenericCrafter("hot-silicon-smelter") {{
+            requirements(Category.crafting, with(Items.copper, 35, Items.lead, 30, graphite, 30));
+            craftEffect = Fx.smeltsmoke;
+            outputItem = new ItemStack(Items.silicon, 5);
+            craftTime = 60f;
+            size = 2;
+            hasPower = true;
+            hasLiquids = true;
+            drawer = new DrawMulti(new DrawDefault(), new DrawFlame(Color.valueOf("ffef99")));
+            ambientSound = Sounds.smelter;
+            ambientSoundVolume = 0.07f;
+
+            consumeLiquid(Liquids.slag, 0.10f);
+            consumeItems(with(Items.coal, 2, Items.sand, 2));
+            consumePower(0.50f);
+        }};
+        pulverizerSupper = new StackCrafter("pulverizer-supper") {{
+            health = 350;
+            itemCapacity = 60;
+            liquidCapacity = 120;
+            switchStack.add(new ProductStack(
+                    ItemStack.with(copper, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 1),
+                    LiquidStack.empty, 15
+            ), new ProductStack(
+                    ItemStack.with(lead, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 1),
+                    LiquidStack.empty, 15
+            ), new ProductStack(
+                    ItemStack.with(titanium, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 3),
+                    LiquidStack.empty, 30
+            ), new ProductStack(
+                    ItemStack.with(thorium, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 6),
+                    LiquidStack.empty, 45
+            ));
+            consumePower(0.5f);
+            requirements(Category.crafting, ItemStack.with(Items.copper, 30, Items.lead, 25));
+        }};
+//======================================================================================================================
+        sporeCombustionGenerator = new ConsumeGenerator("spore-combustion-generator") {{
+            requirements(Category.power, with(Items.copper, 35, Items.graphite, 25, Items.lead, 40, Items.silicon, 30));
+            size = 2;
+
+            powerProduction = 9f;
+            itemDuration = 100f;
+
+            outputLiquid = new LiquidStack(Liquids.water, 0.15f);
+
+            ambientSound = Sounds.smelter;
+            ambientSoundVolume = 0.03f;
+            generateEffect = Fx.generatespark;
+
+            consumeItem(sporePod);
+        }};
+//======================================================================================================================
+        //debug
+        pu = new PureProject("pu") {{
+            health = 650;
+
+            consumePower(50f);
+
+            requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
+        }};
+
         meltingFurnace = new StackCrafter("melting-furnace") {{
             health = 400;
             itemCapacity = 60;
@@ -230,16 +307,7 @@ public class Blocks2 {
 
             consume(new ConsumePower(1, 0, false));
 
-            requirements(Category.crafting, ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
-        }};
-//======================================================================================================================
-        //debug
-        pu = new PureProject("pu") {{
-            health = 650;
-
-            consumePower(50f);
-
-            requirements(Category.effect, BuildVisibility.debugOnly, ItemStack.with(Items.copper, 1));
+            requirements(Category.crafting,BuildVisibility.debugOnly ,ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
         }};
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
@@ -258,7 +326,7 @@ public class Blocks2 {
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shoot = new ShootAlternate(){{
+            shoot = new ShootAlternate() {{
                 shots = 30;
                 shotDelay = 1;
                 barrels = 6;
@@ -293,7 +361,7 @@ public class Blocks2 {
 
                 fragBullets = 6;
                 fragRandomSpread = 360;
-                fragBullet = new BasicBulletType(){{
+                fragBullet = new BasicBulletType() {{
                     width = height = 3;
                     damage = 7;
                     speed = 3;

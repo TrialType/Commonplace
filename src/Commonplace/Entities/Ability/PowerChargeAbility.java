@@ -4,7 +4,6 @@ import Commonplace.Loader.Special.Effects;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.util.Time;
-import mindustry.Vars;
 import mindustry.ai.types.MissileAI;
 import mindustry.entities.Damage;
 import mindustry.entities.abilities.Ability;
@@ -60,7 +59,7 @@ public class PowerChargeAbility extends Ability {
         if (power > 0) {
             if (unit instanceof TimedKillUnit t) {
                 if (t.fin() > missileChargeDurationMul) {
-                    unit.vel.scl((Vars.state.isCampaign() ? 5 : 1) * velMul);
+                    unit.vel.scl(5 * velMul);
                     unit.vel.limit(unit.speed() * maxVelMul);
                     if (!change) {
                         change = true;

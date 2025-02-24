@@ -18,6 +18,7 @@ import arc.struct.ObjectMap;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
 import arc.util.Tmp;
+import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
@@ -131,7 +132,6 @@ public class UnitOverride {
             shootEffect = Fx.shootSmall;
             smokeEffect = Fx.shootSmallSmoke;
             buildingDamageMultiplier = 0.01f;
-
             damageArmorMultiplier = 1;
             maxArmorDamageAdder = 15;
             damageShieldMultiplier = 1.25f;
@@ -150,7 +150,6 @@ public class UnitOverride {
             shootEffect = Fx.shootSmall;
             smokeEffect = Fx.shootSmallSmoke;
             buildingDamageMultiplier = 0.01f;
-
             damageArmorMultiplier = 1.1f;
             maxArmorDamageAdder = 25;
             damageShieldMultiplier = 1.5f;
@@ -169,7 +168,6 @@ public class UnitOverride {
             smokeEffect = Fx.shootSmallSmoke;
             buildingDamageMultiplier = 0.01f;
             homingPower = 0.04f;
-
             damageArmorMultiplier = 1.2f;
             maxArmorDamageAdder = 35;
             damageShieldMultiplier = 1.75f;
@@ -189,7 +187,6 @@ public class UnitOverride {
             lifetime = 25;
             width = height = 8;
             shrinkX = shrinkY = 0;
-
             minArmor = 7;
             damageArmorMultiplier = 1.5f;
             maxArmorDamageAdder = 20;
@@ -232,7 +229,6 @@ public class UnitOverride {
                 shootSound = Sounds.flame;
                 shootEffect = new Effect(32f, 266f, e -> {
                     color(Pal.lightFlame, Pal.darkFlame, Color.gray, e.fin());
-
                     randLenVectors(e.id, 20, e.finpow() * 200, e.rotation, 15,
                             (x, y) -> Fill.circle(e.x + x, e.y + y, 0.65f + e.fout() * 1.5f));
                 });
@@ -240,7 +236,6 @@ public class UnitOverride {
         }};
         mace.weapons.add(weapon);
 
-        fortress.health = 1800;
         fortress.abilities.add(new StatusFieldAbility(StatusEffects2.fireKiller, 300, 120, 60) {{
             activeEffect = new WrapEffect(Fx.overdriveWave, Pal.techBlue);
         }});
@@ -257,12 +252,28 @@ public class UnitOverride {
         weapon.bullet.puddleRange = 16;
         weapon.bullet.puddleAmount = 20;
 
-        scepter.health = 31500;
-        scepter.weapons.get(0).bullet.damage = 150;
-        scepter.weapons.get(0).bullet.lightningDamage = 60;
-        scepter.weapons.get(1).bullet.damage = 30;
+        scepter.weapons.get(0).bullet.damage = 70;
+        scepter.weapons.get(0).bullet.lightningDamage = 30;
+        weapon = scepter.weapons.get(1);
+        weapon.shoot.shots = 2;
+        weapon.shootStatusDuration = 30;
+        weapon.shootStatus = StatusEffects2.fireKiller;
+        scepter.weapons.get(1).bullet = new FireBulletType(6, 20) {{
+            drag = 0;
+            radius = 0;
+            velMin = 6;
+            velMax = 6;
+            lifetime = 40;
+            pierceCap = -1;
+            pierceBuilding = true;
+            fireTrailChance = 0.5f;
+            collides = collidesTiles = true;
+            reflectable = absorbable = hittable = false;
+        }};
+        scepter.weapons.get(2).bullet.speed = 5;
+        scepter.weapons.get(2).bullet.damage = 20;
+        scepter.weapons.get(2).bullet.lifetime = 30;
 
-        reign.health = 84000;
         reign.weapons.get(0).bullet.damage = 240;
         reign.weapons.get(0).bullet.splashDamage = 54;
         reign.weapons.get(0).bullet.fragBullet.damage = 60;
@@ -335,14 +346,11 @@ public class UnitOverride {
         weapon.bullet.bulletInterval = 3;
         weapon.bullet.intervalBullet = new LiquidBulletType(Liquids.slag) {{
             reflectable = absorbable = hittable = false;
-            despawnHit = true;
-
             hitEffect = despawnEffect = Fx.none;
-
+            despawnHit = true;
+            speed = 2;
             damage = 6;
             lifetime = 1;
-            speed = 2;
-
             puddleSize = 15;
         }};
         weapon.bullet.chargeEffect = new Effect(31, 20, c -> {
@@ -351,7 +359,6 @@ public class UnitOverride {
         });
         weapon.bullet.hitEffect = weapon.bullet.despawnEffect = new Effect(16, e -> {
             color(e.color);
-
             randLenVectors(e.id, 14, 2f + e.fin() * 25f, e.rotation, 120, (x, y) -> Fill.circle(e.x + x, e.y + y, e.fout() * 4f));
         });
 
@@ -363,12 +370,12 @@ public class UnitOverride {
             sapStrength = 0.5f;
             length = 100f;
             damage = 33;
-            shootEffect = Fx.shootSmall;
-            hitColor = color = Color.valueOf("bf92f9");
-            despawnEffect = Fx.none;
             width = 0.54f;
             lifetime = 35f;
             knockback = -1.24f;
+            despawnEffect = Fx.none;
+            shootEffect = Fx.shootSmall;
+            hitColor = color = Color.valueOf("bf92f9");
         }};
         weapon = spiroct.weapons.get(1);
         weapon.bullet = new SapRadiusBulletType() {{
@@ -391,10 +398,8 @@ public class UnitOverride {
             lifetime = 120;
             width = height = 8;
             shrinkX = shrinkY = 0;
-
             reflectable = false;
             keepVelocity = false;
-
             lightningColor = Pal.sapBullet;
             shootEffect = smokeEffect = Fx.none;
             hitEffect = despawnEffect = Effects.explosionSmall;
@@ -415,7 +420,6 @@ public class UnitOverride {
             splashDamage = 90f;
             splashDamageRadius = 70f;
             hitShake = despawnShake = 5;
-
             status = StatusEffects.sapped;
             statusDuration = 60f * 10;
         }};
@@ -430,18 +434,14 @@ public class UnitOverride {
         weapon.bullet = new BasicBulletType(2f, 35, "circle") {{
             lifetime = 70;
             inaccuracy = 60;
-
             drag = 0.015f;
             weaveMag = 8;
             weaveScale = 3.25f;
-
             pierce = pierceBuilding = true;
             pierceCap = 5;
-
             width = height = 4;
             shrinkX = shrinkY = 0;
             backColor = frontColor = hitColor = Pal.sapBullet;
-
             shootEffect = smokeEffect = Fx.none;
             hitEffect = despawnEffect = new Effect(60, r -> {
                 Rand rand = new Rand(r.id);
@@ -465,7 +465,6 @@ public class UnitOverride {
             lifetime = 30f;
             sapStrength = 1f;
             hitShake = despawnShake = 0;
-
             smokeEffect = Fx.none;
             despawnEffect = Fx.none;
             shootEffect = Fx.shootSmall;
@@ -493,7 +492,6 @@ public class UnitOverride {
             fromColor = Pal.sapBullet;
             toColor = Pal.sapBulletBack;
             shootEffect = smokeEffect = Fx.sparkShoot;
-
             spawnBullets.add(l, l, l, l);
         }};
         weapon = toxopid.weapons.get(1);
@@ -518,13 +516,10 @@ public class UnitOverride {
             lightRadius = 40f;
             lightColor = Pal.sap;
             lightOpacity = 0.6f;
-
             status = StatusEffects.sapped;
             statusDuration = 60f * 10;
-
             fragLifeMin = 0.3f;
             fragBullets = 9;
-
             fragBullet = new ArtilleryBulletType(2.3f, 40) {{
                 hitEffect = Fx.sapExplosion;
                 knockback = 0.8f;
@@ -542,24 +537,11 @@ public class UnitOverride {
                 lightRadius = 30f;
                 lightColor = Pal.sap;
                 lightOpacity = 0.5f;
-
                 status = StatusEffects.sapped;
                 statusDuration = 60f * 10;
             }};
-
-            spawnBullets.add(new SapBulletType() {{
-                damage = 145;
-                length = 100;
-                width = 1.5f;
-                sapStrength = 0.95f;
-
-                smokeEffect = Fx.none;
-                despawnEffect = Fx.none;
-                shootEffect = Fx.sapped;
-                hitEffect = Fx.hitLaserBlast;
-                hitColor = color = Color.valueOf("bf92f9");
-            }});
         }};
+        toxopid.abilities.add(new FaceSapAbility());
         /*-----------------------------------------------------------------------------*/
         flare.armor = 9;
         flare.speed = 4;
@@ -608,7 +590,6 @@ public class UnitOverride {
             }});
             inaccuracy = 5f;
             shootSound = Sounds.missile;
-
             bullet = new BulletType(30, 0) {{
                 keepVelocity = false;
                 splashDamageRadius = 25;
@@ -626,7 +607,6 @@ public class UnitOverride {
             sprintingDuration = 10;
             sprintingLength = 10;
             sprintingRadius = 150;
-
             status = StatusEffects2.frenzy;
             statusDuration = 240;
         }});
@@ -651,7 +631,6 @@ public class UnitOverride {
             reload = 10;
             targetInterval = 10;
             targetSwitchInterval = 10;
-
             bullet = new BulletType() {{
                 damage = 5;
             }};
@@ -668,30 +647,21 @@ public class UnitOverride {
         weapon.bullet = new StrikeBulletType() {{
             sprite = "large-bomb";
             width = height = 960 / 4f;
-
             maxRange = 300;
-
             hitColor = backColor = Pal.heal;
             frontColor = Color.white;
             mixColorTo = Color.white;
-
             hitSound = Sounds.plasmaboom;
             hitShake = 4f;
-
             lifetime = 120;
-
             despawnEffect = Effects.BombLarge;
             hitEffect = Fx.massiveExplosion;
             keepVelocity = false;
             spin = 2f;
-
             shrinkX = shrinkY = 0.7f;
-
             speed = 0f;
             collides = false;
-
             hitTeam = true;
-
             healPercent = 15f;
             splashDamage = 400f;
             splashDamageRadius = 550f;
@@ -699,8 +669,12 @@ public class UnitOverride {
 
         oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         oct.abilities.clear();
-        oct.abilities.add(new ForceFieldAbility(150, 4, 10000, 600, 6, 0));
-        oct.abilities.add(new ForceFieldAbility(210, 6, 15000, 600, 6, 0));
+        oct.abilities.add(new ForceFieldAbility(150, 5, 20000, 480, 8, 0),
+                new ForceFieldAbility(210, 4, 10000, 480, 6, 0));
+        oct.abilities.add(new NetAbility(23, 22),
+                new NetAbility(-23, 22),
+                new NetAbility(23, -17),
+                new NetAbility(-23, -17));
         /*-----------------------------------------------------------------------------*/
         risso.armor = 7;
         weapon = risso.weapons.get(0);

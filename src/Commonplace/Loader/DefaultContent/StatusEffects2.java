@@ -6,6 +6,7 @@ import arc.func.Cons;
 import arc.func.Floatp;
 import arc.graphics.Color;
 import arc.math.Mathf;
+import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Fx;
@@ -13,6 +14,8 @@ import mindustry.content.StatusEffects;
 import mindustry.entities.effect.ParticleEffect;
 import mindustry.graphics.Pal;
 import mindustry.type.StatusEffect;
+
+import java.lang.reflect.Field;
 
 import static Commonplace.Utils.Classes.UnitPeculiarity.*;
 import static mindustry.content.StatusEffects.*;
@@ -227,14 +230,16 @@ public class StatusEffects2 {
         }};
 
 
+        StatusEffect.TransitionHandler none = (unit, result, time) -> {
+        };
         fireKiller = new StatusEffect("fire-killer") {{
-            opposite(burning);
-            opposite(gasify);
-            opposite(sublimation);
-            affinity(burning, (unit, result, time) -> unit.unapply(burning));
-            affinity(gasify, (unit, result, time) -> unit.unapply(gasify));
-            affinity(sublimation, (unit, result, time) -> unit.unapply(sublimation));
+            affinity(gasify, none);
+            affinity(burning, none);
+            affinity(sublimation, none);
         }};
+        trans(gasify, fireKiller, (unit, result, time) -> result.effect = fireKiller);
+        trans(burning, fireKiller, (unit, result, time) -> result.effect = fireKiller);
+        trans(sublimation, fireKiller, (unit, result, time) -> result.effect = fireKiller);
 
 
         pureA = new StatusEffect("pure-a") {{
@@ -688,6 +693,18 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Pal.redLight.cpy().mul(Pal.techBlue);
             }};
         });
+    }
+
+    public static void trans(StatusEffect base, StatusEffect effect, StatusEffect.TransitionHandler handler) {
+        try {
+            Field field = StatusEffect.class.getDeclaredField("transitions");
+            field.setAccessible(true);
+            //noinspection unchecked
+            ObjectMap<StatusEffect, StatusEffect.TransitionHandler> transitions = (ObjectMap<StatusEffect, StatusEffect.TransitionHandler>) field.get(base);
+            transitions.put(effect, handler);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String modname(String base) {
