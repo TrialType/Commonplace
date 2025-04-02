@@ -1,0 +1,48 @@
+package Commonplace.Abandon.Override;
+
+import Commonplace.Utils.Interfaces.PeculiarityC;
+import arc.struct.IntSeq;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
+import mindustry.gen.TankUnit;
+import mindustry.io.TypeIO;
+
+public class FTankUnit extends TankUnit implements PeculiarityC {
+    protected boolean uploaded = true;
+    protected IntSeq pes = new IntSeq();
+
+    public static FTankUnit create() {
+        return new FTankUnit();
+    }
+
+    @Override
+    public int classId() {
+        return 105;
+    }
+
+    @Override
+    public void update() {
+//        if (!uploaded) {
+//            UnitPeculiarity.load(this, pes.items);
+//            uploaded = true;
+//        }
+        super.update();
+    }
+
+    @Override
+    public void read(Reads read) {
+        super.read(read);
+        pes = TypeIO.readIntSeq(read);
+        uploaded = false;
+    }
+
+    public void write(Writes write) {
+        super.write(write);
+        TypeIO.writeIntSeq(write, pes);
+    }
+
+    @Override
+    public IntSeq getPes() {
+        return pes;
+    }
+}

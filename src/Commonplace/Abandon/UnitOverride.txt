@@ -1,0 +1,58 @@
+//        UnitTypes.dagger.constructor = FMechUnit::create;
+//        UnitTypes.mace.constructor = FMechUnit::create;
+//        UnitTypes.fortress.constructor = FMechUnit::create;
+//        UnitTypes.scepter.constructor = FMechUnit::create;
+//        UnitTypes.reign.constructor = FMechUnit::create;
+//
+//        UnitTypes.nova.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.pulsar.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.quasar.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.vela.constructor = FMechUnitLegacyNova::create;
+//        UnitTypes.corvus.constructor = FMechUnitLegacyNova::create;
+//
+//        UnitTypes.crawler.constructor = FMechUnit::create;
+//        UnitTypes.atrax.constructor = FLegsUnit::create;
+//        UnitTypes.spiroct.constructor = FLegsUnit::create;
+//        UnitTypes.arkyid.constructor = FLegsUnit::create;
+//        UnitTypes.toxopid.constructor = FLegsUnit::create;
+//
+//        UnitTypes.flare.constructor = FUnitEntity::create;
+//        UnitTypes.horizon.constructor = FUnitEntity::create;
+//        UnitTypes.zenith.constructor = FUnitEntity::create;
+//        UnitTypes.antumbra.constructor = FUnitEntity::create;
+//        UnitTypes.eclipse.constructor = FUnitEntity::create;
+//
+//        UnitTypes.poly.constructor = LongLifeUnitEntity::create;
+//        UnitTypes.mega.constructor = FPayloadUnit::create;
+//        UnitTypes.quad.constructor = FPayloadUnit::create;
+//        UnitTypes.oct.constructor = FPayloadUnit::create;
+//
+//        UnitTypes.risso.constructor = FUnitWaterMove::create;
+//        UnitTypes.minke.constructor = FUnitWaterMove::create;
+//        UnitTypes.bryde.constructor = FUnitWaterMove::create;
+//        UnitTypes.sei.constructor = FUnitWaterMove::create;
+//        UnitTypes.omura.constructor = FUnitWaterMove::create;
+//
+//        UnitTypes.retusa.constructor = FUnitWaterMove::create;
+//        UnitTypes.oxynoe.constructor = FUnitWaterMove::create;
+//        UnitTypes.cyerce.constructor = FUnitWaterMove::create;
+//        UnitTypes.aegires.constructor = FUnitWaterMove::create;
+//        UnitTypes.navanax.constructor = FUnitWaterMove::create;
+//
+//        UnitTypes.stell.constructor = FTankUnit::create;
+//        UnitTypes.locus.constructor = FTankUnit::create;
+//        UnitTypes.precept.constructor = FTankUnit::create;
+//        UnitTypes.vanquish.constructor = FTankUnit::create;
+//        UnitTypes.conquer.constructor = FTankUnit::create;
+//
+//        UnitTypes.merui.constructor = FLegsUnit::create;
+//        UnitTypes.cleroi.constructor = FLegsUnit::create;
+//        UnitTypes.anthicus.constructor = FLegsUnit::create;
+//        UnitTypes.tecta.constructor = FLegsUnit::create;
+//        UnitTypes.collaris.constructor = FLegsUnit::create;
+//
+//        UnitTypes.elude.constructor = FElevationMoveUnit::create;
+//        UnitTypes.avert.constructor = FUnitEntity::create;
+//        UnitTypes.obviate.constructor = FUnitEntity::create;
+//        UnitTypes.quell.constructor = FPayloadUnit::create;
+//        UnitTypes.disrupt.constructor = FPayloadUnit::create;

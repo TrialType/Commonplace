@@ -1,0 +1,397 @@
+//import Commonplace.Entities.BulletType.SummonBulletType;
+//import Commonplace.Utils.Interfaces.PeculiarityC;
+//import arc.func.Cons;
+//import arc.math.Mathf;
+//import mindustry.entities.bullet.BulletType;
+//import mindustry.entities.units.WeaponMount;
+//import mindustry.gen.Unit;
+//import mindustry.type.Weapon;
+//import mindustry.type.weapons.RepairBeamWeapon;
+
+//    static final int ChangeNumberOrAddProject = 0;
+//    static final int Default = 1;
+//    static final int None = 2;
+//    static final int LimitAll = 3;
+
+//    public static final Seq<Peculiarity> all = new Seq<>();
+//    public static final Seq<Peculiarity> wellPeculiarity = new Seq<>();
+//    public static final Seq<Peculiarity> middenPeculiarity = new Seq<>();
+//    public static final Seq<Peculiarity> badPeculiarity = new Seq<>();
+
+//    public static final Seq<Peculiarity> applier = new Seq<>();
+
+//    public static void applyWell(PeculiarityC p) {
+//        var peculiarity = wellPeculiarity.random();
+//        applier.add(peculiarity);
+//        p.apply(peculiarity.id);
+//    }
+
+//    public static void applyWell(PeculiarityC p, int num) {
+//        if (num == 1) {
+//            applyWell(p);
+//        } else {
+//            wellPeculiarity.shuffle();
+//            for (int i = 0; i < num; i++) {
+//                var peculiarity = wellPeculiarity.get(i);
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void applyWellAll(PeculiarityC p, int time) {
+//        for (int i = 0; i < time; i++) {
+//            for (var peculiarity : wellPeculiarity) {
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void applyMidden(PeculiarityC p) {
+//        var peculiarity = middenPeculiarity.random();
+//        applier.add(peculiarity);
+//        p.apply(peculiarity.id);
+//    }
+
+//    public static void applyMidden(PeculiarityC p, int num) {
+//        if (num == 1) {
+//            applyMidden(p);
+//        } else {
+//            middenPeculiarity.shuffle();
+//            for (int i = 0; i < num; i++) {
+//                var peculiarity = middenPeculiarity.get(i);
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void applyMiddenAll(PeculiarityC p, int time) {
+//        for (int i = 0; i < time; i++) {
+//            for (var peculiarity : middenPeculiarity) {
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void applyBad(PeculiarityC p) {
+//        var peculiarity = badPeculiarity.random();
+//        applier.add(peculiarity);
+//        p.apply(peculiarity.id);
+//    }
+
+//    public static void applyBad(PeculiarityC p, int num) {
+//        if (num == 1) {
+//            applyBad(p);
+//        } else {
+//            badPeculiarity.shuffle();
+//            for (int i = 0; i < num; i++) {
+//                var peculiarity = badPeculiarity.get(i);
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void applyBadAll(PeculiarityC p, int time) {
+//        for (int i = 0; i < time; i++) {
+//            for (var peculiarity : badPeculiarity) {
+//                applier.add(peculiarity);
+//                p.apply(peculiarity.id);
+//            }
+//        }
+//    }
+
+//    public static void apply(Unit u, int num, float well, float midden) {
+//        if (u instanceof PeculiarityC && !blackList.contains(u.type)) {
+//            int w = 0, m = 0, b = 0;
+//            for (int i = 0; i < num; i++) {
+//                float value = Mathf.random();
+//                if (value >= well) {
+//                    w++;
+//                } else if (value >= midden) {
+//                    m++;
+//                } else {
+//                    b++;
+//                }
+//            }
+//            apply(u, w, m, b);
+//        }
+//    }
+
+//    public static void apply(Unit u, int well, int midden, int bad) {
+//        if (u instanceof PeculiarityC p && !blackList.contains(u.type)) {
+//            applier.clear();
+//            //well
+//            if (well > wellPeculiarity.size) {
+//                applyWellAll(p, well / wellPeculiarity.size);
+//                applyWell(p, well % wellPeculiarity.size);
+//            } else if (well > 0) {
+//                applyWell(p, well);
+//            }
+//            //midden
+//            if (midden > middenPeculiarity.size) {
+//                applyMiddenAll(p, midden / middenPeculiarity.size);
+//                applyMidden(p, midden % middenPeculiarity.size);
+//            } else if (midden > 0) {
+//                applyMidden(p, midden);
+//            }
+//            //bad
+//            if (bad > badPeculiarity.size) {
+//                applyBadAll(p, bad / badPeculiarity.size);
+//                applyBad(p, bad % badPeculiarity.size);
+//            } else if (bad > 0) {
+//                applyBad(p, bad);
+//            }
+//
+//            //smale to big
+//            applier.sort(pe -> pe.value);
+//            for (var pe : applier) {
+//                pe.get(u);
+//            }
+//        }
+//    }
+
+//    public static void load(Unit u, int[] peculiar) {
+//        applier.clear();
+//        for (int index : peculiar) {
+//            applier.add(all.get(index));
+//        }
+//        applier.sort(p -> p.value);
+//        for (var p : applier) {
+//            p.read(u);
+//        }
+//    }
+
+        //well
+//        Peculiarity HealGrow = new Peculiarity(u -> resetHealth(u, 1.05f, 0), u -> readHealth(u, 1.05f, 0));
+//        Peculiarity HealGrow2 = new Peculiarity(u -> resetHealth(u, 1.1f, 0), u -> readHealth(u, 1.1f, 0));
+//        Peculiarity HealGrow3 = new Peculiarity(u -> resetHealth(u, 1.15f, 0), u -> readHealth(u, 1.15f, 0));
+//        Peculiarity DamageGrow = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.05f, f -> w.reload *= f)));
+//        Peculiarity DamageGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f)));
+//        Peculiarity DamageGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.15f, f -> w.reload *= f)));
+//        Peculiarity ReloadGrow = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.95f));
+//        Peculiarity ReloadGrow2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.9f));
+//        Peculiarity ReloadGrow3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 0.85f));
+//        Peculiarity Strong = new Peculiarity(u -> resetHealth(u, 2f, 0), u -> readHealth(u, 2f, 0));
+
+        //midden
+//        Peculiarity HealToDamage = new Peculiarity(u -> {
+//            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f));
+//            resetHealth(u, 0.9f, 1);
+//        }, u -> {
+//            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f));
+//            readHealth(u, 0.9f, 1);
+//        });
+//        Peculiarity DamageToReload = new Peculiarity(u -> applyWeapon(u, w -> {
+//            w.reload *= 1.1f;
+//            w.bullet = resetDamage(w.bullet, 0.9f, f -> w.reload *= f);
+//        }));
+//        Peculiarity FragsToDamage = new Peculiarity(u -> applyWeapon(u, w -> {
+//            w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
+//            w.bullet.fragBullets -= 1;
+//        }), ChangeNumberOrAddProject);
+//        Peculiarity Heal2ReloadToDamage = new Peculiarity(u -> {
+//            applyWeapon(u, w -> {
+//                w.reload *= 1.05f;
+//                w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
+//            });
+//            resetHealth(u, 0.95f, 1);
+//        }, u -> {
+//            applyWeapon(u, w -> {
+//                w.reload *= 1.05f;
+//                w.bullet = resetDamage(w.bullet, 1.1f, f -> w.reload *= f);
+//            });
+//            readHealth(u, 0.95f, 1);
+//        });
+//        Peculiarity Glass = new Peculiarity(u -> {
+//            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 2.5f, f -> w.reload *= f));
+//            resetHealth(u, 0.1f, 35);
+//        }, u -> {
+//            applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 2.5f, f -> w.reload *= f));
+//            readHealth(u, 0.1f, 35);
+//        }, LimitAll);
+//        Peculiarity Stone = new Peculiarity(u -> {
+//            applyWeapon(u, w -> w.reload *= 3);
+//            resetHealth(u, 3, 0);
+//        }, u -> {
+//            applyWeapon(u, w -> w.reload *= 3);
+//            readHealth(u, 3, 0);
+//        });
+//        Peculiarity Hill = new Peculiarity(u -> {
+//            applyWeapon(u, w -> w.reload *= 5);
+//            resetHealth(u, 5, 0);
+//        }, u -> {
+//            applyWeapon(u, w -> w.reload *= 5);
+//            readHealth(u, 5, 0);
+//        });
+
+        //bad
+//        Peculiarity HealBreak = new Peculiarity(u -> resetHealth(u, 0.95f, 1), u -> readHealth(u, 0.95f, 1));
+//        Peculiarity HealBreak2 = new Peculiarity(u -> resetHealth(u, 0.9f, 1), u -> readHealth(u, 0.9f, 1));
+//        Peculiarity HealBreak3 = new Peculiarity(u -> resetHealth(u, 0.85f, 1), u -> readHealth(u, 0.85f, 1));
+//        Peculiarity DamageBreak = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.95f, f -> w.reload *= f)));
+//        Peculiarity DamageBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.9f, f -> w.reload *= f)));
+//        Peculiarity DamageBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.bullet = resetDamage(w.bullet, 0.85f, f -> w.reload *= f)));
+//        Peculiarity ReloadBreak = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.05f));
+//        Peculiarity ReloadBreak2 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.1f));
+//        Peculiarity ReloadBreak3 = new Peculiarity(u -> applyWeapon(u, w -> w.reload *= 1.15f));
+//        Peculiarity Incomplete = new Peculiarity(u -> resetHealth(u, 0.8f, 1), u -> readHealth(u, 0.8f, 1));
+
+//        wellPeculiarity.addAll(
+//                HealGrow, HealGrow, HealGrow, HealGrow, HealGrow, HealGrow,
+//                HealGrow, HealGrow, HealGrow, HealGrow, HealGrow, HealGrow,
+//                HealGrow2, HealGrow2, HealGrow2, HealGrow2, HealGrow2, HealGrow2, HealGrow2,
+//                HealGrow3, HealGrow3, HealGrow3,
+//
+//                DamageGrow, DamageGrow, DamageGrow, DamageGrow, DamageGrow, DamageGrow,
+//                DamageGrow, DamageGrow, DamageGrow, DamageGrow, DamageGrow, DamageGrow,
+//                DamageGrow2, DamageGrow2, DamageGrow2, DamageGrow2, DamageGrow2, DamageGrow2, DamageGrow2,
+//                DamageGrow3, DamageGrow3, DamageGrow3,
+//
+//                ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow,
+//                ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow, ReloadGrow,
+//                ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2, ReloadGrow2,
+//                ReloadGrow3, ReloadGrow3, ReloadGrow3,
+//
+//                Strong
+//        );
+//        middenPeculiarity.addAll(
+//                HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage,
+//                HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage, HealToDamage,
+//
+//                DamageToReload, DamageToReload, DamageToReload, DamageToReload, DamageToReload, DamageToReload,
+//                DamageToReload, DamageToReload, DamageToReload, DamageToReload, DamageToReload, DamageToReload,
+//
+//                FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage,
+//                FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage, FragsToDamage,
+//
+//                Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage,
+//                Heal2ReloadToDamage, Heal2ReloadToDamage, Heal2ReloadToDamage,
+//
+//                Glass, Stone, Hill
+//        );
+//        badPeculiarity.addAll(
+//                HealBreak, HealBreak, HealBreak, HealBreak, HealBreak, HealBreak,
+//                HealBreak, HealBreak, HealBreak, HealBreak, HealBreak, HealBreak,
+//                HealBreak2, HealBreak2, HealBreak2, HealBreak2, HealBreak2, HealBreak2, HealBreak2,
+//                HealBreak3, HealBreak3, HealBreak3,
+//
+//                DamageBreak, DamageBreak, DamageBreak, DamageBreak, DamageBreak, DamageBreak,
+//                DamageBreak, DamageBreak, DamageBreak, DamageBreak, DamageBreak, DamageBreak,
+//                DamageBreak2, DamageBreak2, DamageBreak2, DamageBreak2, DamageBreak2, DamageBreak2, DamageBreak2,
+//                DamageBreak3, DamageBreak3, DamageBreak3,
+//
+//                ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak,
+//                ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak, ReloadBreak,
+//                ReloadBreak2, ReloadBreak2, ReloadBreak2, ReloadBreak2, ReloadBreak2, ReloadBreak2, ReloadBreak2,
+//                ReloadBreak3, ReloadBreak3, ReloadBreak3,
+//
+//                Incomplete
+//        );
+
+//    public static void applyWeapon(Unit target, Cons<Weapon> apply) {
+//        for (int i = 0; i < target.mounts.length; i++) {
+//            if (!(target.mounts[i] instanceof RepairBeamWeapon.HealBeamMount)) {
+//                Weapon weapon = target.mounts[i].weapon.copy();
+//                apply.get(weapon);
+//                target.mounts[i] = new WeaponMount(weapon);
+//            }
+//        }
+//    }
+
+//    public static BulletType resetDamage(BulletType bullet, float des, Cons<Float> weapon) {
+//        BulletType type = bullet.copy();
+//        type.damage *= des;
+//        type.splashDamage *= des;
+//        type.lightningDamage *= des;
+//        if (bullet.fragBullet != null && bullet.fragBullets >= 1) {
+//            type.fragBullet = resetDamage(bullet.fragBullet, des, weapon);
+//        }
+//        if (bullet.intervalBullet != null && bullet.intervalBullets >= 1) {
+//            type.intervalBullet = resetDamage(bullet.intervalBullet, des, weapon);
+//        }
+//        if (type instanceof SummonBulletType s && s.summonBullet != null && s.summonBullets >= 1) {
+//            ((SummonBulletType) type).summonBullet = resetDamage(s.summonBullet, des, weapon);
+//        }
+//        if (type.spawnUnit != null) {
+//            if (des == 0) {
+//                weapon.get(100000000f);
+//            } else {
+//                weapon.get(1 / des);
+//            }
+//        }
+//        if (type.despawnUnit != null) {
+//            if (des == 0) {
+//                weapon.get(100000000f);
+//            } else {
+//                weapon.get(1 / des);
+//            }
+//        }
+//        return type;
+//    }
+
+//    public static void resetHealth(Unit u, float des, float min) {
+//        if (des >= 1) {
+//            u.maxHealth = (int) (u.maxHealth * des);
+//            u.health = Math.min(u.maxHealth, u.health * des);
+//        } else {
+//            u.maxHealth = Math.max((int) (u.maxHealth * des), min);
+//            u.health = Math.min(u.maxHealth, u.health);
+//        }
+//    }
+//
+//    public static void readHealth(Unit u, float des, float min) {
+//        if (des >= 1) {
+//            u.maxHealth = (int) (u.maxHealth * des);
+//        } else {
+//            u.maxHealth = Math.max((int) (u.maxHealth * des), min);
+//        }
+//    }
+
+//    public static class Peculiarity {
+//        final Cons<Unit> apply;
+//        final Cons<Unit> read;
+//        final int id;
+//        final int value;
+//
+//        public Peculiarity(Cons<Unit> apply) {
+//            id = all.size;
+//            all.add(this);
+//            this.apply = this.read = apply;
+//            this.value = Default;
+//        }
+//
+//        public Peculiarity(Cons<Unit> apply, Cons<Unit> read) {
+//            id = all.size;
+//            all.add(this);
+//            this.apply = apply;
+//            this.read = read;
+//            this.value = Default;
+//        }
+//
+//        public Peculiarity(Cons<Unit> apply, int value) {
+//            id = all.size;
+//            all.add(this);
+//            this.apply = this.read = apply;
+//            this.value = value;
+//        }
+//
+//        public Peculiarity(Cons<Unit> apply, Cons<Unit> read, int value) {
+//            id = all.size;
+//            all.add(this);
+//            this.apply = apply;
+//            this.read = read;
+//            this.value = value;
+//        }
+//
+//        public void read(Unit u) {
+//            read.get(u);
+//        }
+//
+//        public void get(Unit u) {
+//            apply.get(u);
+//        }
+//    }
