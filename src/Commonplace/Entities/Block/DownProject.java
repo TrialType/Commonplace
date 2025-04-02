@@ -29,7 +29,7 @@ public class DownProject extends OverdriveProjector {
 
         if (hasBoost && findConsumer(f -> f instanceof ConsumeItems) instanceof ConsumeItems items) {
             stats.remove(Stat.booster);
-            stats.add(Stat.booster, StatValues.itemBoosters("-{0}%", stats.timePeriod, speedDownPhase * 100f, phaseRangeBoost, items.items, this::consumesItem));
+            stats.add(Stat.booster, StatValues.itemBoosters("-{0}%", stats.timePeriod, speedDownPhase * 100f, phaseRangeBoost, items.items));
         }
     }
 

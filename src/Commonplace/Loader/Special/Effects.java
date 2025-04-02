@@ -519,6 +519,11 @@ public class Effects {
         }
 
         @Override
+        public void afterAllRead() {
+
+        }
+
+        @Override
         public <T extends Entityc> T self() {
             return null;
         }
@@ -535,11 +540,6 @@ public class Effects {
 
         @Override
         public boolean isLocal() {
-            return false;
-        }
-
-        @Override
-        public boolean isNull() {
             return false;
         }
 

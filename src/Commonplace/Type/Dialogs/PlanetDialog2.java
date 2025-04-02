@@ -1,6 +1,5 @@
 package Commonplace.Type.Dialogs;
 
-import Commonplace.Loader.DefaultContent.Planets2;
 import Commonplace.Type.Shaders.SpaceContortShader;
 import Commonplace.Utils.Classes.Vars2;
 import arc.Core;
@@ -315,7 +314,7 @@ public class PlanetDialog2 extends PlanetDialog {
         super.show();
     }
 
-    void lookAt(Sector sector) {
+    public void lookAt(Sector sector) {
         if (sector.tile == PlanetGrid.Ptile.empty) return;
 
         state.planet = sector.planet;
@@ -444,11 +443,11 @@ public class PlanetDialog2 extends PlanetDialog {
 
                     if (selected != null && selected != sec && selected.hasBase()) {
                         //imports
-                        if (sec.info.getRealDestination() == selected && sec.info.anyExports()) {
+                        if (sec.info.destination == selected && sec.info.anyExports()) {
                             planets.drawArc(planet, sec.tile.v, selected.tile.v, Color.gray.write(Tmp.c2).a(state.uiAlpha), Pal.accent.write(Tmp.c3).a(state.uiAlpha), 0.4f, 90f, 25);
                         }
                         //exports
-                        if (selected.info.getRealDestination() == sec && selected.info.anyExports()) {
+                        if (selected.info.destination == sec && selected.info.anyExports()) {
                             planets.drawArc(planet, selected.tile.v, sec.tile.v, Pal.place.write(Tmp.c2).a(state.uiAlpha), Pal.accent.write(Tmp.c3).a(state.uiAlpha), 0.4f, 90f, 25);
                         }
                     }

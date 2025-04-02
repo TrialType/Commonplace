@@ -400,7 +400,7 @@ public class Filler extends Block {
 
         protected void updateNeed() {
             int size = sets.size - disable.size - finished();
-            need = size * target.buildCost / buildMul;
+            need = size * target.buildTime / buildMul;
             itemNeed = new ItemStack[target.requirements.length];
             for (int i = 0; i < target.requirements.length; i++) {
                 itemNeed[i] = new ItemStack(target.requirements[i].item, (int) (target.requirements[i].amount * size * itemMul));
