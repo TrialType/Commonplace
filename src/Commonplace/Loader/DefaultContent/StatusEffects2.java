@@ -1,5 +1,6 @@
 package Commonplace.Loader.DefaultContent;
 
+import Commonplace.Loader.Special.Effects;
 import Commonplace.Type.StatusEffectType.ConditionsNumberStatusEffect;
 import Commonplace.Type.StatusEffectType.SupperStatus;
 import arc.func.Cons;
@@ -69,7 +70,7 @@ public class StatusEffects2 {
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose,
-            shocked, aging, erosion;
+            shocked, aging, erosion, disturb;
 
     public static StatusEffect fireKiller;
 
@@ -223,6 +224,13 @@ public class StatusEffects2 {
             reloadMultiplier = 0.65f;
             damageMultiplier = 0.55f;
         }};
+        disturb = new StatusEffect("disturb") {{
+            speedMultiplier = 0.9f;
+            reloadMultiplier = 0.85f;
+            effect = Effects.disturb;
+            effectChance = 0.2f;
+        }};
+
 
         aging = new ConditionsNumberStatusEffect("aging") {{
             speedMultiplier = 0.95f;

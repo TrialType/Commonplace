@@ -1,6 +1,8 @@
 package Commonplace.Loader.Override;
 
 import Commonplace.AI.FlyingFollowFarAI;
+import Commonplace.Entities.Shoot.ContinuesShoot;
+import Commonplace.Entities.Unit.MissElevationMoveUnit;
 import Commonplace.Entities.Unit.ReplenishmentLegsEventUnit;
 import Commonplace.Entities.Unit.ReplenishmentPayloadEventUnit;
 import Commonplace.Entities.Unit.ReplenishmentTankEventUnit;
@@ -12,10 +14,10 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.struct.ObjectMap;
-import arc.struct.ObjectSet;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import mindustry.content.Fx;
@@ -26,6 +28,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.pattern.*;
+import mindustry.gen.EntityMapping;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
@@ -99,19 +102,19 @@ public class UnitOverride {
         aegires.health = 42000;
         navanax.health = 70000;
 
-        stell.health = 2975;
+        stell.health = 2125;
         locus.health = 8350;
         precept.health = 17500;
         vanquish.health = 38500;
         conquer.health = 77000;
 
-        merui.health = 2380;
+        merui.health = 1700;
         cleroi.health = 3850;
         anthicus.health = 10150;
         tecta.health = 26550;
         collaris.health = 63000;
 
-        elude.health = 2100;
+        elude.health = 1500;
         avert.health = 3850;
         obviate.health = 8050;
         quell.health = 22000;
@@ -885,8 +888,8 @@ public class UnitOverride {
 
             summonRange = 220;
             summonBullets = 20;
-            summonBullet = bullet;
         }};
+        ((SummonBulletType) weapon.bullet).summonBullet = bullet;
 
         aegires.abilities.clear();
         aegires.abilities.add(new EnergyFieldAbility(17, 10, 180) {{
@@ -992,49 +995,48 @@ public class UnitOverride {
 
         vanquish.constructor = ReplenishmentTankEventUnit::create;
         weapon = vanquish.weapons.first();
+        weapon.shoot = new ContinuesShoot().shootDelay(5);
+        weapon.bullet.speed = 5;
         weapon.bullet.pierce = false;
         weapon.bullet.pierceBuilding = false;
         weapon.bullet.pierceCap = 1;
-        weapon.bullet.damage = 210;
-        weapon.bullet.splashDamage = 65;
         weapon.bullet.fragBullets = 4;
+        weapon.bullet.fragSpread = 30;
         weapon.bullet.fragOnHit = true;
-        weapon.bullet.fragBullet = new BasicBulletType(6f, 45f) {{
+        weapon.bullet.fragBullet = new BasicBulletType(6f, 28f) {{
             sprite = "missile-large";
             width = 8f;
             height = 12f;
-            lifetime = 15f;
+            lifetime = 9f;
             hitSize = 4f;
             hitColor = backColor = trailColor = Color.valueOf("feb380");
             frontColor = Color.white;
             trailWidth = 2.8f;
             trailLength = 6;
             hitEffect = despawnEffect = Fx.blastExplosion;
-            splashDamageRadius = 10f;
-            splashDamage = 25f;
+            splashDamageRadius = 16f;
+            splashDamage = 30f;
 
             pierce = pierceBuilding = true;
             pierceCap = 3;
 
-            fragAngle = 180f;
-            fragSpread = 10f;
-            fragBullets = 4;
-            fragVelocityMin = 1f;
-            fragRandomSpread = 0f;
+            fragBullets = 8;
+            fragLifeMin = 0.5f;
+            fragRandomSpread = 360f;
             despawnSound = Sounds.dullExplosion;
-            fragBullet = new BasicBulletType(8f, 30) {{
+            fragBullet = new BasicBulletType(3f, 45) {{
                 sprite = "missile-large";
                 width = 6.5f;
                 height = 11f;
-                lifetime = 15f;
+                lifetime = 10;
                 hitSize = 3f;
                 hitColor = backColor = trailColor = Color.valueOf("feb380");
                 frontColor = Color.white;
                 trailWidth = 2.5f;
                 trailLength = 5;
                 hitEffect = despawnEffect = Fx.blastExplosion;
-                splashDamageRadius = 8;
-                splashDamage = 15f;
+                splashDamageRadius = 16;
+                splashDamage = 35f;
             }};
         }};
         vanquish.weapons.get(1).shoot.shots = 2;
@@ -1124,6 +1126,13 @@ public class UnitOverride {
             }};
         }
         /*-----------------------------------------------------------------------------*/
+        elude.constructor = MissElevationMoveUnit::create;
+        elude.speed = 3f;
+        elude.drag = 0.02f;
+        elude.accel = 0.3f;
+        elude.weapons.first().bullet.statusDuration = 150;
+        elude.weapons.first().bullet.status = StatusEffects2.disturb;
+
         weapon = obviate.weapons.first();
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
@@ -1214,6 +1223,46 @@ public class UnitOverride {
             }};
         }};
         /*-----------------------------------------------------------------------------*/
+        weapon = merui.weapons.first();
+        weapon.bullet.lifetime = 42;
+        bullet = weapon.bullet.copy();
+        bullet.spawnBullets = new Seq<>();
+        bullet.damage = 15;
+        bullet.lifetime = 14;
+        bullet.splashDamage = 10;
+        weapon.bullet.spawnBullets.add(bullet);
+        bullet = weapon.bullet.copy();
+        bullet.spawnBullets = new Seq<>();
+        bullet.damage = 15;
+        bullet.lifetime = 28;
+        bullet.splashDamage = 10;
+        weapon.bullet.spawnBullets.add(bullet);
+
+        cleroi.weapons.add(new Weapon(){{
+            mirror = false;
+            x = y = 0;
+            shootY = 6;
+            reload = 35;
+            shoot.shots = 4;
+            shoot.shotDelay = 3;
+            bullet = new BasicBulletType() {{
+                lifetime = 45;
+                damage = 18;
+                speed = 2.2f;
+                inaccuracy = 5;
+                homingPower = 0.03f;
+                homingRange = 150;
+                homingDelay = 5;
+                trailWidth = 1f;
+                trailLength = 13;
+                trailColor = hitColor = Pal.techBlue;
+
+                shootEffect = Fx.none;
+                shootSound = Sounds.none;
+                despawnEffect = hitEffect = Effects.colorSmoke;
+            }};
+        }});
+
         UnitType u = anthicus.weapons.get(0).bullet.spawnUnit;
         u.weapons.get(0).bullet.despawnHit = true;
         u.weapons.get(0).bullet.splashDamage = 280f;

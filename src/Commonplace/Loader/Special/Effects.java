@@ -356,6 +356,13 @@ public class Effects {
         randLenVectors(e.id + 1, 8, 1f + 60f * e.finpow(), (x, y) -> lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f));
 
         Drawf.light(e.x, e.y, 90f, e.color, 0.8f * e.fout());
+    }), disturb = new Effect(40f, e -> {
+        color(Pal.heal.cpy().mul(Pal.sap));
+
+        randLenVectors(e.id, 3, 2f + e.fin() * 3f, (x, y) -> Fill.square(e.x + x, e.y + y, e.fslope() * 1.2f, 45f));
+    }), colorSmoke = new Effect(100, 40, e -> {
+        Draw.color(e.color);
+        Fill.circle(e.x, e.y, e.fout() * 4f);
     });
 
     public static void drawLightningMove(int num, Seq<Vec2> points, float grow, float fin) {
