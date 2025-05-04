@@ -519,11 +519,6 @@ public class Effects {
         }
 
         @Override
-        public void afterAllRead() {
-
-        }
-
-        @Override
         public <T extends Entityc> T self() {
             return null;
         }
@@ -569,6 +564,14 @@ public class Effects {
 
         @Override
         public void afterRead() {
+        }
+
+        @Override
+        public void afterReadAll() {
+        }
+
+        @Override
+        public void beforeWrite() {
         }
 
         @Override

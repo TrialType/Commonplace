@@ -16,10 +16,7 @@ import mindustry.entities.Effect;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.StatusEntry;
 import mindustry.entities.units.WeaponMount;
-import mindustry.gen.Building;
-import mindustry.gen.Call;
-import mindustry.gen.MechUnit;
-import mindustry.gen.Sounds;
+import mindustry.gen.*;
 import mindustry.input.InputHandler;
 import mindustry.type.Item;
 import mindustry.type.UnitType;
@@ -47,6 +44,8 @@ public class GroupUnit extends MechUnit implements Groupmate {
             group.updateGroup();
         }
 
+        super.update();
+
         limitVel();
         limitBounds();
         this.updateBuildLogic();
@@ -59,10 +58,10 @@ public class GroupUnit extends MechUnit implements Groupmate {
             this.wasFlying = this.isFlying();
         }
 
-        if (!this.hovering && this.isGrounded() && (this.splashTimer += Mathf.dst(this.deltaX(), this.deltaY())) >= 7.0F + this.hitSize() / 8.0F) {
+        if (!this.type.hovering && this.isGrounded() && (this.splashTimer += Mathf.dst(this.deltaX(), this.deltaY())) >= 7.0F + this.hitSize() / 8.0F) {
             floor.walkEffect.at(this.x, this.y, this.hitSize() / 8.0F, floor.mapColor);
             this.splashTimer = 0.0F;
-            if (this.emitWalkSound()) {
+            if (this.type.emitWalkSound) {
                 floor.walkSound.at(this.x, this.y, Mathf.random(floor.walkSoundPitchMin, floor.walkSoundPitchMax), floor.walkSoundVolume);
             }
         }

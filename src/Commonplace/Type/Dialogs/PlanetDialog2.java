@@ -938,63 +938,65 @@ public class PlanetDialog2 extends PlanetDialog {
     }
 
     // start game
-    void playSelected() {
-        if (selected == null) return;
+    void playSelected(){
+        if(selected == null) return;
 
         Sector sector = selected;
 
-        if (sector.isBeingPlayed()) {
+        if(sector.isBeingPlayed()){
             //already at this sector
             hide();
             return;
         }
 
-        if (sector.preset != null && sector.preset.locked() && sector.preset.techNode != null && !sector.hasBase()) {
+        if(sector.preset != null && sector.preset.requireUnlock && sector.preset.locked() && sector.preset.techNode != null && !sector.hasBase()){
             return;
         }
 
-        //make sure there are no under-attack sectors (other than this one)
-        for (Planet planet : content.planets()) {
-            if (!planet.allowWaveSimulation && !debugSelect && planet.allowWaveSimulation == sector.planet.allowWaveSimulation) {
-                //if there are two or more attacked sectors... something went wrong, don't show the dialog to prevent softlock
-                Sector attacked = planet.sectors.find(s -> s.isAttacked() && s != sector);
-                if (attacked != null && planet.sectors.count(Sector::isAttacked) < 2) {
-                    BaseDialog dialog = new BaseDialog("@sector.noswitch.title");
-                    dialog.cont.add(bundle.format("sector.noswitch", attacked.name(), attacked.planet.localizedName)).width(400f).labelAlign(Align.center).center().wrap();
-                    dialog.addCloseButton();
-                    dialog.buttons.button("@sector.view", Icon.eyeSmall, () -> {
-                        dialog.hide();
-                        lookAt(attacked);
-                        selectSector(attacked);
-                    });
-                    dialog.show();
+        Planet planet = sector.planet;
 
-                    return;
-                }
+        //make sure there are no under-attack sectors (other than this one)
+        if(!planet.allowWaveSimulation && !debugSelect){
+            //if there are two or more attacked sectors... something went wrong, don't show the dialog to prevent softlock
+            Sector attacked = planet.sectors.find(s -> s.isAttacked() && s != sector);
+            if(attacked != null &&  planet.sectors.count(s -> s.isAttacked()) < 2){
+                BaseDialog dialog = new BaseDialog("@sector.noswitch.title");
+                dialog.cont.add(bundle.format("sector.noswitch", attacked.name(), attacked.planet.localizedName)).width(400f).labelAlign(Align.center).center().wrap();
+                dialog.addCloseButton();
+                dialog.buttons.button("@sector.view", Icon.eyeSmall, () -> {
+                    dialog.hide();
+                    lookAt(attacked);
+                    selectSector(attacked);
+                });
+                dialog.show();
+
+                return;
             }
         }
 
         boolean shouldHide = true;
 
         //save before launch.
-        if (control.saves.getCurrent() != null && Vars.state.isGame() && mode != select) {
-            try {
+        if(control.saves.getCurrent() != null && Vars.state.isGame() && mode != select){
+            try{
                 control.saves.getCurrent().save();
-            } catch (Throwable e) {
+            }catch(Throwable e){
                 e.printStackTrace();
                 ui.showException("[accent]" + Core.bundle.get("savefail"), e);
             }
         }
 
-        if (mode == look && !sector.hasBase()) {
+        if(mode == look && !sector.hasBase()){
             shouldHide = false;
             Sector from = findLauncher(sector);
 
-            if (from == null) {
+            if(from == null){
+                //clear loadout information, so only the basic loadout gets used
                 universe.clearLoadoutInfo();
+                //free launch.
                 control.playSector(sector);
-            } else {
-                CoreBlock block = sector.allowLaunchSchematics() ? (from.info.bestCoreType instanceof CoreBlock b ? b : (CoreBlock) from.planet.defaultCore) : (CoreBlock) from.planet.defaultCore;
+            }else{
+                CoreBlock block = sector.allowLaunchSchematics() ? (from.info.bestCoreType instanceof CoreBlock b ? b : (CoreBlock)from.planet.defaultCore) : (CoreBlock)from.planet.defaultCore;
 
                 loadouts.show(block, from, sector, () -> {
                     var loadout = universe.getLastLoadout();
@@ -1004,48 +1006,43 @@ public class PlanetDialog2 extends PlanetDialog {
 
                     Events.fire(new EventType.SectorLaunchLoadoutEvent(sector, from, loadout));
 
-                    if (settings.getBool("skipcoreanimation")) {
+                    CoreBlock.CoreBuild core = player.team().core();
+                    if(core == null || settings.getBool("skipcoreanimation")){
                         //just... go there
                         control.playSector(from, sector);
                         //hide only after load screen is shown
                         Time.runTask(8f, this::hide);
-                    } else {
+                    }else{
                         //hide immediately so launch sector is visible
                         hide();
 
                         //allow planet dialog to finish hiding before actually launching
                         Time.runTask(5f, () -> {
                             Runnable doLaunch = () -> {
-                                renderer.showLaunch(schemCore);
+                                renderer.showLaunch(core);
                                 //run with less delay, as the loading animation is delayed by several frames
-                                Time.runTask(coreLandDuration - 8f, () -> control.playSector(from, sector));
+                                Time.runTask(core.launchDuration() - 8f, () -> control.playSector(from, sector));
                             };
 
                             //load launchFrom sector right before launching so animation is correct
-                            if (!from.isBeingPlayed()) {
+                            if(!from.isBeingPlayed()){
                                 //run *after* the loading animation is done
                                 Time.runTask(9f, doLaunch);
                                 control.playSector(from);
-                            } else {
+                            }else{
                                 doLaunch.run();
                             }
                         });
                     }
                 });
             }
-        } else if (mode == select) {
+        }else if(mode == select || mode == planetLaunch){
             listener.get(sector);
-        } else if (mode == planetLaunch) {
-            //schematic selection and cost handled by listener
-            listener.get(sector);
-            //unlock right before launch
-            sector.planet.unlockedOnLand.each(UnlockableContent::unlock);
-            control.playSector(sector);
-        } else {
+        }else{
             //sector should have base here
             control.playSector(sector);
         }
 
-        if (shouldHide) hide();
+        if(shouldHide) hide();
     }
 }

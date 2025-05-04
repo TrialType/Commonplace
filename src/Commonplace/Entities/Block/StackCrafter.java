@@ -1,9 +1,12 @@
 package Commonplace.Entities.Block;
 
 import arc.Core;
+import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
+import arc.util.Scaling;
+import arc.util.Strings;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -14,10 +17,9 @@ import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.Liquid;
 import mindustry.type.LiquidStack;
-import mindustry.ui.ItemDisplay;
-import mindustry.ui.LiquidDisplay;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 
 public class StackCrafter extends GenericCrafter {
     public Seq<ProductStack> switchStack = new Seq<>();
@@ -47,28 +49,25 @@ public class StackCrafter extends GenericCrafter {
             table.row();
             for (ProductStack ps : switchStack) {
                 table.row();
-                ItemStack[] iss = ps.itemsIn;
-                LiquidStack[] lss = ps.liquidsIn;
-                table.table(t -> {
-                    for (ItemStack is : iss) {
-                        t.add(new ItemDisplay(is.item, (int) (is.amount / ps.progress))).pad(25).left();
-                    }
-                    for (LiquidStack ls : lss) {
-                        t.add(new LiquidDisplay(ls.liquid, ls.amount / ps.progress, true)).pad(25).left();
-                    }
-                }).grow().left();
-                ItemStack[] ios = ps.itemsOut;
-                LiquidStack[] los = ps.liquidsOut;
-                table.table(t -> {
-                    for (ItemStack is : ios) {
-                        t.add(new ItemDisplay(is.item, (int) (is.amount / ps.progress))).pad(25).right();
-                    }
-                    for (LiquidStack ls : los) {
-                        t.add(new LiquidDisplay(ls.liquid, ls.amount / ps.progress, true)).pad(25).right();
-                    }
-                }).grow().right();
+                table.table(t -> display(ps.itemsIn, ps.liquidsIn, ps.progress, t)).grow().left();
+                table.label(() -> "------>>");
+                table.table(t -> display(ps.itemsOut, ps.liquidsOut, ps.progress, t)).grow().right();
             }
         });
+    }
+
+    public static void display(ItemStack[] s, LiquidStack[] l, float progress, Table t) {
+        String ps = " " + StatUnit.perSecond.localized();
+        for (ItemStack i : s) {
+            t.image(i.item.uiIcon).scaling(Scaling.fit).padRight(3f);
+            t.label(() -> Strings.fixed(i.amount / progress, 1) + ps).color(Color.lightGray);
+            t.row();
+        }
+        for (LiquidStack li : l) {
+            t.image(li.liquid.uiIcon).scaling(Scaling.fit).size(32f).padRight(3f);
+            t.label(() -> Strings.fixed(li.amount / progress, 1) + ps).color(Color.lightGray);
+            t.row();
+        }
     }
 
     public static class ProductStack {
@@ -131,31 +130,9 @@ public class StackCrafter extends GenericCrafter {
                 table.row();
                 table.table(chance == i ? Tex.buttonDown : Tex.paneSolid, t -> {
                     tables.add(t);
-
-                    t.add(Core.bundle.get("@input") + ":");
-                    for (ItemStack is : ps.itemsIn) {
-                        ItemDisplay id = new ItemDisplay(is.item, (int) (is.amount / ps.progress));
-                        id.sizeBy(1);
-                        t.add(id).pad(3).left();
-                    }
-                    for (LiquidStack ls : ps.liquidsIn) {
-                        LiquidDisplay ld = new LiquidDisplay(ls.liquid, ls.amount / ps.progress, true);
-                        ld.sizeBy(1);
-                        t.add(ld).pad(3).left();
-                    }
-                    t.row();
-                    t.add(Core.bundle.get("@output") + ":");
-                    for (ItemStack is : ps.itemsOut) {
-                        ItemDisplay id = new ItemDisplay(is.item, (int) (is.amount / ps.progress));
-                        id.sizeBy(1);
-                        t.add(id).pad(3).left();
-                    }
-                    for (LiquidStack ls : ps.liquidsOut) {
-                        LiquidDisplay ld = new LiquidDisplay(ls.liquid, ls.amount / ps.progress, true);
-                        ld.sizeBy(1);
-                        t.add(ld).pad(3).left();
-                    }
-
+                    StackCrafter.display(ps.itemsIn, ps.liquidsIn, ps.progress, t);
+                    t.label(() -> "------>>");
+                    StackCrafter.display(ps.itemsOut, ps.liquidsOut, ps.progress, t);
                     t.clicked(() -> {
                         if (chance == switchStack.indexOf(ps)) {
                             t.setBackground(Tex.paneSolid);

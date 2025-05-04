@@ -58,8 +58,13 @@ public class DownProject extends OverdriveProjector {
                 indexer.eachBlock(this, realRange, other -> other.block.canOverdrive, other -> other.applySlowdown(realDown(), reload * 7));
             }
 
-            if (timer(timerUse, useTime) && efficiency > 0) {
+            if(efficiency > 0){
+                useProgress += delta();
+            }
+
+            if(useProgress >= useTime){
                 consume();
+                useProgress %= useTime;
             }
         }
 

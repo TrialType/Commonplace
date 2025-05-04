@@ -72,129 +72,129 @@ public class Blocks2 {
     public static Block oilExtractorLarge;
 
     public static void load() {
-//        primarySolidification = new StackCrafter("primary-solidification") {{
-//            health = 350;
-//            itemCapacity = 60;
-//            liquidCapacity = 120;
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionCopper, 14),
-//                    ItemStack.with(Items.copper, 5),
-//                    LiquidStack.empty, 120
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionLead, 14),
-//                    ItemStack.with(Items.lead, 5),
-//                    LiquidStack.empty, 120
-//            ));
-//
-//            hasPower = false;
-//
-//            requirements(Category.crafting, ItemStack.with(Items.metaglass, 35, Items.copper, 40, Items.lead, 25));
-//        }};
-//        intermediateSolidification = new StackCrafter("intermediate-solidification") {{
-//            itemCapacity = 150;
-//            liquidCapacity = 300;
-//            size = 2;
-//            health = 550;
-//
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionCopper, 30),
-//                    ItemStack.with(Items.copper, 12),
-//                    LiquidStack.empty, 90
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionLead, 30),
-//                    ItemStack.with(Items.lead, 12),
-//                    LiquidStack.empty, 90
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionTitanium, 30),
-//                    ItemStack.with(Items.titanium, 10),
-//                    LiquidStack.empty, 90
-//            ));
-//
-//            consume(new ConsumePower(5, 0, false));
-//
-//            requirements(Category.crafting, ItemStack.with(Items.metaglass, 125, Items.copper, 150,
-//                    Items.lead, 100, Items.graphite, 140));
-//        }};
-//        advancedSolidification = new StackCrafter("advanced-solidification") {{
-//            itemCapacity = 360;
-//            liquidCapacity = 600;
-//            size = 3;
-//            health = 1050;
-//
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionCopper, 60),
-//                    ItemStack.with(Items.copper, 30),
-//                    LiquidStack.empty, 90
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionLead, 60),
-//                    ItemStack.with(Items.lead, 30),
-//                    LiquidStack.empty, 90
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionTitanium, 60),
-//                    ItemStack.with(Items.titanium, 24),
-//                    LiquidStack.empty, 90
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionThorium, 60),
-//                    ItemStack.with(Items.thorium, 20),
-//                    LiquidStack.empty, 90
-//            ));
-//
-//            consume(new ConsumePower(20, 0, false));
-//
-//            requirements(Category.crafting, ItemStack.with(Items.metaglass, 500, Items.copper, 450,
-//                    Items.lead, 400, Items.graphite, 350, Items.titanium, 300));
-//        }};
-//        ultimateSolidification = new StackCrafter("ultimate-solidification") {{
-//            itemCapacity = 360;
-//            liquidCapacity = 900;
-//            size = 4;
-//            health = 1550;
-//
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionCopper, 90),
-//                    ItemStack.with(Items.copper, 48),
-//                    LiquidStack.empty, 60
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionLead, 90),
-//                    ItemStack.with(Items.lead, 48),
-//                    LiquidStack.empty, 60
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionTitanium, 90),
-//                    ItemStack.with(Items.titanium, 48),
-//                    LiquidStack.empty, 60
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.empty,
-//                    LiquidStack.with(Liquids2.fusionThorium, 90),
-//                    ItemStack.with(Items.thorium, 48),
-//                    LiquidStack.empty, 60
-//            ));
-//
-//            consume(new ConsumePower(100, 0, false));
-//
-//            requirements(Category.crafting, ItemStack.with(Items.metaglass, 1500, Items.copper, 1450,
-//                    Items.lead, 1400, Items.graphite, 1350, Items.titanium, 1400, Items.thorium, 1450, Items.surgeAlloy, 500));
-//        }};
+        primarySolidification = new StackCrafter("primary-solidification") {{
+            health = 350;
+            itemCapacity = 60;
+            liquidCapacity = 120;
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionCopper, 14),
+                    ItemStack.with(Items.copper, 5),
+                    LiquidStack.empty, 120
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionLead, 14),
+                    ItemStack.with(Items.lead, 5),
+                    LiquidStack.empty, 120
+            ));
+
+            hasPower = false;
+
+            requirements(Category.crafting, ItemStack.with(Items.metaglass, 35, Items.copper, 40, Items.lead, 25));
+        }};
+        intermediateSolidification = new StackCrafter("intermediate-solidification") {{
+            itemCapacity = 150;
+            liquidCapacity = 300;
+            size = 2;
+            health = 550;
+
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionCopper, 30),
+                    ItemStack.with(Items.copper, 12),
+                    LiquidStack.empty, 90
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionLead, 30),
+                    ItemStack.with(Items.lead, 12),
+                    LiquidStack.empty, 90
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionTitanium, 30),
+                    ItemStack.with(Items.titanium, 10),
+                    LiquidStack.empty, 90
+            ));
+
+            consume(new ConsumePower(5, 0, false));
+
+            requirements(Category.crafting, ItemStack.with(Items.metaglass, 125, Items.copper, 150,
+                    Items.lead, 100, Items.graphite, 140));
+        }};
+        advancedSolidification = new StackCrafter("advanced-solidification") {{
+            itemCapacity = 360;
+            liquidCapacity = 600;
+            size = 3;
+            health = 1050;
+
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionCopper, 60),
+                    ItemStack.with(Items.copper, 30),
+                    LiquidStack.empty, 90
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionLead, 60),
+                    ItemStack.with(Items.lead, 30),
+                    LiquidStack.empty, 90
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionTitanium, 60),
+                    ItemStack.with(Items.titanium, 24),
+                    LiquidStack.empty, 90
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionThorium, 60),
+                    ItemStack.with(Items.thorium, 20),
+                    LiquidStack.empty, 90
+            ));
+
+            consume(new ConsumePower(20, 0, false));
+
+            requirements(Category.crafting, ItemStack.with(Items.metaglass, 500, Items.copper, 450,
+                    Items.lead, 400, Items.graphite, 350, Items.titanium, 300));
+        }};
+        ultimateSolidification = new StackCrafter("ultimate-solidification") {{
+            itemCapacity = 360;
+            liquidCapacity = 900;
+            size = 4;
+            health = 1550;
+
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionCopper, 90),
+                    ItemStack.with(Items.copper, 48),
+                    LiquidStack.empty, 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionLead, 90),
+                    ItemStack.with(Items.lead, 48),
+                    LiquidStack.empty, 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionTitanium, 90),
+                    ItemStack.with(Items.titanium, 48),
+                    LiquidStack.empty, 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.empty,
+                    LiquidStack.with(Liquids2.fusionThorium, 90),
+                    ItemStack.with(Items.thorium, 48),
+                    LiquidStack.empty, 60
+            ));
+
+            consume(new ConsumePower(100, 0, false));
+
+            requirements(Category.crafting, ItemStack.with(Items.metaglass, 1500, Items.copper, 1450,
+                    Items.lead, 1400, Items.graphite, 1350, Items.titanium, 1400, Items.thorium, 1450, Items.surgeAlloy, 500));
+        }};
         phaseAmplifier = new GenericCrafter("phase-amplifier") {{
             requirements(Category.crafting, ItemStack.with(phaseFabric, 25, thorium, 80, copper, 100));
             outputItem = new ItemStack(phaseFabric, 4);
@@ -297,42 +297,42 @@ public class Blocks2 {
             requirements(Category.effect, BuildVisibility.editorOnly, ItemStack.with(Items.copper, 1));
         }};
 
-//        meltingFurnace = new StackCrafter("melting-furnace") {{
-//            health = 400;
-//            itemCapacity = 60;
-//            liquidCapacity = 120;
-//            switchStack.add(new ProductStack(
-//                    ItemStack.with(copper, 1),
-//                    LiquidStack.with(Liquids.slag, 5),
-//                    ItemStack.with(scrap, 2),
-//                    LiquidStack.with(Liquids2.fusionCopper, 4), 60
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.with(lead, 1),
-//                    LiquidStack.with(Liquids.slag, 5),
-//                    ItemStack.with(scrap, 2),
-//                    LiquidStack.with(Liquids2.fusionLead, 4), 60
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.with(titanium, 1),
-//                    LiquidStack.with(Liquids.slag, 6),
-//                    ItemStack.with(scrap, 3),
-//                    LiquidStack.with(Liquids2.fusionTitanium, 4), 120
-//            ));
-//            switchStack.add(new ProductStack(
-//                    ItemStack.with(thorium, 1),
-//                    LiquidStack.with(Liquids.slag, 6),
-//                    ItemStack.with(scrap, 4),
-//                    LiquidStack.with(Liquids2.fusionThorium, 3), 180
-//            ));
-//
-//
-//            hasPower = false;
-//
-//            consume(new ConsumePower(1, 0, false));
-//
-//            requirements(Category.crafting, BuildVisibility.debugOnly, ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
-//        }};
+        meltingFurnace = new StackCrafter("melting-furnace") {{
+            health = 400;
+            itemCapacity = 60;
+            liquidCapacity = 120;
+            switchStack.add(new ProductStack(
+                    ItemStack.with(copper, 1),
+                    LiquidStack.with(Liquids.slag, 5),
+                    ItemStack.with(scrap, 2),
+                    LiquidStack.with(Liquids2.fusionCopper, 4), 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(lead, 1),
+                    LiquidStack.with(Liquids.slag, 5),
+                    ItemStack.with(scrap, 2),
+                    LiquidStack.with(Liquids2.fusionLead, 4), 60
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(titanium, 1),
+                    LiquidStack.with(Liquids.slag, 6),
+                    ItemStack.with(scrap, 3),
+                    LiquidStack.with(Liquids2.fusionTitanium, 4), 120
+            ));
+            switchStack.add(new ProductStack(
+                    ItemStack.with(thorium, 1),
+                    LiquidStack.with(Liquids.slag, 6),
+                    ItemStack.with(scrap, 4),
+                    LiquidStack.with(Liquids2.fusionThorium, 3), 180
+            ));
+
+
+            hasPower = false;
+
+            consume(new ConsumePower(1, 0, false));
+
+            requirements(Category.crafting, BuildVisibility.debugOnly, ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
+        }};
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
             requirements(Category.turret, ItemStack.with(phaseFabric, 75, thorium, 350, plastanium, 200, surgeAlloy, 100));

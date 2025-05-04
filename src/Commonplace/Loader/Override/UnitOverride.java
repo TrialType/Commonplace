@@ -21,7 +21,6 @@ import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
-import mindustry.content.UnitTypes;
 import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
@@ -257,7 +256,7 @@ public class UnitOverride {
         weapon.bullet.damage = 70;
         weapon.bullet.lightningDamage = 30;
         weapon.bullet.fragBullets = 2;
-        weapon.bullet.fragBullet = new BulletType(4f, 1){{
+        weapon.bullet.fragBullet = new BulletType(4f, 1) {{
             despawnEffect = hitEffect = Fx.none;
             hitSound = despawnSound = Sounds.none;
             reflectable = hittable = false;
@@ -1091,39 +1090,37 @@ public class UnitOverride {
                     sparkStroke = 1.5f;
                 }};
 
-                spawnBullets.add(new BasicBulletType(weapon.bullet.speed / fin * 0.2f, 35) {
-                    {
-                        drag = 0.002f;
-                        width = 12f;
-                        height = 11f;
-                        lifetime = life * 1.05f;
-                        hitSize = 5f;
-                        pierceCap = 5;
-                        pierce = true;
-                        pierceBuilding = true;
-                        hitColor = backColor = trailColor = Color.valueOf("feb380");
-                        frontColor = Color.white;
-                        trailWidth = 2.5f;
-                        trailLength = 7;
+                spawnBullets.add(new BasicBulletType(weapon.bullet.speed / fin * 0.2f, 35) {{
+                    drag = 0.002f;
+                    width = 12f;
+                    height = 11f;
+                    lifetime = life * 1.05f;
+                    hitSize = 5f;
+                    pierceCap = 5;
+                    pierce = true;
+                    pierceBuilding = true;
+                    hitColor = backColor = trailColor = Color.valueOf("feb380");
+                    frontColor = Color.white;
+                    trailWidth = 2.5f;
+                    trailLength = 7;
 
-                        splashDamage = 65f;
-                        splashDamageRadius = 30f;
-                        despawnEffect = new ExplosionEffect() {{
-                            lifetime = 50f;
-                            waveStroke = 4f;
-                            waveColor = sparkColor = trailColor;
-                            waveRad = 30f;
-                            smokeSize = 7f;
-                            smokes = 6;
-                            smokeSizeBase = 0f;
-                            smokeColor = trailColor;
-                            sparks = 5;
-                            sparkRad = 30f;
-                            sparkLen = 3f;
-                            sparkStroke = 1.5f;
-                        }};
-                    }
-                });
+                    splashDamage = 65f;
+                    splashDamageRadius = 30f;
+                    despawnEffect = new ExplosionEffect() {{
+                        lifetime = 50f;
+                        waveStroke = 4f;
+                        waveColor = sparkColor = trailColor;
+                        waveRad = 30f;
+                        smokeSize = 7f;
+                        smokes = 6;
+                        smokeSizeBase = 0f;
+                        smokeColor = trailColor;
+                        sparks = 5;
+                        sparkRad = 30f;
+                        sparkLen = 3f;
+                        sparkStroke = 1.5f;
+                    }};
+                }});
             }};
         }
         /*-----------------------------------------------------------------------------*/
@@ -1149,12 +1146,10 @@ public class UnitOverride {
         quell.aiController = FlyingFollowFarAI::create;
         weapon = quell.weapons.first();
         weapon.bullet.rangeOverride = 5.9f * 84;
-        weapon.bullet.spawnUnit.immunities = ObjectSet.with(StatusEffects.slow, StatusEffects2.tardy,
-                StatusEffects.wet, StatusEffects.melting, StatusEffects.sporeSlowed, StatusEffects.sapped);
         weapon.bullet.spawnUnit.lifetime = 1.2f * 60;
         weapon.bullet.spawnUnit.rotateSpeed = 8.8f;
-        weapon.bullet.spawnUnit.health = 75;
-        weapon.bullet.spawnUnit.weapons.first().bullet.splashDamage = 220f;
+        weapon.bullet.spawnUnit.weapons.first().bullet.splashDamage = 140f;
+        weapon.bullet.spawnUnit.weapons.first().bullet.buildingDamageMultiplier = 0.5f;
         weapon.bullet.spawnUnit.abilities.add(new PowerChargeAbility() {{
             lightningColor = Pal.sap.cpy().mul(1.3f, 1.1f, 1.1f, 1.1f);
 
@@ -1164,11 +1159,11 @@ public class UnitOverride {
                 lightningLength = 8;
                 lightningColor = Pal.sap.cpy().mul(1.1f);
             }};
-        }}, new MoveLightningAbility(10, 6, 0.6f, 0, 5, 15, Pal.sap));
+        }}, new MoveLightningAbility(10, 6, 0.5f, 0, 5, 15, Pal.sap));
 
         disrupt.constructor = ReplenishmentPayloadEventUnit::create;
         weapon = disrupt.weapons.first().bullet.spawnUnit.weapons.first();
-        weapon.bullet = new SupperExplosionBulletType(200f, 25f) {{
+        weapon.bullet = new SupperExplosionBulletType(160f, 25f) {{
             collidesAir = false;
             suppressionRange = 140f;
             shootEffect = new ExplosionEffect() {{
@@ -1190,12 +1185,13 @@ public class UnitOverride {
             fragBullets = 1;
             fragBullet = new ContinuousLinkBulletType() {{
                 speed = 3;
-                damage = 45f;
-                lifetime = 120;
-                damageInterval = 30f;
+                damage = 10f;
+                lifetime = 60;
+                createChance = 0.5f;
+                damageInterval = 5;
 
-                splashDamage = 20;
-                splashDamageRadius = 20;
+                splashDamage = 15;
+                splashDamageRadius = 10;
 
                 homingDelay = 0;
                 homingPower = 0.1f;
@@ -1315,28 +1311,32 @@ public class UnitOverride {
         nova.armor = 8;
         nova.buildSpeed = 0;
         nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
-        color = Color.valueOf("ffa998");
-        weapon = nova.weapons.get(0);
+        color = Color.valueOf("ffff90");
+        weapon = nova.weapons.first();
         weapon.reload = 3;
-        weapon.bullet.lifetime = 17.33f;
-        weapon.bullet.speed = 9;
-        weapon.bullet.damage = 16;
-        weapon.bullet.healAmount = 0;
-        weapon.bullet.healPercent = 0;
-        weapon.bullet.reflectable = true;
-        weapon.bullet.collidesTeam = false;
-        weapon.bullet.smokeEffect = new Effect(8, e -> {
-            color(Color.white, color, e.fin());
-            stroke(0.5f + e.fout());
-            Lines.circle(e.x, e.y, e.fin() * 5f);
+        weapon.bullet = new DamageOwnBulletType() {{
+            lifetime = 17.33f;
+            speed = 9;
+            damage = 16;
+            width = 2;
+            height = 7;
+            healAmount = 0;
+            healPercent = 0;
+            lightOpacity = 0.6f;
 
-            Drawf.light(e.x, e.y, 23f, color, e.fout() * 0.7f);
-        });
-        weapon.bullet.hitEffect = weapon.bullet.smokeEffect;
-        weapon.bullet.despawnEffect = weapon.bullet.smokeEffect;
-        weapon.bullet.lightColor = color;
-        ((LaserBoltBulletType) weapon.bullet).frontColor = color;
-        ((LaserBoltBulletType) weapon.bullet).backColor = color;
+            hittable = false;
+            reflectable = true;
+            collidesTeam = false;
+
+            hitEffect = despawnEffect = smokeEffect = new Effect(8, e -> {
+                color(Color.white, color, e.fin());
+                stroke(0.5f + e.fout());
+                Lines.circle(e.x, e.y, e.fin() * 5f);
+
+                Drawf.light(e.x, e.y, 23f, color, e.fout() * 0.7f);
+            });
+            lightColor = frontColor = backColor = color;
+        }};
 
         pulsar.speed = 1.1f;
         weapon = pulsar.weapons.get(0);

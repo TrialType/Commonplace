@@ -13,7 +13,7 @@ public class Main extends Mod {
 //        Sign.load();
 //        Liquids2.load();
 //        Commands.load();
-//        Entities.load();
+        Entities.load();
         StatusEffects2.load();
 //        Weathers2.load();
         Units2.load();

@@ -1,6 +1,5 @@
 package Commonplace.Entities.Block;
 
-import Commonplace.Type.Elements.ItemImage2;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
@@ -14,10 +13,12 @@ import arc.scene.ui.Label;
 import arc.scene.ui.layout.Table;
 import arc.struct.IntSeq;
 import arc.struct.IntSet;
+import arc.util.Scaling;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
+import mindustry.core.UI;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Icon;
@@ -148,7 +149,8 @@ public class Filler extends Block {
     public void setBars() {
         super.setBars();
 
-        addBar("progress", (FillerBuild build) -> new Bar(Core.bundle.get("@progress"), Pal.redderDust, () -> build.progress));
+        addBar("progress", build -> new Bar(Core.bundle.get("@progress"), Pal.redderDust,
+                () -> build instanceof FillerBuild f ? f.progress : 0));
     }
 
     protected static class SqrPos {
@@ -580,7 +582,8 @@ public class Filler extends Block {
 
                     int i = 0;
                     for (ItemStack stack : itemNeed) {
-                        l.add(new ItemImage2(stack.item.uiIcon, stack.amount, core() == null ? 0 : core().items.get(stack.item))).padRight(8);
+                        l.image(stack.item.uiIcon).scaling(Scaling.fit).padRight(3f);
+                        l.label(() -> UI.formatAmount(core() == null ? 0 : core().items.get(stack.item)) + "/" + UI.formatAmount(stack.amount));
                         if (++i % 2 == 0) l.row();
                     }
                 };

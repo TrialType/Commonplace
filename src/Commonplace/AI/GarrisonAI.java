@@ -55,9 +55,8 @@ public class GarrisonAI extends GroundAI {
     }
 
     public void move() {
-        int pathId = Vars.controlPath.nextTargetId();
         vecOut.set(target);
-        boolean move = Vars.controlPath.getPathPosition(unit, pathId, targetPos, vecOut, noFound);
+        boolean move = Vars.controlPath.getPathPosition(unit, vecOut, targetPos, vecOut, noFound);
 
         if (move) {
             moveTo(vecOut, 0f, 100f, false, null, targetPos.epsilonEquals(vecOut, 4.1f));
