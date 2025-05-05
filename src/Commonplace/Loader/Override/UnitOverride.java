@@ -16,6 +16,7 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
 import arc.math.Rand;
+import arc.math.geom.Vec2;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import arc.util.Tmp;
@@ -981,7 +982,78 @@ public class UnitOverride {
         }};
 
         /*-----------------------------------------------------------------------------*/
-        locus.weapons.first().bullet.damage = 50f;
+        stell.weapons.first().reload = 70f;
+        stell.weapons.first().recoil = 2.5f;
+        stell.weapons.first().bullet = new PointBulletType() {{
+            speed = 4f;
+            damage = 40;
+            hitSize = 4f;
+            lifetime = 40f;
+
+            splashDamage = 30;
+            splashDamageRadius = 28;
+
+            trailEffect = Fx.none;
+            smokeEffect = Fx.shootBigSmoke;
+            shootEffect = Fx.shootBigColor;
+            despawnEffect = hitEffect = new MultiEffect(Fx.artilleryTrailSmoke, Fx.hitBulletColor);
+            hitColor = trailColor = Color.valueOf("feb380");
+        }};
+
+        weapon = locus.weapons.first();
+        weapon.bullet.damage = 40;
+        weapon.bullet.fragOnHit = true;
+        weapon.bullet.despawnHit = false;
+        weapon.bullet.setDefaults = false;
+        weapon.bullet.fragBullets = 4;
+        weapon.bullet.fragBullet = new RailBulletType() {{
+            length = 25f;
+            damage = 1;
+            pierceArmor = true;
+            hitColor = Color.valueOf("feb380");
+            hitEffect = endEffect = Fx.hitBulletColor;
+            pierceDamageFactor = 1f;
+
+            smokeEffect = Fx.colorSpark;
+
+            endEffect = new Effect(14f, e -> {
+                color(e.color);
+                Drawf.tri(e.x, e.y, e.fout() * 1.5f, 5f, e.rotation);
+            });
+
+            shootEffect = new Effect(10, e -> {
+                color(e.color);
+                float w = 1.2f + 7 * e.fout();
+
+                Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+                color(e.color);
+
+                for (int i : Mathf.signs) {
+                    Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                }
+
+                Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+            });
+
+            lineEffect = new Effect(20f, e -> {
+                if (!(e.data instanceof Vec2 v)) return;
+
+                color(e.color);
+                stroke(e.fout() * 0.9f + 0.6f);
+
+                Fx.rand.setSeed(e.id);
+                for (int i = 0; i < 7; i++) {
+                    Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+                    Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+                }
+
+                e.scaled(14f, b -> {
+                    stroke(b.fout() * 1.5f);
+                    color(e.color);
+                    Lines.line(e.x, e.y, v.x, v.y);
+                });
+            });
+        }};
 
         weapon = precept.weapons.first();
         weapon.bullet.damage = 140;
@@ -1133,6 +1205,31 @@ public class UnitOverride {
         elude.weapons.first().bullet.statusDuration = 150;
         elude.weapons.first().bullet.status = StatusEffects2.disturb;
 
+        avert.weapons.first().bullet.fragBullets = 2;
+        avert.weapons.first().bullet.fragVelocityMin = 1;
+        avert.weapons.first().bullet.fragBullet = new BasicBulletType(8f, 25) {{
+            width = 7f;
+            height = 12f;
+            lifetime = 30f;
+
+            homingPower = 1;
+            homingDelay = 0;
+            homingRange = 100;
+
+            pierceCap = 4;
+            pierce = pierceBuilding = true;
+
+            trailLength = 5;
+            trailWidth = 1.5f;
+            frontColor = Color.white;
+
+            shootEffect = Fx.sparkShoot;
+            smokeEffect = Fx.shootBigSmoke;
+
+            hitColor = backColor = trailColor = Pal.suppress;
+            hitEffect = despawnEffect = Fx.hitBulletColor;
+        }};
+
         weapon = obviate.weapons.first();
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
@@ -1238,7 +1335,7 @@ public class UnitOverride {
         bullet.splashDamage = 10;
         weapon.bullet.spawnBullets.add(bullet);
 
-        cleroi.weapons.add(new Weapon(){{
+        cleroi.weapons.add(new Weapon() {{
             mirror = false;
             x = y = 0;
             shootY = 6;
