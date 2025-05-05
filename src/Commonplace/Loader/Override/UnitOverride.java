@@ -14,7 +14,6 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
-import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.struct.ObjectMap;
@@ -28,7 +27,6 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.pattern.*;
-import mindustry.gen.EntityMapping;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
@@ -564,7 +562,7 @@ public class UnitOverride {
         }};
         toxopid.abilities.add(new FaceSapAbility());
         /*-----------------------------------------------------------------------------*/
-        flare.armor = 9;
+        flare.armor = 3;
         flare.speed = 4;
         flare.circleTarget = true;
         weapon = flare.weapons.first();
@@ -584,7 +582,7 @@ public class UnitOverride {
             velMin = velMax = speed;
         }};
 
-        horizon.armor = 5;
+        horizon.armor = 4;
         horizon.range = 24;
         horizon.speed = 2.5f;
         weapon = horizon.weapons.get(0);
@@ -594,7 +592,7 @@ public class UnitOverride {
         weapon.shoot.shots = 3;
         weapon.bullet.buildingDamageMultiplier = 1.65f;
 
-        zenith.armor = 8;
+        zenith.armor = 6;
         zenith.speed = 2;
         weapon = zenith.weapons.get(0);
         weapon.bullet.damage = 35;
@@ -621,7 +619,7 @@ public class UnitOverride {
             }};
         }});
 
-        antumbra.armor = 12;
+        antumbra.armor = 8;
         antumbra.abilities.add(new SprintingAbility2() {{
             sprintingReload = 240;
             sprintingDamage = 100;
@@ -756,7 +754,9 @@ public class UnitOverride {
         omura.abilities.clear();
         omura.abilities.add(new UnitSpawnSupperAbility(flare, 12 * 60f, 19.25f, -31.75f) {{
             status = ObjectMap.of(
-                    StatusEffects2.friability, 60f * 60 * 60
+                    StatusEffects2.frenzy, 60f * 60 * 60,
+                    StatusEffects2.back, 60f * 60 * 60,
+                    StatusEffects.overclock, 60f * 60 * 60
             );
         }}, new UnitSpawnSupperAbility(flare, 12 * 60f, -19.25f, -31.75f) {{
             status = ObjectMap.of(

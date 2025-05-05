@@ -226,9 +226,10 @@ public class StatusEffects2 {
         }};
         disturb = new StatusEffect("disturb") {{
             speedMultiplier = 0.9f;
-            reloadMultiplier = 0.85f;
+            reloadMultiplier = 0.9f;
             effect = Effects.disturb;
             effectChance = 0.2f;
+            dragMultiplier = 0.6f;
         }};
 
 

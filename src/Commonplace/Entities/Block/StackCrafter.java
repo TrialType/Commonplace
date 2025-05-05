@@ -45,13 +45,13 @@ public class StackCrafter extends GenericCrafter {
     @Override
     public void setStats() {
         super.setStats();
-        stats.add(Stat.input, table -> {
+        stats.add(Stat.output, table -> {
             table.row();
             for (ProductStack ps : switchStack) {
                 table.row();
-                table.table(t -> display(ps.itemsIn, ps.liquidsIn, ps.progress, t)).grow().left();
-                table.label(() -> "------>>");
-                table.table(t -> display(ps.itemsOut, ps.liquidsOut, ps.progress, t)).grow().right();
+                display(ps.itemsIn, ps.liquidsIn, ps.progress, table);
+                table.label(() -> "--->");
+                display(ps.itemsOut, ps.liquidsOut, ps.progress, table);
             }
         });
     }
@@ -59,14 +59,12 @@ public class StackCrafter extends GenericCrafter {
     public static void display(ItemStack[] s, LiquidStack[] l, float progress, Table t) {
         String ps = " " + StatUnit.perSecond.localized();
         for (ItemStack i : s) {
-            t.image(i.item.uiIcon).scaling(Scaling.fit).padRight(3f);
-            t.label(() -> Strings.fixed(i.amount / progress, 1) + ps).color(Color.lightGray);
-            t.row();
+            t.image(i.item.uiIcon).scaling(Scaling.fit);
+            t.label(() -> Strings.fixed(60 * i.amount / progress, 2) + ps);
         }
         for (LiquidStack li : l) {
-            t.image(li.liquid.uiIcon).scaling(Scaling.fit).size(32f).padRight(3f);
-            t.label(() -> Strings.fixed(li.amount / progress, 1) + ps).color(Color.lightGray);
-            t.row();
+            t.image(li.liquid.uiIcon).scaling(Scaling.fit);
+            t.label(() -> Strings.fixed(60 * li.amount / progress, 2) + ps);
         }
     }
 
@@ -131,7 +129,7 @@ public class StackCrafter extends GenericCrafter {
                 table.table(chance == i ? Tex.buttonDown : Tex.paneSolid, t -> {
                     tables.add(t);
                     StackCrafter.display(ps.itemsIn, ps.liquidsIn, ps.progress, t);
-                    t.label(() -> "------>>");
+                    t.label(() -> "--->");
                     StackCrafter.display(ps.itemsOut, ps.liquidsOut, ps.progress, t);
                     t.clicked(() -> {
                         if (chance == switchStack.indexOf(ps)) {

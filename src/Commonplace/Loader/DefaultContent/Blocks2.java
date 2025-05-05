@@ -54,7 +54,7 @@ public class Blocks2 {
     //test
     public static Block pu;
     //defense
-    public static Block eleFenceII, eleFenceIII, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
+    public static Block eleFence, eleFenceLarge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
     public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
@@ -224,34 +224,34 @@ public class Blocks2 {
             consumeItems(with(Items.coal, 2, Items.sand, 2));
             consumePower(0.50f);
         }};
-//        pulverizerSupper = new StackCrafter("pulverizer-supper") {{
-//            health = 350;
-//            itemCapacity = 60;
-//            liquidCapacity = 120;
-//            switchStack.add(new ProductStack(
-//                    ItemStack.with(copper, 1),
-//                    LiquidStack.empty,
-//                    ItemStack.with(scrap, 1),
-//                    LiquidStack.empty, 15
-//            ), new ProductStack(
-//                    ItemStack.with(lead, 1),
-//                    LiquidStack.empty,
-//                    ItemStack.with(scrap, 1),
-//                    LiquidStack.empty, 15
-//            ), new ProductStack(
-//                    ItemStack.with(titanium, 1),
-//                    LiquidStack.empty,
-//                    ItemStack.with(scrap, 3),
-//                    LiquidStack.empty, 30
-//            ), new ProductStack(
-//                    ItemStack.with(thorium, 1),
-//                    LiquidStack.empty,
-//                    ItemStack.with(scrap, 6),
-//                    LiquidStack.empty, 45
-//            ));
-//            consumePower(0.5f);
-//            requirements(Category.crafting, ItemStack.with(Items.copper, 30, Items.lead, 25));
-//        }};
+        pulverizerSupper = new StackCrafter("pulverizer-supper") {{
+            health = 350;
+            itemCapacity = 60;
+            liquidCapacity = 120;
+            switchStack.add(new ProductStack(
+                    ItemStack.with(copper, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 1),
+                    LiquidStack.empty, 15
+            ), new ProductStack(
+                    ItemStack.with(lead, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 1),
+                    LiquidStack.empty, 15
+            ), new ProductStack(
+                    ItemStack.with(titanium, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 3),
+                    LiquidStack.empty, 30
+            ), new ProductStack(
+                    ItemStack.with(thorium, 1),
+                    LiquidStack.empty,
+                    ItemStack.with(scrap, 6),
+                    LiquidStack.empty, 45
+            ));
+            consumePower(0.5f);
+            requirements(Category.crafting, ItemStack.with(Items.copper, 30, Items.lead, 25));
+        }};
 //======================================================================================================================
         sporeCombustionGenerator = new ConsumeGenerator("spore-combustion-generator") {{
             requirements(Category.power, with(Items.copper, 35, Items.graphite, 25, Items.lead, 40, Items.silicon, 30));
@@ -1383,48 +1383,54 @@ public class Blocks2 {
             limitRange(baseType, 7);
         }};
 //======================================================================================================================
-        eleFenceII = new ElectricFence("ele_fenceII") {{
+        eleFence = new ElectricFence("eleFence") {{
             health = 1500;
+            armor = 10;
             size = 3;
             clipSize = 3;
             hasPower = true;
 
-            radius = 400;
-            connect = 15;
-            force = 150;
+            radius = 350;
+            connect = 10;
+            force = 180;
             damage = 1.2f;
+            reload = 1800;
+
             air = true;
-            statusEffect = StatusEffects2.gasify;
+            statusEffect = StatusEffects.burning;
             statusTime = 300;
 
-            consume(new ConsumePower(25, 5000, false));
+            consume(new ConsumePower(15, 5000, false));
 
             requirements(Category.defense, ItemStack.with(
-                    Items.titanium, 350,
-                    Items.copper, 600,
-                    Items.silicon, 300
+                    Items.titanium, 230,
+                    Items.copper, 440,
+                    Items.silicon, 200
             ));
         }};
-        eleFenceIII = new ElectricFence("ele_fenceIII") {{
+        eleFenceLarge = new ElectricFence("eleFenceLarge") {{
             health = 3000;
+            armor = 20;
             size = 4;
             clipSize = 4;
             hasPower = true;
 
-            radius = 650;
-            connect = 25;
-            force = 300;
+            radius = 600;
+            connect = 15;
+            force = 800;
             damage = 2.5f;
+            reload = 1800;
+
             air = true;
-            statusEffect = StatusEffects2.sublimation;
+            statusEffect = StatusEffects2.gasify;
             statusTime = 420;
 
-            consume(new ConsumePower(75, 15000, false));
+            consume(new ConsumePower(30, 15000, false));
 
             requirements(Category.defense, ItemStack.with(
-                    Items.titanium, 450,
-                    Items.copper, 1000,
-                    Items.silicon, 500
+                    thorium, 450,
+                    Items.titanium, 650,
+                    Items.silicon, 370
             ));
         }};
         decoy = new Decoy("decoy") {{

@@ -65,8 +65,8 @@ public class Techs {
                 node(steadyRain, ItemStack.with(titanium, 16000, plastanium, 6000, silicon, 10000), Seq.with(new Objectives.SectorComplete(overgrowth)), () -> {
                 });
             });
-            node(eleFenceII, ItemStack.with(Items.titanium, 3500, Items.copper, 6000, Items.silicon, 3000), Seq.with(new Objectives.SectorComplete(saltFlats)), () -> {
-                node(eleFenceIII, ItemStack.with(Items.titanium, 4500, Items.copper, 10000, Items.silicon, 5000), Seq.with(new Objectives.SectorComplete(nuclearComplex)), () -> {
+            node(eleFence, ItemStack.with(Items.titanium, 3500, Items.copper, 6000, Items.silicon, 3000), Seq.with(new Objectives.SectorComplete(saltFlats)), () -> {
+                node(eleFenceLarge, ItemStack.with(Items.titanium, 4500, Items.copper, 10000, Items.silicon, 5000), Seq.with(new Objectives.SectorComplete(nuclearComplex)), () -> {
                 });
             });
             node(longestDown, Seq.with(new Objectives.SectorComplete(impact0078)), () -> {

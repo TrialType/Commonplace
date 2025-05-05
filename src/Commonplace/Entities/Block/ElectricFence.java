@@ -2,7 +2,6 @@ package Commonplace.Entities.Block;
 
 import Commonplace.Loader.DefaultContent.Units2;
 import arc.Core;
-import arc.func.Floatc;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
@@ -52,10 +51,7 @@ public class ElectricFence extends Block {
                 Building b = world.build(inter);
                 if (b instanceof ElectricFenceBuild eb && b.block instanceof ElectricFence ef) {
                     if (e.builds.contains(b.pos())) {
-                        e.lines.remove(b.pos());
-                        e.builds.removeValue(b.pos());
-                        eb.lines.remove(build.pos());
-                        eb.builds.removeValue(build.pos());
+                        e.removeLink(eb);
                     } else if (e.builds.size < connect && eb.builds.size < ef.connect) {
                         e.addLink(eb, ef);
                     }
@@ -86,13 +82,13 @@ public class ElectricFence extends Block {
         private boolean update;
 
         public Team team;
-        public Floatc broke;
-        public Runnable fixed;
 
         public float x;
         public float y;
         public float half;
         public float rotate;
+
+        public float width;
 
         public float max;
         public float time;
@@ -102,7 +98,7 @@ public class ElectricFence extends Block {
         public StatusEffect statusEffect;
 
 
-        public FenceLine(Team team, float max, Building b1, Building b2, float time, float damage, StatusEffect statusEffect, float statusDuration, float timer, boolean air, boolean broken, Floatc broke, Runnable fixed) {
+        public FenceLine(Team team, float max, Building b1, Building b2, float time, float damage, StatusEffect statusEffect, float statusDuration, float timer, float width, boolean air, boolean broken) {
             float x1 = b1.getX(), x2 = b2.getX(), y1 = b1.getY(), y2 = b2.getY();
             this.team = team;
             this.x = (x1 + x2) / 2;
@@ -115,52 +111,53 @@ public class ElectricFence extends Block {
             this.statusEffect = statusEffect;
             this.statusDuration = statusDuration;
             this.air = air;
-
+            this.width = width;
             this.timer = timer;
-            this.broke = broke;
-            this.fixed = fixed;
             this.broken = broken;
             update = false;
         }
 
-        public void update() {
+        public void update(float efficiency) {
             if (update) {
                 update = false;
             } else {
-                if (!broken) {
+                if (!broken && efficiency > 0) {
                     using = 0;
                     Units.nearbyEnemies(team, x, y, half, u -> {
                         if (dest(u) && closing(u)) {
-                            float ro = u.vel.angle() - rotate;
-                            float l = Mathf.sinDeg(ro) * u.vel.len();
-                            u.vel.sub(Mathf.cosDeg(rotate) * l, Mathf.sinDeg(rotate) * l);
+                            float ro = u.vel.angle() - rotate + 90;
+                            float l = Mathf.cosDeg(ro) * u.vel.len() * Math.min(1, efficiency);
+                            u.vel.sub(Mathf.cosDeg(rotate - 90) * l, Mathf.sinDeg(rotate - 90) * l);
 
-                            using += u.hitSize * l;
-                            u.damage(damage);
-                            u.apply(statusEffect, statusDuration);
+                            using += u.hitSize * Math.abs(Mathf.cosDeg(ro) * Math.max(u.vel.len(), u.type.speed) * Math.min(1, efficiency));
+                            u.damage(damage * efficiency);
+                            u.apply(statusEffect, statusDuration * efficiency);
                             if (using >= max) {
                                 broken = true;
                             }
                         }
                     });
                     if (broken) {
-                        broke.get(time);
+                        using = max;
                     }
-                } else {
-                    using = max;
-                    timer -= delta / 2f;
+                    float f = 1 - using / max;
+                    if (width > f) {
+                        width = Math.max(width - delta / 20, f);
+                    } else {
+                        width = Math.min(width + delta / 20, f);
+                    }
+                } else if (efficiency > 0) {
+                    timer -= delta;
+                    width = Math.max(width - delta / 20, 0.1f);
                     if (timer <= 0) {
                         broken = false;
                         timer = time;
-                        fixed.run();
                     }
+                } else {
+                    width = Math.max(width - delta / 20, 0.1f);
                 }
                 update = true;
             }
-        }
-
-        public float fout() {
-            return 1 - using / max;
         }
 
         public boolean dest(Unit u) {
@@ -181,16 +178,21 @@ public class ElectricFence extends Block {
         public boolean closing(Unit u) {
             float ux = u.x;
             float uy = u.y;
+            float ua = u.vel.angle();
             Vec2 v = new Vec2().trns(rotate, half);
             float angle1 = Angles.angle(ux, uy, x + v.x, y + v.y);
             float angle2 = Angles.angle(ux, uy, x - v.x, y - v.y);
             float angle3 = Angles.angleDist(angle1, angle2);
-            if (angle3 == 180) {
-                return !u.vel.isZero();
-            } else {
-                float angle = u.vel.angle();
-                return Angles.angleDist(angle1, angle) + Angles.angleDist(angle2, angle) <= angle3;
+            if (angle3 != 180 || !u.vel.isZero()) {
+                float angle = rotate + 90;
+                float angle4 = Angles.angleDist(angle1, angle);
+                float angle5 = Angles.angleDist(angle2, angle);
+                if (angle4 + angle5 > angle3) {
+                    angle = rotate - 90;
+                }
+                return Angles.angleDist(ua, angle) < 90;
             }
+            return false;
         }
     }
 
@@ -202,29 +204,15 @@ public class ElectricFence extends Block {
         @Override
         public void updateTile() {
             Seq<Integer> removes = new Seq<>();
-            IntMap<Boolean> invain = new IntMap<>();
-            builds.each(p -> {
-                invain.put(p, invain(p));
-                if (invain.get(p)) {
-                    removes.add(p);
-                }
-            });
-            removes.each(p -> {
-                builds.removeValue(p);
-                lines.remove(p);
-            });
-            removes.clear();
-
             times.forEach(e -> {
-                e.value -= delta;
-                if (e.value <= 0 || invain.get(e.key, invain(e.key))) {
+                e.value -= Math.min(world.build(e.key).efficiency, efficiency) * delta / 2f;
+                if (e.value <= 0) {
                     removes.add(e.key);
                 }
             });
             removes.each(times::remove);
-            removes.clear();
 
-            lines.forEach(e -> e.value.update());
+            lines.forEach(e -> e.value.update(Math.min(world.build(e.key).efficiency, efficiency)));
         }
 
         public void addLink(ElectricFenceBuild b, ElectricFence o) {
@@ -232,32 +220,45 @@ public class ElectricFence extends Block {
                 int p = b.pos();
                 builds.add(p);
                 b.builds.add(pos());
-                addLine(b, o, p);
+                addNewLine(b, o, p);
             }
         }
 
-        public void addLine(ElectricFenceBuild b, ElectricFence o, int p) {
+        public void removeLink(ElectricFenceBuild b) {
+            int p = b.pos(), pos = pos();
+            if (builds.contains(p)) {
+                FenceLine l = lines.get(p);
+                if (l.broken) {
+                    times.put(p, l.timer);
+                    b.times.put(pos, l.timer);
+                }
+                builds.removeValue(p);
+                b.builds.removeValue(pos);
+                lines.remove(p);
+                b.lines.remove(pos);
+            }
+        }
+
+        public void addNewLine(ElectricFenceBuild b, ElectricFence o, int p) {
             FenceLine l = new FenceLine(
                     team, Math.min(o.force, force), this, b,
                     Math.max(o.reload, reload), Math.min(o.damage, damage),
                     statusEffect, Math.min(o.statusTime, statusTime),
-                    times.get(p, 0f), air && o.air, times.containsKey(p),
-                    t -> {
-                        times.put(p, t);
-                        b.times.put(pos(), t);
-                    },
-                    () -> {
-                        times.remove(p);
-                        b.times.remove(pos());
-                    }
+                    times.get(p, 0f), 0.1f, air && o.air, times.containsKey(p)
             );
             lines.put(p, l);
             b.lines.put(pos(), l);
         }
 
-        public boolean invain(int p) {
-            Building b = world.build(p);
-            return b == null || !(b instanceof ElectricFenceBuild) || b.dead || b.health <= 0 || !b.isAdded();
+        public void addOldLine(ElectricFenceBuild b, ElectricFence o, int p, boolean broken, float width, float timer) {
+            FenceLine l = new FenceLine(
+                    team, Math.min(o.force, force), this, b,
+                    Math.max(o.reload, reload), Math.min(o.damage, damage),
+                    statusEffect, Math.min(o.statusTime, statusTime),
+                    timer, width, air && o.air, broken
+            );
+            lines.put(p, l);
+            b.lines.put(pos(), l);
         }
 
         public void reset() {
@@ -269,13 +270,11 @@ public class ElectricFence extends Block {
         }
 
         public void fresh() {
-            builds.each(p -> {
-                ElectricFenceBuild b = (ElectricFenceBuild) world.build(p);
-                b.builds.removeValue(pos());
-                b.lines.remove(pos());
-            });
-            builds.clear();
-            lines.clear();
+            for (int p : builds.toArray()) {
+                if (world.build(p) instanceof ElectricFenceBuild b) {
+                    removeLink(b);
+                }
+            }
         }
 
         public void clear() {
@@ -288,7 +287,7 @@ public class ElectricFence extends Block {
         }
 
         @Override
-        public void onProximityRemoved(){
+        public void onProximityRemoved() {
             super.onProximityRemoved();
             clear();
         }
@@ -327,15 +326,16 @@ public class ElectricFence extends Block {
                 FenceLine l = lines.get(p);
 
                 if (l != null && b != null) {
-                    float thick;
-                    if (l.broken) {
-                        thick = 0.01f;
+                    setupColor(l.width);
+                    Lines.stroke(6 * l.width);
+                    if (l.broken && l.width == 0.1f) {
+                        Vec2 v = new Vec2(l.x - getX(), l.y - getY()).setLength(l.half * (1 - l.timer / l.time)).add(this);
+                        Lines.line(getX(), getY(), v.x, v.y);
+                        v.set(l.x - b.getX(), l.y - b.getY()).setLength(l.half * (1 - l.timer / l.time)).add(b);
+                        Lines.line(b.getX(), b.getY(), v.x, v.y);
                     } else {
-                        thick = l.fout();
+                        Lines.line(getX(), getY(), b.getX(), b.getY());
                     }
-                    setupColor(thick);
-                    Lines.stroke(6 * thick);
-                    Lines.line(getX(), getY(), b.getX(), b.getY());
                 }
             });
         }
@@ -348,7 +348,12 @@ public class ElectricFence extends Block {
         @Override
         public void write(Writes write) {
             write.i(builds.size);
-            builds.each(write::i);
+            lines.forEach(e -> {
+                write.i(e.key);
+                write.f(e.value.width);
+                write.f(e.value.timer);
+                write.bool(e.value.broken);
+            });
             write.i(times.size);
             times.forEach(e -> {
                 write.i(e.key);
@@ -360,18 +365,20 @@ public class ElectricFence extends Block {
         public void read(Reads read, byte revision) {
             int num = read.i();
             for (int i = 0; i < num; i++) {
-                builds.add(read.i());
+                int p = read.i();
+                float width = read.f();
+                float timer = read.f();
+                boolean broken = read.bool();
+                builds.add(p);
+                Building b = world.build(p);
+                if (b instanceof ElectricFenceBuild e && b.block instanceof ElectricFence o) {
+                    addOldLine(e, o, p, broken, width, timer);
+                }
             }
             num = read.i();
             for (int i = 0; i < num; i++) {
                 times.put(read.i(), read.f());
             }
-            builds.each(p -> {
-                Building b = world.build(p);
-                if (b instanceof ElectricFenceBuild e && b.block instanceof ElectricFence o) {
-                    addLine(e, o, p);
-                }
-            });
         }
     }
 }
