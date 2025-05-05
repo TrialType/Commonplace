@@ -984,6 +984,7 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
         stell.weapons.first().reload = 70f;
         stell.weapons.first().recoil = 2.5f;
+        stell.weapons.first().shootSound = Sounds.dullExplosion;
         stell.weapons.first().bullet = new PointBulletType() {{
             speed = 4f;
             damage = 40;
