@@ -1,6 +1,6 @@
-package Commonplace.Type.Renders;
+package Commonplace.UI.Renders;
 
-import Commonplace.Type.Shaders.WaveShader;
+import Commonplace.UI.Shaders.WaveShader;
 import arc.Events;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

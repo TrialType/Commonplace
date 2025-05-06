@@ -15,7 +15,6 @@ import mindustry.entities.Effect;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.game.Team;
 import mindustry.gen.Building;
-import mindustry.gen.Groups;
 import mindustry.gen.Icon;
 import mindustry.gen.Unit;
 import mindustry.graphics.Drawf;
@@ -24,7 +23,7 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 
-import static Commonplace.Type.Dialogs.ProjectDialog.project;
+import static Commonplace.UI.Dialogs.ProjectDialog.project;
 import static mindustry.Vars.player;
 import static mindustry.Vars.state;
 

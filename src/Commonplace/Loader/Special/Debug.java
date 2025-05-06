@@ -1,8 +1,8 @@
 package Commonplace.Loader.Special;
 
 import Commonplace.Type.Control.CorrosionMist;
-import Commonplace.Type.Dialogs.PlanetDialog2;
-import Commonplace.Type.Renders.TestRender;
+import Commonplace.UI.Dialogs.PlanetDialog2;
+import Commonplace.UI.Renders.TestRender;
 import Commonplace.Utils.Classes.Listener;
 import arc.Core;
 import arc.util.Time;

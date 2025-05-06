@@ -1,6 +1,6 @@
-package Commonplace.Type.Renders;
+package Commonplace.UI.Renders;
 
-import Commonplace.Type.Shaders.TestShader;
+import Commonplace.UI.Shaders.TestShader;
 import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.Draw;

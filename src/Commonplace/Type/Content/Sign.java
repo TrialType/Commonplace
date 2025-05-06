@@ -1,4 +1,4 @@
-package Commonplace.Type.New;
+package Commonplace.Type.Content;
 
 import mindustry.ctype.ContentType;
 import mindustry.ctype.UnlockableContent;

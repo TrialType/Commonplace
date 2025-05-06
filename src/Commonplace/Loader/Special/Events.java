@@ -2,11 +2,12 @@ package Commonplace.Loader.Special;
 
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
+import Commonplace.UI.Fragments.DebugFragment;
 import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Classes.Vars2;
 import Commonplace.Utils.Interfaces.BuildUpGrade;
-import Commonplace.Type.Dialogs.ProjectDialog;
-import Commonplace.Type.Dialogs.MoreResearchDialog;
+import Commonplace.UI.Dialogs.ProjectDialog;
+import Commonplace.UI.Dialogs.MoreResearchDialog;
 import Commonplace.Utils.Interfaces.OwnCreate;
 import arc.Core;
 import arc.math.Mathf;
@@ -44,6 +45,7 @@ public class Events {
     public static void load() {
         arc.Events.on(EventType.WorldLoadEvent.class, e -> lastWave = -1);
 
+        arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, Vars2::load));
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, UnitPeculiarity::init));
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, () -> Vars.ui.research = new MoreResearchDialog()));
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, ProjectDialog::create));

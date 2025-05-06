@@ -1,4 +1,4 @@
-package Commonplace.Type.Shaders;
+package Commonplace.UI.Shaders;
 
 import arc.graphics.gl.Shader;
 

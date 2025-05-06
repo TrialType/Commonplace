@@ -1,4 +1,4 @@
-package Commonplace.Type.New;
+package Commonplace.Type.Content;
 
 import Commonplace.Utils.Classes.ProjectUtils;
 import arc.func.Cons;

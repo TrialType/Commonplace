@@ -1,6 +1,6 @@
-package Commonplace.Type.Dialogs;
+package Commonplace.UI.Dialogs;
 
-import Commonplace.Type.Shaders.SpaceContortShader;
+import Commonplace.UI.Shaders.SpaceContortShader;
 import Commonplace.Utils.Classes.Vars2;
 import arc.Core;
 import arc.Events;

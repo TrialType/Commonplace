@@ -1,4 +1,4 @@
-package Commonplace.Type.Dialogs;
+package Commonplace.UI.Dialogs;
 
 import arc.struct.ObjectMap;
 import arc.struct.Seq;

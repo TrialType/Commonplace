@@ -1,4 +1,4 @@
-package Commonplace.Type.New;
+package Commonplace.Type.Content;
 
 import arc.func.Cons;
 import arc.struct.IntIntMap;

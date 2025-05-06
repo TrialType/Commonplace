@@ -1,6 +1,6 @@
 package Commonplace.Loader.Special;
 
-import Commonplace.Type.Renders.WaveRenderer;
+import Commonplace.UI.Renders.WaveRenderer;
 import arc.func.Cons;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;

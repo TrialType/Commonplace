@@ -1,9 +1,9 @@
-package Commonplace.Type.Dialogs;
+package Commonplace.UI.Dialogs;
 
 import Commonplace.Loader.DefaultContent.StatusEffects2;
 import Commonplace.Loader.ProjectContent.Sign;
-import Commonplace.Type.New.BoostProject;
-import Commonplace.Type.New.UnitProject;
+import Commonplace.Type.Content.BoostProject;
+import Commonplace.Type.Content.UnitProject;
 import arc.Core;
 import arc.func.Cons;
 import arc.func.Intc;
