@@ -21,6 +21,9 @@ public class DamageOwnBulletType extends BasicBulletType {
                 h.kill();
             } else if (ownDamage > 0) {
                 float damage = (keepDamage && b.owner instanceof Statusc s) ? s.healthMultiplier() * ownDamage : ownDamage;
+                if (damage == Float.POSITIVE_INFINITY) {
+                    damage = ownDamage;
+                }
                 if (b.owner() instanceof Shieldc s && s.shield() > 0) {
                     float shield = s.shield();
                     s.shield(0);

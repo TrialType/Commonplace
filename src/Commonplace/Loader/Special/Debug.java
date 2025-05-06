@@ -2,6 +2,7 @@ package Commonplace.Loader.Special;
 
 import Commonplace.Type.Control.CorrosionMist;
 import Commonplace.Type.Dialogs.PlanetDialog2;
+import Commonplace.Type.Renders.TestRender;
 import Commonplace.Utils.Classes.Listener;
 import arc.Core;
 import arc.util.Time;
@@ -25,5 +26,8 @@ public class Debug {
 
         Core.settings.put("launch-search", true);
         Core.settings.put("launch-pow", 3);
+
+        TestRender.init();
+        arc.Events.run(EventType.Trigger.draw, TestRender::draw);
     }
 }

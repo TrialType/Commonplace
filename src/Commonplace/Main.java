@@ -4,8 +4,6 @@ import Commonplace.Loader.DefaultContent.*;
 import Commonplace.Loader.Override.*;
 import Commonplace.Loader.ProjectContent.UnitProjects;
 import Commonplace.Loader.Special.*;
-import Commonplace.Type.Renders.TestRender;
-import mindustry.game.EventType;
 import mindustry.mod.Mod;
 
 public class Main extends Mod {
@@ -29,11 +27,5 @@ public class Main extends Mod {
         BlockOverride.load();
 //        Techs.load();
 //        Debug.load();
-    }
-
-    @Override
-    public void init(){
-        TestRender.init();
-        arc.Events.run(EventType.Trigger.draw, TestRender::draw);
     }
 }

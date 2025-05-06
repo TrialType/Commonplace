@@ -1457,7 +1457,7 @@ public class UnitOverride {
         nova.speed = 2.4f;
         nova.armor = 8;
         nova.buildSpeed = 0;
-        nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 114514));
+        nova.abilities.add(new RepairOwnAbility(50, 60 * 8, 0));
         color = Color.valueOf("ffff90");
         weapon = nova.weapons.first();
         weapon.reload = 3;

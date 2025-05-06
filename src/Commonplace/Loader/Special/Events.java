@@ -1,9 +1,9 @@
 package Commonplace.Loader.Special;
 
-import Commonplace.Entities.Block.ElectricFence;
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
 import Commonplace.Utils.Classes.UnitPeculiarity;
+import Commonplace.Utils.Classes.Vars2;
 import Commonplace.Utils.Interfaces.BuildUpGrade;
 import Commonplace.Type.Dialogs.ProjectDialog;
 import Commonplace.Type.Dialogs.MoreResearchDialog;
@@ -18,8 +18,6 @@ import mindustry.content.StatusEffects;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType;
 import mindustry.gen.*;
-import mindustry.world.blocks.ConstructBlock;
-import mindustry.world.blocks.power.PowerNode;
 
 import java.lang.reflect.Field;
 
@@ -55,7 +53,7 @@ public class Events {
         });
 
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (e.unit instanceof OwnCreate o && o.created()) {
+            if (!Vars2.useRandom || e.unit instanceof OwnCreate o && o.created()) {
                 return;
             }
 
@@ -83,53 +81,55 @@ public class Events {
             }
         });
         arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
-            boolean isBoss = isBoss(e.unit);
-            int wave = state.wave - 1;
-            if (lastWave < 0 || lastWave != wave) {
-                lastWave = wave;
-                long seed = mapSeed() + lastWave * 975L;
-                r.setSeed(seed);
-                UnitPeculiarity.setSeed(seed);
-            }
-
-            int extra = (isBoss ? Math.max(1, wave / 20) : 0);
-            float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1);
-
-            if (wave < 8) {
-                UnitPeculiarity.apply(e.unit, extra, 2, r.nextInt(3), true);
-            } else if (wave < 18) {
-                UnitPeculiarity.apply(e.unit, r.nextInt(2) + extra, 2, r.nextInt(3), true);
-            } else if (wave < 30) {
-                UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 2, r.nextInt(3), true);
-            } else {
-                if (r.chance(chance)) {
-                    UnitPeculiarity.applySuper(e.unit, 1);
+            if (Vars2.useRandom) {
+                boolean isBoss = isBoss(e.unit);
+                int wave = state.wave - 1;
+                if (Vars2.lockRandom && (lastWave < 0 || lastWave != wave)) {
+                    lastWave = wave;
+                    long seed = mapSeed() + lastWave * 975L;
+                    r.setSeed(seed);
+                    UnitPeculiarity.setSeed(seed);
                 }
 
-                if (wave < 42) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 1, r.nextInt(3), true);
-                } else if (wave < 55) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 1, r.nextInt(2), true);
-                } else if (wave < 70) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(4) + extra, 1, r.nextInt(2), true);
-                } else if (wave <= 85) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(5) + extra, 1, r.nextInt(2), true);
-                } else if (wave <= 100) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(5) + extra, 0, r.nextInt(2), true);
-                } else if (wave <= 115) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(6) + extra, 0, r.nextInt(2), true);
-                } else if (wave <= 130) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(7) + extra, 0, r.nextInt(2), true);
-                } else if (wave <= 300) {
-                    UnitPeculiarity.apply(e.unit, r.nextInt(7 + Math.min(8, (wave - 130) / 10)) + extra, 0, 0, true);
-                } else if (wave <= 500) {
-                    extra = isBoss ? 15 + (extra - 15) / 4 : 0;
-                    e.unit.shield(e.unit.shield + 30 * (wave - 300));
-                    UnitPeculiarity.apply(e.unit, r.nextInt(15) + extra, 0, 0, true);
+                int extra = (isBoss ? Math.max(1, wave / 20) : 0);
+                float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1);
+
+                if (wave < 8) {
+                    UnitPeculiarity.apply(e.unit, extra, 2, r.nextInt(3), true);
+                } else if (wave < 18) {
+                    UnitPeculiarity.apply(e.unit, r.nextInt(2) + extra, 2, r.nextInt(3), true);
+                } else if (wave < 30) {
+                    UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 2, r.nextInt(3), true);
                 } else {
-                    extra = isBoss ? 23 + (extra - 23) / 8 : 0;
-                    e.unit.shield(e.unit.shield + 6000 + 70 * (wave - 500));
-                    UnitPeculiarity.apply(e.unit, r.nextInt(15) + extra, 0, 0, true);
+                    if (r.chance(chance)) {
+                        UnitPeculiarity.applySuper(e.unit, 1);
+                    }
+
+                    if (wave < 42) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 1, r.nextInt(3), true);
+                    } else if (wave < 55) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(3) + extra, 1, r.nextInt(2), true);
+                    } else if (wave < 70) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(4) + extra, 1, r.nextInt(2), true);
+                    } else if (wave <= 85) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(5) + extra, 1, r.nextInt(2), true);
+                    } else if (wave <= 100) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(5) + extra, 0, r.nextInt(2), true);
+                    } else if (wave <= 115) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(6) + extra, 0, r.nextInt(2), true);
+                    } else if (wave <= 130) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(7) + extra, 0, r.nextInt(2), true);
+                    } else if (wave <= 300) {
+                        UnitPeculiarity.apply(e.unit, r.nextInt(7 + Math.min(8, (wave - 130) / 10)) + extra, 0, 0, true);
+                    } else if (wave <= 500) {
+                        extra = isBoss ? 15 + (extra - 15) / 4 : 0;
+                        e.unit.shield(e.unit.shield + 30 * (wave - 300));
+                        UnitPeculiarity.apply(e.unit, r.nextInt(15) + extra, 0, 0, true);
+                    } else {
+                        extra = isBoss ? 23 + (extra - 23) / 8 : 0;
+                        e.unit.shield(e.unit.shield + 6000 + 70 * (wave - 500));
+                        UnitPeculiarity.apply(e.unit, r.nextInt(15) + extra, 0, 0, true);
+                    }
                 }
             }
         });
