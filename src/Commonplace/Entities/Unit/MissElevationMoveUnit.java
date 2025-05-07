@@ -15,8 +15,11 @@ public class MissElevationMoveUnit extends ElevationMoveUnit {
 
     @Override
     public void rawDamage(float damage) {
-        if (Mathf.chance(0.5f + healthf() * 0.3f)) {
+        float chance = Mathf.random();
+        if (chance < 0.5f + healthf() * 0.2f) {
             super.rawDamage(damage);
+        } else if (chance < 0.8f + healthf() * 0.05f) {
+            heal(10);
         }
     }
 }
