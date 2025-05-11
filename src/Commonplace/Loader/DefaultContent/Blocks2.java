@@ -14,9 +14,7 @@ import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.entities.part.ShapePart;
-import mindustry.entities.pattern.ShootAlternate;
-import mindustry.entities.pattern.ShootBarrel;
-import mindustry.entities.pattern.ShootSpread;
+import mindustry.entities.pattern.*;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
@@ -57,15 +55,16 @@ public class Blocks2 {
     public static Block eleFence, eleFenceLarge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
     //turret
-    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack;
+    public static Block fourNet, fireBoost, wind, plain, hill, butte, scattering, life, steadyRain, wonton, scale, stack,
+            flowers;
     //power
     public static Block sporeCombustionGenerator;
     //crafting
     public static Block primarySolidification, intermediateSolidification, advancedSolidification, ultimateSolidification,
-            phaseAmplifier, meltingFurnace, hotSiliconSmelter, pulverizerSupper;
+            phaseAmplifier, hotSiliconSmelter, pulverizerSupper;
     //effect
     public static Block buildCore, slowProject, unitUpper, reflective, coreLaunch, coreLaunchLarge, mendProjectorLarge,
-            forceProjectorLarge, bulletSlower, shockMineFiller;
+            forceProjectorLarge, bulletSlower, shockMineFiller, automaticDistributor, automaticDistributorLarge;
     //distribution
     public static Block multiMassDriver, sorterOverflowGate, sorterUnderflowGate;
     //liquid
@@ -295,43 +294,6 @@ public class Blocks2 {
             consumePower(50f);
 
             requirements(Category.effect, BuildVisibility.editorOnly, ItemStack.with(Items.copper, 1));
-        }};
-
-        meltingFurnace = new StackCrafter("melting-furnace") {{
-            health = 400;
-            itemCapacity = 60;
-            liquidCapacity = 120;
-            switchStack.add(new ProductStack(
-                    ItemStack.with(copper, 1),
-                    LiquidStack.with(Liquids.slag, 5),
-                    ItemStack.with(scrap, 2),
-                    LiquidStack.with(Liquids2.fusionCopper, 4), 60
-            ));
-            switchStack.add(new ProductStack(
-                    ItemStack.with(lead, 1),
-                    LiquidStack.with(Liquids.slag, 5),
-                    ItemStack.with(scrap, 2),
-                    LiquidStack.with(Liquids2.fusionLead, 4), 60
-            ));
-            switchStack.add(new ProductStack(
-                    ItemStack.with(titanium, 1),
-                    LiquidStack.with(Liquids.slag, 6),
-                    ItemStack.with(scrap, 3),
-                    LiquidStack.with(Liquids2.fusionTitanium, 4), 120
-            ));
-            switchStack.add(new ProductStack(
-                    ItemStack.with(thorium, 1),
-                    LiquidStack.with(Liquids.slag, 6),
-                    ItemStack.with(scrap, 4),
-                    LiquidStack.with(Liquids2.fusionThorium, 3), 180
-            ));
-
-
-            hasPower = false;
-
-            consume(new ConsumePower(1, 0, false));
-
-            requirements(Category.crafting, BuildVisibility.debugOnly, ItemStack.with(Items.metaglass, 15, Items.copper, 20, graphite, 15));
         }};
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
@@ -1153,6 +1115,49 @@ public class Blocks2 {
                 }};
             }});
         }};
+        flowers = new ItemTurret("flowers") {{
+            size = 2;
+            range = 235;
+            reload = 30;
+            health = 400;
+            inaccuracy = 30;
+
+            shoot = new ShootMulti(new ShootPattern() {{
+                shots = 3;
+                shotDelay = 1;
+            }}, new ShootPattern() {{
+                shots = 2;
+            }});
+
+            ammo(graphite, new BasicBulletType(8, 2) {{
+                lifetime = 30;
+
+                homingPower = 2;
+                trailLength = 7;
+                homingDelay = 6;
+                trailWidth = 1.5f;
+                homingRange = 500;
+                width = height = 6;
+                buildingDamageMultiplier = 0.1f;
+
+                pierce = pierceArmor = true;
+                pierceCap = 4;
+
+                frontColor = backColor = trailColor = hitColor = Color.valueOf("b2c6d2");
+                shootSound = Sounds.lasershoot;
+                shootEffect = Fx.none;
+                despawnEffect = hitEffect = Fx.none;
+            }}, titanium, new MagneticStormBulletType() {{
+                damage = 30;
+                lifetime = 240;
+                inaccuracy = -30;
+
+                trailColor = Color.valueOf("8da1e3");
+                shootEffect = despawnEffect = hitEffect = Fx.none;
+            }});
+
+            requirements(Category.turret, ItemStack.with(copper, 100, titanium, 45, silicon, 45));
+        }};
         fireBoost = new OwnerTurret("fire_boost") {{
             targetAir = targetGround = true;
 
@@ -1683,6 +1688,20 @@ public class Blocks2 {
             consume(new ConsumePowerCondition(5, b -> b instanceof FillerBuild f && f.progress < 1));
 
             size = 2;
+        }};
+        automaticDistributor = new AllocationBlock("automatic-distributor") {{
+            size = 2;
+            health = 350;
+            consumePower(1.5f);
+            requirements(Category.effect, ItemStack.with(copper, 75, titanium, 45, silicon, 35, graphite, 40));
+        }};
+        automaticDistributorLarge = new AllocationBlock("automatic-distributor-large") {{
+            num = 8f;
+            size = 3;
+            radius = 160;
+            health = 850;
+            consumePower(7f);
+            requirements(Category.effect, ItemStack.with(titanium, 100, thorium, 40, silicon, 75, graphite, 70));
         }};
 //======================================================================================================================
         sorterOverflowGate = new SorterOverflowGate("sorter-overflow-gate") {{

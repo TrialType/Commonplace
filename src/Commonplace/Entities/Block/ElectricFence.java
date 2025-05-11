@@ -308,6 +308,7 @@ public class ElectricFence extends Block {
             return true;
         }
 
+        @Override
         public void drawConfigure() {
             Drawf.circles(x, y, tile.block().size * tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f));
             Drawf.circles(x, y, radius);

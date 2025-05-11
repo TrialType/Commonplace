@@ -521,17 +521,6 @@ public class Filler extends Block {
                     }
                 }
             } else {
-//                int dx = Math.round(x / tilesize) - sizeOffset - tileX(), dy = Math.round(y / tilesize) - sizeOffset - tileY();
-//                if (dx < size && dx >= 0 && dy < size && dy >= 0) {
-//                    if (sets.size > 0) {
-//                        disable.clear();
-//                        sets.clear();
-//                    } else {
-//                        reset();
-//                    }
-//                    return false;
-//                }
-
                 if (sets.contains(i)) {
                     sets.remove(i);
                     if (disable.contains(i)) {
