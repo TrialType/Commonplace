@@ -9,6 +9,7 @@ import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 
 public class ConditionsNumberStatusEffect extends StatusEffect {
+    public boolean truthDamage = false;
     public Floatf<Unit> damageResult = u -> 0f;
 
     public ConditionsNumberStatusEffect(String name) {
@@ -19,7 +20,14 @@ public class ConditionsNumberStatusEffect extends StatusEffect {
     public void update(Unit unit, float time) {
         damage = damageResult.get(unit);
         if (damage > 0) {
-            unit.damageContinuousPierce(damage);
+            if (truthDamage) {
+                float shield = unit.shield;
+                unit.shield(0);
+                unit.damageContinuousPierce(damage);
+                unit.shield(shield);
+            } else {
+                unit.damageContinuousPierce(damage);
+            }
         } else if (damage < 0) {
             unit.heal(-1f * damage * Time.delta);
         }

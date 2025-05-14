@@ -77,25 +77,25 @@ public class UnitOverride {
         arkyid.health = 28000;
         toxopid.health = 77000;
 
-        flare.health = 200;
+        flare.health = 120;
         horizon.health = 500;
         zenith.health = 1500;
         antumbra.health = 25200;
         eclipse.health = 77000;
 
-        mono.health = 2000;
+        mono.health = 1200;
         poly.health = 700;
         mega.health = 6000;
         quad.health = 22000;
         oct.health = 77000;
 
-        risso.health = 430;
+        risso.health = 350;
         minke.health = 800;
         bryde.health = 1410;
         sei.health = 22000;
         omura.health = 77000;
 
-        retusa.health = 550;
+        retusa.health = 400;
         oxynoe.health = 1060;
         cyerce.health = 1870;
         aegires.health = 42000;
@@ -300,7 +300,7 @@ public class UnitOverride {
         /*-----------------------------------------------------------------------------*/
         crawler.health = 350;
         crawler.speed = 2.5f;
-        crawler.abilities.add(new StatusOwnAbility(StatusEffects2.swift, 900, 600, 1));
+        crawler.abilities.add(new StatusOwnAbility(StatusEffects2.fearless, 900, 600, 0));
         weapon = crawler.weapons.get(0);
         weapon.reload = 30;
         weapon.bullet = new PercentExplosionBulletType(100f, 55f) {{
@@ -578,8 +578,7 @@ public class UnitOverride {
             collides = true;
             pierce = true;
             pierceBuilding = true;
-            buildingDamageMultiplier = 2f;
-            fireTrailChance = 1;
+            fireTrailChance = 0.25f;
             velMin = velMax = speed;
         }};
 
@@ -772,8 +771,9 @@ public class UnitOverride {
         retusa.abilities.add(new StatusFieldAbility(StatusEffects.fast, 60, 90, 60));
         RepairBeamWeapon repair = (RepairBeamWeapon) retusa.weapons.get(0);
         repair.repairSpeed = 1.5f;
-        weapon = retusa.weapons.get(1);
-        weapon.shoot.shots = 3;
+        weapon = retusa.weapons.get(2);
+        weapon.reload = 45;
+        weapon.shoot.shots = 2;
         weapon.inaccuracy = 5;
         weapon.bullet = new BasicBulletType() {{
             sprite = "mine-bullet";
@@ -793,7 +793,7 @@ public class UnitOverride {
             hitSize = 22f;
 
             pierce = pierceBuilding = true;
-            pierceCap = 3;
+            pierceCap = 2;
             collidesAir = false;
             collideFloor = false;
             keepVelocity = false;

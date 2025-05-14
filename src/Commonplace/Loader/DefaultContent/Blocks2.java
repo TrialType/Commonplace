@@ -1147,13 +1147,6 @@ public class Blocks2 {
                 shootSound = Sounds.lasershoot;
                 shootEffect = Fx.none;
                 despawnEffect = hitEffect = Fx.none;
-            }}, titanium, new MagneticStormBulletType() {{
-                damage = 30;
-                lifetime = 240;
-                inaccuracy = -30;
-
-                trailColor = Color.valueOf("8da1e3");
-                shootEffect = despawnEffect = hitEffect = Fx.none;
             }});
 
             requirements(Category.turret, ItemStack.with(copper, 100, titanium, 45, silicon, 45));
@@ -1388,7 +1381,7 @@ public class Blocks2 {
             limitRange(baseType, 7);
         }};
 //======================================================================================================================
-        eleFence = new ElectricFence("eleFence") {{
+        eleFence = new ElectricFence("ele-fence") {{
             health = 1500;
             armor = 10;
             size = 3;
@@ -1413,7 +1406,7 @@ public class Blocks2 {
                     Items.silicon, 200
             ));
         }};
-        eleFenceLarge = new ElectricFence("eleFenceLarge") {{
+        eleFenceLarge = new ElectricFence("ele-fence-large") {{
             health = 3000;
             armor = 20;
             size = 4;
@@ -1684,7 +1677,7 @@ public class Blocks2 {
             consume(new ConsumePower(3, 0, false));
         }};
         shockMineFiller = new Filler("shock-mine-builder", Blocks.shockMine) {{
-            requirements(Category.effect, ItemStack.with(Items.silicon, 75, Items.lead, 100, Items.graphite, 50), true);
+            requirements(Category.effect, ItemStack.with(Items.silicon, 75, Items.lead, 100, Items.graphite, 50));
             consume(new ConsumePowerCondition(5, b -> b instanceof FillerBuild f && f.progress < 1));
 
             size = 2;

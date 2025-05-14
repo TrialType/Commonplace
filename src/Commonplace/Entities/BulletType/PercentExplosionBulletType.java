@@ -14,11 +14,11 @@ import static mindustry.Vars.net;
 import static mindustry.Vars.world;
 
 public class PercentExplosionBulletType extends ExplosionBulletType {
-    public float percent = 35;
-    public float minPercent = 20;
+    public float percent = 30;
+    public float minPercent = 15;
 
     public float damageMultiplierMin = 0.8f;
-    public float damageMultiplierMax = 1.35f;
+    public float damageMultiplierMax = 1.5f;
 
     public PercentExplosionBulletType(float splashDamage, float splashDamageRadius) {
         super(splashDamage, splashDamageRadius);
@@ -119,7 +119,7 @@ public class PercentExplosionBulletType extends ExplosionBulletType {
         bullet.hitSize = hitSize;
         bullet.mover = mover;
         bullet.damage = (owner instanceof Healthc h ?
-                Mathf.randomSeed(owner.id() * (long) h.health(),
+                Mathf.randomSeed((owner.id() + 17) * (long) h.health(),
                         1 - (1 - damageMultiplierMin) * h.healthf(),
                         1 + (damageMultiplierMax - 1) * h.healthf()) : 1) *
                 (damage < 0 ? this.damage : damage) * bullet.damageMultiplier();

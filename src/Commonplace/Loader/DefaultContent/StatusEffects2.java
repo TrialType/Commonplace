@@ -70,7 +70,7 @@ public class StatusEffects2 {
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose,
-            shocked, aging, erosion, disturb;
+            shocked, aging, erosion, disturb, fearless;
 
     public static StatusEffect fireKiller;
 
@@ -249,6 +249,12 @@ public class StatusEffects2 {
             damageResult = u -> 1.5f * u.vel.len() / Vars.tilesize;
 
             opposite(tarred);
+        }};
+        fearless = new ConditionsNumberStatusEffect("fearless") {{
+            speedMultiplier = 2f;
+
+            truthDamage = true;
+            damageResult = u -> u.maxHealth * 0.03f * u.healthMultiplier / 60f;
         }};
 
 
