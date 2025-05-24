@@ -22,49 +22,70 @@ import static Commonplace.Utils.Classes.UnitPeculiarity.*;
 import static mindustry.content.StatusEffects.*;
 
 public class StatusEffects2 {
-    public final static Cons<StatusEffect> well = wellPeculiarity::add;
-    public final static Cons<StatusEffect> well3 = s -> {
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-    };
-    public final static Cons<StatusEffect> well5 = s -> {
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-        wellPeculiarity.add(s);
-    };
-    public final static Cons<StatusEffect> midden = middenPeculiarity::add;
-    public final static Cons<StatusEffect> midden3 = s -> {
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-    };
-    public final static Cons<StatusEffect> midden5 = s -> {
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-        middenPeculiarity.add(s);
-    };
-    public final static Cons<StatusEffect> bad = badPeculiarity::add;
-    public final static Cons<StatusEffect> bad3 = s -> {
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-    };
-    public final static Cons<StatusEffect> bad5 = s -> {
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-        badPeculiarity.add(s);
-    };
+//    public final static Cons<StatusEffect> well = wellPeculiarity::add;
+//    public final static Cons<StatusEffect> well3 = s -> {
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusEffect> well5 = s -> {
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//        wellPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusEffect> midden = middenPeculiarity::add;
+//    public final static Cons<StatusEffect> midden3 = s -> {
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusEffect> midden5 = s -> {
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//        middenPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusEffect> bad = badPeculiarity::add;
+//    public final static Cons<StatusEffect> bad3 = s -> {
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusEffect> bad5 = s -> {
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//        badPeculiarity.add(s);
+//    };
+//    public final static Cons<StatusPack> node = p -> {
+//    };
+
     public final static Floatp zero = () -> 0f;
-    public final static Floatp wave30l70 = () -> Math.min(70f, Vars.state.wave / 30f);
-    public final static Floatp wave50l5 = () -> Math.min(5f, Vars.state.wave / 50f);
-    public final static Floatp wave60l35 = () -> Math.min(35f, Vars.state.wave / 60f);
+    public final static Floatp wave30t50t20l4 = () -> {
+        int wave = Vars.state.wave - 1;
+        if (wave < 30) {
+            return wave / 30f;
+        } else if (wave < 80) {
+            return 1 + (wave - 30) / 50f;
+        } else {
+            return 2 + Math.min(2, (wave - 80) / 20f);
+        }
+    };
+    public final static Floatp wave20l14 = () -> Math.min(1.1f, Vars.state.wave / 20f);
+    public final static Floatp wave30t80t20l2 = () -> {
+        int wave = Vars.state.wave - 1;
+        if (wave < 30) {
+            return wave / 60f;
+        } else if (wave < 80) {
+            return 0.5f + (wave - 30) / 100f;
+        } else {
+            return 1f + Math.min(1f, (wave - 80) / 40f);
+        }
+    };
 
     public final static Seq<StatusEffect> burnings = new Seq<>();
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
@@ -614,46 +635,94 @@ public class StatusEffects2 {
     }
 
     public static void load_peculiarity() {
-        peculiarity_heal("__h1", 1.05f, opposites(well5, modname("_h1")));
-        peculiarity_heal("__h2", 1.1f, opposites(well3, modname("_h2")));
-        peculiarity_heal("__h3", 1.15f, opposites(well, modname("_h3")));
-        peculiarity_damage("__d1", 1.05f, opposites(well5, modname("_d1")));
-        peculiarity_damage("__d2", 1.1f, opposites(well3, modname("_d2")));
-        peculiarity_damage("__d3", 1.15f, opposites(well, modname("_d3")));
-        peculiarity_reload("__r1", 1.05f, opposites(well5, modname("_r1")));
-        peculiarity_reload("__r2", 1.1f, opposites(well3, modname("_r2")));
-        peculiarity_reload("__r3", 1.15f, opposites(well, modname("_r3")));
-        peculiarity_heal("___grow", 2f, well);
-        peculiarity_reload("___oil", 2f, well);
-        peculiarity("__r__h__d", 1.05f, 1f, 1.05f, 1.05f, well);
+//        peculiarity_health("__h1", 1.05f, opposites(well5, modname("_h1")));
+//        peculiarity_health("__h2", 1.1f, opposites(well3, modname("_h2")));
+//        peculiarity_health("__h3", 1.15f, opposites(well, modname("_h3")));
+//        peculiarity_damage("__d1", 1.05f, opposites(well5, modname("_d1")));
+//        peculiarity_damage("__d2", 1.1f, opposites(well3, modname("_d2")));
+//        peculiarity_damage("__d3", 1.15f, opposites(well, modname("_d3")));
+//        peculiarity_reload("__r1", 1.05f, opposites(well5, modname("_r1")));
+//        peculiarity_reload("__r2", 1.1f, opposites(well3, modname("_r2")));
+//        peculiarity_reload("__r3", 1.15f, opposites(well, modname("_r3")));
+//        peculiarity_health("___grow", 2f, well);
+//        peculiarity_reload("___oil", 1.7f, well);
+//        peculiarity_reload("___slip", 2.5f, s -> {
+//            well.get(s);
+//            s.dragMultiplier = 0.15f;
+//        });
+//        peculiarity("__r__h__d", 1.05f, 1f, 1.05f, 1.05f, well);
+//
+//        peculiarity("_h__d", 1.1f, 1, 0.91f, 1, midden5);
+//        peculiarity("_d__r", 0.91f, 1, 1, 1.1f, midden5);
+//        peculiarity("_s__r", 1, 0.91f, 1, 1.1f, midden5);
+//        peculiarity("_h__r", 1, 1, 0.91f, 1.1f, midden5);
+//        peculiarity("_r__s", 1, 1.1f, 1, 0.91f, midden5);
+//        peculiarity("_h_r__d", 1.1f, 1, 0.96f, 0.96f, midden3);
+//        peculiarity("_h_s__d", 1.1f, 0.96f, 1, 0.96f, midden3);
+//        peculiarity("___glass", 2f, 1, 0.5f, 1f, midden);
+//        peculiarity("___loading", 1f, 1 / 1.5f, 1 / 1.5f, 3f, midden);
+//        peculiarity("___X", 0.5f, 1, 1, 2, midden);
+//        peculiarity("___armour", 1, 0.5f, 2, 1, midden);
+//        peculiarity("___stone", 1, 1, 1.5f, 1 / 1.5f, midden);
+//        peculiarity("___hill", 1, 1, 2.5f, 0.4f, midden);
+//
+//        peculiarity_health("_h1", 0.96f, opposites(bad5, modname("__h1")));
+//        peculiarity_health("_h2", 0.91f, opposites(bad3, modname("__h2")));
+//        peculiarity_health("_h3", 0.86f, opposites(bad, modname("__h3")));
+//        peculiarity_damage("_d1", 0.96f, opposites(bad5, modname("__d1")));
+//        peculiarity_damage("_d2", 0.91f, opposites(bad3, modname("__d2")));
+//        peculiarity_damage("_d3", 0.86f, opposites(bad, modname("__d3")));
+//        peculiarity_reload("_r1", 0.96f, opposites(bad5, modname("__r1")));
+//        peculiarity_reload("_r2", 0.91f, opposites(bad3, modname("__r2")));
+//        peculiarity_reload("_r3", 0.86f, opposites(bad, modname("__r3")));
+//        peculiarity_health("___incomplete", 0.5f, bad);
+//        peculiarity_reload("___lock", 0.5f, bad);
 
-        peculiarity("_h__d", 1.1f, 1, 0.91f, 1, midden5);
-        peculiarity("_d__r", 0.91f, 1, 1, 1.1f, midden5);
-        peculiarity("_s__r", 1, 0.91f, 1, 1.1f, midden5);
-        peculiarity("_h__r", 1, 1, 0.91f, 1.1f, midden5);
-        peculiarity("_r__s", 1, 1.1f, 1, 0.91f, midden5);
-        peculiarity("_h_r__d", 1.1f, 1, 0.96f, 0.96f, midden3);
-        peculiarity("_h_s__d", 1.1f, 0.96f, 1, 0.96f, midden3);
-        peculiarity("___glass", 2f, 1, 0.5f, 1f, midden);
-        peculiarity("___loading", 1f, 1 / 1.5f, 1 / 1.5f, 3f, midden);
-        peculiarity("___X", 0.5f, 1, 1, 2, midden);
-        peculiarity("___armour", 1, 0.5f, 2, 1, midden);
-        peculiarity("___stone", 1, 1, 1.5f, 1 / 1.5f, midden);
-        peculiarity("___hill", 1, 1, 2.5f, 0.4f, midden);
+        peculiarity_heal5("__e1", 1 / 12f, well);
+        peculiarity_heal3("__e2", 1 / 9f, well);
+        peculiarity_heal("__e3", 1 / 6f, well);
+        peculiarity_health5(1.02f, well);
+        peculiarity_health3(1.06f, well);
+        peculiarity_health(1.1f, well);
+        peculiarity_damage5(1.02f, well);
+        peculiarity_damage3(1.06f, well);
+        peculiarity_damage(1.1f, well);
+        peculiarity_reload5(1.02f, well);
+        peculiarity_reload3(1.06f, well);
+        peculiarity_reload(1.1f, well);
+        peculiarity_health(1.2f, well);
+        peculiarity_reload(1.2f, well);
+        peculiarity(1.03f, 1f, 1.03f, 1.05f, well);
 
-        peculiarity_heal("_h1", 0.96f, opposites(bad5, modname("__h1")));
-        peculiarity_heal("_h2", 0.91f, opposites(bad3, modname("__h2")));
-        peculiarity_heal("_h3", 0.86f, opposites(bad, modname("__h3")));
-        peculiarity_damage("_d1", 0.96f, opposites(bad5, modname("__d1")));
-        peculiarity_damage("_d2", 0.91f, opposites(bad3, modname("__d2")));
-        peculiarity_damage("_d3", 0.86f, opposites(bad, modname("__d3")));
-        peculiarity_reload("_r1", 0.96f, opposites(bad5, modname("__r1")));
-        peculiarity_reload("_r2", 0.91f, opposites(bad3, modname("__r2")));
-        peculiarity_reload("_r3", 0.86f, opposites(bad, modname("__r3")));
-        peculiarity_heal("___incomplete", 0.5f, bad);
-        peculiarity_reload("___lock", 0.5f, bad);
+        peculiarity5(1.03f, 1, 0.98f, 1, mid);
+        peculiarity5(0.98f, 1, 1, 1.03f, mid);
+        peculiarity5(1, 0.98f, 1, 1.03f, mid);
+        peculiarity5(1, 1, 0.98f, 1.03f, mid);
+        peculiarity5(1, 1.03f, 1, 0.98f, mid);
+        peculiarity3(1.05f, 1, 0.98f, 0.98f, mid);
+        peculiarity3(1.03f, 0.98f, 1, 0.98f, mid);
+        peculiarity(1.2f, 0.84f, 1, 1f, mid);
+        peculiarity(1f, 1 / 1.1f, 1 / 1.1f, 1.2f, mid);
+        peculiarity(0.84f, 1, 1.2f, 1, mid);
+        peculiarity(1, 1.2f, 1, 0.84f, mid);
+        peculiarity(1, 1.2f, 0.84f, 1, mid);
+        peculiarity(1, 1.3f, 0.77f, 1, mid);
+        peculiarity(0.9f, 1f, 1.3f, 1, -5, mid);
+        peculiarity(1, 1.3f, 1, 1, -10, mid);
 
-        super_damage("_sd", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
+        peculiarity_health5(0.98f, bad);
+        peculiarity_health3(0.943f, bad);
+        peculiarity_health(0.9f, bad);
+        peculiarity_damage5(0.98f, bad);
+        peculiarity_damage3(0.943f, bad);
+        peculiarity_damage(0.9f, bad);
+        peculiarity_reload5(0.98f, bad);
+        peculiarity_reload3(0.953f, bad);
+        peculiarity_reload(0.9f, bad);
+        peculiarity_health(0.83f, bad);
+        peculiarity_reload(0.83f, bad);
+
+        super_damage("_sd", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -664,7 +733,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Color.valueOf("EE7777").mul(Pal.accent);
             }};
         });
-        super_heal("_sh", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
+        super_heal("_sh", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -675,7 +744,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Color.valueOf("77EE77").mul(Pal.accent);
             }};
         });
-        super_reload("_sr", 3, 1.5f, 1 / 6f, wave30l70, wave50l5, e -> {
+        super_reload("_sr", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -686,7 +755,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Pal.techBlue.cpy();
             }};
         });
-        super_peculiarity("_sdr", 1.5f, 1.5f, 1, 1.5f, 1 / 6f, wave60l35, wave50l5, zero, wave60l35, e -> {
+        super_peculiarity("_sdr", 1.25f, 1f, 1, 1.25f, 1 / 6f, wave30t80t20l2, wave20l14, zero, wave30t80t20l2, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -748,15 +817,188 @@ public class StatusEffects2 {
         }
     }
 
-    public static String modname(String base) {
-        return Vars.content.transformName(base);
+    public static void peculiarity(float d, float h, float r, float s, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+        }));
     }
 
-    public static Cons<StatusEffect> opposites(Cons<StatusEffect> change, String other) {
-        return s -> {
-            change.get(s);
-            opposites.put(s.name, other);
-        };
+    public static void peculiarity3(float d, float h, float r, float s, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+        });
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity5(float d, float h, float r, float s, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+        });
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity(float d, float h, float r, float s, float a, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+            e.armorOverride += a;
+        }));
+    }
+
+    public static void peculiarity3(float d, float h, float r, float s, float a, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+            e.armorOverride += a;
+        });
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity5(float d, float h, float r, float s, float a, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> {
+            e.damageMultiplier *= d;
+            e.healthMultiplier *= h;
+            e.reloadMultiplier *= r;
+            e.speedMultiplier *= s;
+            e.armorOverride += a;
+        });
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity_heal(String name, float h, Seq<StatusPack> packs) {
+        StatusEffect s = new StatusEffect(name) {{
+            show = false;
+            damage = -h;
+            permanent = true;
+        }};
+        packs.add(new StatusPack(s));
+        heal.add(s);
+    }
+
+    public static void peculiarity_heal3(String name, float h, Seq<StatusPack> packs) {
+        StatusEffect s = new StatusEffect(name) {{
+            show = false;
+            damage = -h;
+            permanent = true;
+        }};
+        StatusPack p = new StatusPack(s);
+        packs.add(p, p, p);
+        heal.add(s);
+    }
+
+    public static void peculiarity_heal5(String name, float h, Seq<StatusPack> packs) {
+        StatusEffect s = new StatusEffect(name) {{
+            show = false;
+            damage = -h;
+            permanent = true;
+        }};
+        StatusPack p = new StatusPack(s);
+        packs.addAll(p, p, p, p, p);
+        heal.add(s);
+    }
+
+    public static void peculiarity_heal(String name, float heal, float a, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(
+                new StatusEffect(name) {{
+                    show = false;
+                    damage = -heal;
+                    permanent = true;
+                }}
+                , e -> e.armorOverride += a
+        ));
+    }
+
+    public static void peculiarity_heal3(String name, float heal, float a, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(
+                new StatusEffect(name) {{
+                    show = false;
+                    damage = -heal;
+                    permanent = true;
+                }}
+                , e -> e.armorOverride += a
+        );
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity_heal5(String name, float heal, float a, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(
+                new StatusEffect(name) {{
+                    show = false;
+                    damage = -heal;
+                    permanent = true;
+                }}
+                , e -> e.armorOverride += a
+        );
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity_damage(float mul, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> e.damageMultiplier *= mul));
+    }
+
+    public static void peculiarity_damage3(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.damageMultiplier *= mul);
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity_damage5(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.damageMultiplier *= mul);
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity_health(float mul, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> e.healthMultiplier *= mul));
+    }
+
+    public static void peculiarity_health3(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.healthMultiplier *= mul);
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity_health5(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.healthMultiplier *= mul);
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity_reload(float mul, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> e.reloadMultiplier *= mul));
+    }
+
+    public static void peculiarity_reload3(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.reloadMultiplier *= mul);
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity_reload5(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.reloadMultiplier *= mul);
+        packs.addAll(p, p, p, p, p);
+    }
+
+    public static void peculiarity_speed(float mul, Seq<StatusPack> packs) {
+        packs.add(new StatusPack(e -> e.speedMultiplier *= mul));
+    }
+
+    public static void peculiarity_speed3(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.speedMultiplier *= mul);
+        packs.add(p, p, p);
+    }
+
+    public static void peculiarity_speed5(float mul, Seq<StatusPack> packs) {
+        StatusPack p = new StatusPack(e -> e.speedMultiplier *= mul);
+        packs.addAll(p, p, p, p, p);
     }
 
     public static void super_damage(String name, float damageMul, float speedMul, float heal, Floatp damageAdd, Floatp speedAdd, Cons<StatusEffect> change) {
@@ -772,12 +1014,10 @@ public class StatusEffects2 {
     }
 
     public static void super_peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, float heal, Floatp damageAdd, Floatp speedAdd, Floatp healAdd, Floatp reloadAdd, Cons<StatusEffect> change) {
-        StatusEffect status = new SupperStatus(name) {{
-            damage = -heal;
-
+        StatusEffect s = new SupperStatus(name) {{
             show = false;
+            damage = -heal;
             permanent = true;
-
             baseDamageMultiplier = damageMul;
             baseReloadMultiplier = reloadMul;
             baseHealthMultiplier = healMul;
@@ -787,31 +1027,70 @@ public class StatusEffects2 {
             waveHealthAdder = healAdd;
             waveSpeedAdder = speedAdd;
         }};
-        superPeculiarity.add(status);
-        change.get(status);
+        sup.add(new StatusPack(s));
+        change.get(s);
     }
 
-    public static void peculiarity_heal(String name, float mul, Cons<StatusEffect> change) {
-        peculiarity(name, 1, 1, mul, 1, change);
-    }
-
-    public static void peculiarity_damage(String name, float mul, Cons<StatusEffect> change) {
-        peculiarity(name, mul, 1, 1, 1, change);
-    }
-
-    public static void peculiarity_reload(String name, float mul, Cons<StatusEffect> change) {
-        peculiarity(name, 1, 1, 1, mul, change);
-    }
-
-    public static void peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, Cons<StatusEffect> change) {
-        StatusEffect result = new StatusEffect(name) {{
-            show = false;
-            permanent = true;
-            damageMultiplier = damageMul;
-            speedMultiplier = speedMul;
-            healthMultiplier = healMul;
-            reloadMultiplier = reloadMul;
-        }};
-        change.get(result);
-    }
+//    public static void super_damage(String name, float damageMul, float speedMul, float heal, Floatp damageAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+//        super_peculiarity(name, damageMul, speedMul, 1, 1, heal, damageAdd, speedAdd, zero, zero, change);
+//    }
+//
+//    public static void super_heal(String name, float healMul, float speedMul, float heal, Floatp healAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+//        super_peculiarity(name, 1, speedMul, healMul, 1, heal, zero, speedAdd, healAdd, zero, change);
+//    }
+//
+//    public static void super_reload(String name, float reloadMul, float speedMul, float heal, Floatp reloadAdd, Floatp speedAdd, Cons<StatusEffect> change) {
+//        super_peculiarity(name, 1, speedMul, 1, reloadMul, heal, zero, speedAdd, zero, reloadAdd, change);
+//    }
+//
+//    public static void super_peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, float heal, Floatp damageAdd, Floatp speedAdd, Floatp healAdd, Floatp reloadAdd, Cons<StatusEffect> change) {
+//        StatusEffect status = new SupperStatus(name) {{
+//            show = false;
+//            damage = -heal;
+//            permanent = true;
+//            baseDamageMultiplier = damageMul;
+//            baseReloadMultiplier = reloadMul;
+//            baseHealthMultiplier = healMul;
+//            baseSpeedMultiplier = speedMul;
+//            waveDamageAdder = damageAdd;
+//            waveReloadAdder = reloadAdd;
+//            waveHealthAdder = healAdd;
+//            waveSpeedAdder = speedAdd;
+//        }};
+//        superPeculiarity.add(status);
+//        change.get(status);
+//    }
+//    public static String modname(String base) {
+//        return Vars.content.transformName(base);
+//    }
+//
+//    public static Cons<StatusEffect> opposites(Cons<StatusEffect> change, String other) {
+//        return s -> {
+//            change.get(s);
+//            opposites.put(s.name, other);
+//        };
+//    }
+//    public static void peculiarity_health(String name, float mul, Cons<StatusEffect> change) {
+//        peculiarity(name, 1, 1, mul, 1, change);
+//    }
+//
+//    public static void peculiarity_damage(String name, float mul, Cons<StatusEffect> change) {
+//        peculiarity(name, mul, 1, 1, 1, change);
+//    }
+//
+//    public static void peculiarity_reload(String name, float mul, Cons<StatusEffect> change) {
+//        peculiarity(name, 1, 1, 1, mul, change);
+//    }
+//
+//    public static void peculiarity(String name, float damageMul, float speedMul, float healMul, float reloadMul, Cons<StatusEffect> change) {
+//        StatusEffect result = new StatusEffect(name) {{
+//            show = false;
+//            permanent = true;
+//            damageMultiplier = damageMul;
+//            speedMultiplier = speedMul;
+//            healthMultiplier = healMul;
+//            reloadMultiplier = reloadMul;
+//        }};
+//        change.get(result);
+//    }
 }

@@ -16,7 +16,6 @@ import arc.util.Nullable;
 import arc.util.Tmp;
 import arc.util.pooling.Pool;
 import arc.util.pooling.Pools;
-import mindustry.Vars;
 import mindustry.core.World;
 import mindustry.entities.Damage;
 import mindustry.entities.Effect;
@@ -40,41 +39,6 @@ public abstract class Damage2 extends Damage {
     private static final Rect hitrect = new Rect();
     private static final Rect rect = new Rect();
     private static final Vec2 vec = new Vec2(), seg1 = new Vec2(), seg2 = new Vec2();
-
-    public static void collidePointInterval(Bullet hitter, Team team, Effect effect, float x, float y, Cons<Entityc> apply, Boolf<Entityc> add, Boolf<Entityc> damageable) {
-        if (hitter.type.collidesGround) {
-            Building build = world.build(World.toTile(x), World.toTile(y));
-
-            if (build != null && hitter.damage > 0) {
-                float health = build.health;
-
-                if (build.team != team && build.collide(hitter)) {
-                    if (damageable.get(build)) {
-                        build.collision(hitter);
-                        hitter.type.hit(hitter, x, y);
-                    } else if (add.get(build)) {
-                        apply.get(build);
-                    }
-                }
-
-                if (hitter.type.testCollision(hitter, build)) {
-                    hitter.type.hitTile(hitter, build, x, y, health, false);
-                }
-            }
-        }
-
-        Units.nearbyEnemies(team, rect.setCentered(x, y, 1f), u -> {
-            if (u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()) {
-                if (damageable.get(u)) {
-                    effect.at(x, y);
-                    u.collision(hitter, x, y);
-                    hitter.collision(u, x, y);
-                } else if (add.get(u)) {
-                    apply.get(u);
-                }
-            }
-        });
-    }
 
     public static void collideLineInterval(Bullet hitter, Team team, Effect effect, float x, float y, float angle, float length, boolean large, boolean laser, int pierceCap, Cons<Entityc> apply, Boolf<Entityc> add, Boolf<Entityc> damageable) {
         length = findLength(hitter, length, laser, pierceCap);

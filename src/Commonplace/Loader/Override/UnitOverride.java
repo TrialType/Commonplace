@@ -303,8 +303,7 @@ public class UnitOverride {
         crawler.abilities.add(new StatusOwnAbility(StatusEffects2.fearless, 900, 600, 0));
         weapon = crawler.weapons.get(0);
         weapon.reload = 30;
-        weapon.bullet = new PercentExplosionBulletType(100f, 55f) {{
-            rangeOverride = 30f;
+        weapon.bullet = new PercentExplosionBulletType(100f, 44f) {{
             buildingDamageMultiplier = 2.5f;
 
             collidesTiles = false;
@@ -312,7 +311,6 @@ public class UnitOverride {
 
             hitSound = Sounds.explosion;
             hitEffect = Fx.pulverize;
-
 
             shootEffect = new ExplosionEffect() {{
                 lifetime = 25;
@@ -899,8 +897,8 @@ public class UnitOverride {
             healPercent = 0.4f;
             sameTypeHealMult = 0.6f;
         }});
-        aegires.abilities.add(new TimeLargeDamageAbility(1.95f, 180) {{
-            buildingMul = 0.5f;
+        aegires.abilities.add(new TimeGrowDamageAbility(1.5f, 180) {{
+            buildingMul = 0.75f;
         }});
 
         navanax.armor = 20;

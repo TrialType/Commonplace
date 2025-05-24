@@ -2,7 +2,6 @@ package Commonplace.Loader.DefaultContent;
 
 import Commonplace.AI.*;
 import Commonplace.Entities.Unit.*;
-import Commonplace.Loader.Special.Commands;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
@@ -15,7 +14,6 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import mindustry.ai.UnitCommand;
 import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.GroundAI;
 import mindustry.content.*;
@@ -809,7 +807,7 @@ public class Units2 {
             hitSize = 20;
             range = maxRange = 56;
 
-            abilities.add(new TimeLargeDamageAbility());
+            abilities.add(new TimeGrowDamageAbility());
         }};
         velocity = new BoostUnitType("velocity") {{
             constructor = BoostUnitEntity::create;

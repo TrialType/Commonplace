@@ -31,11 +31,6 @@ public abstract class Listener {
     }
 
     public static void update() {
-        if (!Vars.state.isGame()) {
-            inited = false;
-            return;
-        }
-
         if (!inited) {
             init();
         }

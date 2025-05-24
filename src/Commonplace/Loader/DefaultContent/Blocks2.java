@@ -50,7 +50,7 @@ import static mindustry.type.ItemStack.with;
 
 public class Blocks2 {
     //test
-    public static Block pu;
+    public static Block pu, damageTest;
     //defense
     public static Block eleFence, eleFenceLarge, decoy, decoyLarge, polymerizationWall, polymerizationWallLarge,
             weakPowerWall, weakPowerWallLarge, superPowerWall, superPowerWallLarge;
@@ -295,54 +295,50 @@ public class Blocks2 {
 
             requirements(Category.effect, BuildVisibility.editorOnly, ItemStack.with(Items.copper, 1));
         }};
+
+        damageTest = new DamageBlock("damageTest");
 //======================================================================================================================
         butte = new PowerTurret("butte") {{
-            requirements(Category.turret, ItemStack.with(phaseFabric, 75, thorium, 350, plastanium, 200, surgeAlloy, 100));
-            consume(new ConsumePower(12, 0, false));
+            requirements(Category.turret, ItemStack.with(phaseFabric, 40, thorium, 70, plastanium, 70, surgeAlloy, 55));
+            consume(new ConsumePower(10, 0, false));
 
-            health = 3000;
+            health = 1800;
             size = 3;
 
-            rotateSpeed = 1;
+            shootCone = 181;
+            shootY = 0;
             recoil = 6f;
-            range = 500;
-            reload = 30;
+            range = 420;
+            reload = 3;
             consumesPower = true;
             hasPower = true;
             consumeAmmoOnce = false;
             canOverdrive = false;
 
-            shoot = new ShootAlternate() {{
-                shots = 30;
-                shotDelay = 1;
-                barrels = 6;
-                spread = 3;
-            }};
+            shoot.shots = 5;
+            shoot.shotDelay = 1;
             shootType = new BasicBulletType() {{
-                sprite = "circle";
-
-                inaccuracy = 15;
-
-                weaveScale = 5.4f;
-                weaveMag = 5;
-                weaveRandom = true;
-
-                width = 3;
-                height = 3;
-                shrinkX = shrinkY = 0;
-                frontColor = backColor = hitColor = Pal.heal;
-                trailLength = 0;
-                trailWidth = 0;
-
                 damage = 1;
-                lifetime = 50;
+                lifetime = 60;
                 speed = 10;
-                buildingDamageMultiplier = 0.1f;
-                status = StatusEffects2.erosion;
-                statusDuration = 240;
-
                 splashDamage = 25;
                 splashDamageRadius = 16;
+                statusDuration = 240;
+                status = StatusEffects2.erosion;
+                buildingDamageMultiplier = 0.1f;
+
+                weaveMag = 7;
+                weaveScale = 7f;
+                inaccuracy = 181;
+                rotateSpeed = 2.5f;
+
+                sprite = "circle";
+                width = 4;
+                height = 4;
+                trailWidth = 0;
+                trailLength = 0;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = hitColor = Pal.heal;
                 hitEffect = despawnEffect = Fx.hitBulletColor;
 
                 fragBullets = 6;
@@ -369,7 +365,7 @@ public class Blocks2 {
         hill = new PowerTurret("hill") {{
             consume(new ConsumePower(6, 0, false));
 
-            health = 2000;
+            health = 800;
             size = 3;
 
             recoil = 6f;
@@ -381,27 +377,27 @@ public class Blocks2 {
             canOverdrive = false;
 
             shoot.shots = 6;
-            inaccuracy = 20;
+            inaccuracy = 5;
             shootType = new BasicBulletType() {{
-                absorbable = false;
-
-                sprite = "circle";
-                hitSize = 25;
-                width = height = 30;
-                shrinkX = shrinkY = 0;
-                frontColor = backColor = Pal.heal;
-
+                speed = 0.25f;
                 damage = 15;
-                lifetime = 200;
-                speed = 4;
-                drag = 0.011f;
+                hitSize = 15;
                 knockback = 1;
-                buildingDamageMultiplier = 0.1f;
-                status = StatusEffects2.torn;
-                statusDuration = 240;
-
+                drag = -0.017f;
+                lifetime = 200;
                 splashDamage = 10;
                 splashDamageRadius = 60;
+                buildingDamageMultiplier = 0.1f;
+
+                weaveMag = 7;
+                weaveScale = 7;
+
+                status = StatusEffects2.torn;
+                statusDuration = 240;
+                sprite = "circle";
+                width = height = 15;
+                shrinkX = shrinkY = 0;
+                frontColor = backColor = Pal.heal;
                 hitEffect = despawnEffect = new Effect(90, e -> {
                     color(Pal.heal);
                     stroke(e.fout() * 7);
@@ -409,42 +405,36 @@ public class Blocks2 {
                 });
             }};
 
-            requirements(Category.turret, ItemStack.with(
-                    plastanium, 120,
-                    Items.titanium, 500,
-                    Items.graphite, 500
-            ));
+            requirements(Category.turret, ItemStack.with(plastanium, 50, titanium, 60, graphite, 70));
         }};
         plain = new PowerTurret("plain") {{
-            requirements(Category.turret, ItemStack.with(Items.titanium, 100,
-                    silicon, 70, Items.graphite, 100
-            ));
-            consume(new ConsumePower(2, 480, false));
+            requirements(Category.turret, ItemStack.with(titanium, 45, silicon, 40, graphite, 50));
+            consume(new ConsumePower(1, 480, false));
 
             size = 2;
             recoil = 3;
             range = 300;
-            health = 1000;
+            health = 300;
             rotateSpeed = 10f;
-            researchCostMultiplier = 100;
+            researchCostMultiplier = 50;
             canOverdrive = false;
 
             shootY = 3f;
-            reload = 30;
+            reload = 20;
             shootCone = 15f;
 
             shootType = new BasicBulletType() {{
                 pierce = true;
-                pierceCap = 8;
+                pierceCap = 5;
 
-                width = height = 12;
+                width = height = 2;
                 damage = 15;
-                speed = 5;
-                lifetime = 70;
+                speed = 9f;
+                lifetime = 35;
 
                 trailLength = 7;
-                trailWidth = 3;
-                frontColor = trailColor = Pal.heal;
+                trailWidth = 2;
+                frontColor = trailColor = Color.valueOf("b8f19a");
 
                 status = StatusEffects2.torn;
                 statusDuration = 240;
