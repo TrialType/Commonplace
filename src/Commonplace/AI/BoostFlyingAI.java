@@ -12,6 +12,8 @@ import mindustry.entities.Predict;
 import mindustry.entities.Sized;
 import mindustry.entities.Units;
 import mindustry.gen.Teamc;
+import mindustry.mod.ClassMap;
+import mindustry.mod.ContentParser;
 import mindustry.type.Weapon;
 import mindustry.world.blocks.storage.CoreBlock;
 

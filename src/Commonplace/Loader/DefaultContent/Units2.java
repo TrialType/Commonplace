@@ -2,10 +2,13 @@ package Commonplace.Loader.DefaultContent;
 
 import Commonplace.AI.*;
 import Commonplace.Entities.Unit.*;
+import Commonplace.Entities.Weapon.Weapon2;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.UnitType.*;
+import Commonplace.Type.CampChanger.OrderedFloat;
+import Commonplace.Utils.Classes.Camp;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -14,6 +17,7 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
+import mindustry.Vars;
 import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.GroundAI;
 import mindustry.content.*;
@@ -37,6 +41,7 @@ import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.BuildWeapon;
 import mindustry.type.weapons.PointDefenseWeapon;
 import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.world.meta.BlockFlag;
 
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.math.Angles.randLenVectors;
@@ -66,9 +71,6 @@ public class Units2 {
 
     //attack
     public static UnitType garrison, herald, exterminate, execute;
-
-    //Test
-    public static UnitType e;
 
     public static void load() {
         support_a = new UnitType("support-a") {{
@@ -1144,9 +1146,8 @@ public class Units2 {
                 }};
             }});
         }};
-        transfer = new TileMinerUnitType("transfer") {{
+        transfer = new UnitType("transfer") {{
             constructor = TileMiner::create;
-            //defaultCommand = new UnitCommand("TileMine", "TileMine", TileMineAI::new);
             aiController = TileMineAI::new;
             controller = u -> u.team.isAI() && !u.team.rules().rtsAi ? aiController.get() : new CommandAI();
 //            commands = new UnitCommand[]{
@@ -1614,21 +1615,23 @@ public class Units2 {
         }};
         herald = new UnitType("herald") {{
             constructor = MechUnit::create;
-            aiController = GroundAI::new;
 
-            health = 40000;
-            armor = 13;
             speed = 3;
-            maxRange = 200;
+            armor = 13;
+            health = 40000;
 
-            abilities.add(new BoostExplosionAbility());
+            targetAir = false;
+            targetFlags = new BlockFlag[]{BlockFlag.generator, BlockFlag.shield, BlockFlag.factory};
+
+            abilities.add(new DamageStatusAbility(420, 3600, 24).self());
 
             weapons.add(new Weapon() {{
                 mirror = false;
+
                 x = y = 0;
                 reload = 30;
                 shootStatus = StatusEffects2.back;
-                shootStatusDuration = 10;
+                shootStatusDuration = 6;
 
                 shoot = new ShootBarrel() {{
                     shots = 6;
@@ -1636,8 +1639,8 @@ public class Units2 {
                     barrels = new float[]{0f, 0f, 180f};
                 }};
 
-                bullet = new BulletType(0, 0) {{
-                    lifetime = 0;
+                bullet = new BulletType(0, 1) {{
+                    lifetime = 1;
                     collides = collidesAir = collidesTiles = false;
                     reflectable = absorbable = hittable = false;
                     keepVelocity = false;
@@ -1648,6 +1651,71 @@ public class Units2 {
                     shootEffect = Fx.none;
                     shootSound = Sounds.none;
                     hitEffect = despawnEffect = Fx.none;
+                }};
+            }}, new Weapon() {{
+                mirror = false;
+                autoTarget = true;
+                controllable = false;
+
+                x = y = 0;
+                shootX = shootY = 0;
+
+                reload = 90;
+                shootStatus = StatusEffects.unmoving;
+                shootStatusDuration = 4;
+                shootCone = 360;
+
+                shoot.shots = 6;
+                shoot.shotDelay = 3;
+
+                bullet = new BulletType(0, 1) {{
+                    shake = 3;
+                    lifetime = 1;
+                    rangeOverride = 30;
+                    splashDamage = 80;
+                    splashDamageRadius = 32;
+
+                    collides = collidesAir = collidesTiles = false;
+                    reflectable = absorbable = hittable = false;
+                    keepVelocity = false;
+
+                    shootEffect = Fx.shockwave;
+                    shootSound = Sounds.none;
+                    hitEffect = despawnEffect = Fx.none;
+                }};
+            }});
+        }};
+
+        new UnitType2("e", Camp.all.first()) {{
+            constructor = CampMechUnit::create;
+
+            speed = 2;
+            hitSize = 15;
+            health = 1500;
+
+            campRangeChanger.add(new OrderedFloat(2, f -> 200f).team());
+        }};
+
+        new UnitType2("f", Camp.all.first()) {{
+            constructor = CampMechUnit::create;
+
+            speed = 2;
+            hitSize = 15;
+            health = 1500;
+
+            weapons.add(new Weapon2() {{
+                reload = 17f;
+                x = 2.75f;
+                y = 1f;
+                top = false;
+                ejectEffect = Fx.casing1;
+
+                bullet = new BasicBulletType(2.5f, 20) {{
+                    width = 7f;
+                    height = 9f;
+                    lifetime = 60f;
+                    shootEffect = Fx.shootSmall;
+                    smokeEffect = Fx.shootSmallSmoke;
                 }};
             }});
         }};

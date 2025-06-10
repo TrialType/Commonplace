@@ -165,7 +165,7 @@ public class MultiMassDriver extends MassDriver {
         }
 
         protected void fire(Seq<Building> buildings) {
-            //reset reload, use power.
+            //reset reload, valid power.
             reloadCounter = 1f;
 
             int[] max = new int[content.items().size];

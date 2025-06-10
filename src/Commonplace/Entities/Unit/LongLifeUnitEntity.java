@@ -1,8 +1,11 @@
 package Commonplace.Entities.Unit;
 
+import arc.util.Time;
 import mindustry.gen.UnitEntity;
 
 public class LongLifeUnitEntity extends UnitEntity {
+    private float hitTimer = 12;
+
     protected LongLifeUnitEntity() {
     }
 
@@ -16,11 +19,14 @@ public class LongLifeUnitEntity extends UnitEntity {
     }
 
     @Override
+    public void update(){
+        hitTimer += Time.delta;
+        super.update();
+    }
+
+    @Override
     public void rawDamage(float damage) {
-        if (damage > this.health + this.shield + this.armor) {
-            super.rawDamage(damage);
-        } else {
-            super.rawDamage(damage * Math.min(1, 1 - hitTime));
-        }
+        super.rawDamage(damage * Math.min(1, hitTimer / 12));
+        hitTimer = 0;
     }
 }

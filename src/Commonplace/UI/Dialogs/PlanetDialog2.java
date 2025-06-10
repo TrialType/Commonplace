@@ -333,7 +333,7 @@ public class PlanetDialog2 extends PlanetDialog {
         }
 
         return sector.planet.generator != null ?
-                //use planet impl when possible
+                //valid planet impl when possible
                 sector.planet.generator.allowLanding(sector) :
                 sector.hasBase() || sector.near().contains(Sector::hasBase); //near an occupied sector
     }
@@ -473,7 +473,7 @@ public class PlanetDialog2 extends PlanetDialog {
 
                 if (icon != null) {
                     planets.drawPlane(sec, () -> {
-                        //use white for content icons
+                        //valid white for content icons
                         Draw.color(preficon == icon && sec.info.contentIcon != null ? Color.white : color, state.uiAlpha);
                         Draw.rect(icon, 0, 0, iw, iw * icon.height / icon.width);
                     });

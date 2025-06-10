@@ -83,6 +83,22 @@ public abstract class UnitPeculiarity {
         }
     }
 
+    public static void applyHeal(Unit u, float chance) {
+        if (!blackList.contains(u.type)) {
+            if (Mathf.chance(chance)) {
+                u.apply(heal.random());
+            }
+        }
+    }
+
+    public static void applyHealSeed(Unit u, float chance) {
+        if (!blackList.contains(u.type)) {
+            if (r.chance(chance)) {
+                u.apply(heal.get(r.nextInt(heal.size)));
+            }
+        }
+    }
+
     public static void applySuper(Unit u, int num) {
         if (num <= 1) {
             apply(u, sup.random());
@@ -269,6 +285,7 @@ public abstract class UnitPeculiarity {
 //        superPeculiarity.sort(s -> s.id);
 
         well.sort(s -> s.id);
+        heal.sort(s -> s.id);
         mid.sort(s -> s.id);
         bad.sort(s -> s.id);
         sup.sort(s -> s.id);

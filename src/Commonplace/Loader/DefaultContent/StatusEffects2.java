@@ -678,9 +678,10 @@ public class StatusEffects2 {
 //        peculiarity_health("___incomplete", 0.5f, bad);
 //        peculiarity_reload("___lock", 0.5f, bad);
 
-        peculiarity_heal5("__e1", 1 / 12f, well);
-        peculiarity_heal3("__e2", 1 / 9f, well);
-        peculiarity_heal("__e3", 1 / 6f, well);
+        peculiarity_heal5("__e1", 1 / 10f);
+        peculiarity_heal3("__e2", 1 / 8f);
+        peculiarity_heal("__e3", 1 / 6f);
+
         peculiarity_health5(1.02f, well);
         peculiarity_health3(1.06f, well);
         peculiarity_health(1.1f, well);
@@ -878,36 +879,33 @@ public class StatusEffects2 {
         packs.addAll(p, p, p, p, p);
     }
 
-    public static void peculiarity_heal(String name, float h, Seq<StatusPack> packs) {
+    public static void peculiarity_heal(String name, float h) {
         StatusEffect s = new StatusEffect(name) {{
             show = false;
             damage = -h;
             permanent = true;
         }};
-        packs.add(new StatusPack(s));
         heal.add(s);
     }
 
-    public static void peculiarity_heal3(String name, float h, Seq<StatusPack> packs) {
+    public static void peculiarity_heal3(String name, float h) {
         StatusEffect s = new StatusEffect(name) {{
             show = false;
             damage = -h;
             permanent = true;
         }};
-        StatusPack p = new StatusPack(s);
-        packs.add(p, p, p);
-        heal.add(s);
+        new StatusPack(s);
+        heal.add(s, s, s);
     }
 
-    public static void peculiarity_heal5(String name, float h, Seq<StatusPack> packs) {
+    public static void peculiarity_heal5(String name, float h) {
         StatusEffect s = new StatusEffect(name) {{
             show = false;
             damage = -h;
             permanent = true;
         }};
-        StatusPack p = new StatusPack(s);
-        packs.addAll(p, p, p, p, p);
-        heal.add(s);
+        new StatusPack(s);
+        heal.addAll(s, s, s, s, s);
     }
 
     public static void peculiarity_heal(String name, float heal, float a, Seq<StatusPack> packs) {
