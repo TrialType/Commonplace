@@ -58,6 +58,11 @@ public class SapAbility extends Ability {
 
     @Override
     public String localized() {
-        return Core.bundle.get("ability.sap.name");
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.sap";
     }
 }

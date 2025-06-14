@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
@@ -89,5 +90,15 @@ public class StopShieldArcAbility extends ShieldArcAbility {
             }
             Draw.reset();
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.stop-shield-arc";
     }
 }

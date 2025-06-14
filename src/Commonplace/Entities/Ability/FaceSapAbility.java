@@ -1,5 +1,6 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;
@@ -60,7 +61,7 @@ public class FaceSapAbility extends Ability {
             Units.nearbyBuildings(ux, uy, Mathf.dst(width, length), b -> {
                 v.set(b).sub(ux, uy);
                 float angle = Angles.angleDist(ro, v.angle());
-                if (b.team != unit. team && angle <= 90 && Mathf.cosDeg(angle) * v.len() <= length + size + b.block.sizeOffset * Vars.tilesize + b.block.offset && Mathf.sinDeg(angle) * v.len() <= width + size) {
+                if (b.team != unit.team && angle <= 90 && Mathf.cosDeg(angle) * v.len() <= length + size + b.block.sizeOffset * Vars.tilesize + b.block.offset && Mathf.sinDeg(angle) * v.len() <= width + size) {
                     if (pierce) {
                         b.damagePierce(damage);
                     } else {
@@ -75,5 +76,15 @@ public class FaceSapAbility extends Ability {
                 timer %= reload;
             }
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.face-sap";
     }
 }

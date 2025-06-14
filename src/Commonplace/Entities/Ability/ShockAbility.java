@@ -1,6 +1,7 @@
 package Commonplace.Entities.Ability;
 
 import Commonplace.Loader.Special.Effects;
+import arc.Core;
 import arc.math.Angles;
 import arc.util.Time;
 import mindustry.entities.Effect;
@@ -55,5 +56,15 @@ public class ShockAbility extends StatusFieldAbility {
 
             timer = 0f;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.shock";
     }
 }

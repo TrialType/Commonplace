@@ -32,6 +32,11 @@ public class StatusOwnAbility extends StatusFieldAbility {
 
     @Override
     public String localized() {
-        return Core.bundle.get("ability.status-own.name");
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.status-own";
     }
 }

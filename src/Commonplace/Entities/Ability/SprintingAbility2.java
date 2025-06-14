@@ -85,6 +85,11 @@ public class SprintingAbility2 extends Ability {
 
     @Override
     public String localized() {
-        return Core.bundle.get("ability.sprinting2.name");
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.sprinting2";
     }
 }

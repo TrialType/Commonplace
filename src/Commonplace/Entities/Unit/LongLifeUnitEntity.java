@@ -4,7 +4,7 @@ import arc.util.Time;
 import mindustry.gen.UnitEntity;
 
 public class LongLifeUnitEntity extends UnitEntity {
-    private float hitTimer = 12;
+    private float hitTimer = 45;
 
     protected LongLifeUnitEntity() {
     }
@@ -26,7 +26,7 @@ public class LongLifeUnitEntity extends UnitEntity {
 
     @Override
     public void rawDamage(float damage) {
-        super.rawDamage(damage * Math.min(1, hitTimer / 12));
+        super.rawDamage(damage * Math.min(1, hitTimer / 45));
         hitTimer = 0;
     }
 }

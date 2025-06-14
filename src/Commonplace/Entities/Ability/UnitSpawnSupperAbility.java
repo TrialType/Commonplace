@@ -44,7 +44,7 @@ public class UnitSpawnSupperAbility extends UnitSpawnAbility {
     }
 
     @Override
-    public String localized() {
-        return Core.bundle.get("ability.unit-spawn-super.name");
+    public String getBundle() {
+        return super.getBundle();
     }
 }

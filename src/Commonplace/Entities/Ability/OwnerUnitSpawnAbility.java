@@ -80,7 +80,7 @@ public class OwnerUnitSpawnAbility extends Ability {
     }
 
     @Override
-    public String localized() {
-        return Core.bundle.get("ability.unit_spawn.name");
+    public String getBundle() {
+        return super.getBundle();
     }
 }

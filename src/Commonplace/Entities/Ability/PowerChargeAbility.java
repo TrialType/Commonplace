@@ -1,6 +1,7 @@
 package Commonplace.Entities.Ability;
 
 import Commonplace.Loader.Special.Effects;
+import arc.Core;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.util.Time;
@@ -93,5 +94,15 @@ public class PowerChargeAbility extends Ability {
                         null, null, unit.aimX, unit.aimY);
             }
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.power-charge";
     }
 }

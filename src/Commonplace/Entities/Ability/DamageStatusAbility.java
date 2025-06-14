@@ -1,10 +1,10 @@
 package Commonplace.Entities.Ability;
 
+import arc.Core;
 import arc.func.Boolf;
 import arc.math.Angles;
 import arc.util.Time;
 import mindustry.content.StatusEffects;
-import mindustry.content.UnitTypes;
 import mindustry.entities.Units;
 import mindustry.entities.abilities.StatusFieldAbility;
 import mindustry.gen.Unit;
@@ -67,5 +67,15 @@ public class DamageStatusAbility extends StatusFieldAbility {
 
             timer = 0f;
         }
+    }
+
+    @Override
+    public String localized() {
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle(){
+        return "ability.damage-status";
     }
 }

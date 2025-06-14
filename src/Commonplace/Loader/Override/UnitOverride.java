@@ -14,6 +14,7 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
@@ -513,52 +514,8 @@ public class UnitOverride {
             spawnBullets.add(l, l, l, l);
         }};
         weapon = toxopid.weapons.get(1);
-        weapon.shoot.shots = 3;
-        weapon.shoot.shotDelay = 5;
         weapon.rotateSpeed = 2f;
-        weapon.bullet = new BasicBulletType(6f, 70) {{
-            hitEffect = Fx.sapExplosion;
-            knockback = 0.8f;
-            lifetime = 40f;
-            width = height = 25f;
-            shrinkX = shrinkY = 0;
-            ammoMultiplier = 4f;
-            splashDamageRadius = 80f;
-            splashDamage = 85f;
-            backColor = Pal.sapBulletBack;
-            frontColor = lightningColor = Pal.sapBullet;
-            lightning = 5;
-            lightningLength = 20;
-            smokeEffect = Fx.shootBigSmoke2;
-            hitShake = 10f;
-            lightRadius = 40f;
-            lightColor = Pal.sap;
-            lightOpacity = 0.6f;
-            status = StatusEffects.sapped;
-            statusDuration = 60f * 10;
-            fragLifeMin = 0.3f;
-            fragBullets = 9;
-            fragBullet = new ArtilleryBulletType(2.3f, 40) {{
-                hitEffect = Fx.sapExplosion;
-                knockback = 0.8f;
-                lifetime = 90f;
-                width = height = 20f;
-                collidesTiles = false;
-                splashDamageRadius = 70f;
-                splashDamage = 45f;
-                backColor = Pal.sapBulletBack;
-                frontColor = lightningColor = Pal.sapBullet;
-                lightning = 2;
-                lightningLength = 5;
-                smokeEffect = Fx.shootBigSmoke2;
-                hitShake = 5f;
-                lightRadius = 30f;
-                lightColor = Pal.sap;
-                lightOpacity = 0.5f;
-                status = StatusEffects.sapped;
-                statusDuration = 60f * 10;
-            }};
-        }};
+        weapon.bullet.fragBullets = 13;
         toxopid.abilities.add(new FaceSapAbility());
         /*-----------------------------------------------------------------------------*/
         flare.armor = 3;
@@ -619,20 +576,59 @@ public class UnitOverride {
 
         antumbra.armor = 8;
         antumbra.abilities.add(new SprintingAbility2() {{
-            sprintingReload = 240;
+            sprintingReload = 420;
             sprintingDamage = 100;
             sprintingDuration = 10;
             sprintingLength = 10;
             sprintingRadius = 150;
             status = StatusEffects2.frenzy;
-            statusDuration = 240;
+            statusDuration = 300;
         }});
         weapon = antumbra.weapons.first();
         weapon.bullet.damage *= 1.2f;
         weapon.bullet.status = StatusEffects.blasted;
         weapon.bullet.statusDuration = 60;
 
-        eclipse.health = 77000;
+        weapon = eclipse.weapons.get(1);
+        weapon.reload = 90;
+        weapon.recoil = 5;
+        weapon.shootSound = Sounds.largeExplosion;
+        weapon.bullet = new BasicBulletType(0.2f, 500, "circle") {{
+            frontColor = backColor = Pal.bulletYellowBack;
+            width = height = 5;
+            shrinkX = shrinkY = 0;
+
+            hitShake = 8;
+            drag = -0.01f;
+            lifetime = 220f;
+            splashDamage = 350;
+            keepVelocity = false;
+            splashDamageRadius = 50;
+            scaledSplashDamage = true;
+            buildingDamageMultiplier = 3;
+
+            hitSoundVolume = 2;
+            hitSound = Sounds.largeExplosion;
+
+            trailInterval = 10;
+            hitEffect = despawnEffect = new ExplosionEffect() {{
+                lifetime = 45;
+                sparks = 15;
+                sparkRad = 42;
+                sparkStroke = 1;
+                sparkLen = 4;
+
+                waveColor = Pal.bulletYellowBack;
+                waveRad = 55;
+                waveLife = 45;
+
+                smokes = 13;
+                smokeSizeBase = 1;
+                smokeSize = 6;
+                smokeRad = 42;
+            }};
+        }};
+        eclipse.abilities.add(new ForceFieldAbility(45, 3, 4500, 1.5f));
         /*-----------------------------------------------------------------------------*/
         mono.mineSpeed = 4f;
         mono.abilities.add(new RepairOwnAbility(100, 180, 0));
@@ -649,7 +645,7 @@ public class UnitOverride {
             targetInterval = 10;
             targetSwitchInterval = 10;
             bullet = new BulletType() {{
-                damage = 5;
+                damage = 8;
             }};
         }});
 
@@ -684,14 +680,12 @@ public class UnitOverride {
             splashDamageRadius = 550f;
         }};
 
+        oct.armor = 30;
         oct.payloadCapacity = 6.5f * 6.5f * tilePayload;
         oct.abilities.clear();
         oct.abilities.add(new ForceFieldAbility(150, 5, 20000, 480, 8, 0),
                 new ForceFieldAbility(210, 4, 10000, 480, 6, 0));
-        oct.abilities.add(new NetAbility(23, 22),
-                new NetAbility(-23, 22),
-                new NetAbility(23, -17),
-                new NetAbility(-23, -17));
+        oct.abilities.add(new StatusFieldAbility(StatusEffects2.back, 30, 150, 150));
         /*-----------------------------------------------------------------------------*/
         risso.armor = 7;
         weapon = risso.weapons.get(0);
@@ -736,19 +730,64 @@ public class UnitOverride {
         ability.amount = 100;
         ability.max = 400;
         weapon = bryde.weapons.get(0);
-        weapon.reload = 150;
-        weapon.shoot.shots = 12;
-        weapon.shoot.shotDelay = 3;
-        weapon.bullet.speed = 6;
-        weapon.bullet.lifetime = 35;
-        weapon.bullet.splashDamage = 70;
-        weapon = bryde.weapons.get(1);
-        weapon.bullet.damage = 18;
-        weapon.bullet.splashDamage = 15;
-        weapon.bullet.lifetime = 90;
+        weapon.reload = 80;
+        weapon.bullet.speed = 4;
+        weapon.bullet.lifetime = 16f;
+        weapon.bullet.status = StatusEffects.none;
+        ((BasicBulletType) weapon.bullet).shrinkInterp = Interp.reverse;
+        weapon.bullet.fragBullets = 8;
+        weapon.bullet.fragLifeMin = 0.65f;
+        weapon.bullet.fragRandomSpread = 30;
+        weapon.bullet.fragVelocityMin = 0.65f;
+        weapon.bullet.fragBullet = new ArtilleryBulletType(6f, 15) {{
+            trailMult = 0.8f;
+            hitEffect = Fx.massiveExplosion;
+            knockback = 1.5f;
+            lifetime = 51.2f / 1.5f;
+            height = 15.5f;
+            width = 15f;
+            splashDamageRadius = 40f;
+            splashDamage = 70f;
+            backColor = Pal.missileYellowBack;
+            frontColor = Pal.missileYellow;
+            trailEffect = Fx.artilleryTrail;
+            trailSize = 6f;
+            hitShake = 4f;
+
+            status = StatusEffects.blasted;
+            statusDuration = 60f;
+        }};
+        weapon = bryde.weapons.get(0);
+        weapon.bullet.pierceCap = 2;
+        weapon.bullet.pierce = true;
+        weapon.bullet.pierceBuilding = true;
 
         weapon = sei.weapons.first();
+        weapon.rotateSpeed = 6;
+        weapon.bullet.statusDuration = 90;
+        weapon.bullet.status = StatusEffects.blasted;
+        weapon = sei.weapons.get(1);
+        weapon.shoot.shots = 4;
+        weapon.bullet.pierceCap = 2;
+        weapon.bullet.knockback = 0.05f;
+        sei.abilities.add(new StatusOwnAbility(StatusEffects.fast, 30, 60, 0f));
+        sei.abilities.add(new StatusEnemyAbility(StatusEffects2.torn, 90, 150, 180f));
 
+        weapon = omura.weapons.first();
+        weapon.bullet.fragBullets = 1;
+        weapon.bullet.fragOnHit = true;
+        weapon.bullet.setDefaults = false;
+        weapon.bullet.pierceDamageFactor = 0.35f;
+        weapon.bullet.fragBullet = new BulletType(0, 1) {{
+            lifetime = 1;
+            splashDamage = 45;
+            splashDamageRadius = 16;
+            buildingDamageMultiplier = 0.75f;
+            hitEffect = despawnEffect = Fx.none;
+
+            collides = false;
+            reflectable = hittable = false;
+        }};
         omura.abilities.clear();
         omura.abilities.add(new UnitSpawnSupperAbility(flare, 12 * 60f, 19.25f, -31.75f) {{
             status = ObjectMap.of(
@@ -765,10 +804,9 @@ public class UnitOverride {
         }});
         /*-----------------------------------------------------------------------------*/
         retusa.speed = 1;
-        retusa.armor = 8;
         retusa.abilities.add(new StatusFieldAbility(StatusEffects.fast, 60, 90, 60));
-        RepairBeamWeapon repair = (RepairBeamWeapon) retusa.weapons.get(0);
-        repair.repairSpeed = 1.5f;
+        weapon = retusa.weapons.first();
+        ((RepairBeamWeapon) weapon).repairSpeed = 0.45f;
         weapon = retusa.weapons.get(2);
         weapon.reload = 45;
         weapon.shoot.shots = 2;
@@ -817,7 +855,6 @@ public class UnitOverride {
             splashDamageRadius = 32f;
         }};
 
-        oxynoe.armor = 10;
         oxynoe.speed = 1.66f;
         StatusFieldAbility statusFieldAbility = (StatusFieldAbility) oxynoe.abilities.get(0);
         statusFieldAbility.range = 90;
@@ -837,7 +874,8 @@ public class UnitOverride {
             });
         });
 
-        cyerce.armor = 16;
+        weapon = cyerce.weapons.first();
+        ((RepairBeamWeapon) weapon).repairSpeed = 0.4f;
         weapon = cyerce.weapons.get(1);
         BulletType bullet = weapon.bullet.fragBullet;
         bullet.speed = 3.8f;
@@ -903,81 +941,80 @@ public class UnitOverride {
 
         navanax.armor = 20;
         weapon = navanax.weapons.first();
-        weapon.bullet = new ContinuousFlameBulletType() {{
-            maxRange = 110f;
-            damage = 35;
-            length = 115f;
-            hitEffect = Fx.hitMeltHeal;
-            drawSize = 200f;
-            lifetime = 155f;
-            shake = 1f;
-
-            shootEffect = Fx.shootHeal;
-            smokeEffect = Fx.none;
-            width = 5f;
-            largeHit = false;
-
-            incendChance = 0.03f;
-            incendSpread = 5f;
-            incendAmount = 1;
-
-            healPercent = 0.4f;
-            collidesTeam = true;
-
-            lengthInterp = f -> (float) (1 - Math.pow(Math.abs(f - 0.5), 5) * 32);
-
-            colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
-            flareColor = Pal.heal.cpy().a(.2f);
-        }};
-        ContinuousLaserBulletType clb = (ContinuousLaserBulletType) navanax.weapons.get(1).bullet;
-        clb.damage = 35;
-        clb.maxRange = 110f;
-        clb.length = 115f;
-        clb.width = 6f;
-        weapon = navanax.weapons.get(2);
-        weapon.continuous = false;
         weapon.reload = 60;
-        weapon.bullet = new LaserBulletType() {{
-            maxRange = 110f;
-            damage = 280;
+        weapon.continuous = false;
+        weapon.shootSound = Sounds.shotgun;
+        weapon.bullet = new ShrapnelBulletType() {{
+            width = 15f;
+            damage = 80;
+            lifetime = 10;
             length = 115f;
-            hitEffect = Fx.hitMeltHeal;
-            drawSize = 200f;
-            lifetime = 45;
+            drawSize = 140f;
+            maxRange = 110f;
 
-            shootEffect = Fx.shootHeal;
-            smokeEffect = Fx.none;
-            width = 55;
-            sideWidth = 0;
-            sideLength = 0;
-            largeHit = false;
-
-            incendChance = 0.03f;
-            incendSpread = 5f;
-            incendAmount = 1;
-
-            healPercent = 0.4f;
+            hitLarge = true;
+            healPercent = 0.2f;
             collidesTeam = true;
 
-            colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal.cpy().a(.5f), Pal.heal.cpy().mul(1.2f), Color.white};
+            statusDuration = 90;
+            status = StatusEffects.shocked;
+
+            fromColor = Pal.heal;
+
+            smokeEffect = Fx.none;
+            shootEffect = Fx.shootHeal;
+            hitEffect = Fx.hitMeltHeal;
+        }};
+        weapon = navanax.weapons.get(2);
+        weapon.reload = 90;
+        weapon.inaccuracy = 6;
+        weapon.shoot.shots = 30;
+        weapon.shoot.shotDelay = 2;
+        weapon.continuous = false;
+        weapon.shootSound = Sounds.lasershoot;
+        weapon.bullet = new LaserBoltBulletType() {{
+            speed = 4;
+            damage = 15;
+            lifetime = 25;
+            maxRange = 110f;
+
+            statusDuration = 90;
+            status = StatusEffects2.disturb;
+            frontColor = backColor = Pal.heal;
+
+            smokeEffect = Fx.none;
+            hitEffect = Fx.hitMeltHeal;
+            shootEffect = Fx.shootHeal;
         }};
         weapon = navanax.weapons.get(3);
+        weapon.reload = 60;
         weapon.continuous = false;
-        weapon.reload = 10;
-        weapon.shoot.shots = 5;
-        weapon.bullet = new LightningBulletType() {{
+        weapon.shootSound = Sounds.laser;
+        weapon.bullet = new LaserBulletType() {{
+            width = 30;
+            damage = 80;
+            length = 110f;
+            lifetime = 15f;
             maxRange = 110f;
-            lightningLength = 30;
-            damage = 14;
-            hitEffect = Fx.hitMeltHeal;
-            drawSize = 200f;
-            lifetime = 155f;
+            drawSize = 140f;
+            lightningLength = 12;
+            sideWidth = sideLength = 0;
 
-            shootEffect = Fx.shootHeal;
+            statusDuration = 90;
+            status = StatusEffects.electrified;
+
             smokeEffect = Fx.none;
+            hitEffect = Fx.hitMeltHeal;
+            shootEffect = Fx.shootHeal;
 
             lightningColor = Pal.heal.cpy().a(.2f);
+            colors = new Color[]{Pal.heal.cpy().a(.2f), Pal.heal, Color.white};
         }};
+        ContinuousLaserBulletType clb = (ContinuousLaserBulletType) navanax.weapons.get(1).bullet;
+        clb.width = 6f;
+        clb.damage = 35;
+        clb.length = 115f;
+        clb.maxRange = 110f;
 
         /*-----------------------------------------------------------------------------*/
         stell.weapons.first().reload = 70f;
@@ -1320,19 +1357,31 @@ public class UnitOverride {
         }};
         /*-----------------------------------------------------------------------------*/
         weapon = merui.weapons.first();
-        weapon.bullet.lifetime = 42;
-        bullet = weapon.bullet.copy();
-        bullet.spawnBullets = new Seq<>();
-        bullet.damage = 15;
-        bullet.lifetime = 14;
-        bullet.splashDamage = 10;
-        weapon.bullet.spawnBullets.add(bullet);
-        bullet = weapon.bullet.copy();
-        bullet.spawnBullets = new Seq<>();
-        bullet.damage = 15;
-        bullet.lifetime = 28;
-        bullet.splashDamage = 10;
-        weapon.bullet.spawnBullets.add(bullet);
+        weapon.bullet.splashDamageRadius = 30;
+        merui.weapons.add(new Weapon("merui-weapon") {{
+            shootSound = Sounds.missile;
+            mirror = false;
+            showStatSprite = false;
+            x = 0f;
+            y = 1f;
+            shootY = 4f;
+            reload = 30f;
+            cooldownTime = 42f;
+            heatColor = Pal.turretHeat;
+
+            bullet = new BasicBulletType() {{
+                lifetime = 20;
+                damage = 7;
+                speed = 1.5f;
+                trailWidth = 1f;
+                trailLength = 7;
+                trailColor = hitColor = Pal.techBlue;
+
+                shootEffect = Fx.none;
+                shootSound = Sounds.missile;
+                despawnEffect = hitEffect = Fx.hitSquaresColor;
+            }};
+        }});
 
         cleroi.weapons.add(new Weapon() {{
             mirror = false;
@@ -1515,24 +1564,12 @@ public class UnitOverride {
         weapon.bullet.status = StatusEffects.slow;
         weapon.bullet.statusDuration = 210;
         weapon.bullet.knockback = -3f;
-        quasar.weapons.add(new Weapon() {{
-            x = y = 0;
-            mirror = false;
-            reload = 120;
-            bullet = new BulletType(0, 0) {{
-                despawnEffect = hitEffect = Fx.none;
-                collides = absorbable = reflectable = hittable = false;
-                rangeOverride = 135;
-                keepVelocity = false;
-                status = StatusEffects2.tardy;
-                statusDuration = 180;
-                splashDamageRadius = 135;
-                shootEffect = new Effect(45, e -> {
-                    color(Pal.heal);
-                    stroke(e.fout() * 2f);
-                    Lines.circle(e.x, e.y, 4f + e.finpow() * 135);
-                });
-            }};
+        quasar.abilities.add(new StatusEnemyAbility(StatusEffects2.tardy, 180, 120, 135) {{
+            applyEffect = new Effect(45, e -> {
+                color(Pal.stoneGray.cpy().mul(Pal.heal));
+                stroke(e.fout() * 2f);
+                Lines.circle(e.x, e.y, 4f + e.finpow() * 135);
+            });
         }});
 
         vela.weapons.get(0).bullet = new FlyContinuousLaserBulletType() {{

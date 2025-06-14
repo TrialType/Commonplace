@@ -1,16 +1,12 @@
 package Commonplace.Entities.Ability;
 
 import arc.Core;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Lines;
-import arc.math.Mathf;
 import arc.struct.IntMap;
 import arc.struct.ObjectMap;
 import arc.util.Time;
 import mindustry.entities.Units;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.*;
-import mindustry.graphics.Pal;
 
 public class TimeGrowDamageAbility extends Ability {
     public static IntMap<Float> damages = new IntMap<>();
@@ -89,13 +85,6 @@ public class TimeGrowDamageAbility extends Ability {
         }
     }
 
-    @Override
-    public void draw(Unit u) {
-        Draw.color(Pal.redDust);
-        Lines.stroke(3f * Mathf.sinDeg(1.5f * Time.time + 17 * u.id));
-        Lines.circle(u.x, u.y, range);
-    }
-
     public void init() {
         unitTimers = new ObjectMap<>();
         buildingTimers = new ObjectMap<>();
@@ -115,6 +104,11 @@ public class TimeGrowDamageAbility extends Ability {
 
     @Override
     public String localized() {
-        return Core.bundle.format("ability.time-large-damage.name");
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.time-grow-damage";
     }
 }

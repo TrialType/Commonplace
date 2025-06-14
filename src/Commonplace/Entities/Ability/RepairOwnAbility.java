@@ -30,6 +30,11 @@ public class RepairOwnAbility extends RepairFieldAbility {
 
     @Override
     public String localized() {
-        return Core.bundle.get("ability.repair-own.name");
+        return Core.bundle.get(getBundle() + ".name");
+    }
+
+    @Override
+    public String getBundle() {
+        return "ability.repair-own";
     }
 }
