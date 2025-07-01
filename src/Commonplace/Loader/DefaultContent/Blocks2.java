@@ -1429,11 +1429,11 @@ public class Blocks2 {
             health = 1000;
 
             farDeflect = 0.75f;
-            farDeflectChance = 0.5f;
+            farDeflectValue = 20;
             adaptability = 1;
             adaptDamageMax = 1.25f;
             adaptDamageMin = 0.75f;
-            flexibility = 15;
+            flexibility = 50;
 
             breakable = true;
             destroyBulletSameTeam = true;
@@ -1464,11 +1464,11 @@ public class Blocks2 {
             health = 3500;
 
             farDeflect = 1.25f;
-            farDeflectChance = 0.75f;
+            farDeflectValue = 30;
             adaptability = 1;
             adaptDamageMax = 2f;
             adaptDamageMin = 0.5f;
-            flexibility = 30;
+            flexibility = 100;
 
             breakable = true;
             destroyBulletSameTeam = true;

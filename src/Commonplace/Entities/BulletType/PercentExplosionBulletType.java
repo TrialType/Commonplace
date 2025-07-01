@@ -14,6 +14,7 @@ import static mindustry.Vars.net;
 import static mindustry.Vars.world;
 
 public class PercentExplosionBulletType extends ExplosionBulletType {
+    public float def = 105;
     public float percent = 30;
     public float minPercent = 15;
 
@@ -35,6 +36,11 @@ public class PercentExplosionBulletType extends ExplosionBulletType {
                 float damage = minPercent >= 0 && b.owner instanceof Statusc s ?
                         Math.max(minPercent * s.healthMultiplier() * h.maxHealth(), percent * h.maxHealth()) / 100f :
                         percent * h.maxHealth() / 100f;
+
+                if (damage == Float.POSITIVE_INFINITY) {
+                    damage = def;
+                }
+
                 if (b.owner() instanceof Shieldc s && s.shield() > 0) {
                     float shield = s.shield();
                     s.shield(0);

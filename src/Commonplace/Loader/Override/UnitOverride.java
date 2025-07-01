@@ -1486,16 +1486,16 @@ public class UnitOverride {
         weapon.bullet.intervalRandomSpread = 30;
         weapon.bullet.intervalAngle = 0;
         weapon.bullet.intervalBullet = new BasicBulletType() {{
-            lifetime = 180;
-            damage = 120;
             speed = 6;
-            homingPower = 0.08F;
-            homingRange = 1000;
+            damage = 120;
+            lifetime = 180;
             homingDelay = 30;
+            homingRange = 1000;
+            homingPower = 0.08F;
             trailChance = 1F;
-            trailColor = Pal.techBlue;
-            trailWidth = 2.2f;
             trailLength = 30;
+            trailWidth = 2.2f;
+            trailColor = Pal.techBlue;
         }};
         weapon.bullet.fragBullet.damage = 100;
         weapon.bullet.fragBullet.splashDamage = 92f;

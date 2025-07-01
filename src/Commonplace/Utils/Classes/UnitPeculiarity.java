@@ -21,7 +21,6 @@ public abstract class UnitPeculiarity {
     public static final Rand r = new Rand();
     public static final Seq<UnitType> blackList = new Seq<>();
 
-    public static final Seq<StatusEffect> heal = new Seq<>();
     public static final Seq<StatusPack> mid = new Seq<>();
     public static final Seq<StatusPack> bad = new Seq<>();
     public static final Seq<StatusPack> well = new Seq<>();
@@ -80,22 +79,6 @@ public abstract class UnitPeculiarity {
             }
 
             applyAll(u, w / well.size, m / mid.size, b / bad.size);
-        }
-    }
-
-    public static void applyHeal(Unit u, float chance) {
-        if (!blackList.contains(u.type)) {
-            if (Mathf.chance(chance)) {
-                u.apply(heal.random());
-            }
-        }
-    }
-
-    public static void applyHealSeed(Unit u, float chance) {
-        if (!blackList.contains(u.type)) {
-            if (r.chance(chance)) {
-                u.apply(heal.get(r.nextInt(heal.size)));
-            }
         }
     }
 
@@ -165,31 +148,27 @@ public abstract class UnitPeculiarity {
     }
 
     public static void apply(Unit u, StatusEffect effect) {
-        if (heal.contains(effect)) {
-            u.apply(effect);
-        } else {
-            Class<? extends Unit> unit = u.getClass();
-            try {
-                Field statuses = unit.getDeclaredField("statuses");
-                statuses.setAccessible(true);
-                @SuppressWarnings("unchecked")
-                Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
+        Class<? extends Unit> unit = u.getClass();
+        try {
+            Field statuses = unit.getDeclaredField("statuses");
+            statuses.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
-                apply(u, entry, effect);
-            } catch (NoSuchFieldException | IllegalAccessException ex) {
-                var su = unit.getSuperclass();
-                while (su != Unit.class) {
-                    try {
-                        Field statuses = su.getDeclaredField("statuses");
-                        statuses.setAccessible(true);
-                        @SuppressWarnings("unchecked")
-                        Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
+            apply(u, entry, effect);
+        } catch (NoSuchFieldException | IllegalAccessException ex) {
+            var su = unit.getSuperclass();
+            while (su != Unit.class) {
+                try {
+                    Field statuses = su.getDeclaredField("statuses");
+                    statuses.setAccessible(true);
+                    @SuppressWarnings("unchecked")
+                    Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
 
-                        apply(u, entry, effect);
-                        break;
-                    } catch (NoSuchFieldException | IllegalAccessException ei) {
-                        su = su.getSuperclass();
-                    }
+                    apply(u, entry, effect);
+                    break;
+                } catch (NoSuchFieldException | IllegalAccessException ei) {
+                    su = su.getSuperclass();
                 }
             }
         }
@@ -285,7 +264,6 @@ public abstract class UnitPeculiarity {
 //        superPeculiarity.sort(s -> s.id);
 
         well.sort(s -> s.id);
-        heal.sort(s -> s.id);
         mid.sort(s -> s.id);
         bad.sort(s -> s.id);
         sup.sort(s -> s.id);

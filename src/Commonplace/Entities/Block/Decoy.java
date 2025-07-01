@@ -22,7 +22,7 @@ public class Decoy extends Wall {
     public float adaptability = 0;
     public float flexibility = 0;
     public float farDeflect = 0f;
-    public float farDeflectChance = 0;
+    public float farDeflectValue = 0;
     public boolean adaptLoss = true;
     public float hitStatusDuration = 0;
     public StatusEffect hitStatus = null;
@@ -40,7 +40,7 @@ public class Decoy extends Wall {
         @Override
         public boolean collision(Bullet b) {
             float damage = b.damage() * b.type().buildingDamageMultiplier;
-            if (farDeflect > 0 && b.owner instanceof Healthc h && Mathf.chance(farDeflectChance)) {
+            if (farDeflect > 0 && b.owner instanceof Healthc h && Mathf.chance(farDeflectValue / damage)) {
                 h.damage(farDeflect * damage);
                 if (hitStatus != null && b.owner instanceof Statusc s) {
                     s.apply(hitStatus, hitStatusDuration);
@@ -50,7 +50,7 @@ public class Decoy extends Wall {
             if (adaptLoss) {
                 float time = timer.getTime(0);
                 timer.reset(0, 0);
-                adapt -= time / flexibility * 60;
+                adapt -= time / flexibility / 60;
                 adapt = Math.max(adapt, 0);
             }
 

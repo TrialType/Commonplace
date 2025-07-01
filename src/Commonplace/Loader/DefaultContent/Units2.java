@@ -17,11 +17,10 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import mindustry.Vars;
-import mindustry.ai.types.CommandAI;
-import mindustry.ai.types.GroundAI;
+import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
+import mindustry.ai.types.CommandAI;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.ExplosionEffect;
@@ -1472,7 +1471,12 @@ public class Units2 {
             targetAir = targetGround = true;
         }};
 
-        //attack
+        loadAttack();
+        loadTrial();
+        loadBoss();
+    }
+
+    public static void loadAttack() {
         garrison = new UnitType("garrison") {{
             constructor = Garrison::new;
             controller = u -> new GarrisonAI();
@@ -1685,45 +1689,100 @@ public class Units2 {
                 }};
             }});
         }};
+    }
 
-        new UnitType2("e", Camp.all.first()) {{
-            constructor = CampMechUnit::create;
+    public static void loadTrial() {
+        new UnitType("trial-crawler-x009") {{
+            constructor = MechUnit::create;
 
-            speed = 2;
-            hitSize = 15;
-            health = 1500;
+            health = 60;
+            speed = 6;
 
-            campRangeChanger.add(new OrderedFloat(2, f -> 200f).team());
-        }};
+            weapons.add(new Weapon() {{
+                x = y = shootY = 0;
+                mirror  =false;
 
-        new UnitType2("f", Camp.all.first()) {{
-            constructor = CampMechUnit::create;
-
-            speed = 2;
-            hitSize = 15;
-            health = 1500;
-
-            weapons.add(new Weapon2() {{
-                reload = 17f;
-                x = 2.75f;
-                y = 1f;
-                top = false;
-                ejectEffect = Fx.casing1;
-
-                bullet = new BasicBulletType(2.5f, 20) {{
-                    width = 7f;
-                    height = 9f;
-                    lifetime = 60f;
-                    shootEffect = Fx.shootSmall;
-                    smokeEffect = Fx.shootSmallSmoke;
+                bullet = new ExplosionBulletType(600, 24) {{
+                    fragBullets = 1;
+                    buildingDamageMultiplier = 6;
+                    fragBullet = new BuildingBoosterBulletType() {{
+                        splashDamage = 0;
+                        splashDamageRadius = 200;
+                        status = StatusEffects2.sluggish;
+                        statusDuration = 300;
+                    }};
                 }};
             }});
         }};
 
-        boss.add(velocity);
-        boss.add(velocity_d);
-        boss.add(velocity_s);
-        boss.add(hidden);
-        boss.add(cave);
+        new UnitType("trial-crawler-k080") {{
+            constructor = LegsUnit::create;
+
+            health = 3000;
+            armor = 7;
+            speed = 0.35f;
+
+            weapons.add(new Weapon() {{
+                x = y = 0;
+                recoil = 8;
+                reload = 240;
+                inaccuracy = 0;
+                mirror = false;
+
+                bullet = new BasicBulletType(20, 1500) {{
+                    width = 10;
+                    height = 25;
+                    shrinkX = shrinkY = 0;
+
+                    lifetime = 30;
+                    knockback = 40;
+                    pierceCap = 15;
+                    pierceBuilding = true;
+                    pierceDamageFactor = 0.1f;
+                    buildingDamageMultiplier = 3f;
+                }};
+            }});
+        }};
+
+        new UnitType("trial-crawler-x770") {{
+            constructor = LegsUnit::create;
+
+            health = 6000;
+            armor = 20;
+            speed = 0.75f;
+            faceTarget = false;
+
+            weapons.add(new Weapon() {{
+                shoot.shots = 15;
+
+                x = y = 0;
+                shootCone = 360;
+                mirror = false;
+                shootOnDeath = true;
+                aiControllable = controllable = false;
+
+                bullet = new LaserBulletType(300) {{
+                    width = 25;
+                    length = 180;
+                    sideWidth = 0;
+                    lifetime = 90;
+                    inaccuracy = 180;
+
+                    lightningDelay = 6;
+                    lightningLength = 7;
+                    lightningSpacing = 35;
+
+                    shootSound = Sounds.laser;
+                    despawnSound = hitSound = Sounds.none;
+                    colors = new Color[]{Pal.accent, Pal.lancerLaser, Color.white};
+                }};
+            }});
+
+            abilities.add(new PowerItemTakeAbility());
+        }};
+    }
+
+    public static void loadBoss() {
+        boss.addAll(velocity, velocity_d, velocity_s, hidden, cave);
     }
 }

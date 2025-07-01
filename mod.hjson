@@ -1,17 +1,17 @@
 #the mod name as displayed in-game
-displayName: "Commonplace"
+displayName: "素履往"
 
 #the internal name of your mod
 name: "Commonplace"
 
 #your name
-author: "大满"
+author: "中满"
 
 #the fully qualified main class of the mod
 main: "Commonplace.Main"
 
 #the mod description as seen in the mod dialog
-description: ""
+description: "一个朴实的模组"
 
 #the mod version
 version: 0.0.1

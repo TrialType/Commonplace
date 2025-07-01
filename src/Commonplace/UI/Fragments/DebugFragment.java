@@ -1,5 +1,6 @@
 package Commonplace.UI.Fragments;
 
+import Commonplace.UI.Elements.UnitGroup;
 import Commonplace.Utils.Classes.Vars2;
 import arc.Core;
 import arc.scene.Element;
@@ -12,9 +13,11 @@ import arc.scene.ui.layout.Table;
 import arc.util.Align;
 import arc.util.Time;
 import mindustry.gen.Tex;
+import mindustry.type.UnitType;
 import mindustry.ui.Styles;
 
 public class DebugFragment {
+    public UnitGroup enemyTable;
     public Table lastToastTable = null;
     public Table useRandomTable = new Table(Tex.windowEmpty);
     public Table lockRandomTable = new Table(Tex.windowEmpty);
@@ -66,6 +69,11 @@ public class DebugFragment {
             });
             t.left();
         });
+
+        enemyTable = new UnitGroup();
+        enemyTable.visible(() -> Vars2.debug);
+        enemyTable.setPosition(0, 800);
+        parent.addChild(enemyTable);
     }
 
     public void showInfo(Table t) {
@@ -77,5 +85,11 @@ public class DebugFragment {
         lastToastTable = t;
         lastToast = Time.millis();
         t.actions(Actions.fadeIn(0.75f), Actions.delay(0.5f), Actions.fadeOut(0.75f));
+    }
+
+    public void addInfo(UnitType type) {
+        if (enemyTable != null) {
+            enemyTable.addLabel(type);
+        }
     }
 }

@@ -21,7 +21,6 @@ import mindustry.content.StatusEffects;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType;
 import mindustry.gen.*;
-import mindustry.world.blocks.defense.turrets.ItemTurret;
 
 import java.lang.reflect.Field;
 
@@ -65,6 +64,17 @@ public class Events {
             Weapons.load();
         });
 
+        arc.Events.on(EventType.UnitCreateEvent.class, e -> {
+            if (e.unit.team.isAI() && !e.unit.type.unlocked()) {
+                Vars2.debugFrag.addInfo(e.unit.type);
+            }
+        });
+        arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
+            if (e.unit.team.isAI() && !e.unit.type.unlocked()) {
+                Vars2.debugFrag.addInfo(e.unit.type);
+            }
+        });
+
         arc.Events.on(EventType.WaveEvent.class, e -> setSeed = true);
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
             if (!Vars2.useRandom || e.unit instanceof OwnCreate o && o.created()) {
@@ -72,7 +82,6 @@ public class Events {
             }
 
             if (e.unit.team != Vars.player.team()) {
-                UnitPeculiarity.applyHeal(e.unit, 0.7f);
                 if (state.isCampaign()) {
                     float threat = state.getSector().threat;
                     if (threat < 0.2f) {
@@ -103,7 +112,6 @@ public class Events {
                     }
                 }
             } else {
-                UnitPeculiarity.applyHeal(e.unit, p_heal);
                 PeculiarChance(p_num, p_supper, p_well, p_midden, e.unit);
             }
 
@@ -127,53 +135,40 @@ public class Events {
                     float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1);
 
                     if (wave < 8) {
-                        UnitPeculiarity.applyHealSeed(e.unit, 0.25f);
-                        UnitPeculiarity.applySeed(e.unit, extra, 2, r.nextInt(3));
+                        UnitPeculiarity.applySeed(e.unit, extra, 2, r.random(3));
                     } else if (wave < 18) {
-                        UnitPeculiarity.applyHealSeed(e.unit, 0.25f);
-                        UnitPeculiarity.applySeed(e.unit, r.nextInt(2) + extra, 2, r.nextInt(3));
+                        UnitPeculiarity.applySeed(e.unit, r.random(2) + extra, 2, r.random(3));
                     } else if (wave < 30) {
-                        UnitPeculiarity.applyHealSeed(e.unit, 0.25f);
-                        UnitPeculiarity.applySeed(e.unit, 1 + r.nextInt(2) + extra, 2, r.nextInt(3));
+                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(2) + extra, 2, r.random(3));
                     } else {
                         if (r.chance(chance)) {
                             UnitPeculiarity.applySuperSeed(e.unit, 1);
                         }
 
                         if (wave < 42) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.25f);
-                            UnitPeculiarity.applySeed(e.unit, 1 + r.nextInt(3) + extra, 3, r.nextInt(3));
+                            UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(3));
                         } else if (wave < 55) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.5f);
-                            UnitPeculiarity.applySeed(e.unit, 1 + r.nextInt(3) + extra, 3, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(2));
                         } else if (wave < 70) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.5f);
-                            UnitPeculiarity.applySeed(e.unit, 2 + r.nextInt(3) + extra, 3, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 2 + r.random(3) + extra, 3, r.random(2));
                         } else if (wave <= 85) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.5f);
-                            UnitPeculiarity.applySeed(e.unit, 2 + r.nextInt(4) + extra, 2, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 2 + r.random(4) + extra, 2, r.random(2));
                         } else if (wave <= 100) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.5f);
-                            UnitPeculiarity.applySeed(e.unit, 3 + r.nextInt(4) + extra, 2, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 3 + r.random(4) + extra, 2, r.random(2));
                         } else if (wave <= 115) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.75f);
-                            UnitPeculiarity.applySeed(e.unit, 3 + r.nextInt(5) + extra, 1, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 3 + r.random(5) + extra, 1, r.random(2));
                         } else if (wave <= 130) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.75f);
-                            UnitPeculiarity.applySeed(e.unit, 4 + r.nextInt(5) + extra, 1, r.nextInt(2));
+                            UnitPeculiarity.applySeed(e.unit, 4 + r.random(5) + extra, 1, r.random(2));
                         } else if (wave <= 200) {
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.75f);
-                            UnitPeculiarity.applySeed(e.unit, 6 + r.nextInt((wave - 130) / 10) + extra, 0, 0);
+                            UnitPeculiarity.applySeed(e.unit, 6 + r.random((wave - 130) / 10) + extra, 0, 0);
                         } else if (wave <= 300) {
                             extra = 15 + (isBoss ? (extra - 15) / 2 : (extra - 15) / 3);
                             e.unit.shield(e.unit.shield + 30 * (wave - 200));
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.75f);
-                            UnitPeculiarity.applySeed(e.unit, r.nextInt(19) + extra, 0, 0);
+                            UnitPeculiarity.applySeed(e.unit, r.random(19) + extra, 0, 0);
                         } else {
                             extra = Math.min(25 + (isBoss ? (extra - 25) / 3 : (extra - 15) / 4), 80);
                             e.unit.shield(e.unit.shield + 3000 + 40 * (wave - 300));
-                            UnitPeculiarity.applyHealSeed(e.unit, 0.9f);
-                            UnitPeculiarity.applySeed(e.unit, r.nextInt(26) + extra, 0, 0);
+                            UnitPeculiarity.applySeed(e.unit, r.random(26) + extra, 0, 0);
                         }
                     }
                 }
@@ -182,7 +177,7 @@ public class Events {
 
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (Vars2.useRandom && e.bullet.owner instanceof Unit u && !UnitPeculiarity.blackList.contains(u.type)) {
-                int[] count = {0, 0};
+                int[] count = {0};
                 StatusEntry se = u.applyDynamicStatus();
                 float fin = Math.max(1, e.unit.maxHealth / u.maxHealth);
                 float h = se.healthMultiplier, d = se.damageMultiplier, s = se.damageMultiplier, r = se.reloadMultiplier;
@@ -191,46 +186,40 @@ public class Events {
                         count[0]++;
                     }
                 });
-                UnitPeculiarity.heal.each(p -> {
-                    if (u.hasEffect(p)) {
-                        count[1]++;
-                    }
-                });
-                if (count[1] < 1) {
-                    UnitPeculiarity.applyHeal(u, 0.5f);
-                }
                 UnitPeculiarity.sup.each(p -> {
-                    if (count[0] < 2 && p.effect != null && e.unit.hasEffect(p.effect)) {
-                        if (Mathf.chance(0.1f)) {
-                            count[0]++;
-                            u.apply(p.effect);
+                    if (p.effect != null && e.unit.hasEffect(p.effect)) {
+                        if (count[0] < 2) {
+                            if (Mathf.chance(0.1f)) {
+                                count[0]++;
+                                u.apply(p.effect);
+                            }
                         } else {
-                            if (Mathf.chance(fin * (1 - d / 2.5f))) {
-                                se.damageMultiplier += Mathf.random(0.2f);
+                            if (Mathf.chance(fin * (1 - d / 1.6f))) {
+                                se.damageMultiplier += Mathf.random(0.08f);
                             }
-                            if (Mathf.chance(fin * (1 - h / 2.5f))) {
-                                se.healthMultiplier += Mathf.random(0.2f);
+                            if (Mathf.chance(fin * (1 - h / 1.6f))) {
+                                se.healthMultiplier += Mathf.random(0.08f);
                             }
-                            if (Mathf.chance(fin * (1 - r / 2.5f))) {
-                                se.reloadMultiplier += Mathf.random(0.2f);
+                            if (Mathf.chance(fin * (1 - r / 1.6f))) {
+                                se.reloadMultiplier += Mathf.random(0.08f);
                             }
-                            if (Mathf.chance(fin * (1 - s / 2.5f))) {
-                                se.speedMultiplier += Mathf.random(0.2f);
+                            if (Mathf.chance(fin * (1 - s / 1.6f))) {
+                                se.speedMultiplier += Mathf.random(0.08f);
                             }
                         }
                     }
                 });
-                if (Mathf.chance(fin * (1 - d / 1.5f))) {
-                    se.damageMultiplier += Mathf.random(0.1f);
+                if (Mathf.chance(fin * (1 - d / 1.2f))) {
+                    se.damageMultiplier += Mathf.random(0.03f);
                 }
-                if (Mathf.chance(fin * (1 - h / 1.5f))) {
-                    se.healthMultiplier += Mathf.random(0.1f);
+                if (Mathf.chance(fin * (1 - h / 1.2f))) {
+                    se.healthMultiplier += Mathf.random(0.03f);
                 }
-                if (Mathf.chance(fin * (1 - r / 1.5f))) {
-                    se.reloadMultiplier += Mathf.random(0.1f);
+                if (Mathf.chance(fin * (1 - r / 1.2f))) {
+                    se.reloadMultiplier += Mathf.random(0.03f);
                 }
-                if (Mathf.chance(fin * (1 - s / 1.5f))) {
-                    se.speedMultiplier += Mathf.random(0.1f);
+                if (Mathf.chance(fin * (1 - s / 1.2f))) {
+                    se.speedMultiplier += Mathf.random(0.03f);
                 }
             }
         });
@@ -256,7 +245,7 @@ public class Events {
                 result += name.charAt(i);
                 result *= 13L;
             }
-            return result;
+            return result % Long.MAX_VALUE;
         }
     }
 

@@ -8,8 +8,8 @@ import mindustry.ui.Styles;
 public abstract class Vars2 {
     public static DebugFragment debugFrag;
 
-    public static boolean debug = true;
-    public static boolean useRandom = false;
+    public static boolean debug = false;
+    public static boolean useRandom = true;
     public static boolean lockRandom = true;
     public static final MessageDialog message = new MessageDialog("@story", Styles.defaultDialog);
 

@@ -91,7 +91,7 @@ public class StatusEffects2 {
     public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
             torn, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose,
-            shocked, aging, erosion, disturb, fearless;
+            shocked, aging, erosion, disturb, fearless, sluggish;
 
     public static StatusEffect fireKiller;
 
@@ -251,6 +251,10 @@ public class StatusEffects2 {
             effect = Effects.disturb;
             effectChance = 0.2f;
             dragMultiplier = 0.6f;
+        }};
+        sluggish = new StatusEffect("sluggish") {{
+            reloadMultiplier = 0.25f;
+            speedMultiplier = 0.5f;
         }};
 
 
@@ -677,11 +681,6 @@ public class StatusEffects2 {
 //        peculiarity_reload("_r3", 0.86f, opposites(bad, modname("__r3")));
 //        peculiarity_health("___incomplete", 0.5f, bad);
 //        peculiarity_reload("___lock", 0.5f, bad);
-
-        peculiarity_heal5("__e1", 1 / 10f);
-        peculiarity_heal3("__e2", 1 / 8f);
-        peculiarity_heal("__e3", 1 / 6f);
-
         peculiarity_health5(1.02f, well);
         peculiarity_health3(1.06f, well);
         peculiarity_health(1.1f, well);
@@ -877,35 +876,6 @@ public class StatusEffects2 {
             e.armorOverride += a;
         });
         packs.addAll(p, p, p, p, p);
-    }
-
-    public static void peculiarity_heal(String name, float h) {
-        StatusEffect s = new StatusEffect(name) {{
-            show = false;
-            damage = -h;
-            permanent = true;
-        }};
-        heal.add(s);
-    }
-
-    public static void peculiarity_heal3(String name, float h) {
-        StatusEffect s = new StatusEffect(name) {{
-            show = false;
-            damage = -h;
-            permanent = true;
-        }};
-        new StatusPack(s);
-        heal.add(s, s, s);
-    }
-
-    public static void peculiarity_heal5(String name, float h) {
-        StatusEffect s = new StatusEffect(name) {{
-            show = false;
-            damage = -h;
-            permanent = true;
-        }};
-        new StatusPack(s);
-        heal.addAll(s, s, s, s, s);
     }
 
     public static void peculiarity_heal(String name, float heal, float a, Seq<StatusPack> packs) {
