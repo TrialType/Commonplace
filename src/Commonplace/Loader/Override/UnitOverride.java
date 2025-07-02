@@ -1290,70 +1290,25 @@ public class UnitOverride {
         quell.constructor = ReplenishmentPayloadEventUnit::create;
         quell.aiController = FlyingFollowFarAI::create;
         weapon = quell.weapons.first();
-        weapon.bullet = new BulletType() {{
-            speed = 0f;
-            rangeOverride = 5.9f * 84;
+        if (weapon.bullet.fragBullet != null) {
+            weapon.bullet = weapon.bullet.fragBullet;
+        }
+        weapon.bullet.rangeOverride = 5.9f * 84;
+        UnitType unit = weapon.bullet.spawnUnit;
+        unit.lifetime = 1.2f * 60;
+        unit.rotateSpeed = 8.8f;
+        unit.weapons.first().bullet.splashDamage = 140f;
+        unit.weapons.first().bullet.buildingDamageMultiplier = 0.5f;
+        unit.abilities.add(new PowerChargeAbility() {{
+            lightningColor = Pal.sap.cpy().mul(1.3f, 1.1f, 1.1f, 1.1f);
 
-            shootEffect = Fx.shootBig;
-            smokeEffect = Fx.shootBigSmoke2;
-
-            collidesAir = false;
-            keepVelocity = false;
-
-            spawnUnit = new MissileUnitType("quell-missile") {{
-                health = 45;
-                speed = 4.3f;
-                maxRange = 6f;
-                rotateSpeed = 8.8f;
-                lifetime = 1.2f * 60;
-                loopSoundVolume = 0.1f;
-
-                targetAir = false;
-                engineLayer = Layer.effect;
-                outlineColor = Pal.darkOutline;
-                engineColor = trailColor = Pal.sapBulletBack;
-
-                weapons.add(new Weapon() {{
-                    shootSound = Sounds.none;
-                    shootCone = 360f;
-                    mirror = false;
-                    reload = 1f;
-                    shootOnDeath = true;
-                    bullet = new ExplosionBulletType(130f, 25f) {{
-                        collidesAir = false;
-                        buildingDamageMultiplier = 0.5f;
-                        shootEffect = Fx.massiveExplosion;
-                    }};
-                }});
-
-                abilities.add(new PowerChargeAbility() {{
-                    lightningColor = Pal.sap.cpy().mul(1.3f, 1.1f, 1.1f, 1.1f);
-
-                    bullet = new LightningBulletType() {{
-                        damage = 7;
-                        lifetime = 3;
-                        lightningLength = 8;
-                        lightningColor = Pal.sap.cpy().mul(1.1f);
-                    }};
-                }}, new MoveLightningAbility(10, 6, 0.5f, 0, 5, 15, Pal.sap));
+            bullet = new LightningBulletType() {{
+                damage = 7;
+                lifetime = 3;
+                lightningLength = 8;
+                lightningColor = Pal.sap.cpy().mul(1.1f);
             }};
-        }};
-//        weapon.bullet.rangeOverride = 5.9f * 84;
-//        UnitType unit = weapon.bullet.fragBullet.spawnUnit;
-//        unit.lifetime = 1.2f * 60;
-//        unit.rotateSpeed = 8.8f;
-//        unit.weapons.first().bullet.splashDamage = 140f;
-//        unit.weapons.first().bullet.buildingDamageMultiplier = 0.5f;
-//        unit.abilities.add(new PowerChargeAbility() {{
-//            lightningColor = Pal.sap.cpy().mul(1.3f, 1.1f, 1.1f, 1.1f);
-//
-//            bullet = new LightningBulletType() {{
-//                damage = 7;
-//                lifetime = 3;
-//                lightningLength = 8;
-//                lightningColor = Pal.sap.cpy().mul(1.1f);
-//            }};
-//        }}, new MoveLightningAbility(10, 6, 0.5f, 0, 5, 15, Pal.sap));
+        }}, new MoveLightningAbility(10, 6, 0.5f, 0, 5, 15, Pal.sap));
 
         disrupt.constructor = ReplenishmentPayloadEventUnit::create;
         weapon = disrupt.weapons.first().bullet.spawnUnit.weapons.first();
