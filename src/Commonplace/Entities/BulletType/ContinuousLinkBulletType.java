@@ -17,7 +17,6 @@ import mindustry.gen.Healthc;
 import mindustry.gen.Unit;
 
 public class ContinuousLinkBulletType extends ContinuousBulletType {
-    public Effect lightningHitEffect = Fx.none;
     public Effect damagePointEffect = Fx.none;
 
     protected final Vec2 vec = new Vec2();
@@ -26,6 +25,7 @@ public class ContinuousLinkBulletType extends ContinuousBulletType {
         speed = 0;
         collides = hittable = reflectable = absorbable = false;
     }
+
 
     @Override
     public void update(Bullet b) {
@@ -43,13 +43,13 @@ public class ContinuousLinkBulletType extends ContinuousBulletType {
             for (Ability a : u.abilities) {
                 if (a instanceof SuppressionFieldAbility s) {
                     vec.set(s.x, s.y).rotate(u.rotation - 90).add(u).sub(b);
-                    Damage2.collideLine(b, b.team, lightningHitEffect, b.x, b.y, vec.angle(), vec.len(), largeHit, false, -1);
+                    Damage2.collideLine(b, b.team, b.x, b.y, vec.angle(), vec.len(), largeHit, false, -1);
                     Fx.chainLightning.at(b.x, b.y, 0, lightningColor, vec.add(b).cpy());
                 }
             }
         } else if (b.owner instanceof Position p) {
             vec.set(p.getX(), p.getY()).sub(b);
-            Damage2.collideLine(b, b.team, lightningHitEffect, b.x, b.y, vec.angle(), vec.len(), largeHit, false, -1);
+            Damage2.collideLine(b, b.team, b.x, b.y, vec.angle(), vec.len(), largeHit, false, -1);
             Fx.chainLightning.at(b.x, b.y, 0, lightningColor, p);
         }
 
