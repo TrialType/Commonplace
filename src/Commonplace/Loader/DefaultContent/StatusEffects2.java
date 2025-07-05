@@ -690,8 +690,6 @@ public class StatusEffects2 {
         peculiarity_reload5(1.02f, well);
         peculiarity_reload3(1.06f, well);
         peculiarity_reload(1.1f, well);
-        peculiarity_health(1.2f, well);
-        peculiarity_reload(1.2f, well);
         peculiarity(1.03f, 1f, 1.03f, 1.05f, well);
 
         peculiarity5(1.03f, 1, 0.98f, 1, mid);
@@ -719,8 +717,6 @@ public class StatusEffects2 {
         peculiarity_reload5(0.98f, bad);
         peculiarity_reload3(0.953f, bad);
         peculiarity_reload(0.9f, bad);
-        peculiarity_health(0.83f, bad);
-        peculiarity_reload(0.83f, bad);
 
         super_damage("_sd", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
             e.effectChance = 0.1f;

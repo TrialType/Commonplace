@@ -3,7 +3,6 @@ package Commonplace.Loader.Special;
 import Commonplace.Entities.Ability.TimeGrowDamageAbility;
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
-import Commonplace.Utils.Classes.Camp;
 import Commonplace.Utils.Classes.Listener;
 import Commonplace.Utils.Classes.UnitPeculiarity;
 import Commonplace.Utils.Classes.Vars2;
@@ -27,31 +26,32 @@ import java.lang.reflect.Field;
 import static mindustry.Vars.*;
 
 public class Events {
+    private static long mapSeed;
     private static boolean setSeed = true;
+    private static boolean mapChange = true;
     private static final Rand r = new Rand();
 
     public static int p_num;
-    public static float p_heal;
     public static float p_well;
     public static float p_midden;
     public static float p_supper;
 
     static {
-        p_num = Core.settings.getInt("commonplace-p-num", 5);
+        p_num = Core.settings.getInt("commonplace-p-num", 2);
         p_well = Core.settings.getFloat("commonplace-p-well", 0.5f);
-        p_heal = Core.settings.getFloat("commonplace-p-heal", 0.5f);
         p_midden = Core.settings.getFloat("commonplace-p-midden", 0.2f);
         p_supper = Core.settings.getFloat("commonplace-p-supper", 0.001f);
     }
 
     public static void load() {
         arc.Events.run(EventType.Trigger.update, () -> {
-            Camp.updateEach();
+            //Camp.updateEach();
             TimeGrowDamageAbility.damages.clear();
         });
 
         arc.Events.on(EventType.WorldLoadEvent.class, e -> {
             setSeed = true;
+            mapChange = true;
             Listener.inited = false;
         });
 
@@ -126,7 +126,7 @@ public class Events {
                     int wave = state.wave - 1;
                     if (Vars2.lockRandom && setSeed) {
                         setSeed = false;
-                        long seed = mapSeed() + wave * 975L;
+                        long seed = seed() + wave * 975L;
                         r.setSeed(seed);
                         UnitPeculiarity.setSeed(seed);
                     }
@@ -235,18 +235,24 @@ public class Events {
         });
     }
 
-    public static long mapSeed() {
-        if (!state.isGame()) {
-            return System.currentTimeMillis();
-        } else {
-            long result = 0;
-            String name = state.map.name();
-            for (int i = 0; i < name.length(); i++) {
-                result += name.charAt(i);
-                result *= 13L;
+    public static long seed() {
+        if(mapChange){
+            mapChange = false;
+            if (!state.isGame()) {
+                System.out.println("ÎÞµØÍ¼");
+                mapSeed = System.currentTimeMillis();
+            } else {
+                long result = 0;
+                String name = state.map.name();
+                for (int i = 0; i < name.length(); i++) {
+                    result += name.charAt(i);
+                    result *= 13L;
+                }
+                mapSeed = result % Long.MAX_VALUE;
             }
-            return result % Long.MAX_VALUE;
         }
+        System.out.println(mapSeed);
+        return mapSeed;
     }
 
     public static void PeculiarChance(int num, float supper, float well, float midden, Unit unit) {
