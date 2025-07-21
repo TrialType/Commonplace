@@ -1,6 +1,8 @@
 package Commonplace.Loader.Special;
 
 import Commonplace.Entities.Ability.TimeGrowDamageAbility;
+import Commonplace.IO.AllGameStats;
+import Commonplace.IO.Save8Override;
 import Commonplace.Loader.ProjectContent.Bullets;
 import Commonplace.Loader.ProjectContent.Weapons;
 import Commonplace.Utils.Classes.InputListener;
@@ -21,8 +23,8 @@ import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType;
-import mindustry.game.Team;
 import mindustry.gen.*;
+import mindustry.io.SaveIO;
 import mindustry.world.blocks.payloads.PayloadSource;
 
 import java.lang.reflect.Field;
@@ -48,6 +50,7 @@ public class Events {
     }
 
     public static void load() {
+        //功能性监听
         arc.Events.run(EventType.Trigger.update, () -> {
             //Camp.updateEach();
             InputListener.update();
@@ -59,13 +62,18 @@ public class Events {
             setSeed = true;
             mapChange = true;
             Listener.inited = false;
+            if (!(state.stats instanceof AllGameStats)) {
+                state.stats = new AllGameStats(state.stats);
+            }
         });
 
+        //覆盖监听
         arc.Events.on(EventType.ClientLoadEvent.class, e -> Time.runTask(5f, () -> {
             Vars2.load();
             ProjectDialog.create();
             UnitPeculiarity.init();
             Vars.ui.research = new MoreResearchDialog();
+            SaveIO.versions.put(8, new Save8Override());
         }));
         arc.Events.on(EventType.ContentInitEvent.class, e -> {
             Bullets.load();
@@ -73,8 +81,12 @@ public class Events {
             UnitTypes.stell.weapons.first().bullet.pierce = false;
         });
 
+        //功能性监听
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (e.unit.team.isAI() && !e.unit.type.unlocked()) {
+            AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(e.unit.team);
+            stats.unitsCreatedHealth += e.unit.maxHealth;
+
+            if (!Vars.net.client() && e.unit.team != state.rules.defaultTeam && !e.unit.type.unlocked()) {
                 Vars2.debugFrag.addInfo(e.unit.type);
             }
         });
@@ -83,35 +95,43 @@ public class Events {
                 Vars2.debugFrag.addInfo(e.unit.type);
             }
         });
+        arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
+            if (e.bullet.owner instanceof Teamc t) {
+                AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(t.team());
+                stats.enemyUnitsDestroyedHealth += e.unit.maxHealth;
+            }
+        });
 
+        //随机性监听
         arc.Events.on(EventType.WaveEvent.class, e -> setSeed = true);
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
             if (!Vars2.useRandom || e.unit instanceof OwnCreate o && o.created() || e.spawner instanceof PayloadSource.PayloadSourceBuild) {
                 return;
             }
 
+            AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(e.unit.team());
+            float extra = Math.max(stats.unitsCreatedHealth / 100f, 1);
             if (e.unit.team != state.rules.defaultTeam) {
+                float mul = state.isCampaign() ? state.rules.planet.campaignRules.difficulty.enemySpawnMultiplier : state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
+                float wm = (1 - mul) * 0.4f + 1;
+                mul *= extra;
                 if (state.isCampaign()) {
                     float threat = state.getSector().threat;
-                    float sn = state.rules.planet.campaignRules.difficulty.enemySpawnMultiplier;
-                    float wm = (1 - sn) * 0.4f + 1;
                     if (threat < 0.2f) {
-                        PeculiarChance((int) (3 * sn), 0.001f * sn, 0.65f * wm, 0.45f * wm, e.unit);
+                        PeculiarChance((int) (3 * mul), 0.001f * mul, 0.65f * wm, 0.45f * wm, e.unit);
                     } else if (threat < 0.4f) {
-                        PeculiarChance((int) (5 * sn), 0.002f * sn, 0.6f * wm, 0.4f * wm, e.unit);
+                        PeculiarChance((int) (5 * mul), 0.002f * mul, 0.6f * wm, 0.4f * wm, e.unit);
                     } else if (threat < 0.6f) {
-                        PeculiarChance((int) (8 * sn), 0.004f * sn, 0.54f * wm, 0.34f * wm, e.unit);
+                        PeculiarChance((int) (8 * mul), 0.004f * mul, 0.54f * wm, 0.34f * wm, e.unit);
                     } else if (threat < 0.8f) {
-                        PeculiarChance((int) (12 * sn), 0.008f * sn, 0.47f * wm, 0.27f * wm, e.unit);
+                        PeculiarChance((int) (12 * mul), 0.008f * mul, 0.47f * wm, 0.27f * wm, e.unit);
                     } else if (threat < 1f) {
-                        PeculiarChance((int) (16 * sn), 0.016f + sn, 0.39f * wm, 0.19f * wm, e.unit);
+                        PeculiarChance((int) (16 * mul), 0.016f + mul, 0.39f * wm, 0.19f * wm, e.unit);
                     } else {
-                        PeculiarChance((int) (20 * sn), 0.032f * sn, 0.3f * wm, 0.1f * wm, e.unit);
+                        PeculiarChance((int) (20 * mul), 0.032f * mul, 0.3f * wm, 0.1f * wm, e.unit);
                     }
                 } else {
                     int cores = e.unit.team.cores().size;
-                    float mul = state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
-                    float wm = (1 - mul) * 0.4f + 1;
                     if (cores == 0) {
                         PeculiarChance((int) (5 * mul), 0.002f * mul, 0.6f * wm, 0.4f * wm, e.unit);
                     } else if (cores < 2) {
@@ -125,7 +145,7 @@ public class Events {
                     }
                 }
             } else {
-                PeculiarChance(p_num, p_supper, p_well, p_midden, e.unit);
+                PeculiarChance(p_num, p_supper * extra, p_well, p_midden, e.unit);
             }
 
             if (e.unit instanceof OwnCreate o) {
@@ -196,15 +216,14 @@ public class Events {
 
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (Vars2.useRandom && e.bullet.owner instanceof Unit u && !UnitPeculiarity.blackList.contains(u.type)) {
-                int[] count = {0};
                 StatusEntry se = u.applyDynamicStatus();
-                float fin = Math.max(1, e.unit.maxHealth / u.maxHealth);
+
+                int[] count = {UnitPeculiarity.sup.count(p -> p.effect != null && u.hasEffect(p.effect))};
+
                 float h = se.healthMultiplier, d = se.damageMultiplier, s = se.damageMultiplier, r = se.reloadMultiplier;
-                UnitPeculiarity.sup.each(p -> {
-                    if (p.effect != null && u.hasEffect(p.effect)) {
-                        count[0]++;
-                    }
-                });
+                float extra = Math.max(((AllGameStats) state.stats).get(u.team).enemyUnitsDestroyedHealth / 5000f, 1);
+                float fin = Math.max(1, e.unit.maxHealth / u.maxHealth) * extra;
+
                 UnitPeculiarity.sup.each(p -> {
                     if (p.effect != null && e.unit.hasEffect(p.effect)) {
                         if (count[0] < 2 && !u.hasEffect(p.effect) && Mathf.chance(0.1f * fin)) {
@@ -226,17 +245,18 @@ public class Events {
                         }
                     }
                 });
+
                 if (d < 1.2) {
-                    se.damageMultiplier += Mathf.random(0.00375f * fin);
+                    se.damageMultiplier += Mathf.random(0.005f * fin);
                 }
                 if (h < 1.2) {
-                    se.healthMultiplier += Mathf.random(0.00375f * fin);
+                    se.healthMultiplier += Mathf.random(0.005f * fin);
                 }
                 if (r < 1.2) {
-                    se.reloadMultiplier += Mathf.random(0.00375f * fin);
+                    se.reloadMultiplier += Mathf.random(0.005f * fin);
                 }
                 if (s < 1.2) {
-                    se.speedMultiplier += Mathf.random(0.00375f * fin);
+                    se.speedMultiplier += Mathf.random(0.005f * fin);
                 }
             }
         });
