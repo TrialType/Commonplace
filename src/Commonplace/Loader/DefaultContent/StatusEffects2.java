@@ -1,7 +1,7 @@
 package Commonplace.Loader.DefaultContent;
 
 import Commonplace.Loader.Special.Effects;
-import Commonplace.Type.StatusEffectType.ConditionsNumberStatusEffect;
+import Commonplace.Type.StatusEffectType.ConditionsStatusEffect;
 import Commonplace.Type.StatusEffectType.SupperStatus;
 import arc.func.Cons;
 import arc.func.Floatp;
@@ -65,33 +65,34 @@ public class StatusEffects2 {
 //    };
 
     public final static Floatp zero = () -> 0f;
-    public final static Floatp wave30t50t20l4 = () -> {
+    public final static Floatp wave10t50l1 = () -> {
         int wave = Vars.state.wave - 1;
-        if (wave < 30) {
-            return wave / 30f;
-        } else if (wave < 80) {
-            return 1 + (wave - 30) / 50f;
+        if (wave < 10) {
+            return wave / 40f;
+        } else if (wave < 50) {
+            return 0.25f + (wave - 10) / 160f;
         } else {
-            return 2 + Math.min(2, (wave - 80) / 20f);
+            return 0.5f + Math.min(0.5f, (wave - 50) / 120f);
         }
     };
-    public final static Floatp wave20l14 = () -> Math.min(1.1f, Vars.state.wave / 20f);
-    public final static Floatp wave30t80t20l2 = () -> {
+    public final static Floatp wave40l09 = () -> Math.min(0.3f, Vars.state.wave / 100f);
+    public final static Floatp wave10t50l05 = () -> {
         int wave = Vars.state.wave - 1;
-        if (wave < 30) {
-            return wave / 60f;
-        } else if (wave < 80) {
-            return 0.5f + (wave - 30) / 100f;
+        if (wave < 10) {
+            return wave / 80f;
+        } else if (wave < 50) {
+            return 0.125f + (wave - 10) / 320f;
         } else {
-            return 1f + Math.min(1f, (wave - 80) / 40f);
+            return 0.25f + Math.min(0.25f, (wave - 50) / 240f);
         }
     };
 
     public final static Seq<StatusEffect> burnings = new Seq<>();
-    public static StatusEffect StrongStop, boostSpeed, HardHit, onePercent,
+    public static StatusEffect strongStop, boostSpeed, hardHit, onePercent,
             torn, tardy, swift, tension, abyss, gasify, sublimation,
             grow, seethe, friability, back, frenzy, deploy, impatience, loose,
-            shocked, aging, erosion, disturb, fearless, sluggish;
+            shocked, aging, erosion, disturb, fearless, sluggish,
+            electricalDisturbance, oscillatoryDisturbance, impact;
 
     public static StatusEffect fireKiller;
 
@@ -108,7 +109,7 @@ public class StatusEffects2 {
             reloadMultiplier = 0.01f;
             dragMultiplier = 0.01f;
         }};
-        StrongStop = new StatusEffect("strong-stop") {{
+        strongStop = new StatusEffect("strong-stop") {{
             show = false;
 
             speedMultiplier = 0;
@@ -119,7 +120,7 @@ public class StatusEffects2 {
             speedMultiplier = 15;
             show = false;
         }};
-        HardHit = new StatusEffect("hard-hit") {{
+        hardHit = new StatusEffect("hard-hit") {{
             damageMultiplier = 0.8F;
             speedMultiplier = 0.75F;
             healthMultiplier = 0.4F;
@@ -257,8 +258,7 @@ public class StatusEffects2 {
             speedMultiplier = 0.5f;
         }};
 
-
-        aging = new ConditionsNumberStatusEffect("aging") {{
+        aging = new ConditionsStatusEffect("aging") {{
             speedMultiplier = 0.95f;
             reloadMultiplier = 0.95f;
             damageMultiplier = 1.05f;
@@ -267,7 +267,7 @@ public class StatusEffects2 {
 
             opposite(tarred);
         }};
-        erosion = new ConditionsNumberStatusEffect("erosion") {{
+        erosion = new ConditionsStatusEffect("erosion") {{
             speedMultiplier = 0.85f;
             reloadMultiplier = 0.85f;
             healthMultiplier = 0.85f;
@@ -275,11 +275,34 @@ public class StatusEffects2 {
 
             opposite(tarred);
         }};
-        fearless = new ConditionsNumberStatusEffect("fearless") {{
+        fearless = new ConditionsStatusEffect("fearless") {{
             speedMultiplier = 2f;
 
             truthDamage = true;
             damageResult = u -> u.maxHealth * 0.03f * u.healthMultiplier / 60f;
+        }};
+        electricalDisturbance = new ConditionsStatusEffect("electrical-disturbance") {{
+            randomSpeed = true;
+            randomSpeedMax = 1.5f;
+            randomSpeedMin = 0.6666f;
+
+            dragMultiplier = 0.01f;
+
+            damageResult = u -> u.vel.len() * 15.2f;
+        }};
+        oscillatoryDisturbance = new ConditionsStatusEffect("oscillatory-disturbance") {{
+            loseSpeed = true;
+            loseReload = true;
+            loseDamage = true;
+            loseHealth = true;
+            healthDelta = -0.006f;
+        }};
+        impact = new ConditionsStatusEffect("impact") {{
+            randomReload = randomSpeed = true;
+            randomReloadMin = 0.68f;
+            randomReloadMax = 1.02f;
+            randomSpeedMin = 0.68f;
+            randomSpeedMax = 1.03f;
         }};
 
 
@@ -718,7 +741,7 @@ public class StatusEffects2 {
         peculiarity_reload3(0.953f, bad);
         peculiarity_reload(0.9f, bad);
 
-        super_damage("_sd", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
+        super_damage("_sd", 1.2f, 1.2f, 1 / 6f, wave10t50l1, wave40l09, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -729,7 +752,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Color.valueOf("EE7777").mul(Pal.accent);
             }};
         });
-        super_heal("_sh", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
+        super_heal("_sh", 1.2f, 1.2f, 1 / 6f, wave10t50l1, wave40l09, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -740,7 +763,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Color.valueOf("77EE77").mul(Pal.accent);
             }};
         });
-        super_reload("_sr", 1.5f, 1f, 1 / 6f, wave30t50t20l4, wave20l14, e -> {
+        super_reload("_sr", 1.2f, 1.2f, 1 / 6f, wave10t50l1, wave40l09, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;
@@ -751,7 +774,7 @@ public class StatusEffects2 {
                 colorFrom = colorTo = Pal.techBlue.cpy();
             }};
         });
-        super_peculiarity("_sdr", 1.25f, 1f, 1, 1.25f, 1 / 6f, wave30t80t20l2, wave20l14, zero, wave30t80t20l2, e -> {
+        super_peculiarity("_sdr", 1.1f, 1.2f, 1, 1.1f, 1 / 6f, wave10t50l05, wave40l09, zero, wave10t50l05, e -> {
             e.effectChance = 0.1f;
             e.effect = new ParticleEffect() {{
                 lifetime = 30;

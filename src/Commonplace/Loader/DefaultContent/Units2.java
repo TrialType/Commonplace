@@ -2,13 +2,10 @@ package Commonplace.Loader.DefaultContent;
 
 import Commonplace.AI.*;
 import Commonplace.Entities.Unit.*;
-import Commonplace.Entities.Weapon.Weapon2;
 import Commonplace.Loader.Special.Effects;
 import Commonplace.Entities.Ability.*;
 import Commonplace.Entities.BulletType.*;
 import Commonplace.Entities.UnitType.*;
-import Commonplace.Type.CampChanger.OrderedFloat;
-import Commonplace.Utils.Classes.Camp;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -17,7 +14,6 @@ import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import mindustry.ai.types.SuicideAI;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.ai.types.CommandAI;
@@ -421,7 +417,7 @@ public class Units2 {
             lifetime = 300;
             trailLength = 15;
             trailColor = Color.valueOf("00DDaAFF");
-            immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.StrongStop);
+            immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.strongStop);
 
             abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 240, 90));
         }};
@@ -1378,7 +1374,7 @@ public class Units2 {
             immunities.addAll(
                     StatusEffects2.swift,
                     StatusEffects.slow, StatusEffects.wet,
-                    StatusEffects.unmoving, StatusEffects2.StrongStop,
+                    StatusEffects.unmoving, StatusEffects2.strongStop,
                     StatusEffects.fast, StatusEffects.freezing
             );
 

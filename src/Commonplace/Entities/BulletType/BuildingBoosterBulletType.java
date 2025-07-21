@@ -39,7 +39,7 @@ public class BuildingBoosterBulletType extends BulletType {
                 if (teamMul > 1) {
                     applyBoostEffect.at(b.x, b.y, radius, hitColor);
                     b.applyBoost(teamMul, teamDuration);
-                } else {
+                } else if (teamMul < 1) {
                     applySlowEffect.at(b.x, b.y, radius, hitColor);
                     b.applySlowdown(teamMul, teamDuration);
                 }
@@ -47,7 +47,7 @@ public class BuildingBoosterBulletType extends BulletType {
                 if (enemyMul > 1) {
                     applyBoostEffect.at(b.x, b.y, radius, hitColor);
                     b.applyBoost(enemyMul, enemyDuration);
-                } else {
+                } else if (enemyMul < 1) {
                     applySlowEffect.at(b.x, b.y, radius, hitColor);
                     b.applySlowdown(enemyMul, enemyDuration);
                 }

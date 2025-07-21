@@ -109,7 +109,7 @@ public class UnitProjectBlock extends Block {
                     unit = player.unit();
                     project.setMap(map, boostMap);
                     project.applyProject(player.unit());
-                    player.unit().apply(StatusEffects2.StrongStop, 180);
+                    player.unit().apply(StatusEffects2.strongStop, 180);
                     applyEffect.at(player.unit().x, player.unit().y, 0, player.unit());
                 }
 

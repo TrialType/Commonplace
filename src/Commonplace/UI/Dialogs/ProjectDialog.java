@@ -52,7 +52,7 @@ public class ProjectDialog extends BaseDialog {
             if (u != null && u.health > 0 && !u.dead && u.spawnedByCore && state.isGame()) {
                 if (heavyPass() && numPass()) {
                     applyProject(u);
-                    player.unit().apply(StatusEffects2.StrongStop, 180);
+                    player.unit().apply(StatusEffects2.strongStop, 180);
                     hide();
                 } else if (!heavyPass()) {
                     ui.showInfo(Core.bundle.get("@tooHeavy"));

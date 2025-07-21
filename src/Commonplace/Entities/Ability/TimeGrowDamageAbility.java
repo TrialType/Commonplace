@@ -72,15 +72,15 @@ public class TimeGrowDamageAbility extends Ability {
         for (Unit u : unitTimers.keys()) {
             if (u != null && (!u.isValid() || !unit.within(u, range + u.hitSize / 2))) {
                 unitTimers.remove(u);
-            } else {
-                unitTimers.put(u, unitTimers.get(u) + Time.delta);
+            } else if (u != null) {
+                unitTimers.put(u, unitTimers.get(u, 0f) + Time.delta);
             }
         }
         for (Building b : buildingTimers.keys()) {
             if (b != null && (!b.isValid() || !unit.within(b, range + b.hitSize() / 2))) {
                 buildingTimers.remove(b);
-            } else {
-                buildingTimers.put(b, buildingTimers.get(b) + Time.delta);
+            } else if (b != null) {
+                buildingTimers.put(b, buildingTimers.get(b, 0f) + Time.delta);
             }
         }
     }

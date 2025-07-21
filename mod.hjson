@@ -5,19 +5,19 @@ displayName: "素履往"
 name: "Commonplace"
 
 #your name
-author: "中满"
+author: "大满"
 
 #the fully qualified main class of the mod
 main: "Commonplace.Main"
 
 #the mod description as seen in the mod dialog
-description: "一个朴实的模组"
+description: "对原版所有战役，单位，几乎所有建筑重置，添加新东西。\n难度水平为原版到较难模组难度的过渡，比原版难，需要对原版较熟悉，最好两个星球都不开挂非数字区块通关过一次，不建议新手打。"
 
 #the mod version
 version: 0.0.1
 
 #the minimum game build required to run this mod
-minGameVersion: 148
+minGameVersion: 149
 
 #this is a java mod
 java: true

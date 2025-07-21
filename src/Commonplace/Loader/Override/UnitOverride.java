@@ -114,7 +114,7 @@ public class UnitOverride {
         tecta.health = 26550;
         collaris.health = 63000;
 
-        elude.health = 1500;
+        elude.health = 1270;
         avert.health = 3850;
         obviate.health = 8050;
         quell.health = 22000;
@@ -1020,11 +1020,18 @@ public class UnitOverride {
         stell.weapons.first().reload = 70f;
         stell.weapons.first().recoil = 2.5f;
         stell.weapons.first().shootSound = Sounds.dullExplosion;
-        stell.weapons.first().bullet = new PointBulletType() {{
-            speed = 4f;
+        stell.weapons.first().bullet = new BulletType() {{
+            speed = 40f;
             damage = 40;
             hitSize = 4f;
-            lifetime = 40f;
+            lifetime = 4f;
+            maxRange = rangeOverride = 160;
+
+            pierceCap = 2;
+            pierceBuilding = true;
+
+            backMove = false;
+            hittable = reflectable = absorbable = false;
 
             splashDamage = 30;
             splashDamageRadius = 28;
@@ -1044,7 +1051,7 @@ public class UnitOverride {
         weapon.bullet.fragBullets = 4;
         weapon.bullet.fragBullet = new RailBulletType() {{
             length = 25f;
-            damage = 1;
+            damage = 2.5f;
             pierceArmor = true;
             hitColor = Color.valueOf("feb380");
             hitEffect = endEffect = Fx.hitBulletColor;
