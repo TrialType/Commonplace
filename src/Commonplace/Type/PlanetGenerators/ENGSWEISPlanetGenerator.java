@@ -50,9 +50,4 @@ public class ENGSWEISPlanetGenerator extends SerpuloPlanetGenerator {
     public float getHeight(Vec3 position) {
         return super.getHeight(position);
     }
-
-    @Override
-    public Color getColor(Vec3 position) {
-        return super.getColor(position);
-    }
 }

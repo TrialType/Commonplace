@@ -212,10 +212,6 @@ public class OwnerTurret extends Turret {
         }
 
         @Override
-        public void upgrade() {
-        }
-
-        @Override
         public boolean canControl() {
             return exp <= OwnerTurret.this.health * 2;
         }

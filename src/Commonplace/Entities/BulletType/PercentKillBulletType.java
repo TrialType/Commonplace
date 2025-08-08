@@ -4,6 +4,7 @@ import arc.Events;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.util.Tmp;
+import mindustry.entities.Damage;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.game.EventType;
 import mindustry.gen.*;
@@ -13,6 +14,7 @@ public class PercentKillBulletType extends BasicBulletType {
 
     public float hitDamage = 400;
     public float hitPercent = 0.05f;
+    public float hitSplashDamageRadius = 24;
     public Interp percent = Interp.linear;
 
     @Override
@@ -24,6 +26,7 @@ public class PercentKillBulletType extends BasicBulletType {
                 if (hitPercent >= 1) {
                     h.kill();
                     health = h.health();
+                    Damage.damage(b.team,entity.x(),entity.y(), hitSplashDamageRadius,health);
                 } else {
                     health = hitDamage + hitPercent * h.maxHealth();
                     h.damagePierce(health);

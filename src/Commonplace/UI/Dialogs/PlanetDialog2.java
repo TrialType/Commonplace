@@ -775,7 +775,7 @@ public class PlanetDialog2 extends PlanetDialog {
         }
     }
 
-    void selectSector(Sector sector) {
+    public void selectSector(Sector sector) {
         selected = sector;
         updateSelected();
     }

@@ -2775,7 +2775,7 @@ public abstract class CampUnit extends Unit implements Camper {
                                 }
                                 boolean hasAll = infinite || current.isRotation(this.team) || tile.team() == Team.derelict && tile.block() == current.block && tile.build != null && tile.block().allowDerelictRepair && Vars.state.rules.derelictRepair || !Structs.contains(current.block.requirements, (i) -> !core.items.has(i.item, Math.min(Mathf.round((float) i.amount * Vars.state.rules.buildCostMultiplier), 1)));
                                 if (hasAll) {
-                                    Call.beginPlace(this, current.block, this.team, current.x, current.y, current.rotation);
+                                    Call.beginPlace(this, current.block, this.team, current.x, current.y, current.rotation, current.block.instantBuild ? current.config : null);
                                     if (current.block.instantBuild) {
                                         if (this.plans.size > 0) {
                                             this.plans.removeFirst();

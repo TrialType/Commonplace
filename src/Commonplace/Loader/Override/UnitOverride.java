@@ -1115,7 +1115,7 @@ public class UnitOverride {
         weapon.bullet.pierce = false;
         weapon.bullet.pierceBuilding = false;
         weapon.bullet.pierceCap = 1;
-        weapon.bullet.fragBullets = 4;
+        weapon.bullet.fragBullets = 3;
         weapon.bullet.fragSpread = 30;
         weapon.bullet.fragOnHit = true;
         weapon.bullet.fragBullet = new BasicBulletType(6f, 28f) {{
@@ -1132,14 +1132,10 @@ public class UnitOverride {
             splashDamageRadius = 16f;
             splashDamage = 30f;
 
-            pierce = pierceBuilding = true;
-            pierceCap = 3;
-
-            fragBullets = 8;
-            fragLifeMin = 0.5f;
+            fragBullets = 3;
             fragRandomSpread = 360f;
             despawnSound = Sounds.dullExplosion;
-            fragBullet = new BasicBulletType(3f, 45) {{
+            fragBullet = new BasicBulletType(3f, 25f) {{
                 sprite = "missile-large";
                 width = 6.5f;
                 height = 11f;
@@ -1147,11 +1143,9 @@ public class UnitOverride {
                 hitSize = 3f;
                 hitColor = backColor = trailColor = Color.valueOf("feb380");
                 frontColor = Color.white;
-                trailWidth = 2.5f;
-                trailLength = 5;
                 hitEffect = despawnEffect = Fx.blastExplosion;
-                splashDamageRadius = 16;
-                splashDamage = 35f;
+                splashDamageRadius = 12;
+                splashDamage = 20f;
             }};
         }};
         vanquish.weapons.get(1).shoot.shots = 2;
@@ -1277,17 +1271,20 @@ public class UnitOverride {
         weapon.bullet.splashDamageRadius = 12;
         weapon.bullet.status = StatusEffects.electrified;
         weapon.bullet.statusDuration = 90;
-        weapon.bullet.fragBullets = 7;
+        weapon.bullet.fragBullets = 5;
         weapon.bullet.fragBullet = new MoveLightningBulletType() {{
-            damage = 7;
-            buildingDamageMultiplier = 0.1f;
-            lifetime = 60;
-            lightningLength = 5;
-            damagePoints = 6;
             points = 30;
-            lightningColor = Pal.sap;
-            pierceCap = 6;
+            lifetime = 60;
+            damage = 0.8f;
+            damagePoints = 6;
+            lightningLength = 5;
+            buildingDamageMultiplier = 0.1f;
 
+            pierceCap = 6;
+            pierceArmor = true;
+            pierceBuilding = true;
+
+            lightningColor = Pal.sap;
             hitEffect = despawnEffect = Fx.none;
         }};
 
@@ -1368,31 +1365,10 @@ public class UnitOverride {
         }};
         /*-----------------------------------------------------------------------------*/
         weapon = merui.weapons.first();
-        weapon.bullet.splashDamageRadius = 30;
-        merui.weapons.add(new Weapon("merui-weapon") {{
-            shootSound = Sounds.missile;
-            mirror = false;
-            showStatSprite = false;
-            x = 0f;
-            y = 1f;
-            shootY = 4f;
-            reload = 30f;
-            cooldownTime = 42f;
-            heatColor = Pal.turretHeat;
-
-            bullet = new BasicBulletType() {{
-                lifetime = 20;
-                damage = 7;
-                speed = 1.5f;
-                trailWidth = 1f;
-                trailLength = 7;
-                trailColor = hitColor = Pal.techBlue;
-
-                shootEffect = Fx.none;
-                shootSound = Sounds.missile;
-                despawnEffect = hitEffect = Fx.hitSquaresColor;
-            }};
-        }});
+        weapon.inaccuracy = 7;
+        weapon.shoot.shots = 2;
+        weapon.bullet.lifeScaleRandMin = 0.85f;
+        weapon.bullet.lifeScaleRandMax = 1.15f;
 
         cleroi.weapons.add(new Weapon() {{
             mirror = false;

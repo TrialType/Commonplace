@@ -23,8 +23,11 @@ import static mindustry.Vars.net;
 import static mindustry.Vars.world;
 
 public class MoveLightningBulletType extends LightningBulletType {
+    public float damageInterval = 5;
     public int damagePoints = 2;
     public int points = 20;
+
+    private boolean hit;
 
     public MoveLightningBulletType() {
         super();
@@ -38,6 +41,7 @@ public class MoveLightningBulletType extends LightningBulletType {
     public void update(Bullet bullet) {
         //noinspection rawtypes
         if (bullet.data instanceof Seq vs && vs.size > 0) {
+            hit = bullet.timer.get(0, damageInterval);
             int from, to, index = (int) ((vs.size + damagePoints) * bullet.fin());
             if (index <= damagePoints) {
                 from = 0;
@@ -59,8 +63,8 @@ public class MoveLightningBulletType extends LightningBulletType {
                 for (int i = 0; i < show.size - 1; i++) {
                     f = show.get(i);
                     t = show.get(i + 1);
-                    boolean absorb = Damage2.collideLineMoveLightning(bullet, bullet.team, hitEffect, f.x, f.y, f.angleTo(t), f.dst(t), false, pierceCap);
 
+                    boolean absorb = Damage2.collideLineMoveLightning(bullet, bullet.team, hitEffect, f.x, f.y, f.angleTo(t), f.dst(t), false, hit, pierceCap);
                     if (absorb) {
                         if (i == 0) {
                             bullet.remove();
@@ -73,6 +77,13 @@ public class MoveLightningBulletType extends LightningBulletType {
                 }
                 Fx.lightning.at(show.first().x, show.first().y, 0, lightningColor, show);
             }
+        }
+    }
+
+    @Override
+    public void hit(Bullet b, float x, float y) {
+        if (hit) {
+            super.hit(b, x, y);
         }
     }
 

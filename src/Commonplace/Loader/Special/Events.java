@@ -84,7 +84,7 @@ public class Events {
         //功能性监听
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
             AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(e.unit.team);
-            stats.unitsCreatedHealth += e.unit.maxHealth;
+            stats.unitsCreatedHealth += e.unit.maxHealth * state.rules.unitHealthMultiplier * state.rules.unitHealth(e.unit.team);
 
             if (!Vars.net.client() && e.unit.team != state.rules.defaultTeam && !e.unit.type.unlocked()) {
                 Vars2.debugFrag.addInfo(e.unit.type);
@@ -98,50 +98,52 @@ public class Events {
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
             if (e.bullet.owner instanceof Teamc t) {
                 AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(t.team());
-                stats.enemyUnitsDestroyedHealth += e.unit.maxHealth;
+                stats.enemyUnitsDestroyedHealth += e.unit.maxHealth * state.rules.unitHealthMultiplier * state.rules.unitHealth(e.unit.team);
             }
         });
 
         //随机性监听
         arc.Events.on(EventType.WaveEvent.class, e -> setSeed = true);
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
-            if (!Vars2.useRandom || e.unit instanceof OwnCreate o && o.created() || e.spawner instanceof PayloadSource.PayloadSourceBuild) {
+            if (!Vars2.useRandom || e.spawner instanceof PayloadSource.PayloadSourceBuild || (e.unit instanceof OwnCreate o && o.created())) {
+                if (e.unit instanceof OwnCreate o) {
+                    o.created(true);
+                }
                 return;
             }
 
-            AllGameStats.LowGameStats stats = ((AllGameStats) state.stats).get(e.unit.team());
-            float extra = Math.max(stats.unitsCreatedHealth / 100f, 1);
+            float mul = state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
+            mul = mul == 0 ? 1 : mul;
+            float extra = 1 + ((AllGameStats) state.stats).get(e.unit.team()).unitsCreatedHealth / mul / 400000f;
             if (e.unit.team != state.rules.defaultTeam) {
-                float mul = state.isCampaign() ? state.rules.planet.campaignRules.difficulty.enemySpawnMultiplier : state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
-                float wm = (1 - mul) * 0.4f + 1;
-                mul *= extra;
+                float wm = (1 - mul) * 0.4f + 1, sup = mul * extra;
                 if (state.isCampaign()) {
                     float threat = state.getSector().threat;
                     if (threat < 0.2f) {
-                        PeculiarChance((int) (3 * mul), 0.001f * mul, 0.65f * wm, 0.45f * wm, e.unit);
+                        PeculiarChance((int) (3 * mul), 0.001f * sup, 0.65f * wm, 0.45f * wm, e.unit);
                     } else if (threat < 0.4f) {
-                        PeculiarChance((int) (5 * mul), 0.002f * mul, 0.6f * wm, 0.4f * wm, e.unit);
+                        PeculiarChance((int) (5 * mul), 0.002f * sup, 0.6f * wm, 0.4f * wm, e.unit);
                     } else if (threat < 0.6f) {
-                        PeculiarChance((int) (8 * mul), 0.004f * mul, 0.54f * wm, 0.34f * wm, e.unit);
+                        PeculiarChance((int) (8 * mul), 0.004f * sup, 0.54f * wm, 0.34f * wm, e.unit);
                     } else if (threat < 0.8f) {
-                        PeculiarChance((int) (12 * mul), 0.008f * mul, 0.47f * wm, 0.27f * wm, e.unit);
+                        PeculiarChance((int) (12 * mul), 0.008f * sup, 0.47f * wm, 0.27f * wm, e.unit);
                     } else if (threat < 1f) {
-                        PeculiarChance((int) (16 * mul), 0.016f + mul, 0.39f * wm, 0.19f * wm, e.unit);
+                        PeculiarChance((int) (16 * mul), 0.016f + sup, 0.39f * wm, 0.19f * wm, e.unit);
                     } else {
-                        PeculiarChance((int) (20 * mul), 0.032f * mul, 0.3f * wm, 0.1f * wm, e.unit);
+                        PeculiarChance((int) (20 * mul), 0.032f * sup, 0.3f * wm, 0.1f * wm, e.unit);
                     }
                 } else {
                     int cores = e.unit.team.cores().size;
                     if (cores == 0) {
-                        PeculiarChance((int) (5 * mul), 0.002f * mul, 0.6f * wm, 0.4f * wm, e.unit);
+                        PeculiarChance((int) (5 * mul), 0.002f * sup, 0.6f * wm, 0.4f * wm, e.unit);
                     } else if (cores < 2) {
-                        PeculiarChance((int) (20 * mul), 0.032f * mul, 0.1f * wm, 0.05f * wm, e.unit);
+                        PeculiarChance((int) (20 * mul), 0.032f * sup, 0.1f * wm, 0.05f * wm, e.unit);
                     } else if (cores < 4) {
-                        PeculiarChance((int) (16 * mul), 0.016f * mul, 0.2f * wm, 0.1f * wm, e.unit);
+                        PeculiarChance((int) (16 * mul), 0.016f * sup, 0.2f * wm, 0.1f * wm, e.unit);
                     } else if (cores < 6) {
-                        PeculiarChance((int) (12 * mul), 0.008f * mul, 0.4f * wm, 0.2f * wm, e.unit);
+                        PeculiarChance((int) (12 * mul), 0.008f * sup, 0.4f * wm, 0.2f * wm, e.unit);
                     } else {
-                        PeculiarChance((int) (8 * mul), 0.004f * mul, 0.5f * wm, 0.3f * wm, e.unit);
+                        PeculiarChance((int) (8 * mul), 0.004f * sup, 0.5f * wm, 0.3f * wm, e.unit);
                     }
                 }
             } else {
@@ -153,76 +155,70 @@ public class Events {
             }
         });
         arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
-            if (Vars2.useRandom) {
-                if (spawner.isSpawning()) {
-                    boolean isBoss = isBoss(e.unit);
-                    int wave = state.wave - 1;
-                    if (Vars2.lockRandom && setSeed) {
-                        setSeed = false;
-                        long seed = seed() + wave * 975L;
-                        r.setSeed(seed);
-                        UnitPeculiarity.setSeed(seed);
+            if (Vars2.useRandom && spawner.isSpawning()) {
+                boolean isBoss = isBoss(e.unit);
+                int wave = state.wave - 1;
+                if (Vars2.lockRandom && setSeed) {
+                    setSeed = false;
+                    long seed = seed() + wave * 975L;
+                    r.setSeed(seed);
+                    UnitPeculiarity.setSeed(seed);
+                }
+
+                float mul = state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
+                int extra = Math.round((isBoss ? Math.max(1, wave / 20) : Math.max(1, wave / 50)) * mul);
+                float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1) * mul;
+
+                if (wave < 8 / mul) {
+                    UnitPeculiarity.applySeed(e.unit, extra, 2, r.random(3));
+                } else if (wave < 18 / mul) {
+                    UnitPeculiarity.applySeed(e.unit, r.random(2) + extra, 2, r.random(3));
+                } else if (wave < 30 / mul) {
+                    UnitPeculiarity.applySeed(e.unit, 1 + r.random(2) + extra, 2, r.random(3));
+                } else {
+                    if (r.chance(chance)) {
+                        UnitPeculiarity.applySuperSeed(e.unit, 1);
                     }
 
-                    float mul;
-                    if (state.isCampaign()) {
-                        mul = state.rules.planet.campaignRules.difficulty.enemySpawnMultiplier;
+                    if (wave < 42 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(3));
+                    } else if (wave < 55 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(2));
+                    } else if (wave < 70 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 2 + r.random(3) + extra, 3, r.random(2));
+                    } else if (wave <= 85 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 2 + r.random(4) + extra, 2, r.random(2));
+                    } else if (wave <= 100 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 3 + r.random(4) + extra, 2, r.random(2));
+                    } else if (wave <= 115 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 3 + r.random(5) + extra, 1, r.random(2));
+                    } else if (wave <= 130 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 4 + r.random(5) + extra, 1, r.random(2));
+                    } else if (wave <= 200 / mul) {
+                        UnitPeculiarity.applySeed(e.unit, 6 + r.random((wave - 130) / 10) + extra, 0, 0);
+                    } else if (wave <= 300 / mul) {
+                        extra = 15 + (isBoss ? (extra - 15) / 2 : (extra - 15) / 3);
+                        e.unit.shield(e.unit.shield + 30 * (wave - 200 / mul));
+                        UnitPeculiarity.applySeed(e.unit, r.random(19) + extra, 0, 0);
                     } else {
-                        mul = state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
-                    }
-                    int extra = Math.round((isBoss ? Math.max(1, wave / 20) : Math.max(1, wave / 50)) * mul);
-                    float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1) * mul;
-
-                    if (wave < 8 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, extra, 2, r.random(3));
-                    } else if (wave < 18 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, r.random(2) + extra, 2, r.random(3));
-                    } else if (wave < 30 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(2) + extra, 2, r.random(3));
-                    } else {
-                        if (r.chance(chance)) {
-                            UnitPeculiarity.applySuperSeed(e.unit, 1);
-                        }
-
-                        if (wave < 42 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(3));
-                        } else if (wave < 55 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(2));
-                        } else if (wave < 70 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 2 + r.random(3) + extra, 3, r.random(2));
-                        } else if (wave <= 85 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 2 + r.random(4) + extra, 2, r.random(2));
-                        } else if (wave <= 100 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 3 + r.random(4) + extra, 2, r.random(2));
-                        } else if (wave <= 115 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 3 + r.random(5) + extra, 1, r.random(2));
-                        } else if (wave <= 130 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 4 + r.random(5) + extra, 1, r.random(2));
-                        } else if (wave <= 200 / mul) {
-                            UnitPeculiarity.applySeed(e.unit, 6 + r.random((wave - 130) / 10) + extra, 0, 0);
-                        } else if (wave <= 300 / mul) {
-                            extra = 15 + (isBoss ? (extra - 15) / 2 : (extra - 15) / 3);
-                            e.unit.shield(e.unit.shield + 30 * (wave - 200 / mul));
-                            UnitPeculiarity.applySeed(e.unit, r.random(19) + extra, 0, 0);
-                        } else {
-                            extra = Math.min(25 + (isBoss ? (extra - 25) / 3 : (extra - 15) / 4), 80);
-                            e.unit.shield(e.unit.shield + 3000 + 40 * (wave - 300 / mul));
-                            UnitPeculiarity.applySeed(e.unit, r.random(26) + extra, 0, 0);
-                        }
+                        extra = Math.min(25 + (isBoss ? (extra - 25) / 3 : (extra - 15) / 4), 80);
+                        e.unit.shield(e.unit.shield + 3000 + 40 * (wave - 300 / mul));
+                        UnitPeculiarity.applySeed(e.unit, r.random(26) + extra, 0, 0);
                     }
                 }
             }
         });
 
         arc.Events.on(EventType.UnitBulletDestroyEvent.class, e -> {
-            if (Vars2.useRandom && e.bullet.owner instanceof Unit u && !UnitPeculiarity.blackList.contains(u.type)) {
+            if (Vars2.useRandom && !(e.unit instanceof TimedKillUnit) && e.bullet.shooter instanceof Unit u && !UnitPeculiarity.blackList.contains(u.type)) {
                 StatusEntry se = u.applyDynamicStatus();
 
                 int[] count = {UnitPeculiarity.sup.count(p -> p.effect != null && u.hasEffect(p.effect))};
 
                 float h = se.healthMultiplier, d = se.damageMultiplier, s = se.damageMultiplier, r = se.reloadMultiplier;
-                float extra = Math.max(((AllGameStats) state.stats).get(u.team).enemyUnitsDestroyedHealth / 5000f, 1);
+                float extra = 1 + ((AllGameStats) state.stats).get(u.team).enemyUnitsDestroyedHealth / 400000f;
                 float fin = Math.max(1, e.unit.maxHealth / u.maxHealth) * extra;
+                float sup = 1.6f * extra, def = 1.2f * extra;
 
                 UnitPeculiarity.sup.each(p -> {
                     if (p.effect != null && e.unit.hasEffect(p.effect)) {
@@ -230,33 +226,33 @@ public class Events {
                             count[0]++;
                             u.apply(p.effect);
                         } else {
-                            if (d < 1.6) {
-                                se.damageMultiplier += Mathf.random(0.01f * fin);
+                            if (d < sup) {
+                                se.damageMultiplier += Mathf.random(0.01f);
                             }
-                            if (h < 1.6) {
-                                se.healthMultiplier += Mathf.random(0.01f * fin);
+                            if (h < sup) {
+                                se.healthMultiplier += Mathf.random(0.01f);
                             }
-                            if (r < 1.6) {
-                                se.reloadMultiplier += Mathf.random(0.01f * fin);
+                            if (r < sup) {
+                                se.reloadMultiplier += Mathf.random(0.01f);
                             }
-                            if (s < 1.6) {
-                                se.speedMultiplier += Mathf.random(0.01f * fin);
+                            if (s < sup) {
+                                se.speedMultiplier += Mathf.random(0.01f);
                             }
                         }
                     }
                 });
 
-                if (d < 1.2) {
-                    se.damageMultiplier += Mathf.random(0.005f * fin);
+                if (d < def) {
+                    se.damageMultiplier += Mathf.random(0.005f);
                 }
-                if (h < 1.2) {
-                    se.healthMultiplier += Mathf.random(0.005f * fin);
+                if (h < def) {
+                    se.healthMultiplier += Mathf.random(0.005f);
                 }
-                if (r < 1.2) {
-                    se.reloadMultiplier += Mathf.random(0.005f * fin);
+                if (r < def) {
+                    se.reloadMultiplier += Mathf.random(0.005f);
                 }
-                if (s < 1.2) {
-                    se.speedMultiplier += Mathf.random(0.005f * fin);
+                if (s < def) {
+                    se.speedMultiplier += Mathf.random(0.005f);
                 }
             }
         });

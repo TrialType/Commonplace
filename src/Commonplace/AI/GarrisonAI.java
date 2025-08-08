@@ -15,7 +15,6 @@ import static mindustry.Vars.tilesize;
 public class GarrisonAI extends GroundAI {
     protected static final Vec2 targetPos = new Vec2();
     protected static final Vec2 vecOut = new Vec2();
-    protected static final boolean[] noFound = {false};
 
     @Override
     public void updateMovement() {
@@ -55,11 +54,10 @@ public class GarrisonAI extends GroundAI {
     }
 
     public void move() {
-        vecOut.set(target);
-        boolean move = Vars.controlPath.getPathPosition(unit, vecOut, targetPos, vecOut, noFound);
+        boolean move = Vars.controlPath.getPathPosition(unit, targetPos, targetPos, vecOut, null);
 
         if (move) {
-            moveTo(vecOut, 0f, 100f, false, null, targetPos.epsilonEquals(vecOut, 4.1f));
+            moveTo(vecOut, 0f, 100f, false, null, true);
         } else if (unit.dst(target) > unit.range()) {
             target = null;
         }

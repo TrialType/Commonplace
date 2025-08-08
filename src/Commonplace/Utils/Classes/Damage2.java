@@ -41,28 +41,28 @@ public abstract class Damage2 extends Damage {
     private static final Vec2 vec = new Vec2(), seg1 = new Vec2(), seg2 = new Vec2();
 
     //用于旧的版本的适配
-    public static void collideLine(Bullet hitter, Team team, float x, float y, float angle, float length, boolean large, boolean laser, int pierceCap){
+    public static void collideLine(Bullet hitter, Team team, float x, float y, float angle, float length, boolean large, boolean laser, int pierceCap) {
         length = findLength(hitter, length, laser, pierceCap);
         hitter.fdata = length;
 
         collidedBlocks.clear();
         vec.trnsExact(angle, length);
 
-        if(hitter.type.collidesGround && hitter.type.collidesTiles){
+        if (hitter.type.collidesGround && hitter.type.collidesTiles) {
             seg1.set(x, y);
             seg2.set(seg1).add(vec);
             World.raycastEachWorld(x, y, seg2.x, seg2.y, (cx, cy) -> {
                 Building tile = world.build(cx, cy);
                 boolean collide = tile != null && tile.collide(hitter) && hitter.checkUnderBuild(tile, cx * tilesize, cy * tilesize)
                         && ((tile.team != team && tile.collide(hitter)) || hitter.type.testCollision(hitter, tile)) && collidedBlocks.add(tile.pos());
-                if(collide){
+                if (collide) {
                     collided.add(collidePool.obtain().set(cx * tilesize, cy * tilesize, tile));
 
-                    for(Point2 p : Geometry.d4){
+                    for (Point2 p : Geometry.d4) {
                         Tile other = world.tile(p.x + cx, p.y + cy);
-                        if(other != null && (large || Intersector.intersectSegmentRectangle(seg1, seg2, other.getBounds(Tmp.r1)))){
+                        if (other != null && (large || Intersector.intersectSegmentRectangle(seg1, seg2, other.getBounds(Tmp.r1)))) {
                             Building build = other.build;
-                            if(build != null && hitter.checkUnderBuild(build, cx * tilesize, cy * tilesize) && collidedBlocks.add(build.pos())){
+                            if (build != null && hitter.checkUnderBuild(build, cx * tilesize, cy * tilesize) && collidedBlocks.add(build.pos())) {
                                 collided.add(collidePool.obtain().set((p.x + cx * tilesize), (p.y + cy) * tilesize, build));
                             }
                         }
@@ -78,12 +78,12 @@ public abstract class Damage2 extends Damage {
         float x2 = vec.x + x, y2 = vec.y + y;
 
         Units.nearbyEnemies(team, rect, u -> {
-            if(u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()){
+            if (u.checkTarget(hitter.type.collidesAir, hitter.type.collidesGround) && u.hittable()) {
                 u.hitbox(hitrect);
 
                 Vec2 vec = Geometry.raycastRect(x, y, x2, y2, hitrect.grow(expand * 2));
 
-                if(vec != null){
+                if (vec != null) {
                     collided.add(collidePool.obtain().set(vec.x, vec.y, u));
                 }
             }
@@ -92,21 +92,21 @@ public abstract class Damage2 extends Damage {
         int[] collideCount = {0};
         collided.sort(c -> hitter.dst2(c.x, c.y));
         collided.each(c -> {
-            if(hitter.damage > 0 && (pierceCap <= 0 || collideCount[0] < pierceCap)){
-                if(c.target instanceof Unit u){
+            if (hitter.damage > 0 && (pierceCap <= 0 || collideCount[0] < pierceCap)) {
+                if (c.target instanceof Unit u) {
                     u.collision(hitter, c.x, c.y);
                     hitter.collision(u, c.x, c.y);
                     collideCount[0]++;
-                }else if(c.target instanceof Building tile){
+                } else if (c.target instanceof Building tile) {
                     float health = tile.health;
 
-                    if(tile.team != team && tile.collide(hitter)){
+                    if (tile.team != team && tile.collide(hitter)) {
                         tile.collision(hitter);
                         hitter.type.hit(hitter, c.x, c.y);
                         collideCount[0]++;
                     }
 
-                    if(hitter.type.testCollision(hitter, tile)){
+                    if (hitter.type.testCollision(hitter, tile)) {
                         hitter.type.hitTile(hitter, tile, c.x, c.y, health, false);
                     }
                 }
@@ -201,7 +201,7 @@ public abstract class Damage2 extends Damage {
         collided.clear();
     }
 
-    public static boolean collideLineMoveLightning(Bullet hitter, Team team, Effect effect, float x, float y, float angle, float length, boolean large, int pierceCap) {
+    public static boolean collideLineMoveLightning(Bullet hitter, Team team, Effect effect, float x, float y, float angle, float length, boolean large, boolean hit, int pierceCap) {
         collidedBlocks.clear();
         vec.trnsExact(angle, length);
         boolean[] absorb = {false};
@@ -283,7 +283,11 @@ public abstract class Damage2 extends Damage {
 
                     if (tile.team != team && tile.collide(hitter)) {
                         hitter.hit = true;
-                        tile.collision(hitter);
+
+                        if (hit) {
+                            tile.collision(hitter);
+                        }
+
                         hitter.type.hit(hitter, c.x, c.y);
 
                         if (!hitter.hasCollided(tile.id)) {
@@ -295,7 +299,7 @@ public abstract class Damage2 extends Damage {
                     }
 
                     //try to heal the tile
-                    if (hitter.type.testCollision(hitter, tile)) {
+                    if (hit && hitter.type.testCollision(hitter, tile)) {
                         hitter.type.hitTile(hitter, tile, c.x, c.y, health, false);
                     }
                 }

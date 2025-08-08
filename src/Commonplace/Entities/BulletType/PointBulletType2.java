@@ -77,8 +77,7 @@ public class PointBulletType2 extends BulletType {
                         laserBulletType.damage * laserBulletType.damageMultiplier(b),
                         1, 1, null);
                 float x1 = b1.x, y1 = b1.y, x2 = b2.x, y2 = b2.y;
-                Damage.collideLine(b1, b.team, laserBulletType.hitEffect, x1, y1,
-                        Angles.angle(x1, y1, x2, y2), b1.dst(b2), false, false, -1);
+                Damage.collideLine(b1, b.team, x1, y1, Angles.angle(x1, y1, x2, y2), b1.dst(b2), false, false, -1);
                 laserEffect.at(x1, y1, 0, laserColor, new Vec2(x2, y2));
             }
         }
