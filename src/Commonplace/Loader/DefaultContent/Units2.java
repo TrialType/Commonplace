@@ -417,7 +417,7 @@ public class Units2 {
             lifetime = 300;
             trailLength = 15;
             trailColor = Color.valueOf("00DDaAFF");
-            immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.strongStop);
+            immunities.addAll(StatusEffects.slow, StatusEffects2.tardy, StatusEffects2.superStop);
 
             abilities.add(new StatusFieldAbility(StatusEffects.shielded, 300, 240, 90));
         }};
@@ -1374,7 +1374,7 @@ public class Units2 {
             immunities.addAll(
                     StatusEffects2.swift,
                     StatusEffects.slow, StatusEffects.wet,
-                    StatusEffects.unmoving, StatusEffects2.strongStop,
+                    StatusEffects.unmoving, StatusEffects2.superStop,
                     StatusEffects.fast, StatusEffects.freezing
             );
 

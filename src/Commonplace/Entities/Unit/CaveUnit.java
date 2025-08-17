@@ -201,7 +201,6 @@ public class CaveUnit extends UnitWaterMove {
         unit.rotation(rotate);
         unit.add();
         unit.apply(StatusEffects2.tension);
-        arc.Events.fire(new Events.GetPowerEvent(unit, time * 2, false));
         Fx.unitSpawn.at(x, y, rotate);
     }
 }

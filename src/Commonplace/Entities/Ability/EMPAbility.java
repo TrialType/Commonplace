@@ -32,7 +32,7 @@ public class EMPAbility extends Ability {
 
     @Override
     public void update(Unit unit) {
-        if (!(unit instanceof BoostUnitEntity eu && eu.first) && !unit.hasEffect(StatusEffects2.strongStop)) {
+        if (!(unit instanceof BoostUnitEntity eu && eu.first) && !unit.hasEffect(StatusEffects2.superStop)) {
             timer = Math.min(reload, timer + Time.delta);
             if (timer >= reload) {
                 maps.clear();
@@ -57,12 +57,12 @@ public class EMPAbility extends Ability {
                                     b.applySlowdown(0, time + 1);
                                 } else if (p instanceof Unit u) {
                                     waveEffect.at(u.x, u.y);
-                                    u.apply(StatusEffects2.strongStop, time + 1);
+                                    u.apply(StatusEffects2.superStop, time + 1);
                                 }
                                 stopEffect.at(p);
                             }
 
-                            unit.apply(StatusEffects2.strongStop, time + 1);
+                            unit.apply(StatusEffects2.superStop, time + 1);
                         });
                     } else {
                         for (Position p : maps) {
@@ -71,12 +71,12 @@ public class EMPAbility extends Ability {
                                 b.applySlowdown(0, time + 1);
                             } else if (p instanceof Unit u) {
                                 waveEffect.at(u.x, u.y);
-                                u.apply(StatusEffects2.strongStop, time + 1);
+                                u.apply(StatusEffects2.superStop, time + 1);
                             }
                             stopEffect.at(p);
                         }
 
-                        unit.apply(StatusEffects2.strongStop, time + 1);
+                        unit.apply(StatusEffects2.superStop, time + 1);
                     }
                 }
             }

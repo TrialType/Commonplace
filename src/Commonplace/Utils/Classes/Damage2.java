@@ -627,10 +627,6 @@ public abstract class Damage2 extends Damage {
                         effect.at(x, y, Angles.angle(x, y, b.x, b.y), b);
                     }
 
-                    if (StatusEffects2.burnings.indexOf(statusEffect) >= 0) {
-                        Fires.create(b.tile);
-                    }
-
                     if (!dead && b.dead) {
                         if (bullet != null) {
                             arc.Events.fire(new EventType.BuildingBulletDestroyEvent(b, bullet));

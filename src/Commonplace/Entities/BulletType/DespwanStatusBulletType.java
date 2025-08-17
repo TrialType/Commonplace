@@ -5,7 +5,7 @@ import mindustry.content.StatusEffects;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
 import mindustry.gen.Bullet;
-import mindustry.gen.Shieldc;
+import mindustry.gen.Healthc;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 
@@ -19,7 +19,11 @@ public class DespwanStatusBulletType extends BulletType {
     public StatusEffect effect = StatusEffects.overclock;
 
     public DespwanStatusBulletType() {
+        speed = 0;
+        damage = 1;
+        lifetime = 1;
         despawnHit = true;
+        absorbable = hittable = reflectable = collides = false;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class DespwanStatusBulletType extends BulletType {
             units.remove(u);
         }
         if (units.any()) {
-            float adder = shield + Math.max((shieldExtend && b.owner instanceof Shieldc s ? s.shield() * extendMultiplier / units.size : 0), 0);
+            float adder = shield + (shieldExtend && b.owner instanceof Healthc h ? h.maxHealth() * extendMultiplier / units.size : 0);
             units.each(u -> {
                 float shield = u.shield;
                 if (maxShield < 0) {

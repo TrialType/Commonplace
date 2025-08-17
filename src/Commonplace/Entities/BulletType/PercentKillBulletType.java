@@ -13,8 +13,10 @@ public class PercentKillBulletType extends BasicBulletType {
     protected static final EventType.UnitDamageEvent bulletDamageEvent = new EventType.UnitDamageEvent();
 
     public float hitDamage = 400;
-    public float hitPercent = 0.05f;
+    public float hitPercent = 0.02f;
     public float hitSplashDamageRadius = 24;
+    public boolean hitAir = true;
+    public boolean hitGround = true;
     public Interp percent = Interp.linear;
 
     @Override
@@ -23,13 +25,11 @@ public class PercentKillBulletType extends BasicBulletType {
 
         if (entity instanceof Healthc h) {
             if (Mathf.chance(percent.apply(1 - h.healthf()))) {
-                if (hitPercent >= 1) {
-                    h.kill();
-                    health = h.health();
-                    Damage.damage(b.team,entity.x(),entity.y(), hitSplashDamageRadius,health);
+                health = hitDamage + hitPercent * h.maxHealth() * (entity instanceof Statusc s ? Math.max(1, s.healthMultiplier()) : 1);
+                if (hitSplashDamageRadius > 0) {
+                    Damage.damage(b.team, entity.x(), entity.y(), hitSplashDamageRadius, damage + health, hitAir, hitGround);
                 } else {
-                    health = hitDamage + hitPercent * h.maxHealth();
-                    h.damagePierce(health);
+                    h.damage(damage + health);
                 }
             } else {
                 float damage = b.damage;

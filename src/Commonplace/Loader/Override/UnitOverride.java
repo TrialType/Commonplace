@@ -1110,14 +1110,12 @@ public class UnitOverride {
 
         vanquish.constructor = ReplenishmentTankEventUnit::create;
         weapon = vanquish.weapons.first();
-        weapon.shoot = new ContinuesShoot().shootDelay(5);
+        weapon.shoot = new ContinuesShoot().chance(0.666667f).shootDelay(5);
         weapon.bullet.speed = 5;
         weapon.bullet.pierce = false;
+        weapon.bullet.fragOnHit = true;
         weapon.bullet.pierceBuilding = false;
         weapon.bullet.pierceCap = 1;
-        weapon.bullet.fragBullets = 3;
-        weapon.bullet.fragSpread = 30;
-        weapon.bullet.fragOnHit = true;
         weapon.bullet.fragBullet = new BasicBulletType(6f, 28f) {{
             sprite = "missile-large";
             width = 8f;
@@ -1143,6 +1141,8 @@ public class UnitOverride {
                 hitSize = 3f;
                 hitColor = backColor = trailColor = Color.valueOf("feb380");
                 frontColor = Color.white;
+                trailWidth = 2.5f;
+                trailLength = 5;
                 hitEffect = despawnEffect = Fx.blastExplosion;
                 splashDamageRadius = 12;
                 splashDamage = 20f;

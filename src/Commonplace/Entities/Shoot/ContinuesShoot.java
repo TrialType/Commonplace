@@ -39,6 +39,11 @@ public class ContinuesShoot extends ShootPattern {
         return this;
     }
 
+    public ContinuesShoot chance(float chance) {
+        this.chance = chance;
+        return this;
+    }
+
     public void shoot(int totalShots, BulletHandler handler) {
         if (chance >= 1 && max < 0 && shotDelay <= 0) {
             return;

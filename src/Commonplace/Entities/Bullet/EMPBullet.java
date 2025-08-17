@@ -205,7 +205,7 @@ public class EMPBullet extends Bullet {
                 Damage.damage(team, x, y, downRange, downDamage, false, true, true, true, this);
             }
             Units.nearbyEnemies(team, x, y, downRange, u -> {
-                u.apply(StatusEffects2.strongStop, downDuration);
+                u.apply(StatusEffects2.superStop, downDuration);
 
             });
             Units.nearbyBuildings(x, y, downRange, b -> {

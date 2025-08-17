@@ -14,12 +14,11 @@ import Commonplace.UI.Dialogs.ProjectDialog;
 import Commonplace.UI.Dialogs.MoreResearchDialog;
 import Commonplace.Utils.Interfaces.OwnCreate;
 import arc.Core;
+import arc.func.Floatf;
 import arc.math.Mathf;
 import arc.math.Rand;
-import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
-import mindustry.content.StatusEffects;
 import mindustry.content.UnitTypes;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType;
@@ -27,20 +26,19 @@ import mindustry.gen.*;
 import mindustry.io.SaveIO;
 import mindustry.world.blocks.payloads.PayloadSource;
 
-import java.lang.reflect.Field;
-
 import static mindustry.Vars.*;
 
 public class Events {
     private static long mapSeed;
-    private static boolean setSeed = true;
-    private static boolean mapChange = true;
     private static final Rand r = new Rand();
 
     public static int p_num;
     public static float p_well;
     public static float p_midden;
     public static float p_supper;
+
+    public static int wave, baseP, baseB, rw, nm, rb;
+    public static float supP, supB, shield;
 
     static {
         p_num = Core.settings.getInt("commonplace-p-num", 2);
@@ -53,14 +51,16 @@ public class Events {
         //功能性监听
         arc.Events.run(EventType.Trigger.update, () -> {
             //Camp.updateEach();
+            updateWave();
             InputListener.update();
             TimeGrowDamageAbility.damages.clear();
         });
         arc.Events.run(EventType.Trigger.draw, InputListener::draw);
 
         arc.Events.on(EventType.WorldLoadEvent.class, e -> {
-            setSeed = true;
-            mapChange = true;
+            seed();
+            wave = -1;
+            updateWave();
             Listener.inited = false;
             if (!(state.stats instanceof AllGameStats)) {
                 state.stats = new AllGameStats(state.stats);
@@ -103,7 +103,6 @@ public class Events {
         });
 
         //随机性监听
-        arc.Events.on(EventType.WaveEvent.class, e -> setSeed = true);
         arc.Events.on(EventType.UnitCreateEvent.class, e -> {
             if (!Vars2.useRandom || e.spawner instanceof PayloadSource.PayloadSourceBuild || (e.unit instanceof OwnCreate o && o.created())) {
                 if (e.unit instanceof OwnCreate o) {
@@ -128,7 +127,7 @@ public class Events {
                     } else if (threat < 0.8f) {
                         PeculiarChance((int) (12 * mul), 0.008f * sup, 0.47f * wm, 0.27f * wm, e.unit);
                     } else if (threat < 1f) {
-                        PeculiarChance((int) (16 * mul), 0.016f + sup, 0.39f * wm, 0.19f * wm, e.unit);
+                        PeculiarChance((int) (16 * mul), 0.016f * sup, 0.39f * wm, 0.19f * wm, e.unit);
                     } else {
                         PeculiarChance((int) (20 * mul), 0.032f * sup, 0.3f * wm, 0.1f * wm, e.unit);
                     }
@@ -156,56 +155,13 @@ public class Events {
         });
         arc.Events.on(EventType.UnitSpawnEvent.class, e -> {
             if (Vars2.useRandom && spawner.isSpawning()) {
-                boolean isBoss = isBoss(e.unit);
-                int wave = state.wave - 1;
-                if (Vars2.lockRandom && setSeed) {
-                    setSeed = false;
-                    long seed = seed() + wave * 975L;
-                    r.setSeed(seed);
-                    UnitPeculiarity.setSeed(seed);
+                boolean isBoss = e.unit.isBoss();
+
+                if (r.chance(isBoss ? supB : supP)) {
+                    UnitPeculiarity.applySuperSeed(e.unit, 1);
                 }
-
-                float mul = state.rules.teams.get(e.unit.team).unitBuildSpeedMultiplier;
-                int extra = Math.round((isBoss ? Math.max(1, wave / 20) : Math.max(1, wave / 50)) * mul);
-                float chance = 0.001f * wave / 5 * (isBoss ? 2 : 1) * mul;
-
-                if (wave < 8 / mul) {
-                    UnitPeculiarity.applySeed(e.unit, extra, 2, r.random(3));
-                } else if (wave < 18 / mul) {
-                    UnitPeculiarity.applySeed(e.unit, r.random(2) + extra, 2, r.random(3));
-                } else if (wave < 30 / mul) {
-                    UnitPeculiarity.applySeed(e.unit, 1 + r.random(2) + extra, 2, r.random(3));
-                } else {
-                    if (r.chance(chance)) {
-                        UnitPeculiarity.applySuperSeed(e.unit, 1);
-                    }
-
-                    if (wave < 42 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(3));
-                    } else if (wave < 55 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 1 + r.random(3) + extra, 3, r.random(2));
-                    } else if (wave < 70 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 2 + r.random(3) + extra, 3, r.random(2));
-                    } else if (wave <= 85 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 2 + r.random(4) + extra, 2, r.random(2));
-                    } else if (wave <= 100 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 3 + r.random(4) + extra, 2, r.random(2));
-                    } else if (wave <= 115 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 3 + r.random(5) + extra, 1, r.random(2));
-                    } else if (wave <= 130 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 4 + r.random(5) + extra, 1, r.random(2));
-                    } else if (wave <= 200 / mul) {
-                        UnitPeculiarity.applySeed(e.unit, 6 + r.random((wave - 130) / 10) + extra, 0, 0);
-                    } else if (wave <= 300 / mul) {
-                        extra = 15 + (isBoss ? (extra - 15) / 2 : (extra - 15) / 3);
-                        e.unit.shield(e.unit.shield + 30 * (wave - 200 / mul));
-                        UnitPeculiarity.applySeed(e.unit, r.random(19) + extra, 0, 0);
-                    } else {
-                        extra = Math.min(25 + (isBoss ? (extra - 25) / 3 : (extra - 15) / 4), 80);
-                        e.unit.shield(e.unit.shield + 3000 + 40 * (wave - 300 / mul));
-                        UnitPeculiarity.applySeed(e.unit, r.random(26) + extra, 0, 0);
-                    }
-                }
+                e.unit.shield(e.unit.shield + shield);
+                UnitPeculiarity.applySeed(e.unit, r.random(rw) + (isBoss ? baseB : baseP), nm, r.random(rb));
             }
         });
 
@@ -218,7 +174,7 @@ public class Events {
                 float h = se.healthMultiplier, d = se.damageMultiplier, s = se.damageMultiplier, r = se.reloadMultiplier;
                 float extra = 1 + ((AllGameStats) state.stats).get(u.team).enemyUnitsDestroyedHealth / 400000f;
                 float fin = Math.max(1, e.unit.maxHealth / u.maxHealth) * extra;
-                float sup = 1.6f * extra, def = 1.2f * extra;
+                float sup = 1.3f * extra, def = 1.1f * extra;
 
                 UnitPeculiarity.sup.each(p -> {
                     if (p.effect != null && e.unit.hasEffect(p.effect)) {
@@ -227,32 +183,32 @@ public class Events {
                             u.apply(p.effect);
                         } else {
                             if (d < sup) {
-                                se.damageMultiplier += Mathf.random(0.01f);
+                                se.damageMultiplier += 0.008f * Math.max(10 * (sup - d) / sup, 1);
                             }
                             if (h < sup) {
-                                se.healthMultiplier += Mathf.random(0.01f);
+                                se.healthMultiplier += 0.008f * Math.max(10 * (sup - h) / sup, 1);
                             }
                             if (r < sup) {
-                                se.reloadMultiplier += Mathf.random(0.01f);
+                                se.reloadMultiplier += 0.008f * Math.max(10 * (sup - r) / sup, 1);
                             }
                             if (s < sup) {
-                                se.speedMultiplier += Mathf.random(0.01f);
+                                se.speedMultiplier += 0.008f * Math.max(10 * (sup - s) / sup, 1);
                             }
                         }
                     }
                 });
 
                 if (d < def) {
-                    se.damageMultiplier += Mathf.random(0.005f);
+                    se.damageMultiplier += 0.005f * Math.max(10 * (def - d) / def, 1);
                 }
                 if (h < def) {
-                    se.healthMultiplier += Mathf.random(0.005f);
+                    se.healthMultiplier += 0.005f * Math.max(10 * (def - h) / def, 1);
                 }
                 if (r < def) {
-                    se.reloadMultiplier += Mathf.random(0.005f);
+                    se.reloadMultiplier += 0.005f * Math.max(10 * (def - r) / def, 1);
                 }
                 if (s < def) {
-                    se.speedMultiplier += Mathf.random(0.005f);
+                    se.speedMultiplier += 0.005f * Math.max(10 * (def - s) / def, 1);
                 }
             }
         });
@@ -268,22 +224,176 @@ public class Events {
         });
     }
 
-    public static long seed() {
-        if (mapChange) {
-            mapChange = false;
-            if (!state.isGame()) {
-                mapSeed = System.currentTimeMillis();
+    public static void seed() {
+        if (state.map == null) {
+            mapSeed = System.currentTimeMillis();
+        } else {
+            long result = 0;
+            String name = state.map.name();
+            for (int i = 0; i < name.length(); i++) {
+                result += name.charAt(i);
+                result *= 13L;
+            }
+            mapSeed = result % Long.MAX_VALUE;
+        }
+    }
+
+    public static void updateWave() {
+        if (state.wave != wave) {
+            UnitPeculiarity.updateSuper();
+
+            if (Vars2.lockRandom) {
+                long seed = mapSeed + state.wave * 975L;
+                r.setSeed(seed);
+                UnitPeculiarity.setSeed(seed);
+            }
+
+            float mul = state.rules.teams.get(state.rules.waveTeam).unitBuildSpeedMultiplier;
+            float w = state.wave * mul;
+
+            wave = state.wave;
+            supP = 0.001f * w / 8;
+            supB = 0.002f * w / 8;
+            baseP = Math.round(w / 30f);
+            baseB = Math.round(w / 15f);
+
+            if (w < 6) {
+                rw = 0;
+                nm = 4;
+                rb = 4;
+                shield = 0;
+            } else if (w < 12) {
+                rw = 2;
+                nm = 4;
+                rb = 4;
+                shield = 0;
+            } else if (w < 18) {
+                rw = 3;
+                nm = 4;
+                rb = 4;
+                shield = 0;
+            } else if (w < 24) {
+                rw = 4;
+                nm = 4;
+                rb = 3;
+                shield = 0;
+            } else if (w < 30) {
+                rw = 5;
+                nm = 4;
+                rb = 3;
+                shield = 0;
+            } else if (w < 38) {
+                rw = 6;
+                nm = 4;
+                rb = 3;
+                shield = 0;
+            } else if (w <= 46) {
+                rw = 7;
+                nm = 4;
+                rb = 2;
+                shield = 0;
+            } else if (w <= 54) {
+                rw = 8;
+                nm = 4;
+                rb = 2;
+                shield = 0;
+            } else if (w <= 62) {
+                rw = 9;
+                nm = 3;
+                rb = 2;
+                shield = 0;
+            } else if (w <= 70) {
+                rw = 10;
+                nm = 3;
+                rb = 2;
+                shield = 0;
+            } else if (w <= 80) {
+                rw = 11;
+                nm = 3;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 90) {
+                rw = 12;
+                nm = 3;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 100) {
+                rw = 13;
+                nm = 3;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 110) {
+                rw = 14;
+                nm = 3;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 120) {
+                rw = 15;
+                nm = 2;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 130) {
+                rw = 16;
+                nm = 2;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 140) {
+                rw = 17;
+                nm = 2;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 150) {
+                rw = 18;
+                nm = 2;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 160) {
+                rw = 19;
+                nm = 1;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 170) {
+                rw = 20;
+                nm = 1;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 180) {
+                rw = 21;
+                nm = 1;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 190) {
+                rw = 22;
+                nm = 1;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 200) {
+                rw = 23;
+                nm = 1;
+                rb = 0;
+                shield = 0;
+            } else if (w <= 300) {
+                rw = 24;
+                nm = 1;
+                rb = 0;
+                shield = (w - 200) * 50;
+            } else if (w <= 400) {
+                rw = 30;
+                nm = 0;
+                rb = 0;
+                shield = 5000 + (w - 300) * 100;
+            } else if (w <= 500) {
+                rw = 40;
+                nm = 0;
+                rb = 0;
+                shield = 15000 + (w - 400) * 200;
             } else {
-                long result = 0;
-                String name = state.map.name();
-                for (int i = 0; i < name.length(); i++) {
-                    result += name.charAt(i);
-                    result *= 13L;
-                }
-                mapSeed = result % Long.MAX_VALUE;
+                rw = 0;
+                nm = 50;
+                rb = 0;
+                shield = 50000;
             }
         }
-        return mapSeed;
     }
 
     public static void PeculiarChance(int num, float supper, float well, float midden, Unit unit) {
@@ -291,42 +401,5 @@ public class Events {
             UnitPeculiarity.applySuper(unit, 1);
         }
         UnitPeculiarity.apply(unit, num - 1, well, midden);
-    }
-
-    public static boolean isBoss(Unit u) {
-        Class<? extends Unit> unit = u.getClass();
-        try {
-            Field field = unit.getDeclaredField("statuses");
-            field.setAccessible(true);
-            //noinspection unchecked
-            Seq<StatusEntry> entry = (Seq<StatusEntry>) field.get(u);
-            return entry.first().effect == StatusEffects.boss;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            var su = unit.getSuperclass();
-            while (su != Unit.class) {
-                try {
-                    Field field = unit.getDeclaredField("statuses");
-                    field.setAccessible(true);
-                    //noinspection unchecked
-                    Seq<StatusEntry> entry = (Seq<StatusEntry>) field.get(u);
-                    return entry.contains(s -> s.effect == StatusEffects.boss);
-                } catch (NoSuchFieldException | IllegalAccessException ex) {
-                    su = su.getSuperclass();
-                }
-            }
-        }
-        return false;
-    }
-
-    public static class GetPowerEvent {
-        Unit getter;
-        int number;
-        boolean full;
-
-        public GetPowerEvent(Unit u, int n, boolean full) {
-            getter = u;
-            number = n;
-            this.full = full;
-        }
     }
 }

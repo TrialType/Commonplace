@@ -6,7 +6,6 @@ import Commonplace.Loader.DefaultContent.StatusEffects2;
 import arc.graphics.Color;
 import mindustry.content.*;
 import arc.graphics.g2d.Fill;
-import mindustry.entities.abilities.MoveLightningAbility;
 import mindustry.entities.pattern.ShootSummon;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
@@ -278,7 +277,7 @@ public class BlockOverride {
         ((ItemTurret) Blocks.diffuse).ammoPerShot = 2;
         ((ItemTurret) Blocks.diffuse).ammoTypes.forEach(e -> {
             e.value.knockback = 1.7f;
-            e.value.ammoMultiplier = 10;
+            e.value.ammoMultiplier = e.key == Items.oxide ? 4 : 10;
         });
 
         ((ContinuousLiquidTurret) Blocks.sublimate).ammoTypes.forEach(e -> {
@@ -318,6 +317,7 @@ public class BlockOverride {
                     velocityScaleRandMax = 1.11f;
 
                     percent = f -> f * f * f - 0.5f;
+                    hitSplashDamageRadius = 20;
 
                     sprite = "mine-bullet";
                     backSprite = "large-bomb-back";
@@ -346,7 +346,9 @@ public class BlockOverride {
                     reloadMultiplier = 0.85f;
                     velocityScaleRandMax = 1.5f;
 
-                    percent = f -> f - 0.3f;
+                    hitGround = false;
+                    hitPercent = 0.03f;
+                    percent = f -> f - 0.4f;
 
                     sprite = "mine-bullet";
                     backSprite = "large-bomb-back";
@@ -380,7 +382,10 @@ public class BlockOverride {
                     reloadMultiplier = 0.9f;
                     velocityScaleRandMax = 1.11f;
 
-                    percent = f -> f - 0.65f;
+                    hitGround = false;
+                    hitPercent = 0.04f;
+                    percent = f -> f - 0.55f;
+                    hitSplashDamageRadius = 16;
 
                     sprite = "mine-bullet";
                     backSprite = "large-bomb-back";
@@ -404,7 +409,9 @@ public class BlockOverride {
                     reloadMultiplier = 0.75f;
                     velocityScaleRandMax = 1.11f;
 
+                    hitPercent = 0.03f;
                     percent = f -> f * f - 0.5f;
+                    hitSplashDamageRadius = 20;
 
                     lightning = 3;
                     lightningLength = 4;
@@ -461,6 +468,8 @@ public class BlockOverride {
 
         ((ItemTurret) Blocks.scathe).ammoTypes.forEach(e -> {
             if (e.key == Items.carbide) {
+                e.value.spawnUnit.weapons.first().bullet.splashDamage = 2200;
+                e.value.spawnUnit.weapons.first().bullet.fragBullet.damage = 200;
                 e.value.spawnUnit.weapons.add(new Weapon() {{
                     mirror = false;
                     shootOnDeath = true;
@@ -472,7 +481,7 @@ public class BlockOverride {
 
                     bullet = new BuildingBoosterBulletType() {{
                         lifetime = 1;
-                        enemyMul = 0.8f;
+                        enemyMul = 0.75f;
                         enemyDuration = 150;
                         splashDamageRadius = 200;
 
@@ -481,18 +490,14 @@ public class BlockOverride {
                     }};
                 }});
             } else if (e.key == Items.surgeAlloy) {
+                e.value.spawnUnit.weapons.first().bullet.status = StatusEffects2.electricalErosion;
+                e.value.spawnUnit.weapons.first().bullet.statusDuration = 180;
                 UnitType type = e.value.spawnUnit.weapons.first().bullet.fragBullet.spawnUnit;
                 type.speed = 7.1f;
                 type.rotateSpeed = 2.1f;
                 type.lifetime = 40 * 3.5f;
-                type.abilities.add(new MoveLightningAbility(0, 0, 0.85f, 0, 0, 6, Color.white) {{
-                    bulletSpread = 180;
-                    bullet = new LightningBulletType() {{
-                        damage = 40;
-                        lightningLength = 8;
-                        lightningColor = Color.valueOf("f3e979");
-                    }};
-                }});
+                type.weapons.first().bullet.status = StatusEffects2.electricalErosion;
+                type.weapons.first().bullet.statusDuration = 60;
             } else if (e.key == Items.phaseFabric) {
                 e.value.spawnUnit.weapons.add(new Weapon() {{
                     mirror = false;
@@ -503,9 +508,7 @@ public class BlockOverride {
                     shootCone = 360;
                     x = y = shootX = shootY = 0;
 
-                    bullet = new DespwanStatusBulletType() {{
-                        lifetime = 1;
-                    }};
+                    bullet = new DespwanStatusBulletType();
                 }});
             }
         });

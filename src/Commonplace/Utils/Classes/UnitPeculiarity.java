@@ -1,5 +1,6 @@
 package Commonplace.Utils.Classes;
 
+import Commonplace.Type.StatusEffectType.SupperStatus;
 import arc.func.Cons;
 import arc.math.Mathf;
 import arc.math.Rand;
@@ -25,11 +26,6 @@ public abstract class UnitPeculiarity {
     public static final Seq<StatusPack> bad = new Seq<>();
     public static final Seq<StatusPack> well = new Seq<>();
     public static final Seq<StatusPack> sup = new Seq<>();
-
-//    public static final Seq<StatusEffect> wellPeculiarity = new Seq<>();
-//    public static final Seq<StatusEffect> middenPeculiarity = new Seq<>();
-//    public static final Seq<StatusEffect> badPeculiarity = new Seq<>();
-//    public static final Seq<StatusEffect> superPeculiarity = new Seq<>();
 
     public static final Map<String, String> opposites = new HashMap<>();
 
@@ -184,69 +180,6 @@ public abstract class UnitPeculiarity {
         }
     }
 
-//    public static void applySuper(Unit u, int num) {
-//        if (num <= 1) {
-//            apply(u, superPeculiarity.random());
-//        } else {
-//            superPeculiarity.shuffle();
-//            for (int i = 0; i < num; i++) {
-//                apply(u, superPeculiarity.get(i));
-//            }
-//        }
-//    }
-//    public static void apply(Unit u, int num, Seq<StatusEffect> effects) {
-//        if (num == 1) {
-//            apply(u, effects.random());
-//        } else {
-//            effects.shuffle();
-//            for (int i = 0; i < num; i++) {
-//                apply(u, effects.get(i));
-//            }
-//        }
-//    }
-//    public static void applyAll(Unit u, int well, int midden, int bad) {
-//        Class<? extends Unit> unit = u.getClass();
-//        try {
-//            Field statuses = unit.getDeclaredField("statuses");
-//            statuses.setAccessible(true);
-//            @SuppressWarnings("unchecked")
-//            Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
-//
-//            for (int i = 0; i < well; i++) {
-//                wellPeculiarity.each(p -> apply(u, entry, p));
-//            }
-//            for (int i = 0; i < midden; i++) {
-//                middenPeculiarity.each(p -> apply(u, entry, p));
-//            }
-//            for (int i = 0; i < bad; i++) {
-//                badPeculiarity.each(p -> apply(u, entry, p));
-//            }
-//        } catch (NoSuchFieldException | IllegalAccessException ex) {
-//            var su = unit.getSuperclass();
-//            while (su != Unit.class) {
-//                try {
-//                    Field statuses = su.getDeclaredField("statuses");
-//                    statuses.setAccessible(true);
-//                    @SuppressWarnings("unchecked")
-//                    Seq<StatusEntry> entry = (Seq<StatusEntry>) statuses.get(u);
-//
-//                    for (int i = 0; i < well; i++) {
-//                        wellPeculiarity.each(p -> apply(u, entry, p));
-//                    }
-//                    for (int i = 0; i < midden; i++) {
-//                        middenPeculiarity.each(p -> apply(u, entry, p));
-//                    }
-//                    for (int i = 0; i < bad; i++) {
-//                        badPeculiarity.each(p -> apply(u, entry, p));
-//                    }
-//                    break;
-//                } catch (NoSuchFieldException | IllegalAccessException ei) {
-//                    su = su.getSuperclass();
-//                }
-//            }
-//        }
-//    }
-
     public static <T> void shuffle(Seq<T> list) {
         T[] value = list.items;
         for (int i = 0; i < list.size; i++) {
@@ -258,11 +191,6 @@ public abstract class UnitPeculiarity {
     }
 
     public static void setSeed(long seed) {
-//        wellPeculiarity.sort(s -> s.id);
-//        middenPeculiarity.sort(s -> s.id);
-//        badPeculiarity.sort(s -> s.id);
-//        superPeculiarity.sort(s -> s.id);
-
         well.sort(s -> s.id);
         mid.sort(s -> s.id);
         bad.sort(s -> s.id);
@@ -274,6 +202,18 @@ public abstract class UnitPeculiarity {
         blackList.addAll(alpha, beta, gamma, exterminate, garrison, transfer, herald, shuttle1,
                 support_a, support_h, velocity, velocity_d, velocity_s, hidden, cave, bulletInterception,
                 rejuvenate, rejuvenate_a, vibrate, crane);
+    }
+
+    public static void updateSuper() {
+        sup.each(s -> {
+            if (s.effect instanceof SupperStatus sta) {
+                sta.damageMultiplier = sta.baseDamage + sta.damageAdder.get();
+                sta.reloadMultiplier = sta.baseReload + sta.reloadAdder.get();
+                sta.healthMultiplier = sta.baseHealth + sta.healthAdder.get();
+                sta.speedMultiplier = sta.baseSpeed + sta.speedAdder.get();
+                sta.dragMultiplier = sta.speedMultiplier * 0.75f;
+            }
+        });
     }
 
     public static class StatusPack {
@@ -297,14 +237,6 @@ public abstract class UnitPeculiarity {
 
             this.apply = apply;
             effect = null;
-        }
-
-        public StatusPack(StatusEffect effect, Cons<StatusEntry> apply) {
-            id = all;
-            all++;
-
-            this.effect = effect;
-            this.apply = apply;
         }
     }
 }
